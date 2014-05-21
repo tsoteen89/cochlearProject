@@ -1,0 +1,50 @@
+<p>I'm in preop /or periop?.</p>
+	  <p>Data is collected by MA/surgeon</p>
+	  <div ng-controller="periopCtrl">
+	  <form class="form form-vertical" ng-submit="submit()">
+	  <div class="control-group" >
+		  <label>Date of Implantation</label>
+		  <div class="controls" >
+			<input class="txt" type="text" class="form-control" placeholder="mm/dd/yy">
+		  </div>
+	  </div>
+	  <div class="control-group" >
+		  <label>Ear(s) being treated</label>
+		  <div class="controls" >
+				<input type="radio" name="ear" ng-model="ear"value="Right">Right<br>
+				<input type="radio" name="ear" ng-model="ear"value="Left">Left</br>
+				<input type="radio" name="ear" ng-model="ear"value="Both">Bilateral</br>
+			</div>
+		</div>
+		</br>
+		<div class="control-group" >
+		  <label>Procedure done for treated ear(s)</label>
+		  <div class="controls" >
+		  <div>
+				<input type="radio" name="proc" ng-model="procTreated" value="Cochlear Implant, Electric Only">Cochlear Implant, Electric Only<br>
+				<input type="radio" name="proc" ng-model="procTreated"value="Cochlear Implant, Electro-acoustic">Cochlear Implant, Electro-acoustic</br>
+			</div>
+			</div>
+			
+		</div>
+		</br>
+		<div class="control-group" >
+		  <label>Procedures done for NON-treated ear(s)</label>
+		  <div class="controls" >
+				<input type="radio" name="proc" ng-model="procNonTreated" value="Cochlear Implant, Electric Only">Cochlear Implant, Electric Only<br>
+				<input type="radio" name="proc" ng-model="procNonTreated"value="Cochlear Implant, Electro-acoustic">Cochlear Implant, Electro-acoustic</br>
+				<input type="radio" name="proc" ng-model="procNonTreated" value="Hearing aid">Hearing Aid</br>
+				<input type="radio" name="proc" ng-model="procNonTreated" value="none">Nothing
+			</div>
+		</div>
+		etc etc
+		</br>
+		<input type="submit" id="submit" value="Submit" />
+			<pre>treatment={{treatment}}</pre>
+			Ear: {{ear}} </br>
+			Procedure on treated ear: {{procTreated}} </br>
+			Procedure on non-treated ear: {{procNonTreated}}
+		</form>
+	 
+		
+	</div> 

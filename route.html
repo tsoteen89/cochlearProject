@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+  <head>
+	<title> Auditory Implant Initiative </title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+  </head>
+
+  <body>
+
+      <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>New Patient</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+      </head>
+
+    <!-- Header -->
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-toggle"></span>
+          </button>
+          <a class="navbar-brand" href="#">Auditory Implant Initiative</a>
+          <a class="navbar-brand" href="#/myHome"><img src="images/cochThumb.png"</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                  <i class="glyphicon glyphicon-user"></i> Patients <span class="caret"></span></a>
+                <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                  <li><a href="#/newPatient">New Patient</a></li>
+                  <li><a href="#/editPatient">Edit Patient</a></li>
+                </ul>
+              </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                <i class="glyphicon glyphicon-user"></i> User <span class="caret"></span></a>
+              <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                <li><a href="#">My Profile</a></li>
+                <li><a href="#/logout"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /Header -->
+
+    <!-- Left Toolbar -->
+    <div class="col-md-2" style="padding-left: 50px">
+        <a href="#"><strong><i class="glyphicon glyphicon-briefcase"></i> Toolbox</strong></a>
+        <hr>
+        <ul class="nav nav-pills nav-stacked">
+          <li><a href="careTeam/index.php"><i class="glyphicon glyphicon-heart-empty"></i> Care Team</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
+          <li><a href="#/login"><i class="glyphicon glyphicon-link"></i> James</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
+          <li><a href="#/messages"><i class="glyphicon glyphicon-book"></i> Messages</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-time"></i> Real-time</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-plus"></i> Advanced..</a></li>
+        </ul>
+        <hr>
+    </div>
+
+  </body>
+
+  <div ng-view="">
+
+</html>
+
+<!-- All Dependencies Here -->
+<script src="js/angular.js"></script>
+<script src="js/angular-route.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/myApp.js"></script>
+<script src="js/myApp.directives.js"></script>
+<script src="js/myApp.controllers.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
