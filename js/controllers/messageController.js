@@ -1,26 +1,24 @@
 (function(){
 
-	 var myApp = angular.module('messageController',[]);
+	var myApp = angular.module('messageSystem',[]);
 
-	 var controllers = {};
 
-	controllers.messageSendCtrl = function($scope){
+	myApp.controller('messageController', function(){
 
-		$scope.send = 1;
+		this.tab = 0;
 
-		$scope.setButtonVal = function(sent){
+		this.setTab = function(tabVal){
 
-			$scope.send = sent;
+			this.tab = tabVal;
 		};
 
-		$scope.isButtonVal = function(){
+		// this.isButtonVal = function(){
 
-			if($scope.send == 1)
-				return true;
-			else
-				return false;
-		};
-	};
+		// 	if(this.send == 1)
+		// 		return true;
+		// 	else
+		// 		return false;
+		// };
+	});
 
-	myApp.controller(controllers);
 })();

@@ -13,18 +13,17 @@
   </head>
 
 
-<!-- ng-controller = "messageSendCtrl as sendCtrl"
-ng-click = "sendCtrl.send.setButtonVal(1)"
+<!-- "
 ng-show="sendCtrl.send.isButtonVal()"-->
   <body>
     <div class = "container">
-      <div class = "row">
+      <div class = "row"  ng-controller = "messageController as messageCtrl">
         <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
         <hr>
         <div class = "messaging-system">
           <div class = "col-xs-10 button-wrapper">
             
-            <button type = "button" class = "btn btn-default" >
+            <button type = "button" class = "btn btn-default" ng-click = "">
               <i class = "glyphicon glyphicon-pencil"></i> New Message
             </button>
 
