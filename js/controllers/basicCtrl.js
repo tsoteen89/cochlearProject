@@ -26,6 +26,8 @@ controllers.newPatientsController = function ($scope, $http) {
 
   $scope.maxDate = new Date();
 
+	$scope.anne = "Anne";
+
 	$scope.patID = "";
 	$scope.fname = "";
 	$scope.lname = "";
@@ -86,11 +88,12 @@ controllers.newPatientsController = function ($scope, $http) {
 
 			console.log($scope.list);
 
-			$http({
-            url: 'testPHP/testPost.php',
-            method: "POST",
-            data: $scope.list,
-      });
+			$scope.newOb = JSON.stringify($scope.list);
+
+			$http.post("testPHP/testPost.php", $scope.newOb)
+				.success(function(data) {
+					console.log(data);
+				});
 	};
 };
 

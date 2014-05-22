@@ -5,7 +5,7 @@
       header('Access-Control-Allow-Credentials: true');
       header('Access-Control-Max-Age: 86400');    // cache for 1 day
   }
-
+/*
   $PatientID = $_POST['list.PatientID'];
   $fname = $_POST['list.fname'];
   $lname = $_POST['list.lname'];
@@ -27,12 +27,13 @@
     Sex, Race, BMI, Height, Weight) VALUES ('$PatientID','$fname','$lname','$mi', '$DOB', '$streetAddress', '$city', '$state', '$zip',
     '$Sex', '$Race', '$BMI', '$Height', '$Weight')");
 
-    echo "1 record was inserted";
+    echo "1 record was inserted \n";
+    echo "Record: ". $_POST['list.fname'];
 
 
 
   mysqli_close($con);
-/*
+
   echo "Pat ID:".$_POST["PatientID"];
   echo "First: ".$_POST["fname"];
   echo "Last: ".$_POST["lname"];
@@ -48,7 +49,9 @@
   echo "Height: ".$_POST["Height"];
   echo "Weight: ".$_POST["Weight"];
 
-/*
-  echo "First:".$_POST["list[0].fname"];
 */
+
+
+  echo "First:".$_POST["newOb[0].fname"];
+
 ?>
