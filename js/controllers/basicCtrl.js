@@ -18,7 +18,7 @@ controllers.TabController = function(){
 }
 
 
-controllers.newPatientsController = function ($scope) {
+controllers.newPatientsController = function ($scope, $http) {
   $scope.today = function() {
     $scope.dt = new Date();
   };
@@ -83,6 +83,14 @@ controllers.newPatientsController = function ($scope) {
 			'DOB':this.dt, 'streetAddress':this.streetAddress, 'city':this.city, 'state':this.state,
 			'zip':this.zip, 'Sex':this.Sex, 'Race':this.Race, 'BMI':this.BMI,
 			'Height':this.Height, 'Weight':this.Weight});
+
+			console.log($scope.list);
+
+			$http({
+            url: 'testPHP/testPost.php',
+            method: "POST",
+            data: $scope.list,
+      });
 	};
 };
 

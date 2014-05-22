@@ -1,6 +1,6 @@
 <div style="padding-left:50px;" ng-controller="newPatientsController">
 
-	<form ng-submit="submit()" action="testPHP/testPost.php" method="post">
+	<form ng-submit="submit()">
 
 	<h2 class="form">Patient Information</h2>
 
@@ -53,9 +53,9 @@
 
 			Sex:
 		  <select ng-model="Sex" name="Sex" placeholder="Male" title="newPatient" ng-required="true">
-				<option>M</option>
-				<option>F</option>
-				<option>O</option>
+				<option>Male</option>
+				<option>Female</option>
+				<option>Other</option>
 		  </select>
 			<br><br>
 

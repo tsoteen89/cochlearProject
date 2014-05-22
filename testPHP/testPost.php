@@ -1,24 +1,29 @@
 <?php
 
+  if (isset($_SERVER['HTTP_ORIGIN'])) {
+      header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+      header('Access-Control-Allow-Credentials: true');
+      header('Access-Control-Max-Age: 86400');    // cache for 1 day
+  }
 
-  $PatientID = $_POST['PatientID'];
-  $fname = $_POST['fname'];
-  $lname = $_POST['lname'];
-  $mi = $_POST['mi'];
-  $DOB = $_POST['DOB'];
-  $streetAddress = $_POST['streetAddress'];
-  $city = $_POST['city'];
-  $state = $_POST['state'];
-  $zip = $_POST['zip'];
-  $Sex = $_POST['Sex'];
-  $Race = $_POST['Race'];
-  $BMI = $_POST['BMI'];
-  $Height = $_POST['Height'];
-  $Weight = $_POST['Weight'];
+  $PatientID = $_POST['list.PatientID'];
+  $fname = $_POST['list.fname'];
+  $lname = $_POST['list.lname'];
+  $mi = $_POST['list.mi'];
+  $DOB = $_POST['list.DOB'];
+  $streetAddress = $_POST['list.streetAddress'];
+  $city = $_POST['list.city'];
+  $state = $_POST['list.state'];
+  $zip = $_POST['list.zip'];
+  $Sex = $_POST['list.Sex'];
+  $Race = $_POST['list.Race'];
+  $BMI = $_POST['list.BMI'];
+  $Height = $_POST['list.Height'];
+  $Weight = $_POST['list.Weight'];
 
 
-    $con = mysqli_connect("localhost", "travis", "scooter", "aii") or die("Server did not respond");
-    mysqli_query($con,"INSERT INTO Patient(PatientID, fname, lname, mi, DOB, streetAddress, city, state, zip,
+    $con = mysqli_connect("msu2u.net", "root", "rugger31", "Aii") or die("Server did not respond");
+    mysqli_query($con,"INSERT INTO patient(PatientID, fname, lname, mi, DOB, streetAddress, city, state, zip,
     Sex, Race, BMI, Height, Weight) VALUES ('$PatientID','$fname','$lname','$mi', '$DOB', '$streetAddress', '$city', '$state', '$zip',
     '$Sex', '$Race', '$BMI', '$Height', '$Weight')");
 
@@ -27,7 +32,7 @@
 
 
   mysqli_close($con);
-
+/*
   echo "Pat ID:".$_POST["PatientID"];
   echo "First: ".$_POST["fname"];
   echo "Last: ".$_POST["lname"];
@@ -43,4 +48,7 @@
   echo "Height: ".$_POST["Height"];
   echo "Weight: ".$_POST["Weight"];
 
+/*
+  echo "First:".$_POST["list[0].fname"];
+*/
 ?>
