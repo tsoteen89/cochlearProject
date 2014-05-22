@@ -1,5 +1,6 @@
 //Travis Osteen
-var myApp = angular.module('myApp', ['ngRoute','ui.bootstrap','myApp.controllers','myApp.directives']);
+(function(){
+var myApp = angular.module('myApp', ['ngRoute','ui.bootstrap','basicCtrl','phase.controllers','myApp.directives']);
 
 
 myApp.config(function ($routeProvider) {
@@ -61,3 +62,5 @@ myApp.config(function ($routeProvider) {
   .otherwise({redirectTo: 'partials/myHome.html'});
 
 });
+
+})();

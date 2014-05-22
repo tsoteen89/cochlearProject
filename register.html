@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <title> Auditory Implant Initiative </title>
+  </head>
+
+  <body>
+
+      <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Login</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+      </head>
+
+    <!-- Header -->
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-toggle"></span>
+          </button>
+          <a class="navbar-brand" href="route.html">ENTER HERE</a>
+          <a class="navbar-brand" href="#/myHome"><img src="images/cochThumb.png"/></a>
+        </div>
+      </div>
+      <!-- /container -->
+    </div>
+    <!-- /Header -->
+	<!-- Main -->
+	<div class="container">
+	  
+	  <!-- upper section -->
+	  <div class="row">
+		
+		<div class="col-md-9">
+			
+		  <!-- column 2 -->	
+		  
+		   <div class="row">
+				<!-- center left-->	
+				<div class="col-md-12">
+				  <div class="panel panel-default">
+					<div class="panel-heading">
+					  <div class="panel-title">
+						<i class="glyphicon glyphicon-wrench pull-right"></i>
+						<h4>Register</h4>
+					  </div>
+					</div>
+					<div class="panel-body" ng-controller="TabController as tab">
+					  <div class="tabbable"> <!-- Only required for left/right tabs -->
+						  
+						  </br>
+						  
+						  <!--<div class="tab-content">-->
+						  
+							<div class="tab-pane">
+							  <form class="form form-vertical">
+								<div class="control-group" >
+								  <label>Name</label>
+								  <div class="controls" >
+									<input type="text" class="form-control" placeholder="Enter Name">
+								  </div>
+								</div>
+								</br>
+								<div class="control-group" >
+								  <label>Date of Birth</label>
+								  <div class="controls" >
+									<input type="text" class="form-control" placeholder="mm/dd/yyyy">
+								  </div>
+								</div>
+								</br>							
+								<div class="control-group" >
+								  <label>Sex</label>
+								  <div class="controls" >
+									<form action="">
+										<input type="radio" name="sex" value="male">Male<br>
+										<input type="radio" name="sex" value="female">Female
+									</form>
+									</div>
+								</div>
+								<hr>
+								<h4>Contact Information</h4>
+								<div class="control-group">
+								  <label>Phone Number</label>
+								  <div class="controls">
+									<input type="text" class="form-control" placeholder="Enter Phone Number">
+								  </div>
+								</div>
+								<div class="control-group">
+								  <label>Address</label>
+								  <div class="controls">
+									<input type="text" class="form-control" placeholder="Enter Address">
+								  </div>
+								</div> 
+													
+							
+								<div class="control-group">
+								  <label></label>
+								  <div class="controls">
+									<button type="submit" class="btn btn-primary">
+									  <i class="glyphicon glyphicon-book"></i>
+									  Request Registration
+									</button>
+								  </div>
+								</div>   
+								
+								<hr>
+								<h4>(Developer) Temporary Registration</h4>
+								
+								<div class="control-group">
+								  <label>Username</label>
+								  <div class="controls">
+									<input type="text" class="form-control" name="username" placeholder="Enter Username">
+								  </div>
+								</div>
+								
+								<div class="control-group">
+								  <label>Password</label>
+								  <div class="controls">
+									<input type="password" class="form-control" name="password" placeholder="Enter Password">
+								  </div>
+								</div>
+								
+								<div class="control-group">
+								  <label></label>
+								  <div class="controls">
+									<button type="submit" name="login" class="btn btn-primary">
+									  <i class="glyphicon glyphicon-book"></i>
+									  Register
+									</button>
+								  </div>
+								  <br><br>
+								  <a href="index.html">
+									  <button type="button" class="btn btn-primary">
+										<i class="glyphicon glyphicon-barcode"></i>
+										(Developer) Back to Login 
+									  </button>
+								  </a>
+								</div>
+								
+							  </form>
+							</div>
+						  <!--</div>-->
+					</div>
+					
+					<!-- password title form box?  
+					<div class="control-group">
+						  <label>Title</label>
+						  <div class="controls">
+							<input type="password" class="form-control" placeholder="Password">
+							
+						  </div>
+						</div>-->
+					  <!-- DropDown thing
+						<div class="control-group">
+						<label>Select Phase of Care</label>				  
+					  <div class="controls">
+									<select class="form-control">
+									<option>Demographics</option>
+									<option>Candidacy Testing</option>
+									<option>Initial Surgical Consultation</option>
+									<option>Preoperative Visit</option>
+									<option>1 Week Postoperative Check</option>
+									<option>Activation (3 weeks)</option>
+									<option>1 month Audiometric Testing</option>  
+									<option>3 month Audiometric Testing</</option>
+									<option>6 month Audiometric Testing</</option>
+									<option>12 month Audiometric Testing</</option>
+									<option>24 month Audiometric Testing</</option>
+									</select>
+								  </div>
+								  </div>  
+					   -->
+					</div><!--/panel content-->
+				  </div><!--/panel-->
+				  
+				  
+				
+				 <!--<div class="panel panel-default">
+					  <div class="panel-heading"><h4>Processing Status</h4></div>
+					  <div class="panel-body">
+						
+						<small>Complete</small>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%">
+							<span class="sr-only">72% Complete</span>
+						  </div>
+						</div>
+						<small>In Progress</small>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+							<span class="sr-only">20% Complete</span>
+						  </div>
+						</div>
+						<small>At Risk</small>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+							<span class="sr-only">80% Complete</span>
+						  </div>
+						</div>
+
+					  </div><!--/panel-body-->
+				 <!-- </div>--><!--/panel-->                    
+				  
+				</div><!--/col-->
+			 
+				<!--center-right-->
+				<div class="col-md-5">
+				  <!--
+					<div class="btn-group btn-group-justified">
+					  <a href="#" class="btn btn-info col-sm-3">
+						<i class="glyphicon glyphicon-plus"></i><br>
+						Service
+					  </a>
+					  <a href="#" class="btn btn-info col-sm-3">
+						<i class="glyphicon glyphicon-cloud"></i><br>
+						Cloud
+					  </a>
+					  <a href="#" class="btn btn-info col-sm-3">
+						<i class="glyphicon glyphicon-cog"></i><br>
+						Tools
+					  </a>
+					  <a href="#" class="btn btn-info col-sm-3">
+						<i class="glyphicon glyphicon-question-sign"></i><br>
+						Help
+					  </a>
+					</div>
+					-->
+				  
+				</div><!--/col-span-6-->
+		 
+		   </div><!--/row-->
+		</div><!--/col-span-9-->
+		
+	  </div><!--/row-->
+	  <!-- /upper section -->
+	  
+	  
+	  
+	</div><!--/container-->
+	<!-- /Main -->
+
+</html>
+
+<!-- All Dependencies Here -->
+<script src="js/angular.js"></script>
+<script src="js/angular-route.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
+<script src="js/myApp.js"></script>
+<script src="js/myApp.directives.js"></script>
+<script src="js/myApp.controllers.js"></script>
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>

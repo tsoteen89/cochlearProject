@@ -1,4 +1,4 @@
-var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap']);
+var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap','ct_careteamcontrollers']);
 
 			app.config(function ($routeProvider) {
 
@@ -12,12 +12,8 @@ var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap']);
 			templateUrl: 'partials/home.html'
 			})
 			.when('/careteams',{
-			controller:'',
-<<<<<<< HEAD
-			templateUrl: 'partials/baa.html'
-=======
+			controller:'getCareTeamDataCtrl',
 			templateUrl: 'partials/careteams.html'
->>>>>>> SananBranch
 			})
 			.when('/invitations',{
 			controller:'',
@@ -27,10 +23,10 @@ var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap']);
 			controller:'',
 			templateUrl: 'partials/providers.html'
 			})
-            .when('/patientpage',{
-                controllers:'',
-                templateUrl: 'partials/patientpage.html'
-            })
+      .when('/patientpage',{
+          controllers:'',
+          templateUrl: 'partials/patientpage.html'
+      })
 			.otherwise({redirectTo: 'partials/home.html'});
-		
+
 		});

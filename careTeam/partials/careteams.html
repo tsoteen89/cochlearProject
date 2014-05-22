@@ -1,0 +1,28 @@
+<div class="container" data-ng-app="careTeamApp">
+    
+    
+<div ng-controller="getCareTeamDataCtrl">    
+ 
+    <h3>Care Teams:</h3> 
+Name: <input type="text" data-ng-model="providerName">
+<br>
+<br>
+ 
+    
+    
+<div class="container">
+    <div class="row">
+        <div class="col-md-5" data-ng-repeat="careteam in careteams | filter:providerName">
+            <a href="#">        
+                <img src="./media/small_empty_img.jpg"  class="img-responsive">    
+                
+                <h3>Provider: {{careteam.provider}}</h3>
+                </h3>Id: {{careteam.p_id}}</h3>            
+            </a>
+  
+        </div>
+    </div>
+</div>
+    
+</div>
+</div>

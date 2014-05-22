@@ -11,6 +11,8 @@
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link href="css/styles.css" rel="stylesheet">
+
+
 	</head>
 	<body>
 <!-- Header -->
@@ -85,15 +87,15 @@
 
   </div><!--/row-->
   <!-- /upper section -->
-      
-      
+
+
   <!-- lower section -->
-  
+
 
 </div><!--/container-->
 <!-- /Main -->
-        
-        
+
+
 
 
 
@@ -118,13 +120,13 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dalog -->
 </div><!-- /.modal -->
-        
-        
-        
-        
-        
-        
-       
+
+
+
+
+
+
+
 
 
 
@@ -133,9 +135,12 @@
 
 
 	<!-- script references -->
-		<script src="js/angular.js"></script>
+<script src="js/angular.js"></script>
 <script src="js/angular-route.js"></script>
 <script src="js/jquery.min.js"></script>
+<!--
+<script src="js/careTeamControllers/ct_patientcontrollers.js"></script> -->
+<script src="js/careTeamControllers/ct_careteamcontrollers.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
 <script src="js/app.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styles.css">

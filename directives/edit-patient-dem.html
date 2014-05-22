@@ -2,7 +2,7 @@
 	  <p>I'm in Demographics.</p>
 	  <p>Data is collected by CI Coordinator</p>
 	  <div ng-controller="existingPatientsCtrl">
-	  <form class="form form-vertical" ng-submit="submit()">
+	  <form class="form form-vertical" ng-submit="submit()" action="phpTest/test2.php" method="post">
 	  <!--
 	  <p>hello{{test}}</p>
 	  <h4>Edit Personal Info</h4>
@@ -37,20 +37,24 @@
 			<input class="txt"type="text" class="form-control" placeholder="Enter Phone Number">
 		</div>
 		-->
+		<p> !!!!!!!!!!!! </p>
+
 		<div class="control-group">
+		
 			<blockquote>
 				<text class="form">Address:</text> &nbsp {{street}} <br>
 				<text style="padding-left:78px;">{{city}},&nbsp{{state}}&nbsp{{zip}}</text> <br>
 			</blockquote>
-			<label>Edit Address</label>
+			
+			<label>Edit Address!!!</label>
 			<br>
-			<input type="text" class="txt" ng-model="street" class="form-control" placeholder="Street Address" title="existingPatient"/>
+			<input type="text" class="txt" name="street" ng-model="street" class="form-control" placeholder="Street Address" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" ng-model="city" class="form-control" placeholder="City" title="existingPatient"/>
+			<input type="text" class="txt" name="city" ng-model="city" class="form-control" placeholder="City" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" ng-model="state" class="form-control" placeholder="State" title="existingPatient"/>
+			<input type="text" class="txt" name="state" ng-model="state" class="form-control" placeholder="State" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" ng-model="zip" class="form-control" placeholder="Zip" title="existingPatient"/>
+			<input type="text" class="txt" name="zip" ng-model="zip" class="form-control" placeholder="Zip" title="existingPatient"/>
 			<br><br>
 			
 		</div> 

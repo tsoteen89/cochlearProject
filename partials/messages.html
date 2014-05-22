@@ -2,45 +2,57 @@
 
 
   <head>
+    <style type="text/css">
+      .messaging-system{
+        margin-top: 3%;
+      }
+      i{
+        font-size: .9em;
+      }      
+    </style>
   </head>
 
-  <body>
 
-    <!-- navbar -->
-    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-toggle"></span>
-          </button>
-          <a class="navbar-brand" href="careTeam/index.php">Care Team</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-        
-          <li class="dropdown">
-              <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-                <i class="glyphicon glyphicon-user"></i> Patients <span class="caret"></span></a>
-              <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                <li><a href="#/newPatient">New Patient</a></li>
-                <li><a href="#/editPatient">Edit Patient</a></li>
-              </ul>
-            </li>
+
+
+  <body>
+    <div class = "container">
+      <div class = "row">
+        <div class = "messaging-system">
+          <div class = "col-xs-10 button-wrapper">
             
-            <li class="dropdown">
-              <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-                <i class="glyphicon glyphicon-user"></i> User <span class="caret"></span></a>
-              <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                <li><a href="#">My Profile</a></li>
-                <li><a href="#"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
-              </ul>
-            </li>
-          </ul>
+            <button type = "button" class = "btn btn-default">
+              <i class = "glyphicon glyphicon-pencil"></i> New Message
+            </button>
+
+            <input class = "search-message pull-right" type = "search" placeholder = "Search Messages..">
+          </div>
+          
+          <div class = "col-xs-3">
+            <ul class = "nav nav-pills nav-stacked">
+              <hr>
+              <li><a href="">Messages</a></li>
+              <li><a href="">Sent Messages</a></li>
+              <li><a href="">Deleted Messages <i class = "glyphicon glyphicon-trash"></i></a></li>
+              <li><a href="">Existing Providers</a></li>
+              <hr>
+            </ul>
+          </div>
+        
+          <div class = "col-xs-7">
+            <hr>
+            <form name = "message-wrapper" class = "message">
+              <input class = "send" type = "text" name = "send" placeholder = "To:" style = "width: 75%; margin-bottom: 5px;"> <br>
+              <input class = "subject" type = "text" name = "subject" placeholder = "Subject:" style = "width: 75%; margin-bottom: 5px;"> <br>
+              <textarea name ="messagebox"rows = "10" cols = "100" placeholder = "Message:" style = "margin-bottom: 10px;"></textarea><br>
+              <button class = "btn btn-success" type = "submit" name = "submit" style = "margin-right: 5px;">Send</button>
+              <button class = "btn btn-default" type = "button" name = "cancel">Cancel</button>
+            </form>
+            <hr>
+          </div>
         </div>
-      </div><!-- /container -->
+      </div>
     </div>
-    <!-- End navbar -->
-    
   </body>
 
 </html>

@@ -1,23 +1,23 @@
-function(){var myApp = angular.module('phase.controllers', []);
+(function(){var myApp = angular.module('phase.controllers', []);
 
 var controllers = {};
 
-controllers.existingPatientsCtrl = function ($scope, $http) {
- 
+controllers.existingPatientsCtrl = function ($scope) {
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
 
 
-  $http.get("phpTest/getData.php")
-		.then(function(res) {
-		$scope.cars =  res.data;
-		});
-  
- 
   $scope.street = "";
   $scope.city = "";
   $scope.state = "";
   $scope.zip = "";
    $scope.list = [];
-   
+
   $scope.submit = function() {
 		{
 			$scope.list.push({'street':this.street,'city':this.city,'state':this.state,'zip':this.zip});
@@ -33,9 +33,9 @@ controllers.periopCtrl = function ($scope) {
   $scope.treatment=[];
   $scope.submit = function() {
 	if($scope.date && $scope.ear && $scope.procTreated && $scope.procNonTreated)	{
-			$scope.treatment.push({'Date of Implantation': this.date, 
-			'ear':this.ear, 
-			'procedureForTreated':this.procTreated, 
+			$scope.treatment.push({'Date of Implantation': this.date,
+			'ear':this.ear,
+			'procedureForTreated':this.procTreated,
 			'procedureForNontreated':this.procNonTreated});
 		}
 	};

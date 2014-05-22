@@ -1,1 +1,95 @@
 <p>Data is collected by Audiologist</p>
+
+  <div ng-controller="audioTestCtrl">
+	<form class="form form-vertical" ng-submit="submit()">
+	  <div class="container">
+		  <h2>Comprehensive Diagnostic Audiogram</h2>
+		  <hr/>
+		</br>
+		<h3> Implanted Ear, Implant On </h3>
+		  <div class="row">
+			<div class="col-xs-6">
+			<label>Pure Tone Average (PTA), in decibels</label>
+			  <div class="range">
+				<input type="range" name="range" ng-model="pta" min="0" max="120" value="60" onchange="range.value=value">
+				<output id="range" >60 db</output>
+			  </div>
+			</div>							
+		  </div>
+
+		  <div class="row">
+			<div class="col-xs-6">
+			<label>Speech Reception Threshold (SRT), in decibels</label>
+			  <div class="range range-success">
+				<input type="range" name="range" ng-model="srt"  min="0" max="120" value="60" onchange="rangeSuccess.value=value">
+				<output id="rangeSuccess" >50 db</output>
+			  </div>
+			</div>
+		  </div>
+
+		  <div class="row">
+			<div class="col-xs-6">
+			<label>Speech Discrimination Score (SDS), percentage</label>
+			  <div class="range range-warning">
+				<input type="range" name="range" ng-model="sds" min="0" max="100" value="50" onchange="rangeWarning.value=value">
+				<output id="rangeWarning">50%</output>
+			  </div>
+			</div>
+		  </div>
+
+		</div>
+		<input type="submit" id="submit" value="Submit" />
+			<pre>test values={{testValues}}</pre>
+			
+			PTA: {{pta}}  </br>
+			SRT: {{srt}}  </br>
+			SDS: {{sds}} </br>
+			
+		<hr>
+		
+		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
+		<h4> AzBio </h4>
+		<label for="age">
+            Score in Quiet 
+            <input type="number" name="age" id="age"
+                min="0" max="100" step="1" value="50">
+             %
+        </label>
+		</br>
+		<label for="age">
+            Score in Noise 
+            <input type="number" name="age" id="age"
+                min="0" max="100" step="1" value="50">
+             %
+        </label>
+		
+		</br>
+		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
+		<h4> BKB-SIN </h4>
+		<label for="age">
+            Score,db 
+            <input type="number" name="age" id="age"
+                min="0" max="100" step="1" value="50">
+        </label>
+		
+		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
+		<h4> CNC </h4>
+		<label for="age">
+            Score in Quiet 
+            <input type="number" name="age" id="age"
+                min="0" max="100" step="1" value="50">
+             %
+        </label>
+		</br>
+		<label for="age">
+            Score in Noise 
+            <input type="number" name="age" id="age"
+                min="0" max="100" step="1" value="50">
+             %
+        </label>
+		
+		</br>
+		</form>
+	 
+		
+	</div>
