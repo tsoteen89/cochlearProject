@@ -138,9 +138,9 @@
 <script src="js/angular.js"></script>
 <script src="js/angular-route.js"></script>
 <script src="js/jquery.min.js"></script>
-<!--
-<script src="js/careTeamControllers/ct_patientcontrollers.js"></script> -->
+<script src="js/careTeamControllers/ct_patientcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_careteamcontrollers.js"></script>
+<script src="js/careTeamControllers/ct_invitationscontrollers.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
 <script src="js/app.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styles.css">

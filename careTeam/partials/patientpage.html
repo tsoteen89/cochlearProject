@@ -18,13 +18,13 @@ Name: <input type="text" data-ng-model="searchName">
             </tr>
             <tr data-ng-repeat="patient in patients | filter:searchName">
                 <td class="col-md-1">
-                    {{patient.Name}}
+                    {{patient.fname}}
                 </td>
                 <td class="col-md-1">
-                    {{patient.Id}}
+                    {{patient.lname}}
                 </td>
                 <td class="col-md-1">
-                    {{patient.CareStatus}}
+                    {{patient.BMI}}
                 </td>
             </tr>
   

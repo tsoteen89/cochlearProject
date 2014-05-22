@@ -1,4 +1,4 @@
-/*
+
 var careTeamApp = angular.module('ct_patientcontrollers',[]);
 
 var controllers = {};
@@ -13,4 +13,4 @@ controllers.getPatientDataCtrl = function($scope, $http){
 
 }
 
-careTeamApp.controller(controllers);*/
+careTeamApp.controller(controllers);

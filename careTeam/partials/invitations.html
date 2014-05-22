@@ -1,26 +1,25 @@
 <div class="container" data-ng-app="careTeamApp">
 
-<div class="row">
-	<div class="col-md-6">
-		<table class="table">
+<div ng-controller="getInvitationsDataCtrl">
+	<div >
+		<table class="table" data-ng-repeat="invitation in invitations">
 		<tr>
-		<td><h4>Dr. John Doe just sent an invitation to you</h4></td>
-		<td><button type="button" class="btn btn-success">Accept</button></td>
-		<td><button type="button" class="btn btn-danger">Deny</button></td>
-		</tr>
-		
-		<td><h4>Dr. John Smith just sent an invitation to you</h4></td>
-		<td><button type="button" class="btn btn-success">Accept</button></td>
-		<td><button type="button" class="btn btn-danger">Deny</button></td>
-		</tr>
-		
-		<td><h4>Dr. Jane Doe just sent an invitation to you</h4></td>
-		<td><button type="button" class="btn btn-success">Accept</button></td>
-		<td><button type="button" class="btn btn-danger">Deny</button></td>
+		<td class="col-md-2"><h4>{{invitation.CareTeamName}} just sent you an invitation!</h4></td>
+		<td class="col-md-1"><button type="button" class="btn btn-success">Accept</button></td>
+		<td class="col-md-1"><button type="button" class="btn btn-danger">Deny</button></td>
 		</tr>
 
 		</table>
 	</div>
+    
+    <!--<div  class="col-md-6">
+        <div class="row">
+            <h4>{{invitation.CareTeamName}} just sent you an invitation!</h4>
+            <button type="button" class="btn btn-success">Accept</button>
+            <button type="button" class="btn btn-danger">Deny</button>
+        </div>
+    </div>-->
+    
 	
 </div>
 </div>

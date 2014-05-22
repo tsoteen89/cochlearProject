@@ -6,7 +6,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 }
 
 $con = mysqli_connect("msu2u.net", "root", "rugger31","Aii") or die("Server did not respond");
-$result = mysqli_query($con,"SELECT * FROM patient");
+$result = mysqli_query($con,"SELECT * FROM Invitations");
 
 while($row = mysqli_fetch_assoc($result))
 {
