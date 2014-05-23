@@ -23,7 +23,7 @@
 
 
     //$con = mysqli_connect("msu2u.net", "root", "rugger31", "Aii") or die("Server did not respond");
-    $con = mysqli_connect("localhost", "root", "", "aii") or die("Server did not respond");
+    $con = mysqli_connect("localhost", "root", "root", "aii") or die("Server did not respond");
     mysqli_query($con,"INSERT INTO Patient(PatientID, fname, lname, mi, DOB, streetAddress, city, state, zip,
     Sex, Race, BMI, Height, Weight) VALUES ('$PatientID','$fname','$lname','$mi', '$DOB', '$streetAddress', '$city', '$state', '$zip',
     '$Sex', '$Race', '$BMI', '$Height', '$Weight')");
