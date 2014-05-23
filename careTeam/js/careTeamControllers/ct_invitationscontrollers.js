@@ -8,6 +8,7 @@ controllers.getInvitationsDataCtrl = function($scope, $http){
     .then(function(res){
         $scope.invitations = res.data;
     });
+    
 
 
 }

@@ -12,11 +12,11 @@ Name: <input type="text" data-ng-model="searchName">
                         
         <table class="table table-hover">
             <tr>
-                <td  class="col-md-1"><strong>Patient Name</strong></td>
-                <td  class="col-md-1"><strong>Patient ID</strong></td>
-                <td  class="col-md-1"><strong>Care Status</strong></td>
+                <td  class="col-md-1"><strong>First Name</strong></td>
+                <td  class="col-md-1"><strong>Last Name</strong></td>
+                <td  class="col-md-1"><strong>BMI</strong></td>
             </tr>
-            <tr data-ng-repeat="patient in patients | filter:searchName">
+            <tr data-ng-repeat="patient in patients">
                 <td class="col-md-1">
                     {{patient.fname}}
                 </td>
@@ -33,4 +33,6 @@ Name: <input type="text" data-ng-model="searchName">
     </div>
     
 </div>
+    
+    
 </div>
