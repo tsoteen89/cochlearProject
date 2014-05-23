@@ -18,7 +18,7 @@ controllers.TabController = function(){
 }
 
 
-controllers.newPatientsController = function ($scope, $http) {
+controllers.newPatientsController = function ($scope) {
   $scope.today = function() {
     $scope.dt = new Date();
   };
@@ -87,13 +87,13 @@ controllers.newPatientsController = function ($scope, $http) {
 			'Height':this.Height, 'Weight':this.Weight});
 
 			console.log($scope.list);
-
+/*
 			$scope.newOb = JSON.stringify($scope.list);
 
 			$http.post("testPHP/testPost.php", $scope.newOb)
 				.success(function(data) {
 					console.log(data);
-				});
+				});*/
 	};
 };
 
