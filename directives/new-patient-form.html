@@ -5,7 +5,7 @@
 
 	<h2 class="form">Patient Information</h2>
 
-	<blockquote><text class="form">Patient ID:</text> &nbsp {{formData.patID}} <br><br>
+	<blockquote><text class="form">Patient ID:</text> &nbsp {{formData.patientID}} <br><br>
 		<text class="form">First Name:</text> &nbsp {{formData.fname}}
 		<text class="form"> &nbsp&nbsp MI:</text> &nbsp {{formData.mi}} <br><br>
 		<text class="form">Last Name:</text> &nbsp {{formData.lname}} <br><br>
@@ -21,7 +21,7 @@
 
 	<div style="width: 275px;">
 		<fieldset class="form-group">
-			<input type="text" rows="1" name="PatientID" ng-model="formData.patID" ng-required="true" class="form-control" placeholder="Patient ID" title="newPatient"></textarea>
+			<input type="text" rows="1" name="PatientID" ng-model="formData.patientID" ng-required="true" class="form-control" placeholder="Patient ID" title="newPatient"></textarea>
 			<br>
 			<input type="text" rows="1" name="fname" ng-model="formData.fname" ng-required="true" class="form-control" placeholder="First Name" title="newPatient"></textarea>
 			<br>
@@ -95,36 +95,4 @@
 
 </div>
 
-<!--
-<div ng-controller="formController">
-    
 
-	<form ng-submit="processForm()">
-
-		<div id="name-group" class="form-group">
-			<label>Name</label>
-			<input type="text" name="name" class="form-control" placeholder="Bruce Wayne" ng-model="formData.name">
-			<span class="help-block"></span>
-		</div>
-
-
-		<div id="superhero-group" class="form-group">
-			<label>Superhero Alias</label>
-			<input type="text" name="superheroAlias" class="form-control" placeholder="Caped Crusader" ng-model="formData.superheroAlias">
-			<span class="help-block"></span>
-		</div>
-
-
-		<button type="submit" class="btn btn-success btn-lg btn-block">
-			<span class="glyphicon glyphicon-flash"></span> Submit!
-		</button>
-	</form>
-
-
-	<pre>
-		{{ formData }}
-	</pre>
-
-</div>
-
--->

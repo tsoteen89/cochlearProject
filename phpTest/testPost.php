@@ -30,61 +30,7 @@
 
     echo "1 record was inserted \n";
 
-
-
   mysqli_close($con);
-/*
-  echo "Pat ID:".$_POST["PatientID"];
-  echo "First: ".$_POST["fname"];
-  echo "Last: ".$_POST["lname"];
-  echo "Middle: ".$_POST["mi"];
-  echo "DOB: ".$_POST["DOB"];
-  echo "Street Address: ".$_POST["streetAddress"];
-  echo "City: ".$_POST["city"];
-  echo "State: ".$_POST["state"];
-  echo "Zip: ".$_POST["zip"];
-  echo "Sex: ".$_POST["Sex"];
-  echo "Race: ".$_POST["Race"];
-  echo "BMI: ".$_POST["BMI"];
-  echo "Height: ".$_POST["Height"];
-  echo "Weight: ".$_POST["Weight"];
-*/
 
-
-
-
-/*
-    echo $_POST['name'];
-    echo $_POST['superheroAlias'];
-
-
-$errors         = array();  	// array to hold validation errors
-$data 			= array(); 		// array to pass back data
-
-// validate the variables ======================================================
-	if (empty($_POST['name']))
-		$errors['name'] = 'Name is required.';
-
-	if (empty($_POST['superheroAlias']))
-		$errors['superheroAlias'] = 'Superhero alias is required.';
-
-// return a response ===========================================================
-
-	// response if there are errors
-	if ( ! empty($errors)) {
-
-		// if there are items in our errors array, return those errors
-		$data['success'] = false;
-		$data['errors']  = $errors;
-	} else {
-
-		// if there are no errors, return a message
-		$data['success'] = true;
-		$data['message'] = 'Success!';
-	}
-
-	// return all our data to an AJAX call
-	echo json_encode($data);
-*/
 
 ?>
