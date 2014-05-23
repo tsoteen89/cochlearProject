@@ -1,14 +1,19 @@
-<div class="container">
+<div class="container" ng-controller="FrmController">
     
     <form>
-        Name: <input type="text">
-        Care Status: <input type="text">
-        Ear: <input type="text">
-        <br/>
-        <br/>
-        
-        <input type="submit" value="submit">
-        
+        <div>
+            <label>Name</label> 
+            <input type="text" ng-model="username" placeholder="User Name" style='margin-left: 22px;'> 
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="text" ng-model="useremail" placeholder="Email" style='margin-left: 22px;'> 
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" ng-model="userpassword" placeholder="Password">
+        </div>
+            <button ng-click='SignUp();' style='margin-left: 63px;margin-top:10px'>SignUp</button>
     </form>
     
 </div>
