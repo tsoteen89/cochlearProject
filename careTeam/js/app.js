@@ -23,10 +23,14 @@ var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap','ct_careteamcon
 			controller:'',
 			templateUrl: 'partials/providers.html'
 			})
-      .when('/patientpage',{
-          controllers:'getPatientDataCtrl',
-          templateUrl: 'partials/patientpage.html'
-      })
+            .when('/patientpage',{
+            controllers:'getPatientDataCtrl',
+            templateUrl: 'partials/patientpage.html'
+            })
+            .when('/insert',{
+            controllers:'',
+            templateUrl: 'partials/insertpatient.html'
+            })
 			.otherwise({redirectTo: 'partials/home.html'});
 
 		});

@@ -65,7 +65,8 @@
         <li><a href="#home"> Facility Home</a></li>
         <li><a href="#careteams">Care Teams</a></li>
         <li><a href="#patientpage">Patient Page</a></li>
-          <li><a href="#invitations">Invitations</a></li>
+        <li><a href="#insert">Insert Patient</a></li>
+        <li><a href="#invitations">Invitations</a></li>
         <li><a href="#providers">Providers</a></li>
         <li><a href="#tools"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
       </ul>
@@ -141,6 +142,7 @@
 <script src="js/careTeamControllers/ct_patientcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_careteamcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_invitationscontrollers.js"></script>
+<script src="js/careTeamControllers/ct_insertpatientcontrollers.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
 <script src="js/app.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styles.css">
