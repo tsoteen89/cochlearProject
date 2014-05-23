@@ -1,6 +1,6 @@
 <div style="padding-left:50px;" ng-controller="newPatientsController">
 
-	<form ng-submit="submit()">
+	<form ng-submit="submit()" action="phpTest/testPost.php" method="post">
 
 	<h2 class="form">Patient Information</h2>
 
@@ -22,11 +22,11 @@
 		<fieldset class="form-group">
 			<input type="text" rows="1" name="PatientID" ng-model="patID" ng-required="true" class="form-control" placeholder="Patient ID" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" name="fname" ng-model="fname" ng-required="true" class="form-control" placeholder="First Name" title="newPatient"></textarea>
+			<input type="text" rows="1" name="fname" ng-model="fname" ng-required="true" class="form-control" placeholder="First Name" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" name="mi" ng-model="mi" ng-required="true" class="form-control" placeholder="Middle Initial" title="newPatient"></textarea>
+			<input type="text" rows="1" name="mi" ng-model="mi" ng-required="true" class="form-control" placeholder="Middle Initial" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" name="lname" ng-model="lname" ng-required="true" class="form-control" placeholder="Last Name" title="newPatient"></textarea>
+			<input type="text" rows="1" name="lname" ng-model="lname" ng-required="true" class="form-control" placeholder="Last Name" title="newPatient"></textarea>
 			<br>
 
 	    <h4>Date of Birth</h4>
@@ -42,13 +42,13 @@
 	        </div>
 	    </div>
 
-			<textarea rows="1" ng-model="streetAddress" name="streetAddress" ng-required="true" class="form-control" placeholder="Street Address" title="newPatient"></textarea>
+			<input type="text" rows="1" ng-model="streetAddress" name="streetAddress" ng-required="true" class="form-control" placeholder="Street Address" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" ng-model="city" name="city" ng-required="true" class="form-control" placeholder="City" title="newPatient"></textarea>
+			<input type="text" rows="1" ng-model="city" name="city" ng-required="true" class="form-control" placeholder="City" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" ng-model="state" name="state" ng-required="true" class="form-control" placeholder="State" title="newPatient"></textarea>
+			<input type="text" rows="1" ng-model="state" name="state" ng-required="true" class="form-control" placeholder="State" title="newPatient"></textarea>
 			<br>
-			<textarea rows="1" ng-model="zip" name="zip" ng-required="true" class="form-control" placeholder="Zip" title="newPatient"></textarea>
+			<input type="text" rows="1" ng-model="zip" name="zip" ng-required="true" class="form-control" placeholder="Zip" title="newPatient"></textarea>
 			<br>
 
 			Sex:
