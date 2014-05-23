@@ -1,5 +1,5 @@
-(function() {
-	 var myApp = angular.module('basicCtrl', []);
+
+var myApp = angular.module('basicCtrl', []);
 
 var controllers = {};
 
@@ -15,32 +15,12 @@ controllers.TabController = function(){
 	this.isSelected=function(checkTab){
 		return this.tab===checkTab;
 	};
-}
-
-
-controllers.newPatientsController = function ($scope) {
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.maxDate = new Date();
-
-	$scope.patID = "";
-	$scope.fname = "";
-	$scope.lname = "";
-	$scope.mi = "";
-	$scope.dt = "";
-	$scope.streetAddress = "";
-	$scope.city = "";
-	$scope.zip = "";
-	$scope.Sex = "";
-	$scope.Race = "";
-	$scope.BMI = "20";
-	$scope.Height = "60";
-	$scope.Weight = "120";
-
-	$scope.bmis = [];
+}   
+    
+    
+controllers.formController = function($scope, $http) {
+    
+    $scope.bmis = [];
 	$scope.heights = [];
 	$scope.weights = [];
 	$scope.i = 0;
@@ -57,35 +37,26 @@ controllers.newPatientsController = function ($scope) {
 		$scope.weights[$scope.i] = $scope.i + 80;
 	}
 
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
+    // create a blank object to hold our form information
+    // $scope will allow this to pass between controller and view
+    $scope.formData = {};
 
-  $scope.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
+    // process the form
+    $scope.processForm = function() {
+        $http({
+            method  : 'POST',
+            url     : 'phpTest/testPost.php',
+            data    : $.param($scope.formData),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+        })
+            .success(function(data) {
+                console.log(data);
+            });
 
-    $scope.opened = true;
-  };
+    };
 
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
-
-  $scope.initDate = new Date('2016-15-20');
-  $scope.format = 'yyyy/MM/dd';
-
-  $scope.list = [];
-  $scope.text = 'hello';
-  $scope.submit = function() {
-      $scope.list.push({'PatientID':this.patID, 'fname':this.fname, 'lname':this.lname, 'mi':this.lname,
-			'DOB':this.dt, 'streetAddress':this.streetAddress, 'city':this.city, 'state':this.state,
-			'zip':this.zip, 'Sex':this.Sex, 'Race':this.Race, 'BMI':this.BMI,
-			'Height':this.Height, 'Weight':this.Weight});
-	};
-};
+}
 
 
 myApp.controller(controllers);
-})();
+
