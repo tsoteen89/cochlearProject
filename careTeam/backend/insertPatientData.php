@@ -6,22 +6,6 @@
       header('Access-Control-Max-Age: 86400');    // cache for 1 day
   }
 
-  /*$PatientID = $_POST['PatientID'];
-  $fname = $_POST['fname'];
-  $lname = $_POST['lname'];
-  $mi = $_POST['mi'];
-  $DOB = $_POST['DOB'];
-  $streetAddress = $_POST['streetAddress'];
-  $city = $_POST['city'];
-  $state = $_POST['state'];
-  $zip = $_POST['zip'];
-  $Sex = $_POST['Sex'];
-  $Race = $_POST['Race'];
-  $BMI = $_POST['BMI'];
-  $Height = $_POST['Height'];
-  $Weight = $_POST['Weight'];
-*/
-
 $username = $_POST['UserName'];
 $email = $_POST['Email'];
 $password = $_POST['pwd'];
