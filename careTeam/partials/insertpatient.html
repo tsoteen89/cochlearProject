@@ -1,19 +1,19 @@
 <div class="container" ng-controller="FrmController">
     
-    <form>
+    <form ng-submit="processForm()">
         <div>
             <label>Name</label> 
-            <input type="text" ng-model="username" placeholder="User Name" style='margin-left: 22px;'> 
+            <input type="text" name= "UserName" ng-model="formData.UserName" placeholder="User Name" style='margin-left: 22px;'> 
         </div>
         <div>
             <label>Email</label>
-            <input type="text" ng-model="useremail" placeholder="Email" style='margin-left: 22px;'> 
+            <input type="text" name="Email" ng-model="formData.Email" placeholder="Email" style='margin-left: 22px;'> 
         </div>
         <div>
             <label>Password</label>
-            <input type="password" ng-model="userpassword" placeholder="Password">
+            <input type="password" name="pwd" ng-model="formData.pwd" placeholder="Password">
         </div>
-            <button ng-click='SignUp();' style='margin-left: 63px;margin-top:10px'>SignUp</button>
+            <input type="submit" id="submit" value="submit">
     </form>
     
 </div>

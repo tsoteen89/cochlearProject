@@ -4,21 +4,22 @@ var controllers={};
 
 controllers.FrmController = function($scope, $http){
     
-    $scope.signUp = function(){
-        $http.post('backend/insertPatientData.php', {'uname': $scope.username, 'pswd': $scope.userpassword, 'email': $scope.useremail
-        })
-        .success(function(data, status, headers, config) {
-            
-            console.log("In success area");
-            
-        })
-        .error(function(data,status){
-            console.log("In error");
-        });
-        
-        
-    }
+    $scope.formData = {};
     
+    $scope.processForm = function() {
+        $http({
+            method  : 'POST',
+            url     : 'backend/insertPatientData.php',
+            data    : $.param($scope.formData),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+        })
+            .success(function(data) {
+                console.log(data);
+            });
+
+    };
     
     
 }
+
+careTeamApp.controller(controllers);
