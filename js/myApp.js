@@ -1,6 +1,6 @@
 //Travis Osteen
 (function(){
-var myApp = angular.module('myApp', ['ngRoute','ui.bootstrap','basicCtrl','phase.controllers','myApp.directives','messageController']);
+var myApp = angular.module('myApp', ['ngRoute','ui.bootstrap','basicCtrl','phase.controllers','myApp.directives','messageSystem']);
 
 
 myApp.config(function ($routeProvider) {
