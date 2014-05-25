@@ -1,98 +1,164 @@
 
-<div style="padding-left:50px;" ng-controller="formController">
+<div ng-controller="formController">
 
-	<form ng-submit="processForm()">
+    <!-- New Patient Header --> 
+    <div class="panel panel-default">    
+        <div class="panel-heading">
+          <div class="panel-title">
+            <h4>New Patient Information</h4>
+          </div>
+        </div>
+    </div>
+    
+    <div class="panel-body" ng-controller="TabController as tab">
+        <div class="tabbable"> 
+            <div class="tab-pane">
+              <form ng-submit="processForm()" class="form form-vertical">
+
+                <div class="control-group" >
+                  <label>Patient ID</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.patientID" ng-required="true" placeholder="Enter Patient ID">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>First Name</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>Middle Initial</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="mi" ng-model="formData.mi" ng-required="true" placeholder="Enter Middle Initial">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>Last Name</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name">
+                  </div>
+                </div><br>
+
+                <hr>        
+
+                <label>Date of Birth</label>
+                <div class="row">
+                    <div class="col-md-3">
+                        <p class="input-group">
+                          <input type="text" class="form-control" name="DOB" datepicker-popup="{{format}}" ng-model="formData.DOB" is-open="opened" max-date="{{maxDate}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="control-group" >
+                  <label>Sex</label>
+                  <div class="controls" >
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male">Male<br>
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female">Female
+                  </div>                        
+                </div><br>
+
+                <div class="control-group" >
+                    <label>Race</label>
+                    <div class="controls" >
+                        <select ng-model="formData.Race" name="Race" ng-required="true">
+                            <option>White</option>
+                            <option>African American</option>
+                            <option>Hispanic</option>
+                            <option>Asian</option>
+                            <option>American Indian</option>
+                        </select>
+                    </div>                        
+                </div><br>
+
+                <div class="control-group" >
+                    <label>BMI</label>
+                    <div class="controls" >
+                        <select name="BMI" ng-model="formData.BMI" ng-required="true">
+                            <option ng-repeat="BMI in bmis">{{BMI}}</option>
+                        </select>
+                    </div>                        
+                </div><br>                    
+
+                <div class="control-group" >
+                    <div class="controls" >
+                        <label>Height: (inches)</label>
+                        <select name="Height" ng-model="formData.Height">
+                            <option ng-repeat="Height in heights">{{Height}}</option>
+                        </select>&nbsp&nbsp
+
+                        <label>Weight</label>
+                        <select name="Weight" ng-model="formData.Weight">
+                            <option ng-repeat="Weight in weights">{{Weight}}</option>
+                        </select>
+                    </div>                        
+                </div><br>                         
+
+                <hr>
+
+                <div class="control-group" >
+                  <label>Street Address</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="streetAddress" ng-model="formData.streetAddress" ng-required="true" placeholder="Enter Street Address">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>City</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="city" ng-model="formData.city" ng-required="true" placeholder="Enter City">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>State</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="state" ng-model="formData.state" ng-required="true" placeholder="Enter State">
+                  </div>
+                </div><br>
+
+                <div class="control-group" >
+                  <label>Zipcode</label>
+                  <div class="controls" >
+                    <input style="width: 200px" type="text" class="form-control" name="zip" ng-model="formData.zip" ng-required="true" placeholder="Enter Code">
+                  </div>
+                </div><br>
+
+                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+
+              </form>
+            </div>
+        </div>
+    </div>
 
 	<h2 class="form">Patient Information</h2>
-
+        
 	<blockquote><text class="form">Patient ID:</text> &nbsp {{formData.patientID}} <br><br>
 		<text class="form">First Name:</text> &nbsp {{formData.fname}}
 		<text class="form"> &nbsp&nbsp MI:</text> &nbsp {{formData.mi}} <br><br>
 		<text class="form">Last Name:</text> &nbsp {{formData.lname}} <br><br>
 		<text class="form">Date of Birth:</text> &nbsp {{formData.DOB | date:'shortDate'}} <br><br>
-		<text class="form">Address:</text> &nbsp {{formData.street}} <br>
+		<text class="form">Address:</text> &nbsp {{formData.streetAddress}} <br>
 		<text style="padding-left:78px;">{{formData.city}},&nbsp{{formData.state}}&nbsp{{formData.zip}}</text> <br><br>
-		<text class="form">Sex:</text> &nbsp {{formData.sex}} <br>
-		<text class="form">Race:</text> &nbsp {{formData.race}} <br>
-		<text class="form">BMI:</text> &nbsp {{formData.bmi}} <br>
-		<text class="form">Height:</text> &nbsp {{formData.height}} <br>
-		<text class="form">Weight:</text> &nbsp {{formData.weight}} <br>
+		<text class="form">Sex:</text> &nbsp {{formData.Sex}} <br>
+		<text class="form">Race:</text> &nbsp {{formData.Race}} <br>
+		<text class="form">BMI:</text> &nbsp {{formData.BMI}} <br>
+		<text class="form">Height:</text> &nbsp {{formData.Height}} <br>
+		<text class="form">Weight:</text> &nbsp {{formData.Weight}} <br>
 	</blockquote>
 
-	<div style="width: 275px;">
-		<fieldset class="form-group">
-			<input type="text" rows="1" name="PatientID" ng-model="formData.patientID" ng-required="true" class="form-control" placeholder="Patient ID" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" name="fname" ng-model="formData.fname" ng-required="true" class="form-control" placeholder="First Name" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" name="mi" ng-model="formData.mi" ng-required="true" class="form-control" placeholder="Middle Initial" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" name="lname" ng-model="formData.lname" ng-required="true" class="form-control" placeholder="Last Name" title="newPatient"></textarea>
-			<br>
-
-	    <h4>Date of Birth</h4>
-	    <div class="row">
-	        <div class="col-md-9">
-	            <p class="input-group">
-	              <input type="text" class="form-control" name="DOB" datepicker-popup="{{format}}" ng-model="formData.DOB" is-open="opened" max-date="{{maxDate}}"
-								 datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-	              <span class="input-group-btn">
-	                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-	              </span>
-	            </p>
-	        </div>
-	    </div>
-
-			<input type="text" rows="1" ng-model="formData.streetAddress" name="streetAddress" ng-required="true" class="form-control" placeholder="Street Address" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" ng-model="formData.city" name="city" ng-required="true" class="form-control" placeholder="City" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" ng-model="formData.state" name="state" ng-required="true" class="form-control" placeholder="State" title="newPatient"></textarea>
-			<br>
-			<input type="text" rows="1" ng-model="formData.zip" name="zip" ng-required="true" class="form-control" placeholder="Zip" title="newPatient"></textarea>
-			<br>
-
-			Sex:
-		  <select ng-model="formData.Sex" name="Sex" placeholder="Male" title="newPatient" ng-required="true">
-				<option>Male</option>
-				<option>Female</option>
-				<option>Other</option>
-		  </select>
-			<br><br>
-
-			Race:
-			<select ng-model="formData.Race" name="Race" ng-required="true">
-				<option>White</option>
-				<option>African American</option>
-				<option>Hispanic</option>
-				<option>Asian</option>
-				<option>American Indian</option>
-			</select><br><br>
-
-			BMI:
-			<select name="BMI" ng-model="formData.BMI" ng-required="true">
-				<option ng-repeat="BMI in bmis">{{BMI}}</option>
-			</select><br><br>
-
-			Height: (inches)
-			<select name="Height" ng-model="formData.Height">
-				<option ng-repeat="Height in heights">{{Height}}</option>
-			</select>&nbsp&nbsp
-
-			Weight:
-			<select name="Weight" ng-model="formData.Weight">
-				<option ng-repeat="Weight in weights">{{Weight}}</option>
-			</select>
-
-		</fieldset>
-		<input type="submit" id="submit" value="Submit" />
-
-		<pre>{{ formData }}</pre>
-
-	</div>
-
-</form>
+    <pre>{{ formData }}</pre>
 
 </div>
+
 
 
