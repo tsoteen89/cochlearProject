@@ -1,0 +1,60 @@
+<div class="container" ng-controller="FrmController">
+    
+    <form class="form-horizontal" role="form" ng-submit="processForm()">
+        <div class="form-group">
+            <div class="col-md-2">
+            <label>Patient ID</label>
+            <input type="text" name="patientId" ng-model="formData.patientId" class="form-control" placeholder="Patient ID">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+            <label>First Name</label>
+            <input type="text" name= "fName" ng-model="formData.fName" class="form-control" placeholder="First Name"> 
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+            <label>Last Name</label>
+            <input type="text" name="lName" ng-model="formData.lName" class="form-control" placeholder="Last Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+            <label>Date of Birth</label>
+            <input type="text" name="dob" ng-model="formData.dob" class="form-control" placeholder="DOB">
+            </div>        
+        </div>
+        
+        <div class="col-md-2">
+        <strong>Care Status</strong>
+        <select name="careStatus" ng-model="formData.careStatus" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+        </div>
+        
+        <div class="col-md-2">
+        <strong>Ear</strong>
+        <select name="ear" ng-model="formData.ear" class="form-control">
+            <option>Left</option>
+            <option>Right</option>
+            <option>Both</option>
+        </select>
+        </div>
+            
+        <div class="col-md-2">
+        <strong>Treatment (months)</strong>
+        <select name="treatment" ng-model="formData.treatment" class="form-control">
+            <option ng-repeat="treatment in treatments">{{treatment}}</option>
+        </select>
+        </div>
+        
+        <br>
+        <br>
+        <br>
+        
+        <input type="submit" class="btn btn-primary" id="submit" value="submit">
+    </form>
+    
+</div>
