@@ -17,7 +17,7 @@
     $Weight = $_POST['Weight'];
 
 
-    $con = mysqli_connect("localhost", "root", "", "aii") or die("Server did not respond");
+    $con = mysqli_connect("localhost", "root", "root", "aii") or die("Server did not respond");
     mysqli_query($con,"INSERT INTO patient(PatientID, fname, lname, mi, DOB, streetAddress, city, state, zip,
     Sex, Race, BMI, Height, Weight) VALUES ('$PatientID','$fname','$lname','$mi', '$DOB', '$streetAddress', '$city', '$state', '$zip',
     '$Sex', '$Race', '$BMI', '$Height', '$Weight')");
