@@ -35,6 +35,6 @@ myApp.directive('audiometricTesting', function() {
 		restrict: 'E',
 		templateUrl: 'directives/audiometric-testing.html'
 	}
-});	
+});
 
 
