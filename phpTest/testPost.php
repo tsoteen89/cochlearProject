@@ -24,23 +24,4 @@
 
     echo "1 record was inserted";
 
-
-
-  mysqli_close($con);
-
-  echo "Pat ID:".$_POST["PatientID"];
-  echo "First: ".$_POST["fname"];
-  echo "Last: ".$_POST["lname"];
-  echo "Middle: ".$_POST["mi"];
-  echo "DOB: ".$_POST["DOB"];
-  echo "Street Address: ".$_POST["streetAddress"];
-  echo "City: ".$_POST["city"];
-  echo "State: ".$_POST["state"];
-  echo "Zip: ".$_POST["zip"];
-  echo "Sex: ".$_POST["Sex"];
-  echo "Race: ".$_POST["Race"];
-  echo "BMI: ".$_POST["BMI"];
-  echo "Height: ".$_POST["Height"];
-  echo "Weight: ".$_POST["Weight"];
-
 ?>
