@@ -9,5 +9,12 @@ app.directive('newCareTeamForm', function() {
 	}
 });	
 
+app.directive('editCareTeamForm', function() {
+    return {
+        restrict: 'E',
+        templateUrl: 'directives/edit-care-team-form.html'
+    }
+});
+
 
 

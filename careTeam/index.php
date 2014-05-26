@@ -135,6 +135,7 @@
 <script src="js/careTeamControllers/ct_invitationscontrollers.js"></script>
 <script src="js/careTeamControllers/ct_insertpatientcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_newCareTeamCtrl.js"></script>
+<script src="js/careTeamControllers/ct_editCareTeamCtrl.js"></script>            
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
