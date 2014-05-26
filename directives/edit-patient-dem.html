@@ -1,44 +1,15 @@
-
+<html>
 	  <p>I'm in NEWWWWW Demographics.</p>
 	  <p>Data is collected by CI Coordinator</p>
 	  <div ng-controller="existingPatientsCtrl">
 	  <form class="form form-vertical" ng-submit="submit()" action="phpTest/test2.php" method="post">
-	  <!--
-	  <p>hello{{test}}</p>
-	  <h4>Edit Personal Info</h4>
-		<div class="control-group" >
-		  <label>Name</label>
-		  <div class="controls" >
-			<input class="txt" type="text" class="form-control" placeholder="Enter Name">
-		  </div>
-		</div>
-		</br>
-		<div class="control-group" >
-		  <label>Date of Birth</label>
-		  <div class="controls" >
-			<input class="txt" type="text" class="form-control" placeholder="mm/dd/yy">
-		  </div>
-		</div>
-		</br>							
-		<div class="control-group" >
-		  <label>Sex</label>
-		  <div class="controls" >
-			<form action="">
-				<input type="radio" name="sex" value="male">Male<br>
-				<input type="radio" name="sex" value="female">Female
-			</form>
-			</div>
-		</div>
-		<hr>
-		<h4>Edit Contact Info</h4>
-		<div class="control-group">
-		  <label>Phone Number</label>
-		  <div class="controls">
-			<input class="txt"type="text" class="form-control" placeholder="Enter Phone Number">
-		</div>
-		-->
-		<p> !!!!!!!!!!!! </p>
-
+	  
+          <div>
+              <select ng-model="selected" ng-options="patient as patient.fname for patient in patients"></select> 
+              
+            </div>
+		
+          
 		<div class="control-group">
 		
 			<blockquote>
@@ -48,15 +19,23 @@
 			
 			<label>Edit Address!!!</label>
 			<br>
-			<input type="text" class="txt" name="street" ng-model="street" class="form-control" placeholder="Street Address" title="existingPatient"/>
+            <label>Patient ID</label></br>
+            <input type="text" class="txt" name="id" ng-model="selected.PatientID" class="form-control" placeholder="Patient ID" value="" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" name="city" ng-model="city" class="form-control" placeholder="City" title="existingPatient"/>
+            <label>Street</label></br>
+			<input type="text" class="txt" name="street" ng-model="selected.streetAddress" class="form-control" placeholder="Street Address" value="" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" name="state" ng-model="state" class="form-control" placeholder="State" title="existingPatient"/>
+            <label>City</label></br>
+			<input type="text" class="txt" name="city" ng-model="selected.city" class="form-control" placeholder="City" title="existingPatient"/>
 			<br><br>
-			<input type="text" class="txt" name="zip" ng-model="zip" class="form-control" placeholder="Zip" title="existingPatient"/>
+            <label>State</label></br>
+			<input type="text" class="txt" name="state" ng-model="selected.state" class="form-control" placeholder="State" title="existingPatient"/>
+			<br><br>
+            <label>Zip code</label></br>
+			<input type="text" class="txt" name="zip" ng-model="selected.zip" class="form-control" placeholder="Zip" title="existingPatient"/>
 			<br><br>
 			
+            {{selected.PatientID}}
 		</div> 
 			<input type="submit" id="submit" value="Submit" />
 			<pre>list={{list}}</pre>
@@ -75,5 +54,5 @@
 		  </div>
 		</div> -->
 	
-
+</html>	
 	  
