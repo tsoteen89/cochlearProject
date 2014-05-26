@@ -37,4 +37,11 @@ myApp.directive('audiometricTesting', function() {
 	}
 });	
 
+myApp.directive('history', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/history.html'
+	}
+});	
+
 
