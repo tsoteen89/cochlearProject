@@ -1,15 +1,16 @@
-(function(){var myApp = angular.module('phase.controllers', []);
+(function(){
+var myApp = angular.module('phase.controllers', []);
 
 var controllers = {};
 
-controllers.existingPatientsCtrl = function ($scope) {
+controllers.existingPatientsCtrl = function ($scope, $http) {
 
-  $scope.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    $scope.opened = true;
-  };
+    $scope.patients = {};
+    $scope.selected={};
+    $http.get('phpTest/getData.php')
+            .then(function(res){
+              $scope.patients = res.data;
+              });
 
 
   $scope.street = "";
@@ -17,12 +18,29 @@ controllers.existingPatientsCtrl = function ($scope) {
   $scope.state = "";
   $scope.zip = "";
    $scope.list = [];
+ 
+    /*travis stuff
+    $scope.formData = {};
 
-  $scope.submit = function() {
+    // edit the form
+    $scope.editAddress = function() {
+        $http({
+            method  : 'PUT',
+            url     : 'phpTest/testPost.php',
+            data    : $.param($scope.formData),  // pass in data as strings
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+        })
+            .success(function(data) {
+                console.log(data);
+            });
+
+    };    
+    */
+  /*$scope.submit = function() {
 		{
-			$scope.list.push({'street':this.street,'city':this.city,'state':this.state,'zip':this.zip});
+			 $scope.list.push({'street':this.street,'city':this.city,'state':this.state,'zip':this.zip});
 		}
-	};
+	};*/
 };
 
 controllers.periopCtrl = function ($scope) {
