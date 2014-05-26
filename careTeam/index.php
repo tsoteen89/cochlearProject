@@ -3,7 +3,6 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title>Bootply.com - 85861</title>
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -29,10 +28,10 @@
 
 	    <li class="dropdown">
           <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-            <i class="glyphicon glyphicon-user"></i> Patients <span class="caret"></span></a>
+            <i class="glyphicon glyphicon-user"></i> Care Teams <span class="caret"></span></a>
           <ul id="g-account-menu" class="dropdown-menu" role="menu">
-            <li><a href="#/newPatient">New Patient</a></li>
-            <li><a href="#/editPatient">Edit Patient</a></li>
+            <li><a href="#/newCareTeam">New Care Team</a></li>
+            <li><a href="#/editCareTeam">Edit Care Team</a></li>
           </ul>
         </li>
 
@@ -125,26 +124,19 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 	<!-- script references -->
 <script src="js/angular.js"></script>
 <script src="js/angular-route.js"></script>
 <script src="js/jquery.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/app.directives.js"></script>
 <script src="js/careTeamControllers/ct_patientcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_careteamcontrollers.js"></script>
 <script src="js/careTeamControllers/ct_invitationscontrollers.js"></script>
 <script src="js/careTeamControllers/ct_insertpatientcontrollers.js"></script>
+<script src="js/careTeamControllers/ct_newCareTeamCtrl.js"></script>
+<script src="js/careTeamControllers/ct_editCareTeamCtrl.js"></script>            
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
-<script src="js/app.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>

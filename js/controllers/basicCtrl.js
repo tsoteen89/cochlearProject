@@ -24,6 +24,13 @@ controllers.formController = function($scope, $http) {
 	$scope.heights = [];
 	$scope.weights = [];
 	$scope.i = 0;
+    $scope.maxDate = new Date();
+    
+    $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.opened = true;
+    };
 
 	for($scope.i=0;$scope.i<36;$scope.i++){
 		$scope.bmis[$scope.i] = $scope.i + 10;
@@ -37,8 +44,7 @@ controllers.formController = function($scope, $http) {
 		$scope.weights[$scope.i] = $scope.i + 80;
 	}
 
-    // create a blank object to hold our form information
-    // $scope will allow this to pass between controller and view
+    // create a blank object to hold form information
     $scope.formData = {};
 
     // process the form

@@ -1,4 +1,4 @@
-var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap','ct_careteamcontrollers', 'ct_patientcontrollers', 'ct_invitationscontrollers', 'ct_insertpatientcontrollers']);
+var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap','ct_careteamcontrollers', 'ct_patientcontrollers', 'ct_invitationscontrollers', 'ct_insertpatientcontrollers', 'ct_newCareTeamCtrl', 'ct_editCareTeamCtrl', 'app.directives']);
 
 			app.config(function ($routeProvider) {
 
@@ -30,6 +30,14 @@ var app = angular.module('careTeamApp',['ngRoute','ui.bootstrap','ct_careteamcon
             .when('/insert',{
             controllers:'FrmController',
             templateUrl: 'partials/insertpatient.html'
+            })
+            .when('/newCareTeam',{
+                controllers:'',
+                templateUrl: 'partials/newCareTeam.html'
+            })
+            .when('/editCareTeam',{
+                controllers:'',
+                templateUrl: 'partials/editCareTeam.html'
             })
 			.otherwise({redirectTo: 'partials/home.html'});
 
