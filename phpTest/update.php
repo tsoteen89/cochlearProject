@@ -20,7 +20,7 @@ $sql = 'UPDATE patient
         SET streetAddress=street, city=newCity, state=newState, zip=newZip,
         WHERE PatientID=id';
 
-mysql_select_db('TUTORIALS');
+
 $retval = mysql_query( $sql, $conn );
 if(! $retval )
 {

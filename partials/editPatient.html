@@ -42,6 +42,8 @@
 				<div class="panel-body" ng-controller="TabController as tab" >
 				  <div class="tabbable"> <!-- Only required for left/right tabs -->
 					  <ul class="nav nav-tabs">
+                          <li ng-class="{active:tab.isSelected(-1)}">
+                            <a href ng-click="tab.selectTab(-1)">History</a></li>
 						<li ng-class="{active:tab.isSelected(0)}">
                             <a href ng-click="tab.selectTab(0)">Demographics</a></li>
 						<li ng-class="{active:tab.isSelected(1)}">
@@ -69,6 +71,9 @@
 					  {{tab}}
                   
 					  <!--<div class="tab-content">-->
+                   <!--<div class="tab-pane" id="tab0" ng-show="tab.isSelected(-1)" >
+						<history></history>
+					</div>-->
 					<div class="tab-pane" id="tab0" ng-show="tab.isSelected(0)" >
 						<edit-patient-dem> </edit-patient-dem>
 					</div>
@@ -99,44 +104,6 @@
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(6)" ng-controller="audioTestCtrl">
                       <p>I'm in 1 month Audiometric.</p>
                       <audiometric-testing></audiometric-testing>
-                            <hr/>
-                            </br>
-                            <h3> Implanted Ear, Implant On </h3>
-                              <div class="row">
-                                <div class="col-xs-6">
-                                <label>Pure Tone Average (PTA), in decibels</label>
-                                  <div class="range">
-                                    <input type="range" name="range" ng-model="pta" min="0" max="120" value="60" onchange="range.value=value">
-                                    <output id="range" >60 db</output>
-                                  </div>
-                                </div>							
-                              </div>
-
-                              <div class="row">
-                                <div class="col-xs-6">
-                                <label>Speech Reception Threshold (SRT), in decibels</label>
-                                  <div class="range range-success">
-                                    <input type="range" name="range" ng-model="srt"  min="0" max="120" value="60" onchange="rangeSuccess.value=value">
-                                    <output id="rangeSuccess" >50 db</output>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="row">
-                                <div class="col-xs-6">
-                                <label>Speech Discrimination Score (SDS), percentage</label>
-                                  <div class="range range-warning">
-                                    <input type="range" name="range" ng-model="sds" min="0" max="100" value="50" onchange="rangeWarning.value=value">
-                                    <output id="rangeWarning">50%</output>
-                                  </div>
-                                </div>
-                              </div>
-                            <input type="submit" id="submit" value="Submit" />
-                                <pre>test values={{testValues}}</pre>
-
-                                PTA: {{pta}}  </br>
-                                SRT: {{srt}}  </br>
-                                SDS: {{sds}} </br>
                     </div>
 									
 		
