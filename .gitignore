@@ -2,8 +2,6 @@
 Documents/GitHubFlowChart/README.md
 
 
-*.png
-
 *.gif
 
 Documents/GitHubFlowChart/img/header_logo_hover
@@ -13,6 +11,5 @@ Documents/GitHubFlowChart/LICENSE/ALv2
 Documents/GitHubFlowChart/LICENSE/GPLv2
 
 
-*.json
 
 Documents/GitHubFlowChart/LICENSE/MIT
