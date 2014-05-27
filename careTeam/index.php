@@ -125,8 +125,9 @@
 
 
 	<!-- script references -->
-<script src="js/angular.js"></script>
-<script src="js/angular-route.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+<!--<script src="js/angular.js"></script> -->
+<script src="js/angular-route.js"></script>      
 <script src="js/jquery.min.js"></script>
 <script src="js/app.js"></script>
 <script src="js/app.directives.js"></script>
