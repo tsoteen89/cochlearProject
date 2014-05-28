@@ -15,12 +15,14 @@ controllers.TabController = function(){
 	};
 } 
     
-controllers.formController = function($scope) {
+controllers.formController = function($scope, $sce) {
     
 	$scope.i = 5;
 
     // create a blank object to hold form information
     $scope.formData = {};
+    
+    $scope.htmlStuff = $sce.trustAsHtml('<h1>I hate github</h1>');
 
     // process the form
     /*
