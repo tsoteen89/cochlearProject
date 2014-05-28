@@ -2,19 +2,28 @@
 
 	var myApp = angular.module('messageSystem',[]);
 
-	myApp.controller('messageController', function(){
+	var controllers = {};
 
-		this.tab = 0;
+	controllers.messageController = function($scope,$http){
 
-		this.tabSelected = function(tabVal){
+		$scope.messageInputs = {};
+		
+		$scope.messageForm = function(){
 
-			this.tab = tabVal;
+			$http({
+
+		 		method : "POST",
+				url    : "phpTest/messageSubmitTest.php",
+		 		data   : $.param($scope.messageInputs),
+		 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+		 	})
+		 	.success(function(data){
+                 console.log(data);
+        	});
+        	$scope.messageInputs = {};
 		};
+	};
 
-		 this.isSelected = function(tabVal){
-
-		 	return this.tab === tabVal;
-		};
-	});
+	myApp.controller(controllers);
 
 })();
