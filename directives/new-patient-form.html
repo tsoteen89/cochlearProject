@@ -14,8 +14,6 @@
     <!-- Progress Bar -->
     <div>
 
-    <div><button ng-click="fillBar()" name="Button" /></div>
-    <small><em>No animation</em></small>
     <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
 
     </div>
@@ -28,28 +26,28 @@
                 <div class="control-group" >
                   <label>Patient ID</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.patientID" ng-required="true" placeholder="Enter Patient ID">
+                    <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.patientID" ng-required="true" placeholder="Enter Patient ID" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>First Name</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name">
+                    <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>Middle Initial</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="mi" ng-model="formData.mi" ng-required="true" placeholder="Enter Middle Initial">
+                    <input style="width: 200px" type="text" class="form-control" name="mi" ng-model="formData.mi" ng-required="true" placeholder="Enter Middle Initial" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>Last Name</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name">
+                    <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
@@ -72,15 +70,15 @@
                 <div class="control-group" >
                   <label>Sex</label>
                   <div class="controls" >
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male"> Male<br>
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female"> Female
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male" ng-blur="fillBar()"> Male<br>
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female" ng-blur="fillBar()"> Female
                   </div>                        
                 </div><br>
 
                 <div class="control-group" >
                     <label>Race</label>
                     <div class="controls" >
-                        <select ng-model="formData.Race" name="Race" ng-required="true">
+                        <select ng-model="formData.Race" name="Race" ng-required="true" ng-blur="fillBar()">
                             <option>White</option>
                             <option>African American</option>
                             <option>Hispanic</option>
@@ -93,7 +91,7 @@
                 <div class="control-group" >
                     <label>BMI</label>
                     <div class="controls" >
-                        <select name="BMI" ng-model="formData.BMI" ng-required="true">
+                        <select name="BMI" ng-model="formData.BMI" ng-required="true" ng-blur="fillBar()">
                             <option ng-repeat="BMI in bmis">{{BMI}}</option>
                         </select>
                     </div>                        
@@ -102,12 +100,12 @@
                 <div class="control-group" >
                     <div class="controls" >
                         <label>Height: (inches)</label>
-                        <select name="Height" ng-model="formData.Height">
+                        <select name="Height" ng-model="formData.Height" ng-blur="fillBar()">
                             <option ng-repeat="Height in heights">{{Height}}</option>
                         </select>&nbsp&nbsp
 
                         <label>Weight</label>
-                        <select name="Weight" ng-model="formData.Weight">
+                        <select name="Weight" ng-model="formData.Weight" ng-blur="fillBar()">
                             <option ng-repeat="Weight in weights">{{Weight}}</option>
                         </select>
                     </div>                        
@@ -118,28 +116,28 @@
                 <div class="control-group" >
                   <label>Street Address</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="streetAddress" ng-model="formData.streetAddress" ng-required="true" placeholder="Enter Street Address">
+                    <input style="width: 200px" type="text" class="form-control" name="streetAddress" ng-model="formData.streetAddress" ng-required="true" placeholder="Enter Street Address" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>City</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="city" ng-model="formData.city" ng-required="true" placeholder="Enter City">
+                    <input style="width: 200px" type="text" class="form-control" name="city" ng-model="formData.city" ng-required="true" placeholder="Enter City" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>State</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="state" ng-model="formData.state" ng-required="true" placeholder="Enter State">
+                    <input style="width: 200px" type="text" class="form-control" name="state" ng-model="formData.state" ng-required="true" placeholder="Enter State" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
                 <div class="control-group" >
                   <label>Zipcode</label>
                   <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="zip" ng-model="formData.zip" ng-required="true" placeholder="Enter Code">
+                    <input style="width: 200px" type="text" class="form-control" name="zip" ng-model="formData.zip" ng-required="true" placeholder="Enter Code" ng-blur="fillBar()">
                   </div>
                 </div><br>
 
