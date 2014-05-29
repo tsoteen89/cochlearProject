@@ -91,7 +91,7 @@ controllers.ProgressDemoCtrl = function($scope) {
         $scope.type = type;
     }
   };
-  $scope.fillBar();
+  //$scope.fillBar();
 
 }
 
