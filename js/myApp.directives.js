@@ -9,10 +9,10 @@ myApp.directive('newPatientForm', function() {
 	}
 });	
 
-myApp.directive('editPatientDem', function() {
+myApp.directive('editPatientContact', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/edit-patient-dem.html'
+		templateUrl: 'directives/edit-patient-contact.html'
 	}
 });	
 
@@ -34,6 +34,20 @@ myApp.directive('audiometricTesting', function() {
 	return {
 		restrict: 'E',
 		templateUrl: 'directives/audiometric-testing.html'
+	}
+});
+
+myApp.directive('demographicsTab', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/demographics-tab.html'
+	}
+});
+
+myApp.directive('surgicalConsultTab', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/surgical-consult-tab.html'
 	}
 });
 

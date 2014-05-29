@@ -1,31 +1,19 @@
 <p>I'm in preop /or periop?.</p>
 	  <p>Data is collected by MA/surgeon</p>
 
-    <style>
-        .progress-wrap {
-          text-align: center;
-          font-size: 10px;
-          color: white;
-          margin: 0 0 20px 0;
-          progress {
-            width: 100%;
-            margin: 0 0 5px 0;
-          }
-        }
-    </style>
  <div ng-controller="periopCtrl">
 <div ng-controller="progressCtrl">
     
     <small><em><b>{{message}}</b></em></small>
     <progressbar class="progress-striped active" value="value" type="{{value}}">{{value}}</progressbar>
-   <br><hr>
+   <hr>
 	  
 	  <form class="form form-vertical" ng-submit="submit()">
 	  <div class="control-group" >
         
 		  <label>Date of Implantation</label>
 		  <div class="controls" >
-			<input ng-click="changeCount()" class="txt" type="text" name="date" ng-model="date" class="form-control" placeholder="mm/dd/yy">
+			<input ng-blur="changeCount()" class="txt" type="text" name="date" ng-model="date" class="form-control" placeholder="mm/dd/yy">
 		  </div>
 	  </div>
 	  <div class="control-group" >
