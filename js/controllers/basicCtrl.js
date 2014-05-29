@@ -7,6 +7,7 @@ controllers.regularController = function($scope) {
 	$scope.name = "Anne";
 }
 
+
 controllers.TabController = function(){
 	this.tab=0;
 	this.selectTab=function(tabNum){
@@ -64,12 +65,43 @@ controllers.formController = function($scope, $http) {
 }
 
 
-controllers.newAPICtrl = function($scope, $http, $templateCache)
-{
+controllers.ProgressDemoCtrl = function($scope) {
+
+  $scope.max = 100;
+  $scope.dynamic = 0;
+
+  $scope.fillBar = function() {
+    var value = 10;
+    var type;
+
+    if ($scope.dynamic < 25) {
+      type = 'danger';
+    } else if ($scope.dynamic < 50) {
+      type = 'warning';
+    } else if ($scope.dynamic < 75) {
+      type = 'info';
+    } else {
+      type = 'success';
+    }
+
+    $scope.showWarning = (type === 'danger' || type === 'warning');
+    
+    if($scope.dynamic < 100)  { 
+        $scope.dynamic = $scope.dynamic + value;
+        $scope.type = type;
+    }
+  };
+  $scope.fillBar();
+
+}
+
+
+controllers.newAPICtrl = function($scope, $http, $templateCache) {
+    
     $scope.theVar = 4;
     
     $scope.method = 'GET';
-    $scope.url = 'http://api.msu2u.net/v1/patient/?limit=5&output=json';
+    $scope.url = 'http://api.msu2u.net/v1/patient/';
 
     $scope.fetch = function() {
           $scope.code = null;
