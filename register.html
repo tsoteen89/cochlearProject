@@ -13,20 +13,20 @@
             <div class="row">
                 <div class="col-md-9">
                     <div class="panel panel-default">
-                
-                        <!-- New Patient Header --> 
-                        <div class="panel panel-default">    
-                            <div class="panel-heading">
-                              <div class="panel-title">
-                                <h4>Facility Registration Form</h4>
-                              </div>
-                            </div>
-                        </div>
                         
                         <div class="panel-body" ng-controller="TabController as tab">
                             <div class="tabbable"> 
                                 <div class="tab-pane">
                                     <form ng-submit="processForm()" class="form form-vertical">
+                                    
+                                        <!-- New Patient Header --> 
+                                        <div class="panel panel-default">    
+                                            <div class="panel-heading">
+                                              <div class="panel-title">
+                                                <h4>Facility Registration Form</h4>
+                                              </div>
+                                            </div>
+                                        </div>
                                         
                                         <!-- Facility Name -->
                                         <div class="control-group" >
@@ -34,39 +34,68 @@
                                             <div class="controls" >
                                                 <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityName" ng-required="true" placeholder="Enter Facility Name" ng-blur="fillBar()">
                                             </div>
-                                        </div><br>
-                                        
-                                        <!-- Facility Street Address -->
-                                        <div class="control-group" >
-                                            <label>Facility Street Address</label>
-                                            <div class="controls" >
-                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityStreetAddress" ng-required="true" placeholder="Enter Facility Street Address" ng-blur="fillBar()">
-                                            </div>
-                                        </div><br>                                        
-                                        
-                                        <!-- Facility City -->
-                                        <div class="control-group" >
-                                            <label>Facility City</label>
-                                            <div class="controls" >
-                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityCity" ng-required="true" placeholder="Enter Facility City" ng-blur="fillBar()">
-                                            </div>
-                                        </div><br>
+                                        </div><br><hr>
                                         
                                         <!-- Facility State -->
-                                        <div class="control-group" >
-                                            <label>Facility State</label>
-                                            <div class="controls" >
+                                        <div class="control-group">
+                                            <div class="controls" style="float:right;margin-right:115px">
+                                                <label>Facility State</label>
                                                 <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityState" ng-required="true" placeholder="Enter Facility State" ng-blur="fillBar()">
+                                            </div>                                 
+                                        
+                                        <!-- Facility City -->
+
+                                            <div class="controls" style="float:right;padding-left:50px;padding-right:50px">
+                                                <label>Facility City</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityCity" ng-required="true" placeholder="Enter Facility City" ng-blur="fillBar()">
                                             </div>
-                                        </div><br>
+                                            
+                                        <!-- Facility Street Address -->
+                                            <div class="controls" style="float:right">
+                                                <label>Facility Street Address</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityStreet" ng-required="true" placeholder="Enter Facility Street Address" ng-blur="fillBar()">
+                                            </div><br><br><br><br>
+                                        
+                                        <!-- Facility Zip -->
+                                            <div class="controls" >
+                                                <label>Facility Zipcode</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityZip" ng-required="true" placeholder="Enter Facility Zipcode" ng-blur="fillBar()">
+                                            </div><br>
+                                        
+                                        <!-- Facility Phone -->
+                                            <div class="controls">
+                                                <label>Facility Phone Number</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityPhone" ng-required="true" placeholder="Enter Facility Phone Number" ng-blur="fillBar()">
+                                            </div><br><hr>
+                                            
+                                            <!-- New Patient Header --> 
+                                            <div class="panel panel-default">    
+                                                <div class="panel-heading">
+                                                  <div class="panel-title">
+                                                    <h4>Facility Administrator Form</h4>
+                                                  </div>
+                                                </div>
+                                            </div>
                                         
                                         <!-- Administrator Name -->
-                                        <div class="control-group" >
-                                            <label>First Name</label>
-                                            <div class="controls" >
+                                            <div class="controls" style="float:right;margin-right:115px">
+                                                <label>Last Name</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()">
+                                            </div>
+                                            
+                                            <div class="controls" style="float:right;padding-left:50px;padding-right:50px">
+                                                <label>Middle Name</label>
+                                                <input style="width: 200px" type="text" class="form-control" name="middle" ng-model="formData.middle" ng-required="true" placeholder="Enter Middle Initial" ng-blur="fillBar()">
+                                            </div>
+                                            
+                                            <div class="controls" style="float:right">
+                                                <label>First Name</label>
                                                 <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
                                             </div>
+                                            
+                                            
                                         </div><br>
+
                                         
                                     </form>
                                 </div>
