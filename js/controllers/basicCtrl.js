@@ -91,7 +91,10 @@ controllers.ProgressDemoCtrl = function($scope) {
         $scope.type = type;
     }
   };
+<<<<<<< HEAD
   //$scope.fillBar();
+=======
+>>>>>>> origin/Travis
 
 }
 
