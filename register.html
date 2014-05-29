@@ -78,7 +78,7 @@
                                 <!-- Facility Phone -->
                                     <div class="controls">
                                         <label>Facility Phone Number</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityPhone" ng-required="true" placeholder="Enter Facility Phone Number" ng-blur="fillBar()">
+                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityPhone" ng-required="true" placeholder="ex.(555-424-4243)" ng-blur="fillBar()">
                                     </div><br><hr>
 
                                     <!-- New Patient Header --> 
@@ -138,10 +138,10 @@
             <text class="form">Facility Name:</text> &nbsp {{formData.facilityName}}<br><br>
             <text class="form">Address:</text> &nbsp {{formData.facilityStreet}} <br>
             <text style="padding-left:78px;">{{formData.facilityCity}},&nbsp{{formData.facilityState}}&nbsp{{formData.facilityZip}}</text> <br><br>
-            <text style="form">Phone:</text> &nbsp {{formData.phone}} <br><br>
+            <text style="form">Phone:</text> &nbsp {{formData.facilityPhone}} <br><br>
             <hr>
             <text class="form">First Name:</text> &nbsp {{formData.fname}}
-            <text class="form"> &nbsp&nbsp MI:</text> &nbsp {{formData.mi}} <br><br>
+            <text class="form"> &nbsp&nbsp MI:</text> &nbsp {{formData.middle}} <br><br>
             <text class="form">Last Name:</text> &nbsp {{formData.lname}} <br><br>
             <text class="form">E-Mail Address:</text> &nbsp {{formData.email}} <br><br>
             <text class="form">Username:</text> &nbsp {{formData.uname}} <br><br>
@@ -172,7 +172,6 @@
     var controllers = {};
     
     controllers.regCtrl =  function($scope) {
-        $scope.x = 3;
         $scope.formData = {};
     }
     
