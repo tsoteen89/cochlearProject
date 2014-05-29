@@ -92,6 +92,7 @@ controllers.ProgressDemoCtrl = function($scope) {
     }
   };
 
+
 }
 
 

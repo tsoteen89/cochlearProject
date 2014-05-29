@@ -19,17 +19,47 @@
   <!-- upper section -->
   <div class="row">
     <div class="col-md-9">
-      	
-      <!-- column 2 -->	
-      
-     
+    
        <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>  
             
        <hr>
+        <div ng-controller="AccordionDemoCtrl">
+
+
+          <label class="checkbox">
+            <input type="checkbox" ng-model="oneAtATime">
+            Open only one at a time
+          </label>
+            
+          <accordion close-others="oneAtATime">
+            <accordion-group heading="Current Patients, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+              <div ng-controller="existingPatientsCtrl">
+              <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records" name="Current Patients"></select> 
+            </div>
+            </accordion-group>
+              
+            <accordion-group heading="Dynamic Body Content">
+              <p>The body of the accordion group grows to fit the contents</p>
+                <button class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
+                <div ng-repeat="item in items">{{item}}</div>
+            </accordion-group>
+              
+            <accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+              {{group.content}}
+            </accordion-group>
+              
+            <accordion-group is-open="status.open">
+                <accordion-heading>
+                    I can have markup, too!
+                    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}">                        </i>
+                </accordion-heading>
+                This is just some content to illustrate fancy headings.
+            </accordion-group>
+          </accordion>
+        </div>
       
 	   <div class="row">
-            <!-- center left-->	
-         	<div class="col-md-12">
+          <div class="col-md-12">
 
               <hr>
               <div class="panel panel-default">
@@ -72,7 +102,7 @@
                   
 					  <!--<div class="tab-content">-->
                    <!--<div class="tab-pane" id="tab0" ng-show="tab.isSelected(-1)" >
-						
+						<history></history>
 					</div>-->
 					<div class="tab-pane" id="tab0" ng-show="tab.isSelected(0)" >
 						<edit-patient-dem> </edit-patient-dem>
