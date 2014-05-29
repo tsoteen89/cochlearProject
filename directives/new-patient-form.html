@@ -12,10 +12,9 @@
     </div>
     
     <!-- Progress Bar -->
-    <div>
+    <div style="position:fixed; margin-top: 50px; margin-left:500px; width: 300px">
 
-    <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
-
+        <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
     </div>
     
     <div class="panel-body" ng-controller="TabController as tab">
@@ -57,7 +56,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <p class="input-group">
-                          <input type="text" class="form-control" name="DOB" datepicker-popup="{{format}}" ng-model="formData.DOB" is-open="opened" max-date="{{maxDate}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                          <input type="text" class="form-control" name="DOB" datepicker-popup="{{format}}" ng-model="formData.DOB" is-open="opened" max-date="{{maxDate}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-focus="fillBar()" />
                           <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                           </span>
@@ -70,8 +69,8 @@
                 <div class="control-group" >
                   <label>Sex</label>
                   <div class="controls" >
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male" ng-blur="fillBar()"> Male<br>
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female" ng-blur="fillBar()"> Female
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male" ng-focus="fillBar()"> Male<br>
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female" ng-focus="fillBar()"> Female
                   </div>                        
                 </div><br>
 

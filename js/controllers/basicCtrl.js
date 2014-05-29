@@ -71,7 +71,7 @@ controllers.ProgressDemoCtrl = function($scope) {
   $scope.dynamic = 0;
 
   $scope.fillBar = function() {
-    var value = 10;
+    var value = 7;
     var type;
 
     if ($scope.dynamic < 25) {
