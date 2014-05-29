@@ -7,6 +7,7 @@ controllers.regularController = function($scope) {
 	$scope.name = "Anne";
 }
 
+
 controllers.TabController = function(){
 	this.tab=0;
 	this.selectTab=function(tabNum){
@@ -64,34 +65,65 @@ controllers.formController = function($scope, $http) {
 }
 
 
-controllers.newAPICtrl = function($scope, $http, $templateCache)
-{
+controllers.ProgressDemoCtrl = function($scope) {
+
+  $scope.max = 100;
+  $scope.dynamic = 0;
+
+  $scope.fillBar = function() {
+    var value = 10;
+    var type;
+
+    if ($scope.dynamic < 25) {
+      type = 'danger';
+    } else if ($scope.dynamic < 50) {
+      type = 'warning';
+    } else if ($scope.dynamic < 75) {
+      type = 'info';
+    } else {
+      type = 'success';
+    }
+
+    $scope.showWarning = (type === 'danger' || type === 'warning');
+    
+    if($scope.dynamic < 100)  { 
+        $scope.dynamic = $scope.dynamic + value;
+        $scope.type = type;
+    }
+  };
+  $scope.fillBar();
+
+}
+
+
+controllers.newAPICtrl = function($scope, $http, $templateCache) {
+    
     $scope.theVar = 4;
     
     $scope.method = 'GET';
     $scope.url = 'http://api.msu2u.net/v1/patient/';
 
     $scope.fetch = function() {
-      $scope.code = null;
-      $scope.response = null;
+          $scope.code = null;
+          $scope.response = null;
 
-      $http({
-          method: $scope.method, 
-          url: $scope.url, 
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          cache: $templateCache}
-      ).
-      success(function(data, status) {
+          $http({
+              method: $scope.method, 
+              url: $scope.url,
+              cache: $templateCache
+          }).
+          success(function(data, status) {
+              $scope.status = status;
+              $scope.data = data;
+          }).
+          error(function(data, status) {
+          $scope.data = data || "Request failed";
           $scope.status = status;
-          $scope.data = data;
-      }).
-      error(function(data, status) {
-      $scope.data = data || "Request failed";
-      $scope.status = status;
-      });
+          });
 
+    };  
 }
-}
+
 
 
 myApp.controller(controllers);

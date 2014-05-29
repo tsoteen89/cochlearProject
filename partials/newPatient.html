@@ -1,6 +1,6 @@
 <html>
 	<body>
-     <!--   
+  
         <div class="container">    
             <div class="row">
                 <div class="col-md-9">
@@ -13,17 +13,26 @@
                 </div>
             </div>
         </div>
-    -->
+
         
         
         
-        
-        <div ng-controller="newAPICtrl">
+        <!-- CODE TO ACCESS JSON FROM MSU2U API AND DISPLAY INDIVIDUAL PEICES 
+        <div ng-controller="newAPICtrl" class="container">
             {{theVar}}
             <button id="fetchbtn" ng-click="fetch()">fetch</button><br>
-            {{data}}
+
+            <ul>
+                <li ng-repeat="dater in data.records">
+                    {{dater.fname}} {{dater.lname}}
+                </li>
+            </ul>
+
+            {{data.records[1].lname | json}}
         
         </div>
+        -->
+
     </body>
 </html>
 

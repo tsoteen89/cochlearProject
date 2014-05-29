@@ -1,5 +1,6 @@
 
 <div ng-controller="formController">
+<div ng-controller="ProgressDemoCtrl">
 
     <!-- New Patient Header --> 
     <div class="panel panel-default">    
@@ -8,6 +9,15 @@
             <h4>New Patient Information</h4>
           </div>
         </div>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div>
+
+    <div><button ng-click="fillBar()" name="Button" /></div>
+    <small><em>No animation</em></small>
+    <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
+
     </div>
     
     <div class="panel-body" ng-controller="TabController as tab">
@@ -62,8 +72,8 @@
                 <div class="control-group" >
                   <label>Sex</label>
                   <div class="controls" >
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male">Male<br>
-                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female">Female
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="male"> Male<br>
+                    <input type="radio" name="Sex" ng-model="formData.Sex" value="female"> Female
                   </div>                        
                 </div><br>
 
@@ -159,6 +169,11 @@
     <pre>{{ formData }}</pre>
 
 </div>
+</div>
+
+
+
+
 
 
 

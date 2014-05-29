@@ -1,0 +1,88 @@
+There will be administrative pages.  These pages will allow the administrative User the power to do admin
+things, such as delete users, add users, and change User Level. 
+
+
+After registration, Page for verify by email? or no verification.  Just re-route back to login page to log in.
+
+
+How are facility ID's created?  Are they all in a list somewhere... 
+
+{
+    Things To Have In Personal Page:  (ALL)
+    1. Care Teams they are a member of
+    2. Messages
+    3. Invites
+
+
+    Things To Have in Personal Page: (Admin)
+    1. Possibly Things....
+    2. Create Care Teams
+    3. Edit Care Teams
+    4. Soft Delete Care Team
+
+    Things To Have in Personal Page: (Audiologist)
+    1. News Feed
+
+    Things To Have in Personal Page: (Surgeon)
+    1. News Feed
+
+    Things To Have in Personal Page: (MA/Nurse)
+    1. News Feed
+}
+
+
+
+{
+    Things To Have In Care Teams: (ALL)
+    1. 
+    
+    
+    Things To Have In Care Teams: (Admin)
+    1. Add Patient
+    2. Edit Patient
+    3. Invite Team Members
+    4. Remove Team Members
+        A.  (Can only the administrator of the facility where the care team was created, do this, or 
+            any administrator connected to the care team?) Refer to CT_7
+    5. View / Print Reports
+    6. Send / View Messages
+    
+    
+    Things To Have In Care Teams: (Surgeon)
+    1. Edit Patient
+    2. Invite Team Members 
+    3. Invite Providers 
+        A.  (What is this? Going through another facilities administrator?)
+        B.  (Does this mean another facilities administator will have to invite a doctor from their 
+            facility to another facilities care team?)
+        C.  (How does a Surgeon go about inviting another member to their care team?)
+        
+    4. View / Print Reports
+    5. Send / View Messages
+    
+    Things (Nurse)
+    1. Edit Patient
+    2. Send / View Messages
+    3. View / Print Reports
+    
+    
+    Questions about Documents:
+    
+        CT_5 What is a Know Directory? 
+        
+}
+
+
+....--Things to do on the Site
+
+
+1.  Move newPatient and editPatient into Care Teams
+
+2.  Move newCareTeam and editCareTeam into myPage
+
+3.  Strip down editPatient to only editing immediate info on patient
+
+4.  Create and implement a page for Auditory Phases Of Care Questions
+
+5.  Create an invitations page within Care Teams 
+

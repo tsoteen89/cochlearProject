@@ -1,8 +1,11 @@
 
 Documents/GitHubFlowChart/README.md
 
+<<<<<<< HEAD
+=======
 
 *.png
+>>>>>>> origin/Travis
 
 *.gif
 
@@ -13,6 +16,5 @@ Documents/GitHubFlowChart/LICENSE/ALv2
 Documents/GitHubFlowChart/LICENSE/GPLv2
 
 
-*.json
 
 Documents/GitHubFlowChart/LICENSE/MIT

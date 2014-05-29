@@ -18,6 +18,12 @@ controllers.TabController = function(){
 controllers.formController = function($scope, $sce) {
     
 	$scope.i = 5;
+    
+
+    
+    $scope.hey = $sce.trustAsHtml('<h1>Work Please</h1>');
+
+    
 
     // create a blank object to hold form information
     $scope.formData = {};
@@ -40,6 +46,7 @@ controllers.formController = function($scope, $sce) {
     };
     */
 }
+
 
 
 app.controller(controllers);
