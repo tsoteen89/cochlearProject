@@ -1,193 +1,90 @@
 
 <html ng-app="regApp">
 
-  <head>
-  <title> Auditory Implant Initiative </title>
-  </head>
-
-  <body>
-
-      <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <title>Login</title>
-        <meta name="generator" content="Bootply" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <head>
+        <title>AII Registration</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
-      </head>
-
-    <!-- Header -->
-    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-toggle"></span>
-          </button>
-          <a class="navbar-brand" href="route.html">ENTER HERE</a>
-          <a class="navbar-brand" href="#/myHome"><img src="images/cochThumb.png"/></a>
-        </div>
-      </div>
-      <!-- /container -->
-    </div>
-    <!-- /Header -->
-	<!-- Main -->
-	<div class="container">
-	  
-	  <!-- upper section -->
-	  <div class="row">
-		
-		<div class="col-md-9">
-			
-		  <!-- column 2 -->	
-		  
-		   <div class="row">
-				<!-- center left-->	
-				<div class="col-md-12">
-				  <div class="panel panel-default">
-					<div class="panel-heading">
-					  <div class="panel-title">
-						<i class="glyphicon glyphicon-wrench pull-right"></i>
-						<h4>Register as User</h4>
-					  </div>
-					</div>
-
-						  </br>
-						  
-
-              <form class="form form-vertical">
-                 <div class="control-group" >
-                  <label>First Name</label>
-                  <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name">
-                  </div>
+    </head>
+    
+    <body>
+        
+        <div class="container">    
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="panel panel-default">
                 
+                        <!-- New Patient Header --> 
+                        <div class="panel panel-default">    
+                            <div class="panel-heading">
+                              <div class="panel-title">
+                                <h4>Facility Registration Form</h4>
+                              </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-body" ng-controller="TabController as tab">
+                            <div class="tabbable"> 
+                                <div class="tab-pane">
+                                    <form ng-submit="processForm()" class="form form-vertical">
+                                        
+                                        <!-- Facility Name -->
+                                        <div class="control-group" >
+                                            <label>Facility Name</label>
+                                            <div class="controls" >
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityName" ng-required="true" placeholder="Enter Facility Name" ng-blur="fillBar()">
+                                            </div>
+                                        </div><br>
+                                        
+                                        <!-- Facility Street Address -->
+                                        <div class="control-group" >
+                                            <label>Facility Street Address</label>
+                                            <div class="controls" >
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityStreetAddress" ng-required="true" placeholder="Enter Facility Street Address" ng-blur="fillBar()">
+                                            </div>
+                                        </div><br>                                        
+                                        
+                                        <!-- Facility City -->
+                                        <div class="control-group" >
+                                            <label>Facility City</label>
+                                            <div class="controls" >
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityCity" ng-required="true" placeholder="Enter Facility City" ng-blur="fillBar()">
+                                            </div>
+                                        </div><br>
+                                        
+                                        <!-- Facility State -->
+                                        <div class="control-group" >
+                                            <label>Facility State</label>
+                                            <div class="controls" >
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityState" ng-required="true" placeholder="Enter Facility State" ng-blur="fillBar()">
+                                            </div>
+                                        </div><br>
+                                        
+                                        <!-- Administrator Name -->
+                                        <div class="control-group" >
+                                            <label>First Name</label>
+                                            <div class="controls" >
+                                                <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
+                                            </div>
+                                        </div><br>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="control-group" >
-                  <label>Middle Initial</label>
-                  <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="mi" ng-model="formData.mi" ng-required="true" placeholder="Enter Middle Initial">
-                  </div>
+                    </div>
                 </div>
+            </div>
+        </div>  
+        
+        <a href="index.html"><h1>Index</h1></a>
+    
+    </body>
 
-                <div class="control-group" >
-                  <label>Last Name</label>
-                  <div class="controls" >
-                    <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name">
-                  </div>
-                </div><br>
-								</br>
-                                <!--
-								<div class="control-group" >
-								  <label>Date of Birth</label>
-								  <div class="controls" >
-									<input type="text" class="form-control" placeholder="mm/dd/yyyy">
-								  </div>
-								</div>
-								</br>							
-								<div class="control-group" >
-								  <label>Sex</label>
-								  <div class="controls" >
-									<form action="">
-										<input type="radio" name="sex" value="male">Male<br>
-										<input type="radio" name="sex" value="female">Female
-									</form>
-									</div>
-								</div>
 
-                                <div class="control-group">
-								  <label>Address</label>
-								  <div class="controls">
-									<input type="text" class="form-control" placeholder="Enter Address">
-								  </div>
-								</div> 
-                               
-								<hr>
-								<h4>Contact Information</h4>
-								<div class="control-group">
-								  <label>Phone Number</label>
-								  <div class="controls">
-									Phone Number:<input type="text" class="form-control" placeholder="Please Enter Phone Number">
-								  </div>
-								</div>
-								
-								-->
-                                Phone Number: <br> <input style="width: 200px" type="tel" class="form-control" name="tele" ng-model="formData.num" ng-required="true" placeholder="Enter Phone Number"> </br>
-                                E-mail: </br> <input style="width: 200px" type="email" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter Phone Number"> </br>
-
-							
-								<div class="control-group">
-								  <label></label>
-								  <div class="controls">
-									<button type="submit" class="btn btn-primary">
-									  <i class="glyphicon glyphicon-book"></i>
-									  Request Registration
-									</button>
-								  </div>
-								</div>   
-								
-								<hr>
-								<h4>(Developer) Temporary Registration</h4>
-								
-								<div class="control-group">
-								  <label>Username</label>
-								  <div class="controls">
-									<input type="text" class="form-control" name="username" placeholder="Enter Username">
-								  </div>
-								</div>
-								
-								<div class="control-group">
-								  <label>Password</label>
-								  <div class="controls">
-									<input type="password" class="form-control" name="password" placeholder="Enter Password">
-								  </div>
-								</div>
-								
-								<div class="control-group">
-								  <label></label>
-								  <div class="controls">
-									<button type="submit" name="login" class="btn btn-primary">
-									  <i class="glyphicon glyphicon-book"></i>
-									  Register
-									</button>
-								  </div>
-								  <br><br>
-								  <a href="index.html">
-									  <button type="button" class="btn btn-primary">
-										<i class="glyphicon glyphicon-barcode"></i>
-										(Developer) Back to Login 
-									  </button>
-								  </a>
-								</div>
-								
-							  </form>
-							</div>
-						  <!--</div>-->
-					</div>
-					
-					
-				  
-				</div><!--/col-span-6-->
-		 
-		   </div><!--/row-->
-		</div><!--/col-span-9-->
-		
-	  </div><!--/row-->
-	  <!-- /upper section -->
-	  
-	  
-	  
-	</div><!--/container-->
-	<!-- /Main -->
-
-        <div ng-controller="regCtrl">
-            X =  {{x}}
-        </div>
 
 </html>
-
-
-
 
 <!-- All Dependencies Here -->
 <script src="js/angular.js"></script>
@@ -213,6 +110,5 @@
     }
     
     regApp.controller(controllers);
-
 
 </script>
