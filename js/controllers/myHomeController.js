@@ -1,51 +1,41 @@
 
-var myApp = angular.module('homeCtrl', []);
+
+var myApp = angular.module('myHomeController', []);
+
 
 var controllers = {};
-   
-controllers.formController = function($scope, $http) {
+
+controllers.homeController = function ($scope){
+	$scope.open = function($event){
+		$event.preventDefault();
+		$event.stopPropagation();
+		
+		$scope.opened = true;
+	};
+	
+    var test = 'howdy';
     
-    $scope.bmis = [];
-	$scope.heights = [];
-	$scope.weights = [];
-	$scope.i = 0;
-    $scope.maxDate = new Date();
+    $scope.alerts = [
+        { content: 'John Smith: Care phase has changed to Preoperative Visit'}
+    ];
     
-    $scope.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.opened = true;
-    };
-
-	for($scope.i=0;$scope.i<36;$scope.i++){
-		$scope.bmis[$scope.i] = $scope.i + 10;
-	}
-
-	for($scope.i=0;$scope.i<68;$scope.i++){
-		$scope.heights[$scope.i] = $scope.i + 12;
-	}
-
-	for($scope.i=0;$scope.i<221;$scope.i++){
-		$scope.weights[$scope.i] = $scope.i + 80;
-	}
-
-    // create a blank object to hold form information
-    $scope.formData = {};
-
-    // process the form
-    $scope.processForm = function() {
-        $http({
-            method  : 'POST',
-            url     : 'phpTest/testPost.php',
-            data    : $.param($scope.formData),  // pass in data as strings
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
-        })
-            .success(function(data) {
-                console.log(data);
-            });
-
-    };
-
+    $scope.notifications = [{content: 'Dr. Charlie Bravo has accepted your invitation to John Smith\'s care team'},
+                         {content: 'Dr. Sierra Victor has invited you to join Jane Doe\'s care team'}];
+    
+    $scope.messages = [{
+            from: 'Dr. Charlie Bravo',
+            subject: 'Re: Surgical Consultation for John Smith',
+            content: '...'
+        },
+        {
+            from: 'Dr. Sierra Victor',
+            subject: 'Could I send Jane Doe your way for candidacy testing?',
+            content: '.......'
+        }];
+    
+	$scope.submit = function(){
+		$scope.list.push({'username':this.username, 'password':this.password});
+	};
 }
 
 myApp.controller(controllers);
