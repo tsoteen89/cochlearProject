@@ -1,5 +1,6 @@
 
 <div ng-controller="formController">
+<div ng-controller="ProgressDemoCtrl">
 
     <!-- New Patient Header --> 
     <div class="panel panel-default">    
@@ -11,11 +12,11 @@
     </div>
     
     <!-- Progress Bar -->
-    <div ng-controller="ProgressDemoCtrl">
+    <div>
 
-        <div><button ng-click="fillBar()" name="Button" /></div>
-        <small><em>No animation</em></small>
-        <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
+    <div><button ng-click="fillBar()" name="Button" /></div>
+    <small><em>No animation</em></small>
+    <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b>
 
     </div>
     
@@ -168,7 +169,7 @@
     <pre>{{ formData }}</pre>
 
 </div>
-
+</div>
 
 
 
