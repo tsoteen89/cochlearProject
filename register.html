@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+
+<html ng-app="regApp">
 
   <head>
   <title> Auditory Implant Initiative </title>
@@ -180,7 +180,14 @@
 	</div><!--/container-->
 	<!-- /Main -->
 
+        <div ng-controller="regCtrl">
+            X =  {{x}}
+        </div>
+
 </html>
+
+
+
 
 <!-- All Dependencies Here -->
 <script src="js/angular.js"></script>
@@ -193,3 +200,19 @@
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+
+
+<script>
+
+    var regApp = angular.module('regApp', ['ui.bootstrap']); 
+
+    var controllers = {};
+    
+    controllers.regCtrl =  function($scope) {
+        $scope.x = 3;
+    }
+    
+    regApp.controller(controllers);
+
+
+</script>
