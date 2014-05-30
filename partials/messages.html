@@ -13,11 +13,12 @@
     </style>
   </head>
 
-
 <!-- "
 ng-show="sendCtrl.send.isButtonVal()"-->
   <body>
     <div class = "container">
+
+
       <div class = "row"  ng-controller = "TabController as tab">
         <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
         
@@ -43,7 +44,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
               <hr>
             </ul>
           </div>
-
+          
         
           <div class = "col-xs-7 message-wrapper" ng-show = "tab.isSelected(1)" ng-controller = "messageController">
 
@@ -193,7 +194,8 @@ ng-show="sendCtrl.send.isButtonVal()"-->
 
         </div>
       </div>
-    </div>
+    </div>        
+     
   </body>
 
 </html>
