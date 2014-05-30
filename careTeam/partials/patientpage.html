@@ -9,6 +9,7 @@ Name: <input type="text" data-ng-model="searchName">
 <br>
     
     <div class="container">
+
                         
         <table class="table table-hover">
             <tr>
@@ -16,19 +17,23 @@ Name: <input type="text" data-ng-model="searchName">
                 <td  class="col-md-1"><strong>Last Name</strong></td>
                 <td  class="col-md-1"><strong>BMI</strong></td>
             </tr>
-            <tr data-ng-repeat="patient in patients | filter: searchName">
+            <tr data-ng-repeat="datum in data.records | filter: searchName">
+
+        
                 <td class="col-md-1">
-                    {{patient.fname}}
+                    {{datum.fname}}
                 </td>
                 <td class="col-md-1">
-                    {{patient.lname}}
+                    {{datum.lname}}
                 </td>
                 <td class="col-md-1">
-                    {{patient.BMI}}
+                    {{datum.bmi}}
                 </td>
+
             </tr>
   
         </table>
+
         
     </div>
     
