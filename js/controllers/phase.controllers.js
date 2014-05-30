@@ -4,6 +4,7 @@ var myApp = angular.module('phase.controllers', []);
 
 var controllers = {};
 
+    
 controllers.AccordionDemoCtrl= function($scope) {
   $scope.oneAtATime = true;
 
@@ -22,7 +23,7 @@ controllers.AccordionDemoCtrl= function($scope) {
     },
     {
       title: 'Pre(peri)operative Visit',
-      content: "I'm in Pre(peri)operative Visit. Data is collected by MA/Surgeon"
+      content: "I'm in Pre(peri)operative Visit. Data is collected by MA/Surgeon" 
     },
     {
       title: '1 week postoperative check',
@@ -58,13 +59,13 @@ controllers.progressCtrl= function($scope){
         $scope.count = $scope.count + 1;
         if ($scope.count == 1) {
             $scope.message = 'Great start!';
-            $scope.value=20;    
+            $scope.value=25;    
         } else if ($scope.count == 2) {
             $scope.message = 'Nothing can stop you now.';
-            $scope.value=40;    
+            $scope.value=50;    
         } else if ($scope.count == 3) {
-            $scope.message = 'Alright! Youre basically a hero!';
-            $scope.value=60;    
+            $scope.message = "Alright! You're basically a hero!";
+            $scope.value=75;    
         } else if ($scope.count == 4) {
             $scope.message = 'SO CLOSE. PRESS THE THING.';
             $scope.value=95; 
@@ -85,7 +86,15 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
-
+    $scope.bmis = [];
+    $scope.ages=[];
+    for($scope.j=1;$scope.j<100;$scope.j++){
+		$scope.ages[$scope.j] = $scope.j;
+	}
+    for($scope.i=10.0;$scope.i<70.0;$scope.i++){
+		$scope.bmis[$scope.i] = $scope.i + 1.0;
+	}
+     
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
@@ -134,10 +143,10 @@ controllers.periopCtrl = function ($scope) {
 };
 
 controllers.candidacyCtrl = function ($scope) {
-    $scope.pta="";
-    $scope.srt="";
-    $scope.sds="";
-    $scope.testValues=[];
+    $scope.values={};
+    $scope.values.pta =60;
+    $scope.values.srt=60;
+    $scope.values.sds=50;
     $scope.submit = function() {
         {
             $scope.testValues.push({'pta':this.pta,'srt':this.srt,'sds':this.sds});
@@ -146,13 +155,42 @@ controllers.candidacyCtrl = function ($scope) {
 };
 
 controllers.audioTestCtrl = function ($scope){
-    $scope.values={}
+    $scope.values={};
     $scope.scores={};
+    $scope.values.pta =60;
+    $scope.values.srt=60;
+    $scope.values.sds=50;
+    $scope.scores.Az_Quiet = 50;
+    $scope.scores.Az_Noise = 50;
+    $scope.scores.BKB = 50;
+    $scope.scores.CNC_Quiet = 50
+    $scope.scores.CNC_Noise = 50;
     $scope.submit = function() {
     if($scope.pta && $scope.srt && $scope.sds)	{
             $scope.testValues.push({'pta':this.pta,'srt':this.srt,'sds':this.sds});
         }
     };
+}
+
+controllers.surgicalCtrl=function($scope){
+    $scope.test="TEST";
+    $scope.questions = [
+        {
+            "text":"What a CT scan of the temporal bones performed?",            
+            "answers":['Yes','No'],
+            "help": "Predefined field choices only allow 'Yes' or 'No'.  If a CT scan is performed, it should be a thin slice CT of the temporal bones, without IV contrast"
+        },
+        {
+            "text":"On the CT scan, was the course of the facial nerve normal in the ear to be implanted?",            
+            "answers":['Yes','No','N/A'],
+            "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'. "
+        },
+        {
+            "text":"On the CT scan, was the mastoid/middle ear aerated on the ear to be implanted ?",            
+            "answers":['Yes','No','N/A'],
+            "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'. If the mastoid or middle ear is partially or totally opacified, select 'No'."
+        }
+    ];
 }
 
 myApp.controller(controllers);
