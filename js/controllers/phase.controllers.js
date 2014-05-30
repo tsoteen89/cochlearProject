@@ -48,30 +48,18 @@ controllers.progressCtrl= function($scope){
     $scope.count = 0;
     $scope.max = 100;
 
-    $scope.value;
-    $scope.message = "";
+    $scope.value=0;
     
-    if ($scope.count == 0) {
-            $scope.message = "Let's fill this form!";
-            value=0;    
-        } 
+    $scope.messages = ["Let's fill this form!",'Great start!','High Five!', 'Nothing can stop you now.',
+                "Alright! You're basically a hero!",'I think I love you.','Almost Done'];
+    $scope.message=$scope.messages[0];
     $scope.changeCount = function() {
-        $scope.count = $scope.count + 1;
-        if ($scope.count == 1) {
-            $scope.message = 'Great start!';
-            $scope.value=25;    
-        } else if ($scope.count == 2) {
-            $scope.message = 'Nothing can stop you now.';
-            $scope.value=50;    
-        } else if ($scope.count == 3) {
-            $scope.message = "Alright! You're basically a hero!";
-            $scope.value=75;    
-        } else if ($scope.count == 4) {
-            $scope.message = 'SO CLOSE. PRESS THE THING.';
-            $scope.value=95; 
-        }  else {
-            $scope.message = 'SO CLOSE. PRESS THE THING.';
-            $scope.value=95; 
+        if($scope.count < 6){
+            $scope.count = $scope.count + 1;
+        }
+       $scope.message=$scope.messages[$scope.count];
+        if($scope.value<86){
+            $scope.value=$scope.value+14;
         }
 
     };
@@ -86,20 +74,27 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
+    $scope.races =[
+        "Arctic (Siberian or Eskimo)", "Caucasian (European)","Caucasian","Caucasian (Middle East)","Caucasian (North African or Other)",
+        "Indigenous Australian","Native American","North East Asian (Mongol - Tibetan - Korean Japanese - etc)",
+        "Pacific (Polynesian - Micronesian - etc)","South East Asian (Chinese -  Thai - Malay - Filipino - etc)",
+        "West African","Bushmen","Ethiopian","Other Race"];
     $scope.bmis = [];
     $scope.ages=[];
     for($scope.j=1;$scope.j<100;$scope.j++){
 		$scope.ages[$scope.j] = $scope.j;
-	}
-    for($scope.i=10.0;$scope.i<70.0;$scope.i++){
-		$scope.bmis[$scope.i] = $scope.i + 1.0;
-	}
+	};
+    
+    for($scope.i=0;$scope.i<61;$scope.i++){
+		$scope.bmis[$scope.i] = $scope.i + 10;
+	};
      
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
-    $scope.method = 'GET';
-    $scope.url = 'http://api.msu2u.net/v1/patient/';
+    
+        $scope.method = 'GET';
+        $scope.url = 'http://api.msu2u.net/v1/patient/';
 
         $scope.code = null;
         $scope.response = null;
@@ -118,10 +113,22 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
           $scope.status = status;
         });
 
-
+    $scope.questions = [
+        {
+            "text":"Cause of Deafness",            
+            "answers":['Congenital','Progressive', 'Trauma', 'Infection','Ototoxicity', 'Meningitis', "Menier's Disease", 'other'],
+            "help": "One of the described causes of deafness must be chosen."+ 
+            "If the patient's cause of deafness is not listed, the choice 'Other' may be selected."+
+            "If 'Other' is selected, the cause of deafness should be free texted into the space provided.",
+            "type":""
+        },
+        {
+        
+        }
+    ];
     $scope.submit = function() {
         {
-             $scope.list.push({'street':this.street,'city':this.city,'state':this.state,'zip':this.zip});
+            //{{selected | json}}
         }
     };
 };
@@ -140,6 +147,50 @@ controllers.periopCtrl = function ($scope) {
         'procedureForNontreated':this.procNonTreated});
 		
 	};
+    $scope.questions = [
+        {
+            "text":"Ear being treated for this event",
+            "answers":['Right', 'Left', 'Bilateral'],
+            "help": "This should be the ear on which the current procedure is being performed. The predefined answer choices only allow 'Right', 'Left' or 'Bilateral'. The choice 'Bilateral' should be used if a simultaneous CI is being performed. ",
+            "type":"radio",
+            "name":"ear"
+        },
+        {
+            "text":"Procedure done for the treated ear",
+            "answers":['Cochlear Implant, Electric Only','Cochlear Implant, Electro Achoustic'],
+            "help": "-- No help",
+            "type":"radio",
+            "name":"procTreated"
+        },
+        {
+            "text":"Procedure done on the non-treated ear",
+            "answers":['Cochlear Implant, Electric Only','Cochlear Implant, Electro Achoustic','Hearing Aid', 'None'],
+            "help": "--No help",
+            "type":"radio",
+            "name":"procNonTreated"
+        },
+        {
+            "text":"This is the surgeon's  (X) th implant",
+            "answers":[''],
+            "help": "Please do not count surgeries which occurred during residency, fellowship, or when assisting the primary surgeon. Only list ones where you were the primary surgeon. ",
+            "type":"text",
+            "name":"num"
+        },
+        {
+            "text":"Were preoperative antibiotics given?",            
+            "answers":['Yes','No'],
+            "help": "Only 'Yes' or 'No' may be selected. In general, cefazolin (or other cephalosporin) should be given (clindamycin for penallergic patients). ",
+            "type":"radio",
+            "name":"antibiotics"
+        },
+        {
+            "text":"Was intraoperative NRT performed?",            
+            "answers":['Yes','No'],
+            "help": "Only 'Yes' or 'No' may be selected. It is recommended that NRT be performed on all patients at the end of the procedure in the operating room. ",
+            "type":"radio",
+            "name":"nrt"
+        }
+    ];
 };
 
 controllers.candidacyCtrl = function ($scope) {
@@ -176,7 +227,7 @@ controllers.surgicalCtrl=function($scope){
     $scope.test="TEST";
     $scope.questions = [
         {
-            "text":"What a CT scan of the temporal bones performed?",            
+            "text":"Was a CT scan of the temporal bones performed?",            
             "answers":['Yes','No'],
             "help": "Predefined field choices only allow 'Yes' or 'No'.  If a CT scan is performed, it should be a thin slice CT of the temporal bones, without IV contrast"
         },
@@ -189,7 +240,28 @@ controllers.surgicalCtrl=function($scope){
             "text":"On the CT scan, was the mastoid/middle ear aerated on the ear to be implanted ?",            
             "answers":['Yes','No','N/A'],
             "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'. If the mastoid or middle ear is partially or totally opacified, select 'No'."
+        },
+        {
+            "text":"On the CT scan, was there any bony dehischence  (tegmen tympani or tegmen mastoideum) in the ear to be implanted?",
+             "answers":['Yes','No','N/A'],
+            "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'."
+        },
+        {
+            "text":"On the CT scan, was the cochlea patent in the ear to be implanted?",
+             "answers":['Yes','No','N/A'],
+            "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'."
+        },
+        {
+            "text":"On the CT scan, was the cochlea well partitioned in the ear to be implanted?",
+             "answers":['Yes','No','N/A'],
+            "help": "Predefined answer choices should be 'Yes' or 'No'. If no CT scan was obtained, select 'N/A'."
+        },
+        {
+            "text":"Was an MRI performed?",
+            "answers":['Yes','No'],
+            "help": "Predefined field choices only allow 'Yes' or 'No'.  If an MRI scan is obtained, it should be an MRI of the brain/brainstem with and without gadolinium."
         }
+        
     ];
 }
 
