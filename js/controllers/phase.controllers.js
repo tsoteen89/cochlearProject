@@ -22,8 +22,8 @@ controllers.AccordionDemoCtrl= function($scope) {
       content: "I'm in Initial Surgical Consultation. Data is collected by Data entry clerk"
     },
     {
-      title: 'Pre(peri)operative Visit',
-      content: "I'm in Pre(peri)operative Visit. Data is collected by MA/Surgeon" 
+      title: 'Perioperative Visit',
+      content: "I'm in Perioperative Visit. Data is collected by MA/Surgeon" 
     },
     {
       title: '1 week postoperative check',
@@ -224,7 +224,6 @@ controllers.audioTestCtrl = function ($scope){
 }
 
 controllers.surgicalCtrl=function($scope){
-    $scope.test="TEST";
     $scope.questions = [
         {
             "text":"Was a CT scan of the temporal bones performed?",            
@@ -260,6 +259,42 @@ controllers.surgicalCtrl=function($scope){
             "text":"Was an MRI performed?",
             "answers":['Yes','No'],
             "help": "Predefined field choices only allow 'Yes' or 'No'.  If an MRI scan is obtained, it should be an MRI of the brain/brainstem with and without gadolinium."
+        }
+        
+    ];
+}
+
+controllers.oneWeekCtrl=function($scope){
+    $scope.questions = [
+        {
+            "text":"During the postoperative period, was there any wound infection?",
+            "answers":['Yes','No'],
+            "type":"radio",
+            "help":"Only 'Yes' or 'No' may be selected. List 'Yes' if an infection requiring antibioitics occurs. " 
+        },
+        {
+            "text":"During the postoperative period, was there any wound dehiscence?",
+            "answers":['Yes','No'],
+            "type":"radio",
+            "help":"Only 'Yes' or 'No' may be selected. The surgeon should use judgment determining what defines dehiscence. In general, any additional treatment (steristrips, wet-to-dry dressing, additional suture) would consistitue a dehiscence. " 
+        },
+        {
+            "text":"During the postoperative period, was there any vertigo or dizziness?",
+            "answers":['Yes','No'],
+            "type":"radio",
+            "help":"Only 'Yes' or 'No' may be selected.  Any complaints by the patient of feeling disequilibrium, sense of motion or fall should be listed as a 'Yes'. " 
+        },
+        {
+            "text":"If there was postoperative vertigo or dizziness, how many days until resolution?",
+            "answers":[' '],
+            "type":"text",
+            "help":"Please list the number of days until the dizziness (if present) resolved." 
+        },
+        {
+            "text":"Please list the type of device that was implanted?",
+            "answers":[' '],
+            "type":"text",
+            "help":"The model number of the implant device should be inserted." 
         }
         
     ];
