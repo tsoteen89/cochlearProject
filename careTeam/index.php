@@ -5,11 +5,12 @@
 		<meta charset="utf-8">
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+	<!--	<link href="css/bootstrap.min.css" rel="stylesheet">-->
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link href="css/styles.css" rel="stylesheet">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 
 	</head>
@@ -62,7 +63,7 @@
 
       <ul class="nav nav-pills nav-stacked">
         <li><a href="#home"> Facility Home</a></li>
-        <li><a href="#careteams">Care Teams</a></li>
+        <li><a href="#careteams">Care Teams <i id="demo-basic" class="fa fa-question-circle"></i> </a></li>
         <li><a href="#patientpage">Patient Page</a></li>
         <li><a href="#insert">Insert Patient</a></li>
         <li><a href="#invitations">Invitations</a></li>
@@ -97,9 +98,6 @@
 
 
 
-
-
-
 <footer class="text-center">This Bootstrap 3 dashboard layout is compliments of <a href="http://www.bootply.com/85850"><strong>Bootply.com</strong></a></footer>
 
 
@@ -129,6 +127,7 @@
 <!--<script src="js/angular.js"></script> -->
 <script src="js/angular-route.js"></script>      
 <script src="js/jquery.min.js"></script>
+
 <script src="js/app.js"></script>
 <script src="js/app.directives.js"></script>
 <script src="js/careTeamControllers/ct_patientcontrollers.js"></script>
@@ -141,5 +140,27 @@
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+<script src="js/hover.js"></script>
+            
+<script src="js/hover.js"></script>
+
+<script 
+    type="text/javascript">
+$(document).ready(function () {
+    var hoverHTMLDemoBasic = '<p>'+
+        'Care Teams functionality allows '+
+        'you to collaborate with other '+
+        'facilities';
+
+    $("#demo-basic").hovercard({
+        detailsHTML: hoverHTMLDemoBasic,
+        width: 400,
+        cardImgSrc: 'media/dr_jed_grisel.jpg'
+    });
+});
+</script>            
+
+            
+            
 	</body>
 </html>

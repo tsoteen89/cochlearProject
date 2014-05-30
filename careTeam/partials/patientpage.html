@@ -16,7 +16,7 @@ Name: <input type="text" data-ng-model="searchName">
                 <td  class="col-md-1"><strong>Last Name</strong></td>
                 <td  class="col-md-1"><strong>BMI</strong></td>
             </tr>
-            <tr data-ng-repeat="patient in patients">
+            <tr data-ng-repeat="patient in patients | filter: searchName">
                 <td class="col-md-1">
                     {{patient.fname}}
                 </td>
