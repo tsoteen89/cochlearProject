@@ -1,0 +1,228 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/historyForm.css" media="all">
+    </head>
+
+    <!--playing with ng-bind html 
+    <div ng-controller="ngBindHtmlCtrl">
+        <p ng-bind-html="trustedHtml"></p>
+    </div>
+    -->
+    <div class="tabbable">
+	  <div ng-controller="existingPatientsCtrl">
+	  <form class="form form-vertical" ng-submit="submit()">
+
+
+		<form id="form_850359" class="appnitro"  method="post" action="">
+            <div class="form_description">
+                <h2>History and Exam Items</h2>
+                <p></p>
+            </div>		
+            
+        <ul >
+        <li id="li_1" >
+         <div>
+        <h4> Select Patient to enter his or her history and exam items</h4>
+          <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records"></select>    
+        </div>
+            
+        <li id="li_2" >
+		<label class="description" for="element_2">Age </label>
+		<div>
+		<select class="element select small" id="element_2" name="element_2"> 
+            <option ng-repeat="age in ages">{{age}}</option>
+		</select>
+		</div> 
+		</li>	
+            
+        <li id="li_3" >
+		<label class="description" for="element_3">Gender </label>
+		<span>
+			<input id="element_3_1" name="element_3" class="element radio" type="radio" value="1" />
+            <label class="choice" for="element_3_1">Male</label>
+            <input id="element_3_2" name="element_3" class="element radio" type="radio" value="2" />
+            <label class="choice" for="element_3_2">Female</label>
+
+		</span><p class="guidelines" id="guide_3"><small>If Patient is a male or female </small></p> 
+		</li>		
+            
+        <li id="li_4" >
+		<label class="description" for="element_4">Ethnicity </label>
+		<div>
+		<select class="element select medium" id="element_4" name="element_4"> 
+			<option value="" selected="selected"></option>
+            <option value="1" >Arctic (Siberian or Eskimo)</option>
+            <option value="2" >Caucasian (European)</option>
+            <option value="3" >Caucasian (Indian)</option>
+            <option value="4" >Caucasian (Middle East)</option>
+            <option value="5" >Caucasian (North African or Other)</option>
+            <option value="6" >Indigenous Australian</option>
+            <option value="7" >Native American</option>
+            <option value="8" >North East Asian (Mongol - Tibetan - Korean Japanese - etc)</option>
+            <option value="9" >Pacific (Polynesian - Micronesian - etc)</option>
+            <option value="10" >South East Asian (Chinese -  Thai - Malay - Filipino - etc)</option>
+            <option value="11" >West African</option>
+            <option value="12" >Bushmen</option>
+            <option value="13" >Ethiopian</option>
+            <option value="14" >Other Race</option>
+		</select>
+		</div><p class="guidelines" id="guide_4"><small>Patient's race</small></p> 
+		</li>		
+            
+        <li id="li_5" >
+		<label class="description" for="element_5">Which ear is being treated for this event? </label>
+		<span>
+			<input id="element_5_1" name="element_5" class="element radio" type="radio" value="1" />
+            <label class="choice" for="element_5_1">Right</label>
+            <input id="element_5_2" name="element_5" class="element radio" type="radio" value="2" />
+            <label class="choice" for="element_5_2">Left</label>
+
+		</span><p class="guidelines" id="guide_5"><small>Indicates which ear the patient wishes to treat.</small></p>      
+		</li>		
+            
+        <li id="li_6" >
+		<label class="description" for="element_6">What type of implant? </label>
+		<span>
+			<input id="element_6_1" name="element_6" class="element radio" type="radio" value="1" />
+            <label class="choice" for="element_6_1">Cochlear implant electric only</label>
+            <input id="element_6_2" name="element_6" class="element radio" type="radio" value="2" />
+            <label class="choice" for="element_6_2">Cochlear implant-electro acoustic</label>
+
+		</span><p class="guidelines" id="guide_6"><small>Indicates what type of implant the patient wants</small></p>
+		</li>		
+            
+        <li id="li_7" >
+		<label class="description" for="element_7">Define non-treated ear </label>
+		<span>
+			<input id="element_7_1" name="element_7_1" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_7_1">Cochlear implant electric only</label>
+            <input id="element_7_2" name="element_7_2" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_7_2">Cochlear implant-electro acoustic</label>
+            <input id="element_7_3" name="element_7_3" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_7_3">Hearing Aide</label>
+            <input id="element_7_4" name="element_7_4" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_7_4">Nothing</label>
+
+		</span><p class="guidelines" id="guide_7"><small>What type of implant does the ear have if any?</small></p> 
+		</li>		
+            
+        <li id="li_8" >
+		<label class="description" for="element_8">BMI </label>
+		<div>
+		<select class="element select small" id="element_8" name="element_8"> 
+			<option value="" selected="selected"></option>
+            <option ng-repeat="BMI in bmis">{{BMI}}</option>        
+		</select>
+		</div><p class="guidelines" id="guide_8"><small>Predefined field choices will only allow numbers rounded to 1 decimal point  to be inserted.</small></p> 
+		</li>		
+            
+        <li id="li_9" >
+		<label class="description" for="element_9">Cause of Deafness </label>
+		<span>
+			<input id="element_9_1" name="element_9_1" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_1">Congenital</label>
+            <input id="element_9_2" name="element_9_2" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_2">Progressive</label>
+            <input id="element_9_3" name="element_9_3" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_3">Trauma</label>
+            <input id="element_9_4" name="element_9_4" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_4">Infection</label>
+            <input id="element_9_5" name="element_9_5" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_5">Ototoxicity</label>
+            <input id="element_9_6" name="element_9_6" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_6">Meningitis</label>
+            <input id="element_9_7" name="element_9_7" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_7">Menier's Disease</label>
+            <input id="element_9_8" name="element_9_8" class="element checkbox" type="checkbox" value="1" />
+            <label class="choice" for="element_9_8">Other</label>
+
+		</span>
+        <p class="guidelines" id="guide_9">
+            <small>One of the described causes of deafness must be chosen. If the patient's cause of deafness is not listed, the choice "Other" may be selected. If "Other" is selected, the cause of deafness should be free texted into the free space provided</small>
+        </p> 
+		</li>		
+            
+        <li id="li_1" >
+		<label class="description" for="element_1">Other </label>
+		<div>
+			<input id="element_1" name="element_1" class="element text medium" type="text" maxlength="255" value=""/> 
+		</div> 
+		</li>		
+            
+        <li id="li_10" >
+		<label class="description" for="element_10">Duration of Deafness </label>
+		<div>
+		<select class="element select small" id="element_10" name="element_10"> 
+			<option value="" selected="selected"></option>
+            <option value="1" ><1</option>
+            <option value="2" >100</option>
+		</select>
+		</div><p class="guidelines" id="guide_10">
+                <small>If the duration of deafness is less than one year should be selected. Otherwise, predefined field choices will only allow integers to be inserted. Example: When did patient stop talking on telephone, or when did patient stop benefitting from hearing aids.</small></p> 
+		</li>		
+            
+        <li id="li_11" >
+		<label class="description" for="element_11">History of Chronic Mastoiditis </label>
+		<span>
+			<input id="element_11_1" name="element_11" class="element radio" type="radio" value="1" />
+            <label class="choice" for="element_11_1">Yes</label>
+            <input id="element_11_2" name="element_11" class="element radio" type="radio" value="2" />
+            <label class="choice" for="element_11_2">No</label>
+		</span><p class="guidelines" id="guide_11">
+            <small>If the patient has been treated in the past for  chronic mastoiditis "Yes" should be selected. Otherwise, "No" is the correct choice.</small></p> 
+		</li>		
+            
+        <li id="li_12" >
+		<label class="description" for="element_12">Which ear? </label>
+		<span>
+			<input id="element_12_1" name="element_12" class="element radio" type="radio" value="1" />
+            <label class="choice" for="element_12_1">Right</label>
+            <input id="element_12_2" name="element_12" class="element radio" type="radio" value="2" />
+            <label class="choice" for="element_12_2">Left</label>
+            <input id="element_12_3" name="element_12" class="element radio" type="radio" value="3" />
+            <label class="choice" for="element_12_3">Both</label>
+		</span>
+            <p class="guidelines" id="guide_12">
+                <small>Predefined field choices will only allow "Left", "Right" or "Both" to be inserted.</small></p> 
+		</li>
+			
+        <li class="buttons">
+            <input type="hidden" name="form_id" value="850359" />
+
+            <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+		</li>
+</ul>
+		
+		<div class="control-group">
+        
+            
+		    <!-- Live Preview
+			<blockquote>
+				<text class="form">Address:</text> &nbsp {{selected.streetAddress}} <br>
+				<text style="padding-left:78px;">{{selected.city}},&nbsp{{selected.state}}&nbsp{{selected.zip}}</text> <br>
+			</blockquote>
+                -->
+            <br>
+			<hr>
+			<label>Edit Patient Address</label>
+			<br>
+            <label>Street</label></br>
+			<input type="text" class="txt" name="street" ng-model="selected.streetAddress" class="form-control" placeholder="Street Address"/>
+			<br><br>
+            <label>City</label></br>
+			<input type="text" class="txt" name="city" ng-model="selected.city" class="form-control" placeholder="City"/>
+			<br><br>
+            <label>State</label></br>
+			<input type="text" class="txt" name="state" ng-model="selected.state" class="form-control" placeholder="State"/>
+			<br><br>
+            <label>Zip code</label></br>
+			<input type="text" class="txt" name="zip" ng-model="selected.zip" class="form-control" placeholder="Zip"/>
+			<br><br>
+			
+		</div> 
+			<input type="submit" id="submit" value="Submit" />
+	  </form>
+	</div> 					
+</div>
+</html>	
+	  

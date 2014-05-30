@@ -4,7 +4,6 @@ body
 	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
 	font-size:small;
 	margin:8px 0 16px;
-	text-align:center;
 }
 
 #form_container
@@ -547,12 +546,12 @@ form .guidelines
 	border:1px solid #e6e6e6;
 	color:#444;
 	font-size:80%;
-	left:100%;
-	line-height:130%;
-	margin:0 0 0 8px;
+	left:70%;
+	line-height:100%;
+	margin:20px 20px 0 8px;
 	padding:8px 10px 9px;
 	position:absolute;
-	top:0;
+	top:10px;
 	visibility:hidden;
 	width:42%;
 	z-index:1000;

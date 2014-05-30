@@ -9,7 +9,7 @@ controllers.regularController = function($scope) {
 
 
 controllers.TabController = function(){
-	this.tab=0;
+	this.tab=-1;
 	this.selectTab=function(tabNum){
 		this.tab=tabNum;
 	};
