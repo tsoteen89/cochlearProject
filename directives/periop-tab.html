@@ -1,73 +1,41 @@
-<p>I'm in preop /or periop?.</p>
-	  <p>Data is collected by MA/surgeon</p>
-
-    <style>
-        .progress-wrap {
-          text-align: center;
-          font-size: 10px;
-          color: white;
-          margin: 0 0 20px 0;
-          progress {
-            width: 100%;
-            margin: 0 0 5px 0;
-          }
-        }
-    </style>
- <div ng-controller="periopCtrl">
-<div ng-controller="progressCtrl">
+<html>
     
-    <small><em><b>{{message}}</b></em></small>
-    <progressbar class="progress-striped active" value="value" type="{{value}}">{{value}}</progressbar>
-   <br><hr>
-	  
-	  <form class="form form-vertical" ng-submit="submit()">
-	  <div class="control-group" >
-        
-		  <label>Date of Implantation</label>
-		  <div class="controls" >
-			<input ng-click="changeCount()" class="txt" type="text" name="date" ng-model="date" class="form-control" placeholder="mm/dd/yy">
-		  </div>
-	  </div>
-	  <div class="control-group" >
-		  <label>Ear(s) being treated</label>
-		  <div class="controls" >
-				<input ng-click="changeCount()"type="radio" name="ear" ng-model="ear"value="Right">Right<br>
-				<input ng-click="changeCount()"type="radio" name="ear" ng-model="ear"value="Left">Left</br>
-				<input ng-click="changeCount()"type="radio" name="ear" ng-model="ear"value="Both">Bilateral</br>
-			</div>
-		</div>
-		</br>
+    <div class="tabbable">
+	  <div ng-controller="periopCtrl">
+        <div ng-controller="progressCtrl">
 
-		<div class="control-group" >
-		  <label>Procedure done for treated ear(s)</label>
-		  <div class="controls"  >
-              <div>
-                    <input ng-click="changeCount()" type="radio" name="proc" ng-model="procTreated" 
-                           value="Cochlear Implant, Electric Only">Cochlear Implant, Electric Only<br>
-                    <input ng-click="changeCount()" type="radio" name="proc" ng-model="procTreated" 
-                           value="Cochlear Implant, Electro-acoustic">Cochlear Implant, Electro-acoustic</br>
+        <small><em><b>{{message}}</b></em></small>
+        <progressbar class="progress-striped active" value="value" type="{{value}}">{{value}}</progressbar>
+       <hr>
+        <form class="form form-vertical" ng-submit="submit()" id="form_850359" class="appnitro"  method="post" action="">
+
+            <div class="form_description">
+                <h2>Perioperative Visit</h2>
+                <p></p>
+                <p>Data is collected by MA/surgeon</p>
+            </div>		
+
+         <ul >
+
+        <div class="control-group" >
+            <label>Date of Implantation</label>
+            <div class="controls" >
+                <input ng-blur="changeCount()" class="txt" type="text" name="date" ng-model="date" class="form-control" placeholder="mm/dd/yy">
+            </div>
+        </div>
+        <div class="control-group" >
+
+        <li id="li_1" ng-repeat= "question in questions">
+        <label class="description" >{{question.text}} </label>
+            <span>
+                <div ng-repeat="answer in question.answers" >
+                <input type="{{question.type}}" name="{{question.name}}" ng-click="changeCount()"/>
+                <label class="choice" >{{answer}}</label>
                 </div>
-			</div>	
-		</div>
-		</br>
-
-		<div class="control-group">
-		  <label>Procedures done for NON-treated ear(s)</label>
-		  <div class="controls" >
-				<input ng-click="changeCount()" type="radio" name="nonProc" 
-                       ng-model="procNonTreated" value="Cochlear Implant, Electric Only">Cochlear Implant, Electric Only<br>
-				<input ng-click="changeCount()" type="radio" name="nonProc" 
-                       ng-model="procNonTreated"value="Cochlear Implant, Electro-acoustic">Cochlear Implant, Electro-acoustic</br>
-				<input ng-click="changeCount()" type="radio" name="nonProc"
-                       ng-model="procNonTreated" value="Hearing aid">Hearing Aid</br>
-				<input ng-click="changeCount()" type="radio" name="nonProc" 
-                       ng-model="procNonTreated" value="none">Nothing
-			</div>
-		</div>
-		etc etc
-		</br>
-
-
+            </span>
+            <p class="guidelines" id="guide_12">
+                <small>{{question.help}}</small></p> 
+        </li>
 
 		<input type="submit" id="submit" value="Submit" />
 			<pre>treatment={{treatment}}</pre>
@@ -77,8 +45,31 @@
 			<b>Procedure on treated ear:</b> {{procTreated}} </br>
 			<b>Procedure on non-treated ear:</b>{{procNonTreated}}
 			</div>
-		</form>
-	 </div> 
+          </ul>
+	</form>	
+					
+        </div>
 </div>
+</div>
+</html>	  
+
+ 
+	
+	<!--Example of Old Code 
+	  <div class="control-group" >
+		  <label>Ear(s) being treated</label>
+		  <div class="controls" >
+				<input ng-click="changeCount()"type="radio" class="element radio" name="ear" ng-model="ear"value="Right"/>
+                <label class="choice">Right</label>
+				<input ng-click="changeCount()"type="radio" class="element radio" name="ear" ng-model="ear"value="Left"/>
+                <label class="choice">Left</label>
+				<input ng-click="changeCount()"type="radio" class="element radio" name="ear" ng-model="ear"value="Both"/>
+                <label class="choice">Both</label>
+			</div>
+		</div>
+		</br>
+-->
 		
+ 
+	
 	

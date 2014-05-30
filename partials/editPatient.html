@@ -6,7 +6,10 @@
         
         <style>
             .txt {
-            width: 300px;
+                width: 300px;
+            }
+            .range {
+                width:500px;
             }
         </style>
 	</head>
@@ -23,6 +26,7 @@
        <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>  
             
        <hr>
+          
         <div ng-controller="AccordionDemoCtrl">
 
 
@@ -34,7 +38,8 @@
           <accordion close-others="oneAtATime">
             <accordion-group heading="Current Patients, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
               <div ng-controller="existingPatientsCtrl">
-              <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records" name="Current Patients"></select> 
+              <select ng-model="selected" 
+                      ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records" name="Current Patients"></select> 
             </div>
             </accordion-group>
               
@@ -43,11 +48,11 @@
                 <button class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
                 <div ng-repeat="item in items">{{item}}</div>
             </accordion-group>
-              
+              <!--
             <accordion-group heading="{{group.title}}" ng-repeat="group in groups">
               {{group.content}}
             </accordion-group>
-              
+              -->
             <accordion-group is-open="status.open">
                 <accordion-heading>
                     I can have markup, too!
@@ -81,7 +86,7 @@
 						<li ng-class="{active:tab.isSelected(2)}">
                             <a href ng-click="tab.selectTab(2)">Initial Surgical Consultation</a></li>
 						<li ng-class="{active:tab.isSelected(3)}">
-                            <a href ng-click="tab.selectTab(3)">Preoperative Visit</a></li>
+                            <a href ng-click="tab.selectTab(3)">Perioperative Visit</a></li>
 						<li ng-class="{active:tab.isSelected(4)}">
                             <a href ng-click="tab.selectTab(4)">1 Week Postoperative Check</a></li>
 						<li ng-class="{active:tab.isSelected(5)}">
@@ -98,14 +103,12 @@
                             <a href ng-click="tab.selectTab(10)">24 month Audiometric Testing</a></li>
 					  </ul>
 					  </br></br>
-					  {{tab}}
-                  
 					  <!--<div class="tab-content">-->
-                   <!--<div class="tab-pane" id="tab0" ng-show="tab.isSelected(-1)" >
-						<history></history>
-					</div>-->
+                   <div class="tab-pane" id="tab0" ng-show="tab.isSelected(-1)" >
+                        <edit-patient-contact> </edit-patient-contact>
+					</div>
 					<div class="tab-pane" id="tab0" ng-show="tab.isSelected(0)" >
-						<edit-patient-dem> </edit-patient-dem>
+                        <demographics-tab></demographics-tab>
 					</div>
                   
 					<div class="tab-pane" id="tab1" ng-show="tab.isSelected(1)">
@@ -113,8 +116,7 @@
 					</div>
                   
                     <div class="tab-pane" id="tab2" ng-show="tab.isSelected(2)">
-                      <p>I'm in Initial Surgical Consultation.</p>
-                      <p>Data is collected by Data entry clerk</p>
+                        <surgical-consult-tab></surgical-consult-tab>
                     </div>
                   
 					<div class="tab-pane" id="tab2" ng-show="tab.isSelected(3)">

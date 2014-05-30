@@ -1,0 +1,42 @@
+<html>
+
+    <!--playing with ng-bind html 
+    <div ng-controller="ngBindHtmlCtrl">
+        <p ng-bind-html="trustedHtml"></p>
+    </div>
+    -->
+    <div class="tabbable">
+	  <div ng-controller="surgicalCtrl">
+	  <form class="form form-vertical" ng-submit="submit()" id="form_850359" class="appnitro"  method="post" action="">
+
+            <div class="form_description">
+                <h2>Initial surgical consultation</h2>
+                <p></p>
+            </div>		
+            
+         <ul >
+		
+            <li id="li_1" ng-repeat= "question in questions">
+            <label class="description" >{{question.text}} </label>
+            <span>
+                <div ng-repeat="answer in question.answers">
+                <input class="element radio" type="radio" value="1" />
+                <label class="choice" >{{answer}}</label>
+                </div>
+            </span>
+                <p class="guidelines" id="guide_12">
+                    <small>{{question.help}}</small></p> 
+            </li>
+
+            <li class="buttons">
+                <input type="hidden" name="form_id" value="850359" />
+
+                <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+            </li>
+          </ul>
+	</form>	
+					
+        </div>
+</div>
+</html>	
+	  

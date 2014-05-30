@@ -1,17 +1,16 @@
-<p>I'm in Candidacy.</p>
-  <p>Data is collected by Audiologist</p>
+
   <div ng-controller="candidacyCtrl">
 	<form class="form form-vertical" ng-submit="submit()">
 	  <div class="container">
 		  <h2>Regular Hearing Test Values </h2>
 		  <hr/>
-		</br>
+          <br>
 		  <div class="row">
 			<div class="col-xs-6">
 			<label>Pure Tone Average (PTA), in decibels</label>
 			  <div class="range">
-				<input type="range" name="range" ng-model="pta" min="0" max="120" value="60" onchange="range.value=value">
-				<output id="range" >60 db</output>
+				<input type="range" class="range" ng-model="values.pta" min="0" max="120">
+                   PTA: {{values.pta}} db  </br>
 			  </div>
 			</div>							
 		  </div>
@@ -20,8 +19,8 @@
 			<div class="col-xs-6">
 			<label>Speech Reception Threshold (SRT), in decibels</label>
 			  <div class="range range-success">
-				<input type="range" name="range" ng-model="srt"  min="0" max="120" value="60" onchange="rangeSuccess.value=value">
-				<output id="rangeSuccess" >50 db</output>
+				<input type="range" class="range" ng-model="values.srt"  min="0" max="120" value="60">
+                  SRT: {{values.srt}} db  </br>
 			  </div>
 			</div>
 		  </div>
@@ -30,19 +29,16 @@
 			<div class="col-xs-6">
 			<label>Speech Discrimination Score (SDS), percentage</label>
 			  <div class="range range-warning">
-				<input type="range" name="range" ng-model="sds" min="0" max="100" value="50" onchange="rangeWarning.value=value">
-				<output id="rangeWarning">50%</output>
+				<input type="range" class="range" ng-model="values.sds" min="0" max="100" value="50">
+                  SDS: {{values.sds}} % </br>
 			  </div>
 			</div>
 		  </div>
 
 		</div>
 		<input type="submit" id="submit" value="Submit" />
-			<pre>test values={{testValues}}</pre>
-			
-			PTA: {{pta}}  </br>
-			SRT: {{srt}}  </br>
-			SDS: {{sds}} </br>
+			<pre>values={{values}}</pre>
+
 			
 		  
 		</form>

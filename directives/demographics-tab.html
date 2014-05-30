@@ -1,0 +1,46 @@
+<html>
+    <head>
+    <style>
+        table,th,td
+        {
+        border:1px solid black;
+        border-collapse:collapse;
+        }
+        th,td
+        {
+        padding:5px;
+        }
+        th
+        {
+        text-align:left;
+        }
+    </style>
+
+    </head>
+    <p> Demographics of all patients </p>
+    
+
+    <div ng-controller="existingPatientsCtrl">
+        <div>
+            <table class="reference" style="width:60%">
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>		
+                <th>Race</th>
+                <th>BMI</th>
+                <th>Height</th>
+                <th>Weight</th>
+            </tr>
+            <tr ng-repeat="patient in data.records">
+                <td>{{patient.fname}}</td>
+                <td>{{patient.lname}}</td>		
+                <td>{{patient.race}}</td>
+                <td>{{patient.bmi}}</td>
+                <td>{{patient.height}}</td>
+                <td>{{patient.weight}}</td>
+            </tr>
+        </table>
+
+        </div>
+    </div>
+</html>

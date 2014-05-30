@@ -1,6 +1,4 @@
-<p>Data is collected by Audiologist</p>
-
-  <div ng-controller="audioTestCtrl">
+ <div ng-controller="audioTestCtrl">
 	<form class="form form-vertical" ng-submit="submit()">
 	  <div class="container">
           
@@ -15,8 +13,8 @@
 			<div class="col-xs-6">
 			<label>Pure Tone Average (PTA), in decibels</label>
 			  <div class="range">
-				<input type="range" name="range" ng-model="values.pta" min="0" max="120" value="60" onchange="rangemove.value=value">
-				<output id="rangemove" >60 </output>
+				<input type="range" class="range" ng-model="values.pta" min="0" max="120">
+                   PTA: {{values.pta}} db  </br>
 			  </div>
 			</div>							
 		  </div>
@@ -25,8 +23,8 @@
 			<div class="col-xs-6">
 			<label>Speech Reception Threshold (SRT), in decibels</label>
 			  <div class="range range-success">
-				<input type="range" name="range" ng-model="values.srt"  min="0" max="120" value="60" onchange="rangeSuccess.value=value">
-				<output id="rangeSuccess" >60 </output>
+				<input type="range" class="range" ng-model="values.srt"  min="0" max="120" value="60">
+                  SRT: {{values.srt}} db  </br>
 			  </div>
 			</div>
 		  </div>
@@ -35,22 +33,16 @@
 			<div class="col-xs-6">
 			<label>Speech Discrimination Score (SDS), percentage</label>
 			  <div class="range range-warning">
-				<input type="range" name="range" ng-model="values.sds" min="0" max="100" value="50" onchange="rangeWarning.value=value">
-				<output id="rangeWarning">50</output>
+				<input type="range" class="range" ng-model="values.sds" min="0" max="100" value="50">
+                  SDS: {{values.sds}} % </br>
 			  </div>
 			</div>
 		  </div>
-
-		</div>
-			
-			PTA: {{values.pta}} db  </br>
-			SRT: {{values.srt}} db  </br>
-			SDS: {{values.sds}} % </br>
 			
 		<hr>
 		
-		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
-		<h4> AzBio </h4>
+		<h4> Implanted Ear, Implant On, Nonimplanted ear plugged </h4>
+		<h5> AzBio </h5>
 		<label for="quiet">
             Score in Quiet 
             <input type="number" ng-model="scores.Az_Quiet" name="quietScore" id="quietScore"
@@ -66,16 +58,16 @@
         </label>
 		
 		</br>
-		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
-		<h4> BKB-SIN </h4>
+		<h4> Implanted Ear, Implant On, Nonimplanted ear plugged </h4>
+		<h5> BKB-SIN </h5>
 		<label for="BKB">
             Score,db 
             <input type="number" ng-model="scores.BKB" name="BKB" id="BKB"
                 min="0" max="100" step="1" value="50">
         </label>
 		
-		<h3> Implanted Ear, Implant On, Nonimplanted ear plugged </h3>
-		<h4> CNC </h4>
+		<h4> Implanted Ear, Implant On, Nonimplanted ear plugged </h4>
+		<h5> CNC </h5>
 		<label for="quietCNC">
             Score in Quiet 
             <input type="number" ng-model="scores.CNC_Quiet" name="quietCNC" id="quietCNC"
@@ -97,5 +89,5 @@
             <pre> scores= {{scores}}</pre>
 		</form>
 	 
-		
+		</div>
 	</div>
