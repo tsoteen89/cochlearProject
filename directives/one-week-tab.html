@@ -1,0 +1,50 @@
+<html>
+    
+    <div class="tabbable">
+	  <div ng-controller="oneWeekCtrl">
+        <div ng-controller="progressCtrl">
+
+        <small><em><b>{{message}}</b></em></small>
+        <progressbar class="progress-striped active" value="value" type="{{value}}">{{value}}%</progressbar>
+       <hr>
+        <form class="form form-vertical" ng-submit="submit()" id="form_850359" class="appnitro"  method="post" action="">
+
+            <div class="form_description">
+                <h2>1 week post operative check</h2>
+                <p></p>
+                <p>Time Zero Milestone</p>
+            </div>		
+
+         <ul >
+             
+        <div class="control-group" >
+
+        <li id="li_1" ng-repeat= "question in questions">
+        <label class="description" >{{question.text}} </label>
+            <span>
+                <div ng-repeat="answer in question.answers" >
+                <input type="{{question.type}}" name="{{question.name}}" ng-click="changeCount()"/>
+                <label class="choice" >{{answer}}</label>
+                </div>
+            </span>
+            <p class="guidelines" id="guide_12">
+                <small>{{question.help}}</small></p> 
+        </li>
+
+        </ul>
+        <li class="buttons">
+            <input type="hidden" name="form_id" value="850359" />
+
+            <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+		</li>
+	</form>	
+					
+        </div>
+</div>
+</div>
+</html>	  
+
+ 
+ 
+	
+	
