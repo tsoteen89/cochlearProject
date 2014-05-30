@@ -1,7 +1,4 @@
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/historyForm.css" media="all">
-    </head>
 
     <!--playing with ng-bind html 
     <div ng-controller="ngBindHtmlCtrl">
@@ -10,36 +7,36 @@
     -->
     <div class="tabbable">
 	  <div ng-controller="surgicalCtrl">
-	  <form class="form form-vertical" ng-submit="submit()">
-		<form id="form_850359" class="appnitro"  method="post" action="">
+	  <form class="form form-vertical" ng-submit="submit()" id="form_850359" class="appnitro"  method="post" action="">
+
             <div class="form_description">
                 <h2>Initial surgical consultation</h2>
                 <p></p>
             </div>		
             
-        <ul >
+         <ul >
 		
-            
-        <li id="li_1" ng-repeat= "question in questions">
-		<label class="description" for="element_12">{{question.text}} </label>
-		<span>
-            <div ng-repeat="answer in question.answers">
-			<input id="element_12_1" name="element_12" class="element radio" type="radio" value="1" />
-            <label class="choice" for="element_12_1">{{answer}}</label>
-            </div>
-		</span>
-            <p class="guidelines" id="guide_12">
-                <small>{{question.help}}</small></p> 
-		</li>
-			
-        <li class="buttons">
-            <input type="hidden" name="form_id" value="850359" />
+            <li id="li_1" ng-repeat= "question in questions">
+            <label class="description" >{{question.text}} </label>
+            <span>
+                <div ng-repeat="answer in question.answers">
+                <input class="element radio" type="radio" value="1" />
+                <label class="choice" >{{answer}}</label>
+                </div>
+            </span>
+                <p class="guidelines" id="guide_12">
+                    <small>{{question.help}}</small></p> 
+            </li>
 
-            <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
-		</li>
-</ul>
-		
+            <li class="buttons">
+                <input type="hidden" name="form_id" value="850359" />
+
+                <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+            </li>
+          </ul>
+	</form>	
 					
+        </div>
 </div>
 </html>	
 	  
