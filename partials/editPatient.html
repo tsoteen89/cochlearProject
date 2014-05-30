@@ -2,8 +2,7 @@
 <html lang="en" ng-app="myApp">
 	<head>
 		<title>Edit Patient</title>
-		<link rel="stylesheet" href="/application/html/js/prajwalkman/angular-slider/angular-slider.min.css" media="all">
-        
+        <link rel="stylesheet" type="text/css" href="css/historyForm.css" media="all">
         <style>
             .txt {
                 width: 300px;
@@ -42,17 +41,17 @@
                       ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records" name="Current Patients"></select> 
             </div>
             </accordion-group>
-              
+            <!--
             <accordion-group heading="Dynamic Body Content">
               <p>The body of the accordion group grows to fit the contents</p>
                 <button class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
                 <div ng-repeat="item in items">{{item}}</div>
             </accordion-group>
-              <!--
+            -->
             <accordion-group heading="{{group.title}}" ng-repeat="group in groups">
               {{group.content}}
             </accordion-group>
-              -->
+              
             <accordion-group is-open="status.open">
                 <accordion-heading>
                     I can have markup, too!
@@ -124,40 +123,49 @@
 					</div>
                   
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(4)">
-                      <p>I'm in 1 week post check.</p>
-                      <p>Time Zero Milestone</p>
+                      <one-week-tab></one-week-tab>
                     </div>
                   
-                    <div class="tab-pane" id="tab1" ng-show="tab.isSelected(5)">
-                      <p>I'm in Activation.</p>
-                      <p>Data is collected by Audiologist</p>
-                    </div>
-                  
-                    <div class="tab-pane" id="tab1" ng-show="tab.isSelected(6)" ng-controller="audioTestCtrl">
-                      <p>I'm in 1 month Audiometric.</p>
+                    <div class="tab-pane" id="tab1" ng-show="tab.isSelected(6)">
                       <audiometric-testing></audiometric-testing>
                     </div>
-									
-		
+
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(7)">
-                      <p>I'm in 3 month Audiometric.</p>
                       <audiometric-testing></audiometric-testing>
                     </div>
       
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(8)">
-                      <p>I'm in 6 month Audiometric.</p>
                       <audiometric-testing></audiometric-testing>
                     </div>
       
                     </div>
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(9)">
-                      <p>I'm in 12 month Audiometric.</p>
                       <audiometric-testing></audiometric-testing>
                     </div>
     
                     <div class="tab-pane" id="tab1" ng-show="tab.isSelected(10)">
-                      <p>I'm in 24 month Audiometric.</p>
                       <audiometric-testing></audiometric-testing>
+                    </div>
+                    <div class="tab-pane" id="tab1" ng-show="tab.isSelected(5)">
+                        <div class="form_description">
+                            <h2>Activation(3 weeks)</h2>
+                            <p></p>
+                            <p>Data is collected by Audiologist</p>
+                        </div>		
+
+                
+                        <div class="control-group" >
+                            <label>Date of Activation</label>
+                            <div class="controls" >
+                                <input class="txt" type="text" name="date" ng-model="date" class="form-control" placeholder="mm/dd/yy">
+                            </div>
+                         </div>
+                        <li class="buttons">
+                            <input type="hidden" name="form_id" value="850359" />
+
+                            <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+                        </li>
+
                     </div>
 					  <!--</div>-->
 				</div>

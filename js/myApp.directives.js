@@ -51,5 +51,13 @@ myApp.directive('surgicalConsultTab', function() {
 	}
 });
 
+myApp.directive('oneWeekTab', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/one-week-tab.html'
+	}
+});
+
+
 
 

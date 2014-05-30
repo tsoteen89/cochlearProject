@@ -5,11 +5,6 @@
       header('Access-Control-Allow-Credentials: true');
       header('Access-Control-Max-Age: 86400');    // cache for 1 day
   }
-/*
-$username = $_POST['UserName'];
-$email = $_POST['Email'];
-$password = $_POST['pwd'];
-*/
     
 $pID = $_POST['patientId'];
 $fName = $_POST['fName'];
@@ -27,16 +22,6 @@ echo $careStatus;
 echo $ear;
 echo $treatment;
 
-
-/*
-patientId
-fName
-lName
-dob
-careStatus
-ear
-treatment
-*/
 
 
 
