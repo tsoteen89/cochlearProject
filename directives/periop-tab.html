@@ -14,9 +14,7 @@
                 <p></p>
                 <p>Data is collected by MA/surgeon</p>
             </div>		
-
          <ul >
-
         <div class="control-group" >
             <label>Date of Implantation</label>
             <div class="controls" >
@@ -25,15 +23,15 @@
         </div>
         <div class="control-group" >
 
-        <li id="li_1" ng-repeat= "question in questions">
+        <li ng-repeat= "question in questions">
         <label class="description" >{{question.text}} </label>
             <span>
                 <div ng-repeat="answer in question.answers" >
-                <input type="{{question.type}}" name="{{question.name}}" ng-click="changeCount()"/>
+                <input type="{{question.type}}" ng-click="changeCount()" ng-model="question.name" value={{answer}}/>
                 <label class="choice" >{{answer}}</label>
                 </div>
             </span>
-            <p class="guidelines" id="guide_12">
+            <p class="guidelines">
                 <small>{{question.help}}</small></p> 
         </li>
 
@@ -41,12 +39,15 @@
 			<pre>treatment={{treatment}}</pre>
 			<div>
 			<b>Date:</b> {{date}} </br>
-			<b>Ear: </b>{{ear}} </br>
+			
+            <b>Ear: </b>{{ear}} </br>
 			<b>Procedure on treated ear:</b> {{procTreated}} </br>
 			<b>Procedure on non-treated ear:</b>{{procNonTreated}}
+            
 			</div>
           </ul>
 	</form>	
+            {{formAnswers}}
 					
         </div>
 </div>
