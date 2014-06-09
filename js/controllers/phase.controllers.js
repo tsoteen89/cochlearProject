@@ -147,6 +147,9 @@ controllers.periopCtrl = function ($scope) {
         'procedureForNontreated':this.procNonTreated});
 		
 	};
+    
+    $scope.formAnswers = {};
+    $scope.count=0;
     $scope.questions = [
         {
             "text":"Ear being treated for this event",
@@ -174,7 +177,7 @@ controllers.periopCtrl = function ($scope) {
             "answers":[''],
             "help": "Please do not count surgeries which occurred during residency, fellowship, or when assisting the primary surgeon. Only list ones where you were the primary surgeon. ",
             "type":"text",
-            "name":"num"
+            "name":"x"
         },
         {
             "text":"Were preoperative antibiotics given?",            
