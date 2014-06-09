@@ -65,6 +65,23 @@ controllers.formController = function($scope, $http) {
 }
 
 
+controllers.practicePost = function($scope, $http){
+    
+    $scope.patObject = {};
+    
+    $scope.processPost = function() {
+        $http({
+            method  : 'POST',
+            url     : 'localhost/Github/aii-api/v1/patient',
+            data    : $.param($scope.patObject),  // pass in data as strings
+            headers : { 'Content-Type': 'multipart/form-data' }  
+        })
+        .success(function(data) {
+            console.log(data);
+        });
+    }
+}
+
 controllers.ProgressDemoCtrl = function($scope) {
 
   $scope.max = 100;
