@@ -54,7 +54,7 @@ controllers.formController = function($scope, $http) {
             method  : 'POST',
             url     : 'phpTest/testPost.php',
             data    : $.param($scope.formData),  // pass in data as strings
-            headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+            headers : { 'Content-Type': 'application/json' } 
         })
         .success(function(data) {
             console.log(data);
@@ -72,13 +72,17 @@ controllers.practicePost = function($scope, $http){
     $scope.processPost = function() {
         $http({
             method  : 'POST',
-            url     : 'localhost/Github/aii-api/v1/patient',
-            data    : $.param($scope.patObject),  // pass in data as strings
-            headers : { 'Content-Type': 'multipart/form-data' }  
+            url     : '../aii-api/v1/patient',
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
         })
         .success(function(data) {
             console.log(data);
-        });
+        })
+        .error(function() {
+           "Request failed";
+          $scope.status = status;
+        });;
     }
 }
 
