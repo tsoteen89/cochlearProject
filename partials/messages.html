@@ -26,7 +26,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
         <div class = "messaging-system">
           <div class = "col-xs-10 button-wrapper">
             
-            <button type = "button" class = "btn btn-default" ng-click = 'tab.selectTab(-1)'>
+            <button type = "button" class = "btn btn-default" ng-click = 'tab.selectTab(1)'>
               <span><i class = "glyphicon glyphicon-plus"></i></span> New Message
             </button>
 
@@ -37,7 +37,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
           <div class = "col-xs-3">
             <ul class = "nav nav-pills nav-stacked">
               <hr>
-              <li ng-class = "{ active:tab.isSelected(0) }"><a href ng-click = "tab.selectTab(0)">Messages</a></li>
+              <li ng-class = "{ active:tab.isSelected(-1) }"><a href ng-click = "tab.selectTab(-1)">Messages</a></li>
               <li ng-class = "{ active:tab.isSelected(2) }"><a href ng-click = "tab.selectTab(2)">Sent Messages</a></li>
               <li ng-class = "{ active:tab.isSelected(3) } "><a href ng-click = "tab.selectTab(3)">Deleted Messages <span><i class = "glyphicon glyphicon-trash"></i></span></a></li>
               <li ng-class = "{ active:tab.isSelected(4) }"><a href ng-click = "tab.selectTab(4)">Existing Providers</a></li>
