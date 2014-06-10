@@ -47,18 +47,20 @@ ng-show="sendCtrl.send.isButtonVal()"-->
           
         
           <div class = "col-xs-7 message-wrapper" ng-show = "tab.isSelected(1)" ng-controller = "composeMessage">
-            <!-- messageSender.$valid && -->
+            <!--  -->
             <hr>
-            <form name = "messageSender" class = "message" ng-submit = " messageForm()">
+            <form name = "messageSender" class = "message" ng-submit = "messageSender.$valid && messageForm()">
               <input class = "send" type = "text" placeholder = "To:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeObject.receiver_id"> <br>
-              {{composeObject.receiver_id}}
+              
               <input class = "subject" type = "text" placeholder = "Subject:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeObject.subject"> <br>
 
               <textarea rows = "10" cols = "100" placeholder = "Message:" style = "margin-bottom: 10px;" ng-required="true" ng-model = "composeObject.content"></textarea><br>
 
-              <button class = "btn btn-success" type = "submit" name = "submit" style = "margin-right: 5px;">Send</button>
+              <input class = "btn btn-success" type = "submit" name = "submit" style = "margin-right: 5px;" value = "Send"></input>
               <button class = "btn btn-default" type = "button" name = "cancel" value = "Cancel">Cancel</button>
             </form>
+
+            {{ composeObject }}
             <hr>
           </div>
 
