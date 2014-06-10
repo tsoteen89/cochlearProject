@@ -10,17 +10,13 @@ controllers.regularController = function($scope) {
 
 controllers.TabController = function(){
 	this.tab=-1;
-  this.messagetab=0;
+
 	this.selectTab=function(tabNum){
 		this.tab=tabNum;
-    this.messagetab = tabNum;
 	};
 	this.isSelected=function(checkTab){
 		return this.tab===checkTab;
 	};
-  this.tabSelected = function(checkTab){
-    return this.messagetab==checkTab;
-  }
 }   
     
     
