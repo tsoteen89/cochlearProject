@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" data-ng-app="myApp">
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	</head>
     
 	<body>
-<!-- Main -->
-    <div class="container">
+        
+    <div class="container" ng-controller="homeController">
 
         <div class="col-md-9">
-
-          <!-- column 2 -->
-
 
            <a href="#"><strong><i class="glyphicon glyphicon-th-list"></i>&nbsp Care Teams</strong></a>
 
            <hr>
            <div class="row">
-                <!-- center left-->
+                
                 <div class="col-md-8">
                   <div class="panel panel-default">
 
@@ -28,8 +25,8 @@
                         <h5>Care Phase: Preoperative Visit</h5>
 						<h5>Location: Wichita Falls, TX</h5>
 
-                      </div><!--/panel-body-->
-                  </div><!--/panel-->
+                      </div>
+                  </div>
 
 				  <div class="panel panel-default">
 
@@ -39,18 +36,18 @@
                         <h5>Care Phase: 3 Month Post-Operative Checkup</h5>
 						<h5>Location: Holliday, TX</h5>
 
-                      </div><!--/panel-body-->
-                  </div><!--/panel-->
+                      </div>
+                  </div>
 				  
-                </div><!--/col-->
+                </div>
 
-                <!--center-right-->
+                
                 <div class="col-md-4">
                 <ul class="nav nav-justified">
 				
                   <li class = "dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-exclamation-sign"></i><span class = "count">1</span></a>
                     <ul class = "dropdown-menu" role = "menu">
-                      <li><a href="#">John Smith's care phase has changed to <strong>Preoperative Visit</strong></a></li>
+                      <li><a href="#">{{ alerts[0].content }}</a></li>
 					  <hr>
                       <li><a href="#/messages"><strong>All Alerts</strong></a></li>
                     </ul>
@@ -58,9 +55,9 @@
 				  
 				  <li class = "dropdown"><a href="#" class ="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i><span class = "count">2</span></a>
                     <ul class = "dropdown-menu" role = "menu">
-                      <li><a href="#">Dr. Charlie Bravo has accepted your invitation to John Smith's care team</a></li>
+                      <li><a href="#">{{ notifications[0].content }}</a></li>
 					  <hr>
-                      <li><a>Dr. Sierra Victor has invited you to join Jane Doe's care team</a>
+                      <li><a>{{ notifications[1].content }}</a>
                         
 						<button type="button" class="btn btn-info pull-right"> <i class="glyphicon glyphicon-remove"></i></button>
 						<button type="button" class="btn btn-info pull-right"> <i class="glyphicon glyphicon-ok"></i></button></li>
@@ -72,9 +69,9 @@
 				  
                   <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope"></i><span class="count">2</span></a>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="#"><em>Dr. Charlie Bravo</em><br><ul>Re: Surgical Consultation for John Smith</ul></a></li>
+                      <li><a href="#"><em>{{ messages[0].from }}</em><br><ul>{{ messages[0].subject }}</ul></a></li>
 					  <hr>
-                      <li><a href="#"><em>Dr. Sierra Victor</em><br><ul>Could I send Jane Doe your way for candidacy testing?</ul></a></li>
+                      <li><a href="#"><em>{{ messages[1].from }}</em><br><ul>{{ messages[1].subject }}</ul></a></li>
 					  <hr>
                       <li><a href="#/messages"><strong>All Messages</strong></a></li>
                     </ul>
@@ -82,15 +79,17 @@
                 </ul>
 
                 <hr>
-
+                
+                <input type='text' ng-model="testForm">
+                    {{ testForm }}
                           
-                </div><!--/col-span-6-->
+                </div>
 
-           </div><!--/row-->
-        </div><!--/col-span-9-->
+           </div>
+        </div>
 
-      </div><!--/row-->
-      <!-- /upper section -->
+      </div>
+      
 
      
 
