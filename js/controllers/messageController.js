@@ -3,26 +3,28 @@
 	var myApp = angular.module('messageSystem',[]);
 
 	var controllers = {};
+	
 
-	controllers.messageController = function($scope,$http){
-
-		$scope.messageInputs = {};
-		
-		$scope.messageForm = function(){
-
-			$http({
-
-		 		method : "POST",
-				url    : "phpTest/messageSubmitTest.php",
-		 		data   : $.param($scope.messageInputs),
-		 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-		 	})
-		 	.success(function(data){
-                 console.log(data);
-        	});
-        	$scope.messageInputs = {};
-		};
-	};
+	controllers.composeMessage = function($scope, $http){
+    
+	    $scope.composeObject = {};
+	    
+	    $scope.messageForm = function() {
+	        $http({
+	            method  : 'POST',
+	            url     : '../aii-api/v1/messages',
+	            data    : $scope.composeObject,  // do not put param
+	            headers : { 'Content-Type': 'application/json' }
+	        })
+	        .success(function(data) {
+	            console.log(data);
+	        })
+	        .error(function() {
+	           "Request failed";
+	          $scope.status = status;
+	        });;
+	    }
+	}
 
 	myApp.controller(controllers);
 

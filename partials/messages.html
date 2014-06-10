@@ -50,13 +50,13 @@ ng-show="sendCtrl.send.isButtonVal()"-->
 
             <hr>
             <form name = "messageSender" class = "message" ng-submit = "messageSender.$valid && messageForm()">
-              <input class = "send" type = "text" placeholder = "To:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="messageInputs.send"> <br>
+              <input class = "send" type = "text" placeholder = "To:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeObject.sender_id"> <br>
               {{messageInputs.send}}
-              <input class = "subject" type = "text" placeholder = "Subject:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="messageInputs.subject"> <br>
+              <input class = "subject" type = "text" placeholder = "Subject:" style = "width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeObject.subject"> <br>
 
-              <textarea rows = "10" cols = "100" placeholder = "Message:" style = "margin-bottom: 10px;" ng-required="true" ng-model = "messageInputs.textBox"></textarea><br>
+              <textarea rows = "10" cols = "100" placeholder = "Message:" style = "margin-bottom: 10px;" ng-required="true" ng-model = "composeObject.content"></textarea><br>
 
-              <button class = "btn btn-success" type = "submit" name = "submit" value ="Send" style = "margin-right: 5px;">Send</button>
+              <button class = "btn btn-success" type = "submit" name = "submit" style = "margin-right: 5px;">Send</button>
               <button class = "btn btn-default" type = "button" name = "cancel" value = "Cancel">Cancel</button>
             </form>
             <hr>
