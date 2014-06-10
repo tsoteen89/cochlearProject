@@ -19,34 +19,34 @@ ng-show="sendCtrl.send.isButtonVal()"-->
     <div class = "container">
 
 
-      <div class = "row"  ng-controller = "TabController as tab">
+      <div class = "row"  ng-controller = "TabController as messagetab">
         <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
         
 
         <div class = "messaging-system">
           <div class = "col-xs-10 button-wrapper">
             
-            <button type = "button" class = "btn btn-default" ng-click = 'tab.selectTab(1)'>
+            <button type = "button" class = "btn btn-default" ng-click = 'messagetab.selectTab(1)'>
               <span><i class = "glyphicon glyphicon-plus"></i></span> New Message
             </button>
 
-            <input class = "search-message pull-right" type = "search" placeholder = "Search Messages.." ng-hide = "tab.isSelected(1)">
+            <input class = "search-message pull-right" type = "search" placeholder = "Search Messages.." ng-hide = "messagetab.isSelected(1)">
           </div>
 
           
           <div class = "col-xs-3">
             <ul class = "nav nav-pills nav-stacked">
               <hr>
-              <li ng-class = "{ active:tab.isSelected(0) }"><a href ng-click = "tab.selectTab(0)">Messages</a></li>
-              <li ng-class = "{ active:tab.isSelected(2) }"><a href ng-click = "tab.selectTab(2)">Sent Messages</a></li>
-              <li ng-class = "{ active:tab.isSelected(3) } "><a href ng-click = "tab.selectTab(3)">Deleted Messages <span><i class = "glyphicon glyphicon-trash"></i></span></a></li>
-              <li ng-class = "{ active:tab.isSelected(4) }"><a href ng-click = "tab.selectTab(4)">Existing Providers</a></li>
+              <li ng-class = "{ active:messagetab.tabSelected(0) }"><a href ng-click = "messagetab.selectTab(0)">Messages</a></li>
+              <li ng-class = "{ active:messagetab.tabSelected(2) }"><a href ng-click = "messagetab.selectTab(2)">Sent Messages</a></li>
+              <li ng-class = "{ active:messagetab.tabSelected(3) } "><a href ng-click = "messagetab.selectTab(3)">Deleted Messages <span><i class = "glyphicon glyphicon-trash"></i></span></a></li>
+              <li ng-class = "{ active:messagetab.tabSelected(4) }"><a href ng-click = "messagetab.selectTab(4)">Existing Providers</a></li>
               <hr>
             </ul>
           </div>
           
         
-          <div class = "col-xs-7 message-wrapper" ng-show = "tab.isSelected(1)" ng-controller = "messageController">
+          <div class = "col-xs-7 message-wrapper" ng-show = "messagetab.tabSelected(1)" ng-controller = "messageController">
 
             <hr>
             <form name = "messageSender" class = "message" ng-submit = "messageSender.$valid && messageForm()">
@@ -63,7 +63,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
           </div>
 
         
-          <div class = "col-xs-7 message-inbox" ng-show = "tab.isSelected(0)">
+          <div class = "col-xs-7 message-inbox" ng-show = "messagetab.tabSelected(0)">
             <hr>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
@@ -101,7 +101,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
 
 
 
-          <div class = "col-xs-7 message-send" ng-show = "tab.isSelected(2)">
+          <div class = "col-xs-7 message-send" ng-show = "messagetab.tabSelected(2)">
             <hr>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
@@ -139,7 +139,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
 
 
 
-          <div class = "col-xs-7 message-delete" ng-show = "tab.isSelected(3)">
+          <div class = "col-xs-7 message-delete" ng-show = "messagetab.tabSelected(3)">
             <hr>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
@@ -177,7 +177,7 @@ ng-show="sendCtrl.send.isButtonVal()"-->
 
 
 
-          <div class = "col-xs-7" ng-show = "tab.isSelected(4)">
+          <div class = "col-xs-7" ng-show = "messagetab.tabSelected(4)">
             <h3>This tabs usage</h3>
               <p>I wanted to provide an easy way for patients to easily message
                  their providers "Patient to Provider messaging". With this tab, a patient can 
