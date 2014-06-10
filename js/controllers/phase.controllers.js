@@ -94,7 +94,8 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     $scope.list=[];
     
         $scope.method = 'GET';
-        $scope.url = 'http://api.msu2u.net/v1/patient/';
+        $scope.url='../aii-api/v1/patient/';
+        //$scope.url = 'http://api.msu2u.net/v1/patient/';
 
         $scope.code = null;
         $scope.response = null;
@@ -112,6 +113,18 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
           $scope.data = data || "Request failed";
           $scope.status = status;
         });
+    
+    //newwwwwwwwww
+    $scope.processPut = function() {
+        $http({
+            method  : 'PUT',
+            url     : "../aii-api/v1/patient/" + $scope.patObject.patient_id,
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processPut");
+       console.log("../aii-api/v1/patient/" + $scope.patObject.patient_id);
+    }
 
     $scope.questions = [
         {

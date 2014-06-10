@@ -7,10 +7,10 @@
     -->
     <div class="tabbable">
 	  <div ng-controller="existingPatientsCtrl">
-	  <form class="form form-vertical" ng-submit="submit()">
+	  <form class="form form-vertical" ng-submit="processPut()" >
 
 
-		<form id="form_850359" class="appnitro"  method="post" action="">
+		<!--<form id="form_850359" class="appnitro"  method="post" action="">-->
             <div class="form_description">
                 <h2>History and Exam Items</h2>
                 <p></p>
@@ -22,7 +22,9 @@
         <h4> Select Patient to enter his or her history and exam items</h4>
           <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records"></select>    
         </div>
+            {{selected}}
             
+        <!--
         <li id="li_2" >
 		<label class="description">Age </label>
 		<div>
@@ -185,6 +187,7 @@
 				<text style="padding-left:78px;">{{selected.city}},&nbsp{{selected.state}}&nbsp{{selected.zip}}</text> <br>
 			</blockquote>
                 -->
+            <!--
             <br>
 			<hr>
 			<label>Edit Patient Address</label>
@@ -204,6 +207,22 @@
 			
 		</div> 
 			<input type="submit" id="submit" value="Submit" />
+            -->
+            {{patObject.patient_id = selected.patientId}}
+        
+            
+                <input type="text" name="patient_id" ng-model="patObject.patient_id" />
+                
+                <input type="text" name="fname" ng-model="patObject.fname" />
+                
+                <input type="text" name="lname" ng-model="patObject.lname" />
+                
+                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+            
+           
+            
+            {{patObject}}
+            
 	  </form>
 	</div> 					
 </div>
