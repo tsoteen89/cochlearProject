@@ -137,6 +137,17 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
         console.log("im in processDelete");
        console.log("../aii-api/v1/patient/" + $scope.patObject.patient_id);
     }        
+    
+    $scope.processSoftDelete = function() {
+        $http({
+            method  : 'PUT',
+            url     : "../aii-api/v1/patient/" + $scope.patObject.patient_id,
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processSoftDelete");
+       console.log("../aii-api/v1/patient/" + $scope.patObject.patient_id);
+    }     
 
     $scope.questions = [
         {
