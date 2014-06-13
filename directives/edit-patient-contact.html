@@ -242,13 +242,13 @@
                
          <div>
         <h2>FORM TO DELETE A PATIENT </h2><br>
-          <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records"></select>    
+          <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records"></select>    
         </div><br>
             {{selected}}
 
           
               
-                {{patObject.patient_id = selected.patientId}}
+                {{patObject.patient_id = selected.patientID}}
         
             
                 <input type="text" name="patient_id" ng-model="patObject.patient_id" />

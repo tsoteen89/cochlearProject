@@ -6,7 +6,7 @@
 	</head>
     
 	<body>
-        
+<!--
     <div class="container" ng-controller="homeController">
 
         <div class="col-md-9">
@@ -89,7 +89,16 @@
         </div>
 
       </div>
-      
+-->
+        
+        <div ng-controller="existingPatientsCtrl">
+            
+            <div>
+            <h2>THESE ARE YOUR PATIENTS?? </h2><br>
+               <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records">                </select>    
+            </div><br>
+            
+        </div>
 
      
 

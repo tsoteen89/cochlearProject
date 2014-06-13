@@ -146,6 +146,12 @@ controllers.newAPICtrl = function($scope, $http, $templateCache) {
     };  
 }
 
+controllers.patientCtrl = function($scope, $http) {
+    
+    
+    
+}
+
 
 
 myApp.controller(controllers);
