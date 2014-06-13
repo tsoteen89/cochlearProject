@@ -98,7 +98,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     $scope.list=[];
     
     $scope.method = 'GET';
-    $scope.url='../aii-api-1/v1/patients/';
+    $scope.url='../aii-api/v1/patients/';
     //$scope.url = 'http://api.msu2u.net/v1/patient/';
 
     $scope.code = null;
@@ -122,7 +122,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     $scope.processPut = function() {
         $http({
             method  : 'PUT',
-            url     : "../aii-api-1/v1/patients/" + $scope.patObject.patient_id,
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
             data    : $scope.patObject,  // do not put param
             headers : { 'Content-Type': 'application/json' }
         })
@@ -134,7 +134,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     $scope.processDelete = function() {
         $http({
             method  : 'DELETE',
-            url     : "../aii-api-1/v1/patients/" + $scope.patObject.patient_id,
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
             data    : $scope.patObject,  // do not put param
             headers : { 'Content-Type': 'application/json' }
         })
@@ -145,7 +145,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     $scope.processSoftDelete = function() {
         $http({
             method  : 'PUT',
-            url     : "../aii-api-1/v1/patients/" + $scope.patObject.patient_id,
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
             data    : $scope.patObject,  // do not put param
             headers : { 'Content-Type': 'application/json' }
         })

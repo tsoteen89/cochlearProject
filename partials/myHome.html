@@ -91,13 +91,21 @@
       </div>
 -->
         
-        <div ng-controller="existingPatientsCtrl">
+        <div ng-controller="apiPatientsController">
             
             <div>
-            <h2>THESE ARE YOUR PATIENTS?? </h2><br>
+            <h2>Patients </h2><br>
                <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records">                </select>    
             </div><br>
             
+        </div>
+        
+        <div ng-controller="apiCareTeamsController">
+            <div>
+                <h2>CareTeams</h2><br>
+                    <select ng-model="selected" ng-options="careTeam as careTeams.careTeamID for careTeams in data.records">                
+                    </select>   
+            </div>
         </div>
 
      
