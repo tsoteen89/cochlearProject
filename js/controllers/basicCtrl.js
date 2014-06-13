@@ -3,13 +3,9 @@ var myApp = angular.module('basicCtrl', []);
 
 var controllers = {};
 
-controllers.regularController = function($scope) {
-	$scope.name = "Anne";
-}
-
-
 controllers.TabController = function(){
 	this.tab=-1;
+
 	this.selectTab=function(tabNum){
 		this.tab=tabNum;
 	};
@@ -144,6 +140,92 @@ controllers.newAPICtrl = function($scope, $http, $templateCache) {
 
     };  
 }
+
+
+//Controller used on myHome to process API methods for Patients
+controllers.apiPatientsController = function ($scope, $http, $templateCache) {   
+    
+    $scope.patients = {};
+    $scope.selected={};
+    $scope.list=[];
+    
+    $scope.url='../aii-api/v1/patients/';
+
+    $http({
+        method: 'GET', 
+        url: $scope.url, 
+        cache: $templateCache
+        }).success(function(data, status) {
+            $scope.status = status;
+            $scope.data = data;
+        }).error(function(data, status) {
+            $scope.data = data || "Request failed";
+            $scope.status = status;
+        }
+    );
+    
+
+    $scope.processPut = function() {
+        $http({
+            method  : 'PUT',
+            url     : $scope.url + $scope.patObject.patient_id,
+            data    : $scope.patObject,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processPut");
+        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }
+    
+    
+    $scope.processDelete = function() {
+        $http({
+            method  : 'DELETE',
+            url     : $scope.url + $scope.patObject.patient_id,
+            data    : $scope.patObject, 
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processDelete");
+        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }        
+    
+    $scope.processSoftDelete = function() {
+        $http({
+            method  : 'PUT',
+            url     : $scope.url + $scope.patObject.patient_id,
+            data    : $scope.patObject,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processSoftDelete");
+        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }     
+
+};
+
+
+//Controller used on myHome to process API methods for CareTeams
+controllers.apiCareTeamsController = function ($scope, $http, $templateCache) {   
+    
+    $scope.careTeams = {};
+    $scope.selected={};
+    $scope.list=[];
+    
+    $scope.url='../aii-api/v1/careTeams/';
+
+    $http({
+        method: 'GET', 
+        url: $scope.url, 
+        cache: $templateCache
+        }).success(function(data, status) {
+            $scope.status = status;
+            $scope.data = data;
+        }).error(function(data, status) {
+            $scope.data = data || "Request failed";
+            $scope.status = status;
+        }
+    );
+    
+}
+
 
 
 
