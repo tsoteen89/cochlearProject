@@ -74,6 +74,7 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
+    /*
     $scope.races =[
         "Arctic (Siberian or Eskimo)", "Caucasian (European)","Caucasian","Caucasian (Middle East)","Caucasian (North African or Other)",
         "Indigenous Australian","Native American","North East Asian (Mongol - Tibetan - Korean Japanese - etc)",
@@ -81,6 +82,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
         "West African","Bushmen","Ethiopian","Other Race"];
     $scope.bmis = [];
     $scope.ages=[];
+    
     for($scope.j=1;$scope.j<100;$scope.j++){
 		$scope.ages[$scope.j] = $scope.j;
 	};
@@ -88,30 +90,68 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
     for($scope.i=0;$scope.i<61;$scope.i++){
 		$scope.bmis[$scope.i] = $scope.i + 10;
 	};
-     
+     */
+    
+    
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
     
-        $scope.method = 'GET';
-        $scope.url = 'http://api.msu2u.net/v1/patient/';
+    $scope.method = 'GET';
+    $scope.url='../aii-api/v1/patients/';
+    //$scope.url = 'http://api.msu2u.net/v1/patient/';
 
-        $scope.code = null;
-        $scope.response = null;
+    $scope.code = null;
+    $scope.response = null;
 
-        $http(
-          {method: $scope.method, 
-           url: $scope.url, 
-           cache: $templateCache
-          }).
-        success(function(data, status) {
-          $scope.status = status;
-          $scope.data = data;
-        }).
-        error(function(data, status) {
-          $scope.data = data || "Request failed";
-          $scope.status = status;
-        });
+    $http(
+      {method: $scope.method, 
+       url: $scope.url, 
+       cache: $templateCache
+      }).
+    success(function(data, status) {
+      $scope.status = status;
+      $scope.data = data;
+    }).
+    error(function(data, status) {
+      $scope.data = data || "Request failed";
+      $scope.status = status;
+    });
+    
+    //newwwwwwwwww
+    $scope.processPut = function() {
+        $http({
+            method  : 'PUT',
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processPut");
+       console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }
+    
+    
+    $scope.processDelete = function() {
+        $http({
+            method  : 'DELETE',
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processDelete");
+       console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }        
+    
+    $scope.processSoftDelete = function() {
+        $http({
+            method  : 'PUT',
+            url     : "../aii-api/v1/patients/" + $scope.patObject.patient_id,
+            data    : $scope.patObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("im in processSoftDelete");
+       console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
+    }     
 
     $scope.questions = [
         {
@@ -147,6 +187,9 @@ controllers.periopCtrl = function ($scope) {
         'procedureForNontreated':this.procNonTreated});
 		
 	};
+    
+    $scope.formAnswers = {};
+    $scope.count=0;
     $scope.questions = [
         {
             "text":"Ear being treated for this event",
@@ -174,7 +217,7 @@ controllers.periopCtrl = function ($scope) {
             "answers":[''],
             "help": "Please do not count surgeries which occurred during residency, fellowship, or when assisting the primary surgeon. Only list ones where you were the primary surgeon. ",
             "type":"text",
-            "name":"num"
+            "name":"x"
         },
         {
             "text":"Were preoperative antibiotics given?",            

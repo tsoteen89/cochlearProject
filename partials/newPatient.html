@@ -1,9 +1,29 @@
 <html>
 	<body>
-
+        
+        <!--
         <new-patient-form>
         </new-patient-form>
-       
+       -->
+        
+        <div ng-controller="practicePost">
+        
+            <form ng-submit="processPost()">
+            
+                <input type="text" name="patient_id" ng-model="patObject.patient_id" />
+                
+                <input type="text" name="fname" ng-model="patObject.fname" />
+                
+                <input type="text" name="lname" ng-model="patObject.lname" />
+                
+                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+            
+            </form>
+            
+            {{patObject}}
+            
+        
+        </div>
         
         <!-- CODE TO ACCESS JSON FROM MSU2U API AND DISPLAY INDIVIDUAL PEICES 
         <div ng-controller="newAPICtrl" class="container">
