@@ -91,20 +91,32 @@
       </div>
 -->
         
-        <div ng-controller="apiPatientsController">
-            
-            <div>
-            <h2>Patients </h2><br>
-               <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records">                </select>    
-            </div><br>
-            
-        </div>
+
+<!-- *********************************************************************************************** -->
+        <div ng-controller="apiPatientsController">    
         
-        <div ng-controller="apiCareTeamsController">
-            <div>
-                <h2>CareTeams</h2><br>
-                    <select ng-model="selected" ng-options="careTeam as careTeams.careTeamID for careTeams in data.records">                
-                    </select>   
+        <h1>Patients</h1>
+        <h3>Search Patient:</h3> 
+        Name: <input type="text" data-ng-model="searchName">
+        <br>
+        <br>
+            <div style="width:25%">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td><strong>Last Name</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="patient in data.records | filter: searchName">
+                        <td class="col-md-1">
+                            {{patient.first}}
+                        </td>
+                        <td class="col-md-1">
+                            {{patient.last}}
+                        </td>
+                    </tr>
+                </table>
+                
             </div>
         </div>
 

@@ -60,6 +60,11 @@ controllers.formController = function($scope, $http) {
 
 }
 
+controllers.styleCtrl = function($scope){
+    
+    $scope.active = 1;
+}
+
 
 controllers.practicePost = function($scope, $http){
     
