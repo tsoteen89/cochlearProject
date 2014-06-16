@@ -34,88 +34,31 @@
             Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
         </div>
       
-      
-      
-      
-    <!--
-
-		
-		<div class="col-md-4" style="width:25%;margin:0 auto">
-			
-
-		   <div class="row">
-
-				<div class="col-md-12">
-				  <div class="panel panel-default">
-					<div class="panel-heading">
-					
-					  <div class="panel-title">
-						<i class="glyphicon glyphicon-cloud pull-right"></i>
-						<h4>User Login</h4>
-					  </div>
-					  
-					</div>
-					
-					<div class="panel-body">
-					  <div class="tabbable">
-						  <br>
-							<div class="tab-pane">
-							  <form id="userLogin" class="form form-vertical" action="route.html" method="post">
-								
-								<div class="control-group">
-								  <label>Username</label>
-								  <div class="controls">
-									<input type='text' class="form-control" name='username' placeholder="Enter Username" ng-model="login.username">
-								  </div>
-								</div>
-								
-								<div class="control-group">
-								  <br>
-								  <label>Password</label>
-								  <div class="controls">
-									<input type='password' class="form-control" name='password' placeholder="Enter Password" ng-model="login.password">
-								  </div>
-								</div>
-								
-								<div class="control-group">
-								  <label></label>
-								  <div class="controls">
-									<button type="submit" name='login' class="btn btn-primary">
-										<i class="glyphicon glyphicon-log-in"></i>
-										Login
-									</button>
-									
-									<a href="register.html">
-										<button type="button" name='register' class="btn btn-primary pull-right">
-										  <i class="glyphicon glyphicon-book"></i>
-										  Register
-										</button>
-									</a>
-								  </div>
-								  <br><br>
-								  <a href="route.html">
-									<button type="button" class="btn btn-primary">
-									  <i class="glyphicon glyphicon-barcode"></i>
-									  (Developer) Bypass Login
-									</button>
-								  </a>
-								</div>
-							  </form>
-							</div>
-					   </div>
-					</div>
-				  </div>
-				</div>
-		   </div>
-		</div>
-	  </div>
-	</div>
-
-    -->
     
     </body>
 </html>
 
+<script>
 
+    var controllers = {};
+
+    controllers.loginControl = function ($scope){
+        $scope.open = function($event){
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.login = {};
+
+        $scope.submit = function(){
+            $scope.list.push({'username':this.username, 'password':this.password});
+        };
+    }
+
+    login.controller(controllers);
+
+</script>
 
 
