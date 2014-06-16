@@ -273,7 +273,7 @@
                
          <div>
         <h2>FORM TO SOFT DELETE A PATIENT </h2><br>
-          <select ng-model="selected" ng-options="patient as patient.fname + ' ' + patient.lname for patient in data.records"></select>    
+          <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records"></select>    
         </div><br>
             {{selected}}
 
