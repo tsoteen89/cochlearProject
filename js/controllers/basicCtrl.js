@@ -154,11 +154,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
     $scope.selected={};
     $scope.list=[];
     
-    $scope.url='../aii-api/v1/patients/';
+    $scope.careTeamsURL='../aii-api/v1/patients/1/careTeams';
+    $scope.facilityPatsURL = '../aii-api/v1/facilities/100/patients';
 
     $http({
         method: 'GET', 
-        url: $scope.url, 
+        url: $scope.careTeamsURL, 
         cache: $templateCache
         }).success(function(data, status) {
             $scope.status = status;
@@ -166,6 +167,19 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         }).error(function(data, status) {
             $scope.data = data || "Request failed";
             $scope.status = status;
+        }
+    );
+    
+    $http({
+        method: 'GET', 
+        url: $scope.facilityPatsURL, 
+        cache: $templateCache
+        }).success(function(data, status) {
+            $scope.statusB = status;
+            $scope.dataB = data;
+        }).error(function(data, status) {
+            $scope.dataB = data || "Request failed";
+            $scope.statusB = status;
         }
     );
     
@@ -202,7 +216,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         })
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
-    }     
+    }
+    
+    $scope.getPatientCareTeam = function(){
+        $scope.newVar = $scope.dataB.records[0].First;
+        
+    }
 
 };
 

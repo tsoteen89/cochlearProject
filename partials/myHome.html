@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="myApp">
+<html lang="en" data-ng-app="myApp" style="height:100%">
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	</head>
     
-	<body>
+	<body style="height:100%">
 <!--
     <div class="container" ng-controller="homeController">
 
@@ -100,7 +100,33 @@
         Name: <input type="text" data-ng-model="searchName">
         <br>
         <br>
+            <!-- Patients -->
             <div style="width:25%;float:left">
+                
+                <text ng-click="getPatientCareTeam()">{{dataB.records[0].First}}</text>
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td><strong>Last Name</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="patients in dataB.records | filter: searchName">
+                        <td class="col-md-1" ng-init="patients=patients">
+                            <text ng-click="getPatientCareTeam()">{{patients.First}}</text>
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.Last}}
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.PatientID}}
+                        </td>
+                    </tr>
+                </table>
+                {{newVar}}
+                
+            </div>
+            <!-- Care Teams -->
+            <div style="width:30%;float:left;margin-left:10%">
                 
                 <table class="table table-hover">
                     <tr>
@@ -109,10 +135,10 @@
                     </tr>
                     <tr data-ng-repeat="patients in data.records | filter: searchName">
                         <td class="col-md-1">
-                            {{patients.first}}
+                            {{patients.careTeamID}}
                         </td>
                         <td class="col-md-1">
-                            {{patients.last}}
+                            {{patients.patientID}}
                         </td>
                     </tr>
                 </table>
