@@ -218,10 +218,45 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
     
-    $scope.getPatientCareTeam = function(){
-        $scope.newVar = $scope.dataB.records[0].First;
+    
+    $scope.getPatientCareTeam = function(patients){
         
+        $scope.patientID = patients.PatientID;
+        $scope.patientCareTeamURL = "../aii-api/v1/patients/" + $scope.patientID + "/careTeams";
+        
+        //Grab all CareTeams for a patient
+        $http({
+            method: 'GET', 
+            url: $scope.patientCareTeamURL, 
+            cache: $templateCache
+            }).success(function(data, status) {
+                $scope.careStatus = status;
+                $scope.careTeamData = data;
+                $scope.CTID = $scope.careTeamData.records[0].careTeamID;
+                $scope.patientFacilityURL = "../aii-api/v1/careTeams/" + $scope.CTID + "/facilities";
+                //Grab all facilities for a patients CareTeam
+                $http({
+                    method: 'GET',
+                    url: $scope.patientFacilityURL,
+                    cache: $templateCache
+                    }).success(function(data, status) {
+                        $scope.facilityStatus = status;
+                        $scope.facilityData = data;
+                    }).error(function(data, status) {
+                        $scope.facilityData = data || "Request failed";
+                        $scope.facilityStatus = status;
+                    }
+
+                );
+            }).error(function(data, status) {
+                $scope.careTeamData = data || "Request failed";
+                $scope.careStatus = status;
+            }
+        
+        ); 
+
     }
+
 
 };
 
