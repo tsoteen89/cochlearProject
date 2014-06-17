@@ -1,6 +1,6 @@
 (function(){
 
-var myApp = angular.module('phase.controllers', []);
+var myApp = angular.module('phaseControllers', []);
 
 var controllers = {};
 

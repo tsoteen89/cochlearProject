@@ -1,39 +1,21 @@
 <!-- Test Comment -->
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html ng-app="myApp" style="height:100%">
 
   <head>
 	<title> Auditory Implant Initiative </title>
-      <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-      
-      <!--<link rel="stylesheet" type="text/css" href="css/styles.css"> -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
   </head>
 
-  <body>
+  <body style="background-color: #DDEAEB; height:100%">
 
-      <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <title>New Patient</title>
-        <meta name="generator" content="Bootply" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet">
-      </head>
 
     <!-- Header -->
-    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-toggle"></span>
-          </button>
-          <a class="navbar-brand" href="#">Auditory Implant Initiative</a>
-          <a class="navbar-brand" href="#/myHome"><img src="images/cochThumb.png"</a>
-        </div>
-
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
+      
+    <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:10%">
+        <a class="navbar-brand" style="color: grey;font-size:32px;margin-top:18px" href="#">Auditory Implant Initiative</a>
+         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
                   <i class="glyphicon glyphicon-user"></i> Patients <span class="caret"></span></a>
@@ -51,32 +33,32 @@
               </ul>
             </li>
           </ul>
-        </div>
-      </div>
-      <!-- /container -->
+        
     </div>
-    <!-- /Header -->
-
-    <!-- Left Toolbar -->
-    <div class="col-md-2" style="padding-left: 50px">
-        <a href="#"><strong><i class="glyphicon glyphicon-briefcase"></i> Toolbox</strong></a>
-        <hr>
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="careTeam/index.php"><i class="glyphicon glyphicon-heart-empty"></i> Care Team</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-flash"></i> Alerts</a></li>
-          <li><a href="#/login"><i class="glyphicon glyphicon-link"></i> James</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-list-alt"></i> Reports</a></li>
-          <li><a href="#/messages"><i class="glyphicon glyphicon-book"></i> Messages</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-briefcase"></i> Tools</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-time"></i> Real-time</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-plus"></i> Advanced..</a></li>
-        </ul>
-        <hr>
+    
+    <!-- Left Side Bar -->
+      
+    <div ng-controller="styleCtrl" class="col-md-2" style="background-color: #5CB8E6; width:7%; height:100%; margin-right: 5%;">
+        <a href="#/myHome"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;"><img src="images/dashboard.png" style="margin-top:10px" /><br>My Home
+        </div></a>
+        <a href="#/messages"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;"><img src="images/messages.png" style="margin-top:10px" /><br>Messages
+        </div></a>
+        <a href="careTeam/index.php"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;"><img src="images/patients.png" style="margin-top:10px" /><br>Care Team
+        </div></a>
+        <a href="#/newPatient"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;"><img src="images/addNew.png" style="margin-top:10px" /><br>New Patient
+        </div></a>
+        <a href="#/myHome"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;"><img src="images/patients.png" style="margin-top:10px" /><br>Patient Directory
+        </div></a>
+        <a href="http://www.google.com"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;">Link
+        </div></a>
+        <a href="http://www.google.com"><div class="buttonlink" style="width:128%; height:12%; margin-left:-15px;">Link
+        </div></a>
     </div>
-
+      
   </body>
 
-  <div ng-view=""></div>
+  <div ng-view=""></div> 
+
 
 </html>
 
@@ -85,10 +67,9 @@
 <script src="js/angular-route.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script src="js/myApp.js"></script>
-
 <script src="js/myApp.directives.js"></script>
 <script src="js/controllers/basicCtrl.js"></script>
-<script src="js/controllers/phase.controllers.js"></script>
+<script src="js/controllers/phaseControllers.js"></script>
 <script src="js/controllers/messageController.js"></script>
 <script src="js/controllers/myHomeController.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="myApp">
+<html lang="en" data-ng-app="myApp" style="height:100%">
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	</head>
     
-	<body>
+	<body style="height:100%">
 <!--
     <div class="container" ng-controller="homeController">
 
@@ -91,20 +91,53 @@
       </div>
 -->
         
-        <div ng-controller="apiPatientsController">
-            
-            <div>
-            <h2>Patients </h2><br>
-               <select ng-model="selected" ng-options="patient as patients.first + ' ' + patients.last for patients in data.records">                </select>    
-            </div><br>
-            
-        </div>
+
+<!-- *********************************************************************************************** -->
+        <div ng-controller="apiPatientsController">    
         
-        <div ng-controller="apiCareTeamsController">
-            <div>
-                <h2>CareTeams</h2><br>
-                    <select ng-model="selected" ng-options="careTeam as careTeams.careTeamID for careTeams in data.records">                
-                    </select>   
+        <h1>Patients</h1>
+        <h3>Search Patient:</h3> 
+        Name: <input type="text" data-ng-model="searchName">
+        <br>
+        <br>
+            <!-- Patients -->
+            <div style="width:25%;float:left">
+                
+                <text ng-click="getPatientCareTeam()">{{dataB.records[0].First}}</text>
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td><strong>Last Name</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="patients in dataB.records | filter: searchName">
+                        <td class="col-md-1">
+                            <a href="" ng-click="getPatientCareTeam(patients)">{{patients.First}}</a>
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.Last}}
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.PatientID}}
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+            <!-- Care Teams -->
+            <div style="width:30%;float:left;margin-left:10%">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>Facility Name</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="facility in facilityData.records | filter: searchName">
+                        <td class="col-md-1">
+                            {{facility.Name}}
+                        </td>
+                    </tr>
+                </table>
+                
             </div>
         </div>
 

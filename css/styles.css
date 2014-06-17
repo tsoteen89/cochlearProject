@@ -39,3 +39,27 @@ footer {
     max-height: 200px;
     overflow-x: hidden;
 }
+
+.buttonlink{
+	border-style:solid;
+	border-color:#86C8E2 #fff #3E9EC2 #fff;
+	border-width:2px 0px 3px 0px;
+	background:#5CB5D9;
+	line-height:2;
+	text-align:center;
+	text-decoration:none;
+	font-weight:900;
+}
+.buttonlink:hover{
+	background:#4B92AE;
+}
+
+
+/* NEW STUFF */
+
+
+
+
+
+
+

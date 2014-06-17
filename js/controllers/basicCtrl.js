@@ -60,6 +60,11 @@ controllers.formController = function($scope, $http) {
 
 }
 
+controllers.styleCtrl = function($scope){
+    
+    $scope.active = 1;
+}
+
 
 controllers.practicePost = function($scope, $http){
     
@@ -149,11 +154,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
     $scope.selected={};
     $scope.list=[];
     
-    $scope.url='../aii-api/v1/patients/';
+    $scope.careTeamsURL='../aii-api/v1/patients/1/careTeams';
+    $scope.facilityPatsURL = '../aii-api/v1/facilities/100/patients';
 
     $http({
         method: 'GET', 
-        url: $scope.url, 
+        url: $scope.careTeamsURL, 
         cache: $templateCache
         }).success(function(data, status) {
             $scope.status = status;
@@ -161,6 +167,19 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         }).error(function(data, status) {
             $scope.data = data || "Request failed";
             $scope.status = status;
+        }
+    );
+    
+    $http({
+        method: 'GET', 
+        url: $scope.facilityPatsURL, 
+        cache: $templateCache
+        }).success(function(data, status) {
+            $scope.statusB = status;
+            $scope.dataB = data;
+        }).error(function(data, status) {
+            $scope.dataB = data || "Request failed";
+            $scope.statusB = status;
         }
     );
     
@@ -197,7 +216,47 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         })
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
-    }     
+    }
+    
+    
+    $scope.getPatientCareTeam = function(patients){
+        
+        $scope.patientID = patients.PatientID;
+        $scope.patientCareTeamURL = "../aii-api/v1/patients/" + $scope.patientID + "/careTeams";
+        
+        //Grab all CareTeams for a patient
+        $http({
+            method: 'GET', 
+            url: $scope.patientCareTeamURL, 
+            cache: $templateCache
+            }).success(function(data, status) {
+                $scope.careStatus = status;
+                $scope.careTeamData = data;
+                $scope.CTID = $scope.careTeamData.records[0].careTeamID;
+                $scope.patientFacilityURL = "../aii-api/v1/careTeams/" + $scope.CTID + "/facilities";
+                //Grab all facilities for a patients CareTeam
+                $http({
+                    method: 'GET',
+                    url: $scope.patientFacilityURL,
+                    cache: $templateCache
+                    }).success(function(data, status) {
+                        $scope.facilityStatus = status;
+                        $scope.facilityData = data;
+                    }).error(function(data, status) {
+                        $scope.facilityData = data || "Request failed";
+                        $scope.facilityStatus = status;
+                    }
+
+                );
+            }).error(function(data, status) {
+                $scope.careTeamData = data || "Request failed";
+                $scope.careStatus = status;
+            }
+        
+        ); 
+
+    }
+
 
 };
 
@@ -225,6 +284,28 @@ controllers.apiCareTeamsController = function ($scope, $http, $templateCache) {
     );
     
 }
+
+
+controllers.homeController = function($scope){
+    $scope.test = "howdy";
+
+    $scope.alerts = 
+        [{ content: 'John Smith: Care phase has changed to Preoperative Visit'}];
+    
+    $scope.notifications = [{content: 'Dr. Charlie Bravo has accepted your invitation to John Smith\'s care team'},
+                         {content: 'Dr. Sierra Victor has invited you to join Jane Doe\'s care team'}];
+    
+    $scope.messages = [{
+            from: 'Dr. Charlie Bravo',
+            subject: 'Re: Surgical Consultation for John Smith',
+            content: '...'
+        },
+        {
+            from: 'Dr. Sierra Victor',
+            subject: 'Could I send Jane Doe your way for candidacy testing?',
+            content: '.......'
+    }];
+};
 
 
 
