@@ -147,6 +147,10 @@ controllers.newAPICtrl = function($scope, $http, $templateCache) {
 }
 
 
+
+
+
+
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache) {   
     
@@ -154,7 +158,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
     $scope.selected={};
     $scope.list=[];
     
-    $scope.careTeamsURL='../aii-api/v1/patients/1/careTeams';
+    $scope.careTeamsURL='../aii-api/v1/facilities/100/careTeams';
     $scope.facilityPatsURL = '../aii-api/v1/facilities/100/patients';
 
     $http({
@@ -163,27 +167,26 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         cache: $templateCache
         }).success(function(data, status) {
             $scope.status = status;
-            $scope.data = data;
+            $scope.careData = data;
         }).error(function(data, status) {
-            $scope.data = data || "Request failed";
+            $scope.careData = data || "Request failed";
             $scope.status = status;
         }
     );
-    
+
     $http({
         method: 'GET', 
         url: $scope.facilityPatsURL, 
         cache: $templateCache
         }).success(function(data, status) {
-            $scope.statusB = status;
-            $scope.dataB = data;
+            $scope.patientStatus = status;
+            $scope.patientsData = data;
         }).error(function(data, status) {
-            $scope.dataB = data || "Request failed";
-            $scope.statusB = status;
+            $scope.patientsData = data || "Request failed";
+            $scope.patientStatus = status;
         }
     );
     
-
     $scope.processPut = function() {
         $http({
             method  : 'PUT',
@@ -217,6 +220,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
+    
     
     
     $scope.getPatientCareTeam = function(patients){
@@ -259,6 +263,11 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
 
 
 };
+
+
+
+
+
 
 
 //Controller used on myHome to process API methods for CareTeams
