@@ -210,24 +210,34 @@
 		</div> 
 			<input type="submit" id="submit" value="Submit" />
             -->
+<<<<<<< HEAD
+            {{patObject.patient_id = selected.patientId}} <br>
+=======
             {{patObject.patient_id = selected.patientId}}
             <!--
             {{patObject.fname = selected.fname}}
             {{patObject.lname = selected.lname}}
             {{patObject.visible = selected.visible}} -->
+>>>>>>> upstream/master
         
             
-                <input type="text" name="patient_id" ng-model="patObject.patient_id" />
+                <input type="text" name="patient_id" ng-model="patObject.patient_id" /><br>
                 
+<<<<<<< HEAD
+                <input type="text" name="fname" ng-model="patObject.fname" /><br>
+                
+                <input type="text" name="lname" ng-model="patObject.lname" /><br>
+=======
                 <input type="text" name="fname" ng-model="patObject.fname" placeholder="{{selected.fname}}" />
                 
                 <input type="text" name="lname" ng-model="patObject.lname" placeholder="{{selected.lname}}" />
                 
                 <input type="text" name="visible" ng-model="patObject.visible" placeholder="{{selected.visible}}" />
+>>>>>>> upstream/master
                 
                 <input style="width: 200px" type="submit" id="submit" value="Submit" />
             
-           
+           <br>
             
             {{patObject}}
             

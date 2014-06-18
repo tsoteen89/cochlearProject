@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="myApp" style="height:100%">
+<html lang="en" data-ng-app="myApp" style="width:100%;height:100%">
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	</head>
     
-	<body style="height:100%">
+	<body style="width:100%;height:100%">
 <!--
     <div class="container" ng-controller="homeController">
 
@@ -103,14 +103,13 @@
             <!-- Patients -->
             <div style="width:25%;float:left">
                 
-                <text ng-click="getPatientCareTeam()">{{dataB.records[0].First}}</text>
-                
                 <table class="table table-hover">
                     <tr>
                         <td><strong>First Name</strong></td>
                         <td><strong>Last Name</strong></td>
+                        <td><strong>Patient ID</strong></td>
                     </tr>
-                    <tr data-ng-repeat="patients in dataB.records | filter: searchName">
+                    <tr data-ng-repeat="patients in patientsData.records | filter: searchName">
                         <td class="col-md-1">
                             <a href="" ng-click="getPatientCareTeam(patients)">{{patients.First}}</a>
                         </td>
@@ -122,8 +121,21 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div style="width:7%;float:left">
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>Current Phase</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="phase in careData.records">
+                        <td>
+                            {{phase.CurrentPhaseID}}
+                        </td>
+                    </tr>
+                </table>
                 
             </div>
+            
             <!-- Care Teams -->
             <div style="width:30%;float:left;margin-left:10%">
                 
@@ -132,7 +144,7 @@
                         <td><strong>Facility Name</strong></td>
                     </tr>
                     <tr data-ng-repeat="facility in facilityData.records | filter: searchName">
-                        <td class="col-md-1">
+                                                <td class="col-md-1">
                             {{facility.Name}}
                         </td>
                     </tr>
