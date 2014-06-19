@@ -35,6 +35,7 @@
                         </td>
                     </tr>
                 </table>
+
             </div>
             <div style="width:8%;float:left">
                 <table class="table table-hover">
@@ -49,7 +50,26 @@
                 </table>
             </div>
             
-            <!-- Care Teams -->
+            <!-- Care Teams --> 
+           <div style="width:30%;float:left;margin-left:10%">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>Care Teams</strong></td>
+                        <td><strong>Current Phase</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="careTeams in patientCareTeams.records | filter: searchName">
+                        <td class="col-md-1">
+                            <a href="" ng-click="getCareFacility(careTeams)">{{careTeams.careTeamID}}</a>
+                        </td>
+                        <td class="col-md-1">
+                            {{careTeams.currentPhaseID}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Facilities -->
             <div style="width:30%;float:left;margin-left:10%">
                 
                 <table class="table table-hover">
@@ -57,15 +77,17 @@
                         <td><strong>Facility Name</strong></td>
                     </tr>
                     <tr data-ng-repeat="facility in facilityData.records | filter: searchName">
-                                                <td class="col-md-1">
+                        <td class="col-md-1">
                             {{facility.Name}}
                         </td>
                     </tr>
                 </table>
-                <a href="#/questions"><button ng-click="saveCareTeamID(careData.records[0].CareTeamID)">Edit Patient</button></a>
+                <a href="#/questions"><button>Edit Patient</button></a>
             </div>
-            {{y}}
-            {{careData.records[0].CareTeamID}}
+        </div>
+        
+        <div ng-controller="questionsController">
+            THE MONSTER: {{theMonster}}
         </div>
 
      
