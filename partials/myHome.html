@@ -6,93 +6,7 @@
 	</head>
     
 	<body style="width:100%;height:100%">
-<!--
-    <div class="container" ng-controller="homeController">
 
-        <div class="col-md-9">
-
-           <a href="#"><strong><i class="glyphicon glyphicon-th-list"></i>&nbsp Care Teams</strong></a>
-
-           <hr>
-           <div class="row">
-                
-                <div class="col-md-8">
-                  <div class="panel panel-default">
-
-                      <div class="panel-heading"><i class="glyphicon glyphicon-user"></i><a href="careTeam/index.php">&nbsp John Smith</a></div>
-                      <div class="panel-body">
-
-                        <h5>Care Phase: Preoperative Visit</h5>
-						<h5>Location: Wichita Falls, TX</h5>
-
-                      </div>
-                  </div>
-
-				  <div class="panel panel-default">
-
-                      <div class="panel-heading"><i class="glyphicon glyphicon-user"></i><a href="careTeam/index.php">&nbsp Mike Yankee</a></div>
-                      <div class="panel-body">
-						
-                        <h5>Care Phase: 3 Month Post-Operative Checkup</h5>
-						<h5>Location: Holliday, TX</h5>
-
-                      </div>
-                  </div>
-				  
-                </div>
-
-                
-                <div class="col-md-4">
-                <ul class="nav nav-justified">
-				
-                  <li class = "dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-exclamation-sign"></i><span class = "count">1</span></a>
-                    <ul class = "dropdown-menu" role = "menu">
-                      <li><a href="#">{{ alerts[0].content }}</a></li>
-					  <hr>
-                      <li><a href="#/messages"><strong>All Alerts</strong></a></li>
-                    </ul>
-                  </li>
-				  
-				  <li class = "dropdown"><a href="#" class ="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i><span class = "count">2</span></a>
-                    <ul class = "dropdown-menu" role = "menu">
-                      <li><a href="#">{{ notifications[0].content }}</a></li>
-					  <hr>
-                      <li><a>{{ notifications[1].content }}</a>
-                        
-						<button type="button" class="btn btn-info pull-right"> <i class="glyphicon glyphicon-remove"></i></button>
-						<button type="button" class="btn btn-info pull-right"> <i class="glyphicon glyphicon-ok"></i></button></li>
-                        <br>
-					  <hr>
-                      <li><a href="#/messages"><strong>All Notifications</strong></a></li>
-                    </ul>
-                  </li>   
-				  
-                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope"></i><span class="count">2</span></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#"><em>{{ messages[0].from }}</em><br><ul>{{ messages[0].subject }}</ul></a></li>
-					  <hr>
-                      <li><a href="#"><em>{{ messages[1].from }}</em><br><ul>{{ messages[1].subject }}</ul></a></li>
-					  <hr>
-                      <li><a href="#/messages"><strong>All Messages</strong></a></li>
-                    </ul>
-                  </li>
-                </ul>
-
-                <hr>
-                
-                <input type='text' ng-model="testForm">
-                    {{ testForm }}
-                          
-                </div>
-
-           </div>
-        </div>
-
-      </div>
--->
-        
-
-<!-- *********************************************************************************************** -->
         <div ng-controller="apiPatientsController">    
         
         <h1>Patients</h1>
@@ -122,7 +36,7 @@
                     </tr>
                 </table>
             </div>
-            <div style="width:7%;float:left">
+            <div style="width:8%;float:left">
                 <table class="table table-hover">
                     <tr>
                         <td><strong>Current Phase</strong></td>
@@ -133,7 +47,6 @@
                         </td>
                     </tr>
                 </table>
-                
             </div>
             
             <!-- Care Teams -->
@@ -149,8 +62,10 @@
                         </td>
                     </tr>
                 </table>
-                
+                <a href="#/questions"><button ng-click="saveCareTeamID(careData.records[0].CareTeamID)">Edit Patient</button></a>
             </div>
+            {{y}}
+            {{careData.records[0].CareTeamID}}
         </div>
 
      

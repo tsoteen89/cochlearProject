@@ -3,6 +3,33 @@ var myApp = angular.module('basicCtrl', []);
 
 var controllers = {};
 
+myApp.factory('getPatients', function($http){
+    
+    return $http.get('../aii-api/v1/facilities/100/patients');
+ 
+});
+
+myApp.factory('getCareTeams', function($http){
+   
+    return $http.get('../aii-api/v1/facilities/100/careTeams');
+    
+});
+
+
+myApp.factory('persistData', function () {
+    var x;
+
+    return {
+        setData:function (data) {
+            x = data;
+            console.log(data);
+        },
+        getData:function () {
+            return x;
+        }
+    };
+});
+
 controllers.TabController = function(){
 	this.tab=-1;
 
@@ -152,41 +179,29 @@ controllers.newAPICtrl = function($scope, $http, $templateCache) {
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, getPatients, getCareTeams, persistData) {   
     
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
+    $scope.y = 0;
     
-    $scope.careTeamsURL='../aii-api/v1/facilities/100/careTeams';
-    $scope.facilityPatsURL = '../aii-api/v1/facilities/100/patients';
-
-    $http({
-        method: 'GET', 
-        url: $scope.careTeamsURL, 
-        cache: $templateCache
-        }).success(function(data, status) {
-            $scope.status = status;
-            $scope.careData = data;
-        }).error(function(data, status) {
-            $scope.careData = data || "Request failed";
-            $scope.status = status;
-        }
-    );
-
-    $http({
-        method: 'GET', 
-        url: $scope.facilityPatsURL, 
-        cache: $templateCache
-        }).success(function(data, status) {
-            $scope.patientStatus = status;
-            $scope.patientsData = data;
-        }).error(function(data, status) {
-            $scope.patientsData = data || "Request failed";
-            $scope.patientStatus = status;
-        }
-    );
+    $scope.saveCareTeamID = function(careTeamID) {
+        persistData.setData(careTeamID);
+    }
     
+    $scope.y = persistData.getData();
+    
+    //Grab all patients using getPatients Factory
+    getPatients.success(function(data) {
+        $scope.patientsData = data;
+    });
+    
+    //Grab all careTeams using getCareTeams Factory
+    getCareTeams.success(function(data) {
+        $scope.careData = data;
+    });
+
     $scope.processPut = function() {
         $http({
             method  : 'PUT',
@@ -220,7 +235,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
-    
     
     
     $scope.getPatientCareTeam = function(patients){
@@ -265,7 +279,33 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache) {
 };
 
 
+controllers.sessionTestCtrl = function ($scope, $http, Session) {
+    
+    $scope.session = Session;
+}
 
+myApp.run(function(Session) {}); 
+
+myApp.factory('Session', function($http) {
+  var Session = {
+    data: {},
+    saveSession: function() { /* save session data to db */ },
+    updateSession: function() { 
+      /* load data from db */   
+        $http({
+        method: 'GET', 
+        url: '../aii-api/v1/facilities/100/careTeams', 
+        }).success(function(data, status) {
+            Session.data = data;
+        }
+    ); 
+    }
+  };
+      
+    
+  Session.updateSession();
+  return Session; 
+});
 
 
 
