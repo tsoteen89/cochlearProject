@@ -1027,7 +1027,7 @@ controllers.formController = function($scope, $http) {
     $scope.processForm = function() {
         $http({
             method  : 'POST',
-            url     : '../aii-api/v1/patients',
+            url     : 'http://killzombieswith.us/aii-api/v1/patients',
             data    : $scope.formData,  // pass in data as strings
             headers : { 'Content-Type': 'application/json' } 
         })

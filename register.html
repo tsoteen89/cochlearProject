@@ -22,7 +22,9 @@
                 <div class="panel-body">
                     <div class="tabbable"> 
                         <div class="tab-pane">
-                            <form ng-submit="processForm()" class="form form-vertical">
+                            
+<!-- FACILITY REGISTRATION FORM BEGIN -->
+                            <form ng-submit="registerFacility()" class="form form-vertical">
 
                                 <!-- New Patient Header --> 
                                 <div class="panel panel-default">    
@@ -32,46 +34,59 @@
                                       </div>
                                     </div>
                                 </div>
-
+                                
                                 <!-- Facility Name -->
                                 <div class="control-group" >
                                     <label>Facility Name</label>
                                     <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityName" ng-required="true" placeholder="Enter Facility Name" ng-blur="fillBar()">
+                                        <input style="width: 200px" type="text" class="form-control" name="Name" ng-model="facilityData.Name" ng-required="true" placeholder="Enter Facility Name">
                                     </div>
                                 </div><br><hr>
 
-                                <!-- Facility State -->
-                                <div class="control-group">
-                                    <div class="controls" style="float:left">
-                                        <label>Facility Street Address</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityStreet" ng-required="true" placeholder="Enter Facility Street Address" ng-blur="fillBar()">
-                                    </div>                                 
-
-                                <!-- Facility City -->
-
-                                    <div class="controls" style="float:left;margin-left:4%">
-                                        <label>Facility City</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityCity" ng-required="true" placeholder="Enter Facility City" ng-blur="fillBar()">
+                                <!-- Facility Type -->
+                                <div class="control-group" >
+                                    <label>Facility Type</label>
+                                    <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="FacilityTypeID" ng-model="facilityData.FacilityTypeID" ng-required="true" placeholder="Enter Facility Type">
                                     </div>
+                                </div><br><hr>
 
                                 <!-- Facility Street Address -->
                                     <div class="controls" style="float:left;margin-left:4%">
-                                        <label>Facility State</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityState" ng-required="true" placeholder="Enter Facility State" ng-blur="fillBar()">
+                                        <label>Facility Address</label>
+                                        <input style="width: 200px" type="text" class="form-control" name="Address1" ng-model="facilityData.Address1" ng-required="true" placeholder="Enter Facility Street, City and State">
                                     </div><br><br><br><br>
 
                                 <!-- Facility Zip -->
                                     <div class="controls" >
                                         <label>Facility Zipcode</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityZip" ng-required="true" placeholder="Enter Facility Zipcode" ng-blur="fillBar()">
+                                        <input style="width: 200px" type="text" class="form-control" name="ZipCode" ng-model="facilityData.ZipCode" ng-required="true" placeholder="Enter Facility Zipcode">
                                     </div><br>
 
                                 <!-- Facility Phone -->
                                     <div class="controls">
                                         <label>Facility Phone Number</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.facilityPhone" ng-required="true" placeholder="ex.(555-424-4243)" ng-blur="fillBar()">
+                                        <input style="width: 200px" type="text" class="form-control" name="Phone" ng-model="facilityData.Phone" ng-required="true" placeholder="ex.(555-424-4243)">
                                     </div><br><hr>
+                                
+                                <!-- Facility Description -->
+                                    <div class="controls">
+                                        <label>Facility Description</label>
+                                        <input style="width: 200px" type="text" class="form-control" name="Description" ng-model="facilityData.Description" ng-required="true" placeholder="Small Description">
+                                    </div><br><hr>
+                                    
+                                    
+                                </div><br>
+                                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+                                Facility Data:{{ facilityData | json }}
+
+                            </form>
+                            <br><br><br>
+                                   
+                            <form ng-submit="registerAdministrator()" class="form form-vertical">
+                                    
+                                    
+<!-- FACILITY ADMINISTRATOR FORM BEGIN -->
 
                                     <!-- New Patient Header --> 
                                     <div class="panel panel-default">    
@@ -83,40 +98,85 @@
                                     </div>
 
                                 <!-- Administrator Name -->
-                                    <div class="controls" style="float:left">
-                                        <label>First Name</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.fname" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
-                                    </div>
-
-                                    <div class="controls" style="float:left;margin-left:4%">
-                                        <label>Middle Name</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="middle" ng-model="formData.middle" ng-required="true" placeholder="Enter Middle Initial" ng-blur="fillBar()">
-                                    </div>
-
-                                    <div class="controls" style="float:left;margin-left:4%">
-                                        <label>Last Name</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.lname" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()">
-                                    </div><br><br><br><br>
-
-                                    <div class="controls">
-                                        <label>E-Mail Address</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter E-Mail" ng-blur="fillBar()">
-                                    </div><br><hr>
-
-                                    <div class="controls">
-                                        <br><label>User Name</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="uname" ng-model="formData.uname" ng-required="true" placeholder="Enter New User Name" ng-blur="fillBar()">
+                                    <div class="control-group" >
+                                      <label>User Name</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="userName" ng-model="administratorData.username" ng-required="true" placeholder="Enter UserName">
+                                      </div>
                                     </div><br>
 
-                                    <div class="controls">
-                                        <label>Password</label>
-                                        <input style="width: 200px" type="password" class="form-control" name="password" ng-model="formData.password" ng-required="true" placeholder="Enter New Password" ng-blur="fillBar()">
+                                    <div class="control-group" >
+                                      <label>Password</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="password" ng-model="administratorData.password" ng-required="true" placeholder="Enter Password">
+                                      </div>
+                                    </div><br>
+
+                                    <div class="control-group" >
+                                      <label>E-Mail</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="email" ng-model="administratorData.email" ng-required="true" placeholder="Enter Email">
+                                      </div>
+                                    </div><br>
+
+                                    <hr>        
+
+                                    <div class="control-group" >
+                                      <label>Phone Number</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="administratorData.phone" ng-required="true" placeholder="Enter Phone Number">
                                     </div>
+
+                                    <hr>
+
+                                    <div class="control-group" >
+                                      <label>Facility ID</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="administratorData.facilityID" ng-required="true" placeholder="Enter Facility ID">
+                                    </div>                       
+                                    </div><br>
+
+                                    <div class="control-group" >
+                                      <label>User Level ID</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="administratorData.userLevelID" ng-required="true" placeholder="Enter User Level ID">
+                                    </div>                       
+                                    </div><br>
+
+                                    <div class="control-group" >
+                                      <label>Created On</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="administratorData.createdOn" ng-required="true" placeholder="Enter Created On (1374177302)">
+                                    </div>                       
+                                    </div><br>
+
+
+
+                                    <div class="control-group" >
+                                      <label>First Name</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="administratorData.firstName" ng-required="true" placeholder="Enter First Name">
+                                    </div>                       
+                                    </div><br>
+
+                                    <div class="control-group" >
+                                      <label>Last Name</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="administratorData.lastName" ng-required="true" placeholder="Enter Last Name">
+                                    </div>                       
+                                    </div><br>     
+
+                                    <div class="control-group" >
+                                      <label>Title ID</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="administratorData.titleID" ng-required="true" placeholder="Enter Title ID (1)">
+                                    </div>                       
+                                    </div><br> 
 
 
                                 </div><br>
                                 <input style="width: 200px" type="submit" id="submit" value="Submit" />
-                                {{ formData | json }}
+                                Administrator Data:{{ administratorData | json }}
 
                             </form>
                         </div>
@@ -124,23 +184,6 @@
                 </div>
             </div>
         </div>  
-        
-
-        <div style="position:fixed;margin-left:70%;width:28%">
-
-        <blockquote><h1>New Facility Form</h1><br>
-            <text class="form">Facility Name:</text> &nbsp {{formData.facilityName}}<br><br>
-            <text class="form">Address:</text> &nbsp {{formData.facilityStreet}} <br>
-            <text style="padding-left:78px;">{{formData.facilityCity}},&nbsp{{formData.facilityState}}&nbsp{{formData.facilityZip}}</text> <br><br>
-            <text style="form">Phone:</text> &nbsp {{formData.facilityPhone}} <br><br>
-            <hr>
-            <text class="form">First Name:</text> &nbsp {{formData.fname}}
-            <text class="form"> &nbsp&nbsp MI:</text> &nbsp {{formData.middle}} <br><br>
-            <text class="form">Last Name:</text> &nbsp {{formData.lname}} <br><br>
-            <text class="form">E-Mail Address:</text> &nbsp {{formData.email}} <br><br>
-            <text class="form">Username:</text> &nbsp {{formData.uname}} <br><br>
-        </blockquote>
-        </div>
 
     
     </body>
@@ -165,8 +208,38 @@
 
     var controllers = {};
     
-    controllers.regCtrl =  function($scope) {
-        $scope.formData = {};
+    controllers.regCtrl =  function($scope, $http) {
+        
+        $scope.administratorData = {};
+        $scope.facilityData = {};
+        
+        
+        $scope.registerFacility = function() {
+            console.log("facility registration");
+            $http({
+                method  : 'POST',
+                url     : 'http://killzombieswith.us/aii-api/v1/facilities',
+                data    : $scope.facilityData,  // pass in data as strings
+                headers : { 'Content-Type': 'application/json' } 
+            })
+            .success(function(data) {
+                console.log(data);
+            });
+        }
+        
+        $scope.registerAdministrator = function() {
+            console.log("admin registration");
+            $http({
+                method  : 'POST',
+                url     : 'http://killzombieswith.us/aii-api/v1/users',
+                data    : $scope.administratorData,  // pass in data as strings
+                headers : { 'Content-Type': 'application/json' } 
+            })
+            .success(function(data) {
+                console.log(data);
+            });
+        }
+        
     }
     
     regApp.controller(controllers);
