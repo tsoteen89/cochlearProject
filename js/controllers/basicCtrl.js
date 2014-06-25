@@ -6,14 +6,14 @@ var controllers = {};
 //Factory to get all Patients associated with Facility 100
 myApp.factory('getPatients', function($http){
     
-    return $http.get('../aii-api/v1/facilities/100/patients');
+    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/patients');
  
 });
 
 //Factory to get all CareTeams associated with facility 100
 myApp.factory('getCareTeams', function($http){
    
-    return $http.get('../aii-api/v1/facilities/100/careTeams');
+    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/careTeams');
     
 });
 
@@ -1027,7 +1027,7 @@ controllers.formController = function($scope, $http) {
     $scope.processForm = function() {
         $http({
             method  : 'POST',
-            url     : 'phpTest/testPost.php',
+            url     : 'http://killzombieswith.us/aii-api/v1/patients',
             data    : $.param($scope.formData),  // pass in data as strings
             headers : { 'Content-Type': 'application/json' } 
         })
