@@ -1027,8 +1027,8 @@ controllers.formController = function($scope, $http) {
     $scope.processForm = function() {
         $http({
             method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/patients',
-            data    : $.param($scope.formData),  // pass in data as strings
+            url     : '../aii-api/v1/patients',
+            data    : $scope.formData,  // pass in data as strings
             headers : { 'Content-Type': 'application/json' } 
         })
         .success(function(data) {
@@ -1037,6 +1037,27 @@ controllers.formController = function($scope, $http) {
 
     };
 
+}
+
+
+controllers.addUserController = function($scope){
+    
+    // create a blank object to hold form information
+    $scope.formData = {};
+
+    // process the form
+    $scope.processForm = function() {
+        $http({
+            method  : 'POST',
+            url     : '../aii-api/v1/users',
+            data    : $scope.formData,  // pass in data as strings
+            headers : { 'Content-Type': 'application/json' } 
+        })
+        .success(function(data) {
+            console.log(data);
+        });
+
+    };
 }
 
 controllers.styleCtrl = function($scope){

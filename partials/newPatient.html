@@ -2,7 +2,7 @@
 	<body>
         <div ng-controller="formController">
         <div ng-controller="ProgressDemoCtrl">
-        <div class="col-md-9" style="width:50%">
+        <div class="col-md-9" style="width:40%">
         <div class="panel panel-default">
             
             <!-- New Patient Header --> 
@@ -42,16 +42,10 @@
 
                         <hr>        
 
-                        <label>Date of Birth</label>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p class="input-group">
-                                  <input type="text" class="form-control" name="DOB" datepicker-popup="{{format}}" ng-model="formData.DOB" is-open="opened" max-date="{{maxDate}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-focus="fillBar()" />
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                  </span>
-                                </p>
-                            </div>
+                        <div class="control-group" >
+                          <label>DOB</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="DOB" ng-model="formData.DOB" ng-required="true" placeholder="Enter Date of Birth" ng-blur="fillBar()">
                         </div>
 
                         <hr>
@@ -59,8 +53,8 @@
                         <div class="control-group" >
                           <label>Sex</label>
                           <div class="controls" >
-                            <input type="radio" name="Sex" ng-model="formData.Sex" value="male" ng-focus="fillBar()"> Male<br>
-                            <input type="radio" name="Sex" ng-model="formData.Sex" value="female" ng-focus="fillBar()"> Female
+                            <input type="radio" name="Sex" ng-model="formData.Sex" value="m" ng-focus="fillBar()"> Male<br>
+                            <input type="radio" name="Sex" ng-model="formData.Sex" value="f" ng-focus="fillBar()"> Female
                           </div>                        
                         </div><br>
 
@@ -117,27 +111,6 @@
 
         </div>
         </div>
-
-                <!-- Dynamic Information Provider -->
-            <div style="position:fixed;margin-left:67%;width:30%">
-
-                    <!-- Progress Bar -->
-                Progress
-                <progressbar class="progress-striped active" value="dynamic" type="{{type}}"><b>{{dynamic}}%</b></progressbar>
-                    <!-- Patient Data Displayed -->
-                <blockquote><text class="form">Patient ID:</text> &nbsp {{formData.PatientID}} <br><br>
-                    <text class="form">First Name:</text> &nbsp {{formData.First}}
-                    <text class="form">Last Name:</text> &nbsp {{formData.Last}} <br><br>
-                    <text class="form">Date of Birth:</text> &nbsp {{formData.DOB | date:'shortDate'}} <br><br>
-                    <text class="form">Sex:</text> &nbsp {{formData.Sex}} <br>
-                    <text class="form">Race:</text> &nbsp {{formData.Race}} <br>
-                    <text class="form">BMI:</text> &nbsp {{formData.BMI}} <br>
-                    <text class="form">Height:</text> &nbsp {{formData.Height}} <br>
-                    <text class="form">Weight:</text> &nbsp {{formData.Weight}} <br>
-                </blockquote>
-
-            </div>
-
         </div>
         </div>
 
