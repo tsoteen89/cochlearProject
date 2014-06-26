@@ -24,10 +24,10 @@ myApp.config(function ($routeProvider) {
       controller: '',
       templateUrl: 'partials/logout.html'
   })
-  .when('/login',
+  .when('/mySettings',
   {
       controller: '',
-      templateUrl: 'login.php'
+      templateUrl: 'partials/mySettings.html'
   })
   .when('/myHome',
   {

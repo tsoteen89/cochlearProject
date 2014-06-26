@@ -132,21 +132,21 @@
                                     <div class="control-group" >
                                       <label>Facility ID</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="administratorData.facilityID" ng-required="true" placeholder="Enter Facility ID">
+                                        <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="administratorData.FacilityID" ng-required="true" placeholder="Enter Facility ID">
                                     </div>                       
                                     </div><br>
 
                                     <div class="control-group" >
                                       <label>User Level ID</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="administratorData.userLevelID" ng-required="true" placeholder="Enter User Level ID">
+                                        <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="administratorData.UserLevelID" ng-required="true" placeholder="Enter User Level ID">
                                     </div>                       
                                     </div><br>
 
                                     <div class="control-group" >
                                       <label>Created On</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="administratorData.createdOn" ng-required="true" placeholder="Enter Created On (1374177302)">
+                                        <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="administratorData.created_on" ng-required="true" placeholder="Enter Created On (1374177302)">
                                     </div>                       
                                     </div><br>
 
@@ -155,21 +155,21 @@
                                     <div class="control-group" >
                                       <label>First Name</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="administratorData.firstName" ng-required="true" placeholder="Enter First Name">
+                                        <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="administratorData.first_name" ng-required="true" placeholder="Enter First Name">
                                     </div>                       
                                     </div><br>
 
                                     <div class="control-group" >
                                       <label>Last Name</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="administratorData.lastName" ng-required="true" placeholder="Enter Last Name">
+                                        <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="administratorData.last_name" ng-required="true" placeholder="Enter Last Name">
                                     </div>                       
                                     </div><br>     
 
                                     <div class="control-group" >
                                       <label>Title ID</label>
                                       <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="administratorData.titleID" ng-required="true" placeholder="Enter Title ID (1)">
+                                        <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="administratorData.TitleID" ng-required="true" placeholder="Enter Title ID (1)">
                                     </div>                       
                                     </div><br> 
 
@@ -218,7 +218,7 @@
             console.log("facility registration");
             $http({
                 method  : 'POST',
-                url     : 'http://killzombieswith.us/aii-api/v1/facilities',
+                url     : '../aii-api/v1/facilities',
                 data    : $scope.facilityData,  // pass in data as strings
                 headers : { 'Content-Type': 'application/json' } 
             })
@@ -231,7 +231,7 @@
             console.log("admin registration");
             $http({
                 method  : 'POST',
-                url     : 'http://killzombieswith.us/aii-api/v1/users',
+                url     : '../aii-api/v1/users',
                 data    : $scope.administratorData,  // pass in data as strings
                 headers : { 'Content-Type': 'application/json' } 
             })

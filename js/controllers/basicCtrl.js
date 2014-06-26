@@ -10,6 +10,13 @@ myApp.factory('getPatients', function($http){
  
 });
 
+//Factory to get single User by ID
+myApp.factory('getUser', function($http){
+    
+    return $http.get('http://killzombieswith.us/aii-api/v1/users/1');
+    
+});
+
 //Factory to get all CareTeams associated with facility 100
 myApp.factory('getCareTeams', function($http){
    
@@ -1040,7 +1047,7 @@ controllers.formController = function($scope, $http) {
 }
 
 
-controllers.addUserController = function($scope){
+controllers.addUserController = function($scope, $http){
     
     // create a blank object to hold form information
     $scope.formData = {};
@@ -1058,6 +1065,27 @@ controllers.addUserController = function($scope){
         });
 
     };
+}
+
+
+controllers.editUserController = function($scope, $http, getUser){
+    $scope.editUser = {};
+    
+    //Grab single User by ID
+    getUser.success(function(data) {
+        $scope.userData = data;
+    });
+    
+    $scope.editUserPut = function() {
+        $http({
+            method  : 'PUT',
+            url     : 'http://killzombieswith.us/aii-api/v1/users',
+            data    : $scope.editUser,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        console.log("editUserPut has been Called");
+    }
+    
 }
 
 controllers.styleCtrl = function($scope){
