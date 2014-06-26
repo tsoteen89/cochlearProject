@@ -1079,7 +1079,7 @@ controllers.editUserController = function($scope, $http, getUser){
     $scope.editUserPut = function() {
         $http({
             method  : 'PUT',
-            url     : 'http://killzombieswith.us/aii-api/v1/users',
+            url     : 'http://killzombieswith.us/aii-api/v1/users/' + userData.records[0].userID,
             data    : $scope.editUser,
             headers : { 'Content-Type': 'application/json' }
         })

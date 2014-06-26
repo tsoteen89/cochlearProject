@@ -18,7 +18,6 @@
                         <label class="description" >{{question.QuestionText}} </label>
                         <span>
                             <div ng-if="InputArray(question.Input)">
-                                IT's TRUE!!!
                             </div>
                             <select ng-if="question.Input.Type == 'Select'">
                                 <option ng-repeat="value in question.Input.Values" value="value">{{value}}</option>
