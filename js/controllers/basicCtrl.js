@@ -6,21 +6,21 @@ var controllers = {};
 //Factory to get all Patients associated with Facility 100
 myApp.factory('getPatients', function($http){
     
-    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/patients');
+    return $http.get('../aii-api/v1/facilities/100/patients');
  
 });
 
 //Factory to get single User by ID
 myApp.factory('getUser', function($http){
     
-    return $http.get('http://killzombieswith.us/aii-api/v1/users/1');
+    return $http.get('../aii-api/v1/users/1');
     
 });
 
 //Factory to get all CareTeams associated with facility 100
 myApp.factory('getCareTeams', function($http){
    
-    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/careTeams');
+    return $http.get('../aii-api/v1/facilities/100/careTeams');
     
 });
 
@@ -153,6 +153,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
     });
     
     $scope.theMonster = persistData.getData();
+    $scope.answer = {};
     
 
     $scope.questionJson = [
@@ -214,7 +215,9 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
           "Input":{
              "Type":"Select",
              "Values":[
-
+                 "Type 1",
+                 "Type 2",
+                 "Type 3"
              ]
           },
           "Comment":""
@@ -306,7 +309,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
              {
                 "Type":"Select",
                 "Label":"Year",
-                "Year":"(Now-50):Now"
+                "Values":"(Now-50):Now"
              },
              {
                 "Type":"Select",
@@ -365,7 +368,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
              {
                 "Type":"Select",
                 "Label":"Year",
-                "Year":"(Now-50):Now"
+                "Values":"(Now-50):Now"
              },
              {
                 "Type":"Select",
@@ -440,7 +443,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
              {
                 "Type":"Select",
                 "Label":"Year",
-                "Year":"(Now-50):Now"
+                "Values":"(Now-50):Now"
              },
              {
                 "Type":"Select",
@@ -477,7 +480,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
              {
                 "Type":"Select",
                 "Label":"Year",
-                "Year":"(Now-50):Now"
+                "Values":"(Now-50):Now"
              }
           ],
           "Comment":"Need web link for the CDC site. And, leave date field blank if it wasn't given."
@@ -765,7 +768,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
              {
                 "Type":"Select",
                 "Label":"Year",
-                "Year":"(Now-50):Now"
+                "Values":"(Now-50):Now"
              },
              {
                 "Type":"Select",
@@ -1079,7 +1082,7 @@ controllers.editUserController = function($scope, $http, getUser){
     $scope.editUserPut = function() {
         $http({
             method  : 'PUT',
-            url     : 'http://killzombieswith.us/aii-api/v1/users/' + userData.records[0].userID,
+            url     : '../aii-api/v1/users/' + userData.records[0].userID,
             data    : $scope.editUser,
             headers : { 'Content-Type': 'application/json' }
         })
