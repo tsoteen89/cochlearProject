@@ -158,11 +158,31 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
     
     $scope.theMonster = persistData.getData();
     $scope.answer = {};
-    $scope.answer.checks = {};
     
     $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
         $scope.questionJson = data.records;
     });
+    
+    
+  $scope.roles = [
+    'guest', 
+    'user', 
+    'customer', 
+    'admin'
+  ];
+  $scope.user = {
+    roles: ['user']
+  };
+  $scope.checkAll = function() {
+    $scope.user.roles = angular.copy($scope.roles);
+  };
+  $scope.uncheckAll = function() {
+    $scope.user.roles = [];
+  };
+  $scope.checkFirst = function() {
+    $scope.user.roles.splice(0, $scope.user.roles.length); 
+    $scope.user.roles.push('guest');
+  };
     
 /*
     $scope.questionJson = [

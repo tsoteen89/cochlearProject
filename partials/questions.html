@@ -51,10 +51,10 @@
                                 <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
                                 <label class="choice" >{{values}}</label>
                             </div>
-                            <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                                <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[values][question]">
-                                <label class="choice" >{{values}}</label>
-                            </div>
+                            <label ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                <input type={{question.Input.Type}} checklist-value="values" checklist-model="answer[question.QuestionID]">
+                                {{values}}
+                            </label>
                             <br><br>
                             
                         </span>
