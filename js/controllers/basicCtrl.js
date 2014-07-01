@@ -6,21 +6,21 @@ var controllers = {};
 //Factory to get all Patients associated with Facility 100
 myApp.factory('getPatients', function($http){
     
-    return $http.get('../aii-api/v1/facilities/100/patients');
+    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/patients');
  
 });
 
 //Factory to get single User by ID
 myApp.factory('getUser', function($http){
     
-    return $http.get('../aii-api/v1/users/1');
+    return $http.get('http://killzombieswith.us/aii-api/v1/users/1');
     
 });
 
 //Factory to get all CareTeams associated with facility 100
 myApp.factory('getCareTeams', function($http){
    
-    return $http.get('../aii-api/v1/facilities/100/careTeams');
+    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/careTeams');
     
 });
 
@@ -147,6 +147,10 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, get
 
 controllers.questionsController = function($scope, persistData, getPatientCareTeams, $http){
     
+    $scope.InputArray = function(data){
+        return Array.isArray(data);
+    }
+    
     getPatientCareTeams.getCares(function(results) {
         console.log('GetCares async returned value');
         $scope.patientCareTeams = results;
@@ -154,8 +158,13 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
     
     $scope.theMonster = persistData.getData();
     $scope.answer = {};
+    $scope.answer.checks = {};
     
-
+    $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
+        $scope.questionJson = data.records;
+    });
+    
+/*
     $scope.questionJson = [
        {
           "QuestionID":"1",
@@ -982,10 +991,7 @@ controllers.questionsController = function($scope, persistData, getPatientCareTe
           "TypeID":"4"
        }
     ]
-    
-    $scope.InputArray = function(data){
-        return Array.isArray(data);
-    }
+*/
 
 };
 
