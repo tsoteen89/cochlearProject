@@ -41,8 +41,18 @@
                             <select ng-if="question.Input.Type == 'Select'">
                                 <option ng-repeat="values in question.Input.Values" value="values">{{values}}</option>
                             </select>
-                            <div ng-if="question.Input.Type != 'Select'" ng-repeat="values in question.Input.Values" >
+                            <div ng-if="question.Input.Type == 'Date'">
+                                <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                            </div>
+                            <div ng-if="question.Input.Type == 'Text'">
+                                <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                            </div>
+                            <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                 <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                <label class="choice" >{{values}}</label>
+                            </div>
+                            <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[values][question]">
                                 <label class="choice" >{{values}}</label>
                             </div>
                             <br><br>
