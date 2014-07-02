@@ -1,53 +1,20 @@
-
-var myApp = angular.module('basicCtrl', []);
+var myApp = angular.module('aiiController', []);
 
 var controllers = {};
 
-//Factory to get all Patients associated with Facility 100
-myApp.factory('getPatients', function($http){
+//************************************FACTORIES***************************************//
+
+//Factory to dynamically GET from api
+myApp.factory('getData', function($http){
     
-    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/patients');
+    return {
+        Patient: function(url) { return $http.get(url); },
+        User: function(url) { return $http.get(url);},
+        CareTeam: function(url) { return $http.get(url);},
+        PatientCareTeams: function(url) { return $http.get(url);},
+        CareTeamFacilities: function(url) { return $http.get(url);},
+    }
  
-});
-
-//Factory to get single User by ID
-myApp.factory('getUser', function($http){
-    
-    return $http.get('http://killzombieswith.us/aii-api/v1/users/1');
-    
-});
-
-//Factory to get all CareTeams associated with facility 100
-myApp.factory('getCareTeams', function($http){
-   
-    return $http.get('http://killzombieswith.us/aii-api/v1/facilities/100/careTeams');
-    
-});
-
-
-myApp.factory('getPatientCareTeams', function($http) {
-    var url = 'null';
-    return {
-        getCares: function(callback) {
-          $http.get(url).success(callback);
-        },
-        setCares: function(data) {
-            url = data;
-        }
-    };
-});
-
-
-myApp.factory('getCareFacilities', function($http) {
-    var url = 'null';
-    return {
-        getFacilities: function(callback) {
-          $http.get(url).success(callback);
-        },
-        setFacilities: function(data) {
-            url = data;
-        }
-    };
 });
 
 
@@ -67,23 +34,50 @@ myApp.factory('persistData', function () {
 });
 
 
+//*****************************************END FACTORIES*******************************************//
+
+//**************************************QUESTION CONTROLLERS***************************************//
+
+//Controller used to handle display of Questions for a Patient's CareTeam  
+controllers.questionsController = function($scope, persistData, getData, $http){
+    $scope.answer = {};
+    $scope.careTeamID = persistData.getData();
+    
+    $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
+        $scope.questionJson = data.records;
+    });
+    
+    $scope.InputArray = function(data){
+        return Array.isArray(data);
+    }
+
+};
+
+//************************************END QUESTION CONTROLLERS***************************************//
+
+//**************************************PATIENT CONTROLLERS******************************************//
+
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, getPatients, getCareTeams, persistData, getPatientCareTeams, getCareFacilities) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData) {   
     
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
-
-    //Grab all patients using getPatients Factory
-    getPatients.success(function(data) {
+    
+    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
+    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
+    
+    //Grab all Patients using patientURL 
+    getData.Patient($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     });
     
-    //Grab all careTeams using getCareTeams Factory
-    getCareTeams.success(function(data) {
+    //Grab all CareTeams using careTeamURL
+    getData.CareTeam($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
-
+    
+    //Put method for patient.
     $scope.processPut = function() {
         $http({
             method  : 'PUT',
@@ -95,7 +89,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, get
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
     
-    
+    //Delete method for patient
     $scope.processDelete = function() {
         $http({
             method  : 'DELETE',
@@ -107,6 +101,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, get
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }        
     
+    //Soft Delete method for patient
     $scope.processSoftDelete = function() {
         $http({
             method  : 'PUT',
@@ -118,66 +113,27 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, get
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
     
-    
+    //Return a CareTeam for a specific Patient ID    
     $scope.getPatientCareTeam = function(patients){
+        $scope.PatientCareTeamsURL = 'http://killzombieswith.us/aii-api/v1/patients/' + patients.PatientID + '/careTeams';
         
-        getPatientCareTeams.setCares('http://killzombieswith.us/aii-api/v1/patients/' + patients.PatientID + '/careTeams');
-        
-        getPatientCareTeams.getCares(function(results) {
-            console.log('GetCares async returned value');
-            $scope.patientCareTeams = results;
+        getData.PatientCareTeams($scope.PatientCareTeamsURL).success(function(data) {
+            $scope.patientCareTeams = data;
         });
     }
     
-    
-    $scope.getCareFacility = function(careTeams) {
-    
-        getCareFacilities.setFacilities('http://killzombieswith.us/aii-api/v1/careTeams/' + careTeams.CareTeamID + '/facilities');
+    //Return a Facility for a specific CareTeam ID
+    $scope.getCareTeamFacilities = function(careTeams){
+        $scope.CareTeamFacilitiesURL = 'http://killzombieswith.us/aii-api/v1/careTeams/' + careTeams.CareTeamID + '/facilities';
         
-        getCareFacilities.getFacilities(function(results) {
-            console.log('GetCares async returned value');
-            $scope.facilityData = results;
+        getData.CareTeamFacilities($scope.CareTeamFacilitiesURL).success(function(data) {
+            $scope.facilityData = data;
         });
         
         persistData.setData(careTeams.CareTeamID);
-    }
+    }    
 
-};
-
-
-//Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.questionsController = function($scope, persistData, getPatientCareTeams, $http){
-    
-    $scope.InputArray = function(data){
-        return Array.isArray(data);
-    }
-    
-    getPatientCareTeams.getCares(function(results) {
-        console.log('GetCares async returned value');
-        $scope.patientCareTeams = results;
-    });
-    
-    $scope.careTeamID = persistData.getData();
-    $scope.answer = {};
-    
-    $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
-        $scope.questionJson = data.records;
-    });
-
-};
-
-
-//Controller used to handle "Tabs"
-controllers.TabController = function(){
-	this.tab=-1;
-
-	this.selectTab=function(tabNum){
-		this.tab=tabNum;
-	};
-	this.isSelected=function(checkTab){
-		return this.tab===checkTab;
-	};
-}   
+};  
     
 
 //Controller used to handle addition of new Patients to the system
@@ -207,8 +163,11 @@ controllers.formController = function($scope, $http) {
 
 }
 
+//**************************************END PATIENT CONTROLLERS******************************************//
 
-//Controller used to handle addition of new Users to the system
+//*****************************************USER CONTROLLERS**********************************************//
+
+//Controller used to handle addition of NEW Users to the system
 controllers.addUserController = function($scope, $http){
     
     // create a blank object to hold form information
@@ -230,12 +189,13 @@ controllers.addUserController = function($scope, $http){
 }
 
 
-//Controller used to handle any edits made to a User
-controllers.editUserController = function($scope, $http, getUser){
+//Controller used to handle any EDITS made to a User
+controllers.editUserController = function($scope, $http, getData){
     $scope.editUser = {};
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
     
     //Grab single User by ID
-    getUser.success(function(data) {
+    getData.User($scope.userURL).success(function(data) {
         $scope.userData = data;
     });
     
@@ -250,6 +210,10 @@ controllers.editUserController = function($scope, $http, getUser){
     }
     
 }
+
+//**************************************END USER CONTROLLERS******************************************//
+
+//************************************MISCELLANEOUS CONTROLLERS***************************************//
 
 
 //Controller used to display a dynamically filled Progress Bar
@@ -284,7 +248,40 @@ controllers.ProgressDemoCtrl = function($scope) {
 }
 
 
+//Controller used to handle creation of new Messages
+controllers.composeMessage = function($scope, $http){
 
+    $scope.composeObject = {};
+
+    $scope.messageForm = function() {
+        $http({
+            method  : 'POST',
+            url     : '../aii-api/v1/messages',
+            data    : $scope.composeObject,  // do not put param
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .success(function(data) {
+            console.log(data);
+        })
+        .error(function() {
+           "Request failed";
+          $scope.status = status;
+        });;
+    }
+}
+
+
+//Controller used to handle "Tabs"
+controllers.TabController = function(){
+	this.tab=-1;
+
+	this.selectTab=function(tabNum){
+		this.tab=tabNum;
+	};
+	this.isSelected=function(checkTab){
+		return this.tab===checkTab;
+	};
+} 
 
 
 // Delete this when finished with it.
@@ -310,7 +307,16 @@ controllers.homeController = function($scope){
 };
 
 
+//EXAMPLE FOR BINDING HTML CONTROLLER
+controllers.ngBindHtmlCtrl = function ($scope, $sce) {
+  $scope.myHTML =
+     'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
+    $scope.trustedHtml = $sce.trustAsHtml($scope.myHTML);
+    $scope.textBox= $sce.trustAsHtml('<input  type="text" > </input>'); 
+};
 
+
+//********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
 myApp.controller(controllers);
 

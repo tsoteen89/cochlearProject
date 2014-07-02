@@ -48,7 +48,7 @@
                     </tr>
                     <tr data-ng-repeat="careTeams in patientCareTeams.records | filter: searchName">
                         <td class="col-md-1">
-                            <a href="" ng-click="getCareFacility(careTeams)">{{careTeams.CareTeamID}}</a>
+                            <a href="" ng-click="getCareTeamFacilities(careTeams)">{{careTeams.CareTeamID}}</a>
                         </td>
                         <td class="col-md-1">
                             {{careTeams.CurrentPhaseID}}
@@ -76,3 +76,4 @@
 
 	</body>
 </html>
+ 
