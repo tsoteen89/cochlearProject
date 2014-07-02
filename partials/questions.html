@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="myApp" style="width:100%;height:100%">
+<html lang="en" style="width:100%;height:100%">
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -11,56 +11,64 @@
         
         <div class="col-md-6">
         <form class="form form-verticle" id="form_850359" class="appnitro">
-            <div class="control-group" ng-controller="questionsController">
-                CareTeamID: {{careTeamID}}
+            <div class="control-group" data-ng-controller="questionsController">
+                CareTeamID: {{answer.CareTeamID}}
                 
                 <div style="float:right">Question Answers:{{answer}}</div>
                 
                 <!-- Display All Questions -->
                 <ul>
                     <li ng-repeat= "question in questionJson">
-                        <label class="description" >{{question.QuestionText}} </label>
-                        <span>
-                            <!-- If the Input has multiple fields, display them all -->
-                            <div ng-if="InputArray(question.Input)">   
-                                <ul>
-                                    <li ng-repeat= "input in question.Input">
-                                        <label class="description" >{{input.Label}}</label>
-                                        <select ng-if="input.Type == 'Select'">
-                                            <option ng-repeat="value in input.Values" value="value">{{value}}</option>
-                                        </select>
-                                        <div ng-if="input.Type != 'Select'" ng-repeat="values in input.Values" >
-                                            <input type="{{input.Type}}" name="{{question.QuestionText}}">
-                                            <label class="choice" >{{values}}</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Else Display only the single Input field -->
-                            <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values" ng-model="answer[question.QuestionID]">
-                                
-                            </select>
-                            <div ng-if="question.Input.Type == 'Date'">
-                                <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
-                            </div>
-                            <div ng-if="question.Input.Type == 'Text'">
-                                <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
-                            </div>
-                            <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
-                                <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
-                                <label class="choice" >{{values}}</label>
-                            </div>
-                            <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                                <input type={{question.Input.Type}} checklist-value="values" checklist-model="answer[question.QuestionID]">
-                                <label class="choice" >{{values}}</label>
-                            </div>
-                            <br><br>
-                            
-                        </span>
-                        <p class="guidelines">
-                            <small>{{question.QuestionHelp}}</small>
-                        </p>
+                        <div ng-hide="question.IsChild">
+                            <label class="description" >{{question.QuestionText}} </label>
+                            <span>
+                                <!-- If the Input has multiple fields, display them all -->
+                                <div ng-if="InputArray(question.Input)">   
+                                    <ul>
+                                        <li ng-repeat= "input in question.Input">
+                                            <label class="description" >{{input.Label}}</label>
+                                            <select ng-if="input.Type == 'Select'">
+                                                <option ng-repeat="value in input.Values" value="value">{{value}}</option>
+                                            </select>
+                                            <div ng-if="input.Type != 'Select'" ng-repeat="values in input.Values" >
+                                                <input type="{{input.Type}}" name="{{question.QuestionText}}">
+                                                <label class="choice" >{{values}}</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Else Display only the single Input field -->
+                                <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values" ng-model="answer[question.QuestionID]">
+
+                                </select>
+                                <div ng-if="question.Input.Type == 'Date'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Text'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} checklist-value="values" checklist-model="answer[question.QuestionID]">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <br>
+
+                            </span>
+                            <p class="guidelines">
+                                <small>{{question.QuestionHelp}}</small>
+                            </p>
+                        </div>
+                        <div ng-if="question.Trigger == answer[question.QuestionID] && question.Trigger != null">
+                            {{showChild(question.Children)}}
+                        </div>
+                        <div ng-if="question.Trigger != answer[question.QuestionID] || question.Trigger == null">
+                            {{hideChild(question.Children)}}
+                        </div>
                     </li>
                 </ul>
                 <!-- End Display Of All Questions -->

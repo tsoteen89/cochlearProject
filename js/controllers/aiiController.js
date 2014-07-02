@@ -1,3 +1,5 @@
+(function(){
+
 var myApp = angular.module('aiiController', []);
 
 var controllers = {};
@@ -20,16 +22,24 @@ myApp.factory('getData', function($http){
 
 //Factory that uses getter and setter to keep data persistant throughout partials
 myApp.factory('persistData', function () {
-    var persistantData;
+    var CareTeamID;
+    var PhaseID;
 
     return {
-        setData:function (data) {
-            persistantData = data;
+        setCareTeamID:function (data) {
+            CareTeamID = data;
             console.log(data);
         },
-        getData:function () {
-            return persistantData;
-        }
+        setPhaseID: function (data) {
+            PhaseID = data;
+            console.log(data);
+        },
+        getCareTeamID:function () {
+            return CareTeamID;
+        },
+        getPhaseID: function (data) {
+            return PhaseID;
+        },
     };
 });
 
@@ -41,7 +51,8 @@ myApp.factory('persistData', function () {
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.questionsController = function($scope, persistData, getData, $http){
     $scope.answer = {};
-    $scope.careTeamID = persistData.getData();
+    $scope.answer.PhaseID = persistData.getPhaseID();
+    $scope.answer.CareTeamID = persistData.getCareTeamID();
     
     $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
         $scope.questionJson = data.records;
@@ -49,6 +60,32 @@ controllers.questionsController = function($scope, persistData, getData, $http){
     
     $scope.InputArray = function(data){
         return Array.isArray(data);
+    }
+    
+    $scope.showChild = function(data){
+        var index;
+        var indexB;
+        
+        for(index=0; index < data.length; index++) {
+            for(indexB=0; indexB < $scope.questionJson.length; indexB++) {
+                if($scope.questionJson[indexB].QuestionID == data[index]) {
+                    $scope.questionJson[indexB].IsChild = 0;
+                }
+            }
+        }
+    }
+    
+    $scope.hideChild = function(data){
+        var index;
+        var indexB;
+        
+        for(index=0; index < data.length; index++) {
+            for(indexB=0; indexB < $scope.questionJson.length; indexB++) {
+                if($scope.questionJson[indexB].QuestionID == data[index]) {
+                    $scope.questionJson[indexB].IsChild = 1;
+                }
+            }
+        }
     }
 
 };
@@ -130,7 +167,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.facilityData = data;
         });
         
-        persistData.setData(careTeams.CareTeamID);
+        persistData.setCareTeamID(careTeams.CareTeamID);
+        persistData.setPhaseID(careTeams.CurrentPhaseID);
     }    
 
 };  
@@ -319,4 +357,6 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 //********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
 myApp.controller(controllers);
+
+})();
 
