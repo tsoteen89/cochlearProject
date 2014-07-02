@@ -12,7 +12,7 @@
         <div class="col-md-6">
         <form class="form form-verticle" id="form_850359" class="appnitro">
             <div class="control-group" ng-controller="questionsController">
-                {{theMonster}}
+                CareTeamID: {{careTeamID}}
                 
                 <div style="float:right">Question Answers:{{answer}}</div>
                 
@@ -38,8 +38,8 @@
                             </div>
                             
                             <!-- Else Display only the single Input field -->
-                            <select ng-if="question.Input.Type == 'Select'">
-                                <option ng-repeat="values in question.Input.Values" value="values">{{values}}</option>
+                            <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values" ng-model="answer[question.QuestionID]">
+                                
                             </select>
                             <div ng-if="question.Input.Type == 'Date'">
                                 <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
@@ -51,10 +51,10 @@
                                 <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
                                 <label class="choice" >{{values}}</label>
                             </div>
-                            <label ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                            <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
                                 <input type={{question.Input.Type}} checklist-value="values" checklist-model="answer[question.QuestionID]">
-                                {{values}}
-                            </label>
+                                <label class="choice" >{{values}}</label>
+                            </div>
                             <br><br>
                             
                         </span>

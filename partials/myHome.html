@@ -37,18 +37,6 @@
                 </table>
 
             </div>
-            <div style="width:8%;float:left">
-                <table class="table table-hover">
-                    <tr>
-                        <td><strong>Current Phase</strong></td>
-                    </tr>
-                    <tr data-ng-repeat="phase in careData.records">
-                        <td>
-                            {{phase.CurrentPhaseID}}
-                        </td>
-                    </tr>
-                </table>
-            </div>
             
             <!-- Care Teams --> 
            <div style="width:30%;float:left;margin-left:10%">
@@ -60,10 +48,10 @@
                     </tr>
                     <tr data-ng-repeat="careTeams in patientCareTeams.records | filter: searchName">
                         <td class="col-md-1">
-                            <a href="" ng-click="getCareFacility(careTeams)">{{careTeams.careTeamID}}</a>
+                            <a href="" ng-click="getCareFacility(careTeams)">{{careTeams.CareTeamID}}</a>
                         </td>
                         <td class="col-md-1">
-                            {{careTeams.currentPhaseID}}
+                            {{careTeams.CurrentPhaseID}}
                         </td>
                     </tr>
                 </table>
@@ -85,12 +73,6 @@
                 <a href="#/questions"><button>Edit Patient</button></a>
             </div>
         </div>
-        
-        <div ng-controller="questionsController">
-            THE MONSTER: {{theMonster}}
-        </div>
-
-     
 
 	</body>
 </html>
