@@ -51,6 +51,7 @@ myApp.factory('persistData', function () {
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.questionsController = function($scope, persistData, getData, $http){
     $scope.answer = {};
+    $scope.answer.Answers = {}; 
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     
@@ -87,6 +88,19 @@ controllers.questionsController = function($scope, persistData, getData, $http){
             }
         }
     }
+    
+    $scope.saveAnswers = function() {
+        $http({
+            method  : 'POST',
+            url     : '../aii-api/v1/answers',
+            data    : $scope.answer,  // pass in data as strings
+            headers : { 'Content-Type': 'application/json' } 
+        })
+        .success(function(data) {
+            console.log(data);
+        });
+
+    };
 
 };
 
@@ -184,6 +198,23 @@ controllers.formController = function($scope, $http) {
         $event.stopPropagation();
         $scope.opened = true;
     };
+    
+    $scope.bmis = [];
+    $scope.heights = [];
+    $scope.weights = [];
+    $scope.i = 0;
+    
+    for($scope.i=0;$scope.i<36;$scope.i++){
+ 		$scope.bmis[$scope.i] = $scope.i + 10;
+ 	}
+ 
+ 	for($scope.i=0;$scope.i<68;$scope.i++){
+ 		$scope.heights[$scope.i] = $scope.i + 12;
+ 	}
+ 
+ 	for($scope.i=0;$scope.i<221;$scope.i++){
+ 		$scope.weights[$scope.i] = $scope.i + 80;
+ 	}
 
     // Post function to add a new Patient to the system
     $scope.processForm = function() {

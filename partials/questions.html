@@ -9,9 +9,9 @@
         <label style="font-size:32px">Question Page</label>
         <hr>
         
-        <div class="col-md-6">
-        <form class="form form-verticle" id="form_850359" class="appnitro">
-            <div class="control-group" data-ng-controller="questionsController">
+        <div class="col-md-6" data-ng-controller="questionsController">
+        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="saveAnswers()">
+            <div class="control-group" >
                 CareTeamID: {{answer.CareTeamID}}
                 
                 <div style="float:right">Question Answers:{{answer}}</div>
@@ -22,7 +22,9 @@
                         <div ng-hide="question.IsChild">
                             <label class="description" >{{question.QuestionText}} </label>
                             <span>
+                                
                                 <!-- If the Input has multiple fields, display them all -->
+                                <!--
                                 <div ng-if="InputArray(question.Input)">   
                                     <ul>
                                         <li ng-repeat= "input in question.Input">
@@ -37,23 +39,29 @@
                                         </li>
                                     </ul>
                                 </div>
+                                -->
 
                                 <!-- Else Display only the single Input field -->
-                                <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values" ng-model="answer[question.QuestionID]">
+                                <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                        ng-model="answer.Answers[question.QuestionID]">
 
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
-                                    <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
-                                    <input type={{question.Input.Type}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
-                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer[question.QuestionID]">
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                                    <input type={{question.Input.Type}} checklist-value="values" checklist-model="answer[question.QuestionID]">
+                                    <input type={{question.Input.Type}} checklist-value="values" 
+                                           checklist-model="answer.Answers[question.QuestionID]">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <br>
@@ -63,10 +71,10 @@
                                 <small>{{question.QuestionHelp}}</small>
                             </p>
                         </div>
-                        <div ng-if="question.Trigger == answer[question.QuestionID] && question.Trigger != null">
+                        <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
                             {{showChild(question.Children)}}
                         </div>
-                        <div ng-if="question.Trigger != answer[question.QuestionID] || question.Trigger == null">
+                        <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
                             {{hideChild(question.Children)}}
                         </div>
                     </li>
@@ -74,6 +82,7 @@
                 <!-- End Display Of All Questions -->
                 
             </div>
+            <input style="width: 200px" type="submit" id="submit" value="Submit" />
         </form>
         </div>
     </body>
