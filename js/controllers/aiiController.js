@@ -10,13 +10,45 @@ var controllers = {};
 myApp.factory('getData', function($http){
     
     return {
-        Patient: function(url) { return $http.get(url); },
-        User: function(url) { return $http.get(url);},
-        CareTeam: function(url) { return $http.get(url);},
-        PatientCareTeams: function(url) { return $http.get(url);},
-        CareTeamFacilities: function(url) { return $http.get(url);},
+        get: function(url) { return $http.get(url); },
     }
  
+});
+    
+    
+//Factory to dynamically POST to api  
+myApp.factory('postData', function($http){
+    
+    return {
+        post: function(path, object) {
+            return $http({
+                method  : 'POST',
+                url     : path,
+                data    : object,
+                headers : { 'Content-Type': 'application/json' } 
+            }).success(function(addedData) {
+                console.log(addedData);
+            });
+        },
+    }
+});
+    
+
+//Factory to dynamically PUT to api  
+myApp.factory('putData', function($http){
+    
+    return {
+        put: function(path, object) {
+            return $http({
+                method  : 'PUT',
+                url     : path,
+                data    : object,
+                headers : { 'Content-Type': 'application/json' } 
+            }).success(function(addedData) {
+                console.log(addedData);
+            });
+        },
+    }
 });
 
 
@@ -49,20 +81,23 @@ myApp.factory('persistData', function () {
 //**************************************QUESTION CONTROLLERS***************************************//
 
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.questionsController = function($scope, persistData, getData, $http){
+controllers.questionsController = function($scope, persistData, getData, postData, $http){
     $scope.answer = {};
-    $scope.answer.Answers = {}; 
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
-    $http.get("http://killzombieswith.us/aii-api/v1/phases/2/questions").success(function(data) {
+    //Get all questions for a particular Phase
+    getData.get($scope.questionsURL).success(function(data) {
         $scope.questionJson = data.records;
     });
     
-    $scope.InputArray = function(data){
-        return Array.isArray(data);
-    }
+    getData.get($scope.answersURL).success(function(data) {
+        $scope.answer = data.records;
+    });
     
+    //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
         var indexB;
@@ -76,6 +111,7 @@ controllers.questionsController = function($scope, persistData, getData, $http){
         }
     }
     
+    //Hide a child if the Trigger has been reset
     $scope.hideChild = function(data){
         var index;
         var indexB;
@@ -89,17 +125,9 @@ controllers.questionsController = function($scope, persistData, getData, $http){
         }
     }
     
-    $scope.saveAnswers = function() {
-        $http({
-            method  : 'POST',
-            url     : '../aii-api/v1/answers',
-            data    : $scope.answer,  // pass in data as strings
-            headers : { 'Content-Type': 'application/json' } 
-        })
-        .success(function(data) {
-            console.log(data);
-        });
-
+    //Post all answers saved 
+    $scope.postAnswers = function() {
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
     };
 
 };
@@ -119,12 +147,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
     //Grab all Patients using patientURL 
-    getData.Patient($scope.patientURL).success(function(data) {
+    getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     });
     
     //Grab all CareTeams using careTeamURL
-    getData.CareTeam($scope.careTeamURL).success(function(data) {
+    getData.get($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
     
@@ -168,7 +196,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.getPatientCareTeam = function(patients){
         $scope.PatientCareTeamsURL = 'http://killzombieswith.us/aii-api/v1/patients/' + patients.PatientID + '/careTeams';
         
-        getData.PatientCareTeams($scope.PatientCareTeamsURL).success(function(data) {
+        getData.get($scope.PatientCareTeamsURL).success(function(data) {
             $scope.patientCareTeams = data;
         });
     }
@@ -177,7 +205,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.getCareTeamFacilities = function(careTeams){
         $scope.CareTeamFacilitiesURL = 'http://killzombieswith.us/aii-api/v1/careTeams/' + careTeams.CareTeamID + '/facilities';
         
-        getData.CareTeamFacilities($scope.CareTeamFacilitiesURL).success(function(data) {
+        getData.get($scope.CareTeamFacilitiesURL).success(function(data) {
             $scope.facilityData = data;
         });
         
@@ -189,7 +217,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     
 
 //Controller used to handle addition of new Patients to the system
-controllers.formController = function($scope, $http) {
+controllers.formController = function($scope, $http, postData) {
     // create a blank object to hold form information
     $scope.formData = {};
     
@@ -218,16 +246,7 @@ controllers.formController = function($scope, $http) {
 
     // Post function to add a new Patient to the system
     $scope.processForm = function() {
-        $http({
-            method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/patients',
-            data    : $scope.formData,  // pass in data as strings
-            headers : { 'Content-Type': 'application/json' } 
-        })
-        .success(function(data) {
-            console.log(data);
-        });
-
+        postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
     };
 
 }
@@ -237,46 +256,32 @@ controllers.formController = function($scope, $http) {
 //*****************************************USER CONTROLLERS**********************************************//
 
 //Controller used to handle addition of NEW Users to the system
-controllers.addUserController = function($scope, $http){
+controllers.addUserController = function($scope, $http, postData){
     
     // create a blank object to hold form information
     $scope.formData = {};
 
-    // process the form
+    // Post function to add a new User to the system
     $scope.processForm = function() {
-        $http({
-            method  : 'POST',
-            url     : '../aii-api/v1/users',
-            data    : $scope.formData,  // pass in data as strings
-            headers : { 'Content-Type': 'application/json' } 
-        })
-        .success(function(data) {
-            console.log(data);
-        });
-
+        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
     };
 }
 
 
 //Controller used to handle any EDITS made to a User
-controllers.editUserController = function($scope, $http, getData){
+controllers.editUserController = function($scope, $http, getData, putData){
     $scope.editUser = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
     
     //Grab single User by ID
-    getData.User($scope.userURL).success(function(data) {
+    getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     });
     
+    //Put changed information into database
     $scope.editUserPut = function() {
-        $http({
-            method  : 'PUT',
-            url     : '../aii-api/v1/users/' + this.userData.records[0].userID,
-            data    : $scope.editUser,
-            headers : { 'Content-Type': 'application/json' }
-        })
-        console.log("editUserPut has been Called");
-    }
+        putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
+    };
     
 }
 

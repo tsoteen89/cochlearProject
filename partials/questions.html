@@ -10,7 +10,7 @@
         <hr>
         
         <div class="col-md-6" data-ng-controller="questionsController">
-        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="saveAnswers()">
+        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="postAnswers()">
             <div class="control-group" >
                 CareTeamID: {{answer.CareTeamID}}
                 
@@ -22,29 +22,10 @@
                         <div ng-hide="question.IsChild">
                             <label class="description" >{{question.QuestionText}} </label>
                             <span>
-                                
-                                <!-- If the Input has multiple fields, display them all -->
-                                <!--
-                                <div ng-if="InputArray(question.Input)">   
-                                    <ul>
-                                        <li ng-repeat= "input in question.Input">
-                                            <label class="description" >{{input.Label}}</label>
-                                            <select ng-if="input.Type == 'Select'">
-                                                <option ng-repeat="value in input.Values" value="value">{{value}}</option>
-                                            </select>
-                                            <div ng-if="input.Type != 'Select'" ng-repeat="values in input.Values" >
-                                                <input type="{{input.Type}}" name="{{question.QuestionText}}">
-                                                <label class="choice" >{{values}}</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                -->
 
                                 <!-- Else Display only the single Input field -->
                                 <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
                                         ng-model="answer.Answers[question.QuestionID]">
-
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
