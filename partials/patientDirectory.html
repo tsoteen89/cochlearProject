@@ -6,7 +6,51 @@
 	</head>
     
 	<body style="width:100%;height:100%">
+        <div ng-controller="apiPatientsController" >
+            <h1 style="color:#84a4b4"> Patient Overviews</h1>
+            <div style="width: 85%; height: 200px; padding:15px; border: 5px; border-color: #11ace9;
+                        border-style:solid; margin: 15px"
+                 data-ng-repeat="patients in patientsData.records">
+                
+                <div style="border: 3px; border-color: #5f9ccf; border-style:solid; float:left; width: 150px; height: 150px; 
+                            text-align:center">
+                    Picture Here
+                </div>
+                <div style="font-size:100%; margin: 15px; display:inline-block">
+                 <a href="" style="font-size:125%;">
+                     {{patients.First}}  {{patients.Last}}</a>
+                    <br>
+                    <p ng-if=patients.Sex=='f'>
+                        Female
+                    </p>
+                    <p ng-if=patients.Sex=='m'>
+                        Male
+                    </p>
+                    <p>
+                    {{patients.BMI}}
+                    </p>
+                    <button style="margin-left: 200px"> Details </button>
+                </div>
+                
+                <div style="border: 5px; border-color: #5f9ccf;  border-left-style:solid; float:right; 
+                            width: 70%; height: 195px; margin: -15px">
+                    <!--
+                    {{getPatientCareTeam(patients)}}
+                    
+                    {{patientCareTeams.records}}
 
+-->
+                    <p style="font-size:125%; margin: 15px;"> 
+                        Treatment Phase <br>
+                        <span data-ng-repeat="careTeams in patientCareTeams.records">
+                            {{careTeams.CareTeamID}} <br> <br> <br>
+                        </span>
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+<!--
         <div ng-controller="apiPatientsController">    
         
         <h1>Patients</h1>
@@ -14,7 +58,9 @@
         Name: <input type="text" data-ng-model="searchName">
         <br>
         <br>
+-->
             <!-- Patients -->
+    <!--
             <div style="width:25%;float:left">
                 
                 <table class="table table-hover">
@@ -37,8 +83,9 @@
                 </table>
 
             </div>
-            
-            <!-- Care Teams --> 
+    -->
+            <!-- Care Teams -->
+    <!--
            <div style="width:30%;float:left;margin-left:10%">
                 
                 <table class="table table-hover">
@@ -56,8 +103,9 @@
                     </tr>
                 </table>
             </div>
-            
+    -->   
             <!-- Facilities -->
+    <!--
             <div style="width:30%;float:left;margin-left:10%">
                 
                 <table class="table table-hover">
@@ -73,6 +121,6 @@
                 <a href="#/questions"><button>Edit Patient</button></a>
             </div>
         </div>
-
+    -->
 	</body>
 </html>
