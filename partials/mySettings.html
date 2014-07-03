@@ -1,47 +1,42 @@
-<html>
-    <head>
-    </head>
-    <body>
-        <label style="font-size:32px">My Settings</label>
-        <hr>
-        <div ng-controller="editUserController">
-            
-            <label style="font-size:24px">{{userData.records[0].username}}</label><br><br>
-            <label>Name: </label> {{userData.records[0].firstName}} {{userData.records[0].lastName}} <br>
-            <label>User Level: </label> {{userData.records[0].userLevelID}} <br>
-            <label>Facility ID: </label> {{userData.records[0].facilityID}} <br><hr>
-            
-            <form ng-submit="editUserPut()">
-                
-                <label>Current E-Mail:</label> {{userData.records[0].email}}<br>
-                <input type="checkbox" ng-model="emailCheck">&nbsp &nbspEdit Email</button><br><br>
-                <div ng-show="emailCheck">
-                        <label>New E-Mail:</label> 
-                        <input style="width: 200px" type="text" class="form-control" name="email" ng-model="editUser.email" placeholder="Enter New E-Mail">
-                        <br>
-                </div>
+<div style="margin: 25px 25px 25px 25px">
+     
+    <label style="font-size:32px">My Settings</label>
+    <hr>
+    <div ng-controller="editUserController">
 
-                <label>Current Phone Number:</label> {{userData.records[0].phone}}<br>
-                <input type="checkbox" ng-model="phoneCheck">&nbsp &nbsp Edit Phone</button><br><br>
-                <div ng-show="phoneCheck">
-                    <form ng-submit="editUserPut()">
-                        <label>New Phone Number:</label> 
-                        <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="editUser.phone" placeholder="Enter New Phone Number">
-                        <br>
-                </div>
+        <label style="font-size:24px">{{userData.records[0].username}}</label><br><br>
+        <label>Name: </label> {{userData.records[0].firstName}} {{userData.records[0].lastName}} <br>
+        <label>User Level: </label> {{userData.records[0].userLevelID}} <br>
+        <label>Facility ID: </label> {{userData.records[0].facilityID}} <br><hr>
 
-                <label>Current Password:</label> ****** <br>
-                <input type="checkbox" ng-model="passwordCheck">&nbsp &nbsp Change Password</button><br><br>
-                <div ng-show="passwordCheck">
-                    <form ng-submit="editUserPut()">
-                        <label>New Password:</label> 
-                        <input style="width: 200px" type="text" class="form-control" name="password" ng-model="editUser.password" placeholder="Enter New Password">
-                        <br>
-                </div>
-                <input style="width: 100px" type="submit" id="submit" value="Submit" />
-                
-            </form>
-        
-        </div>
-    </body>
-</html>
+        <form ng-submit="editUserPut()">
+
+            <label>Current E-Mail:</label> {{userData.records[0].email}}<br>
+            <input type="checkbox" ng-model="emailCheck">&nbsp &nbspEdit Email</button><br><br>
+            <div ng-show="emailCheck">
+                    <label>New E-Mail:</label> 
+                    <input style="width: 200px" type="text" class="form-control" name="email" ng-model="editUser.email" placeholder="Enter New E-Mail">
+                    <br>
+            </div>
+
+            <label>Current Phone Number:</label> {{userData.records[0].phone}}<br>
+            <input type="checkbox" ng-model="phoneCheck">&nbsp &nbsp Edit Phone</button><br><br>
+            <div ng-show="phoneCheck">
+                <form ng-submit="editUserPut()">
+                    <label>New Phone Number:</label> 
+                    <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="editUser.phone" placeholder="Enter New Phone Number">
+                    <br>
+            </div>
+
+            <label>Current Password:</label> ****** <br>
+            <input type="checkbox" ng-model="passwordCheck">&nbsp &nbsp Change Password</button><br><br>
+            <div ng-show="passwordCheck">
+                <form ng-submit="editUserPut()">
+                    <label>New Password:</label> 
+                    <input style="width: 200px" type="text" class="form-control" name="password" ng-model="editUser.password" placeholder="Enter New Password">
+                    <br>
+            </div>
+            <input style="width: 100px" type="submit" id="submit" value="Submit" />
+        </form>
+    </div>
+</div>
