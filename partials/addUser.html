@@ -1,0 +1,111 @@
+
+        <div ng-controller="addUserController">
+        <div class="col-md-5">
+        <div class="panel panel-default">
+            
+            <!-- New Patient Header --> 
+            <div class="panel panel-default">    
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    <h4>New User Information</h4>
+                  </div>
+                </div>
+            </div> 
+
+            <div class="panel-body" ng-controller="TabController as tab">
+                <div class="tabbable"> 
+                    <div class="tab-pane">
+                      <form ng-submit="processForm()" class="form form-vertical">
+
+                        <div class="control-group" >
+                          <label>User Name</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="userName" ng-model="formData.username" ng-required="true" placeholder="Enter UserName">
+                          </div>
+                        </div><br>
+
+                        <div class="control-group" >
+                          <label>Password</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="password" ng-model="formData.password" ng-required="true" placeholder="Enter Password">
+                          </div>
+                        </div><br>
+
+                        <div class="control-group" >
+                          <label>E-Mail</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter Email">
+                          </div>
+                        </div><br>
+
+                        <hr>        
+
+                        <div class="control-group" >
+                          <label>Phone Number</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number">
+                        </div>
+
+                        <hr>
+
+                        <div class="control-group" >
+                          <label>Facility ID</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="formData.FacilityID" ng-required="true" placeholder="Enter Facility ID">
+                        </div>                       
+                        </div><br>
+                            
+                        <div class="control-group" >
+                          <label>User Level ID</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID">
+                        </div>                       
+                        </div><br>
+                            
+                        <div class="control-group" >
+                          <label>Created On</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="formData.created_on" ng-required="true" placeholder="Enter Created On (1374177302)">
+                        </div>                       
+                        </div><br>
+                            
+       
+
+                        <div class="control-group" >
+                          <label>First Name</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="formData.first_name" ng-required="true" placeholder="Enter First Name">
+                        </div>                       
+                        </div><br>
+
+                        <div class="control-group" >
+                          <label>Last Name</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="formData.last_name" ng-required="true" placeholder="Enter Last Name">
+                        </div>                       
+                        </div><br>     
+                            
+                        <div class="control-group" >
+                          <label>Title ID</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="formData.TitleID" ng-required="true" placeholder="Enter Title ID (1)">
+                        </div>                       
+                        </div><br>    
+
+                        <hr>
+
+                        <input style="width: 200px" type="submit" id="submit" value="Submit" />
+
+                      </form>
+                    </div>
+                </div>
+            </div>
+
+            <pre>{{ formData }}</pre>
+
+        </div>
+        </div>
+        </div>
+        </div>
+
+

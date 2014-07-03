@@ -1,0 +1,63 @@
+
+        <label style="font-size:32px">Question Page</label>
+        <hr>
+        
+        <div class="col-md-6" data-ng-controller="questionsController">
+        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="postAnswers()">
+            <div class="control-group" >
+                CareTeamID: {{answer.CareTeamID}}
+                
+                <div style="float:right">Question Answers:{{answer}}</div>
+                
+                <!-- Display All Questions -->
+                <ul>
+                    <li ng-repeat= "question in questionJson">
+                        <div ng-hide="question.IsChild">
+                            <label class="description" >{{question.QuestionText}} </label>
+                            <span>
+
+                                <!-- Else Display only the single Input field -->
+                                <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                        ng-model="answer.Answers[question.QuestionID]">
+                                </select>
+                                <div ng-if="question.Input.Type == 'Date'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Text'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} checklist-value="values" 
+                                           checklist-model="answer.Answers[question.QuestionID]">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <br>
+
+                            </span>
+                            <p class="guidelines">
+                                <small>{{question.QuestionHelp}}</small>
+                            </p>
+                        </div>
+                        <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
+                            {{showChild(question.Children)}}
+                        </div>
+                        <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
+                            {{hideChild(question.Children)}}
+                        </div>
+                    </li>
+                </ul>
+                <!-- End Display Of All Questions -->
+                
+            </div>
+            <input style="width: 200px" type="submit" id="submit" value="Submit" />
+        </form>
+        </div>
+
+    

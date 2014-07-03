@@ -1,63 +1,61 @@
 //Travis Osteen
 (function(){
-var myApp = angular.module('myApp', ['ngRoute','ui.bootstrap','basicCtrl','phase.controllers','myApp.directives','messageSystem','myHomeController']);
+var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
+                                     'aiiController','myApp.directives']);
 
 
 myApp.config(function ($routeProvider) {
 
   $routeProvider.when('/', {
-      controller: '',
-      templateUrl: 'partials/myHome.html'
+      templateUrl: 'partials/dashboard.html'
   })
   .when('/newPatient',
   {
-      controller: '',
       templateUrl: 'partials/newPatient.html'
   })
   .when('/accntSettings',
   {
-      controller: '',
       templateUrl: 'partials/accntSettings.html'
   })
   .when('/logout',
   {
-      controller: '',
       templateUrl: 'partials/logout.html'
   })
-  .when('/login',
+  .when('/mySettings',
   {
-      controller: '',
-      templateUrl: 'login.php'
+      templateUrl: 'partials/mySettings.html'
   })
-  .when('/myHome',
+  .when('/dashboard',
   {
-      controller: '',
-      templateUrl: 'partials/myHome.html'
+      templateUrl: 'partials/dashboard.html'
   })
   .when('/messages',
   {
-      controller: '',
       templateUrl: 'partials/messages.html'
   })
   .when('/invites',
   {
-      controller: '',
       templateUrl: 'partials/invites.html'
   })
   .when('/careTeam',
   {
-      controller: '',
       templateUrl: 'partials/careTeam.html'
   })
   .when('/editPatient',
   {
-      controller: '',
       templateUrl: 'partials/editPatient.html'
   })
-  .when('/register',
+  .when('/questions',
   {
-      controller: '',
-      templateUrl: 'partials/register.html'
+      templateUrl: 'partials/questions.html'
+  })
+  .when('/addUser',
+  {
+      templateUrl: 'partials/addUser.html'
+  })
+  .when('/patientDirectory',
+  {
+      templateUrl: 'partials/patientDirectory.html'
   })
   .otherwise({redirectTo: 'partials/myHome.html'});
 

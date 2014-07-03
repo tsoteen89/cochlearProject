@@ -1,0 +1,69 @@
+
+
+        <div ng-controller="apiPatientsController">    
+        
+        <h1>Patients</h1>
+        <h3>Search Patient:</h3> 
+        Name: <input type="text" data-ng-model="searchName">
+        <br>
+        <br>
+            <!-- Patients -->
+            <div style="width:25%;float:left">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td><strong>Last Name</strong></td>
+                        <td><strong>Patient ID</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="patients in patientsData.records | filter: searchName">
+                        <td class="col-md-1">
+                            <a href="" ng-click="getPatientCareTeam(patients)">{{patients.First}}</a>
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.Last}}
+                        </td>
+                        <td class="col-md-1">
+                            {{patients.PatientID}}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            
+            <!-- Care Teams --> 
+           <div style="width:30%;float:left;margin-left:10%">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>Care Teams</strong></td>
+                        <td><strong>Current Phase</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="careTeams in patientCareTeams.records | filter: searchName">
+                        <td class="col-md-1">
+                            <a href="" ng-click="getCareTeamFacilities(careTeams)">{{careTeams.CareTeamID}}</a>
+                        </td>
+                        <td class="col-md-1">
+                            {{careTeams.CurrentPhaseID}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Facilities -->
+            <div style="width:30%;float:left;margin-left:10%">
+                
+                <table class="table table-hover">
+                    <tr>
+                        <td><strong>Facility Name</strong></td>
+                    </tr>
+                    <tr data-ng-repeat="facility in facilityData.records | filter: searchName">
+                        <td class="col-md-1">
+                            {{facility.Name}}
+                        </td>
+                    </tr>
+                </table>
+                <a href="#/questions"><button>Edit Patient</button></a>
+            </div>
+        </div>
+

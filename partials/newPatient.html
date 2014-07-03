@@ -1,48 +1,114 @@
-<html>
-	<body>
-        
-        <!--
-        <new-patient-form>
-        </new-patient-form>
-       -->
-        
-        <div ng-controller="practicePost">
-        
-            <form ng-submit="processPost()">
+
+        <div ng-controller="formController">
+        <div ng-controller="ProgressDemoCtrl">
+        <div class="col-md-9" style="width:40%">
+        <div class="panel panel-default">
             
-                <input type="text" name="patient_id" ng-model="patObject.patient_id" />
-                
-                <input type="text" name="fname" ng-model="patObject.fname" />
-                
-                <input type="text" name="lname" ng-model="patObject.lname" />
-                
-                <input style="width: 200px" type="submit" id="submit" value="Submit" />
-            
-            </form>
-            
-            {{patObject}}
-            
-        
+            <!-- New Patient Header --> 
+            <div class="panel panel-default">    
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    <h4>New Patient Information</h4>
+                  </div>
+                </div>
+            </div> 
+
+            <div class="panel-body" ng-controller="TabController as tab">
+                <div class="tabbable"> 
+                    <div class="tab-pane">
+                      <form ng-submit="processForm()" class="form form-vertical">
+
+                        <div class="control-group" >
+                          <label>Patient ID</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.PatientID" ng-required="true" placeholder="Enter Patient ID" ng-blur="fillBar()">
+                          </div>
+                        </div><br>
+
+                        <div class="control-group" >
+                          <label>First Name</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.First" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
+                          </div>
+                        </div><br>
+
+                        <div class="control-group" >
+                          <label>Last Name</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.Last" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()">
+                          </div>
+                        </div><br>
+
+                        <hr>        
+
+                        <div class="control-group" >
+                          <label>DOB</label>
+                          <div class="controls" >
+                            <input style="width: 200px" type="text" class="form-control" name="DOB" ng-model="formData.DOB" ng-required="true" placeholder="Enter Date of Birth" ng-blur="fillBar()">
+                        </div>
+
+                        <hr>
+
+                        <div class="control-group" >
+                          <label>Sex</label>
+                          <div class="controls" >
+                            <input type="radio" name="Sex" ng-model="formData.Sex" value="m" ng-focus="fillBar()"> Male<br>
+                            <input type="radio" name="Sex" ng-model="formData.Sex" value="f" ng-focus="fillBar()"> Female
+                          </div>                        
+                        </div><br>
+
+                        <div class="control-group" >
+                            <label>Race</label>
+                            <div class="controls" >
+                                <select ng-model="formData.Race" name="Race" ng-required="true" ng-blur="fillBar()">
+                                    <option>White</option>
+                                    <option>African American</option>
+                                    <option>Hispanic</option>
+                                    <option>Asian</option>
+                                    <option>American Indian</option>
+                                </select>
+                            </div>                        
+                        </div><br>
+
+                        <div class="control-group" >
+                            <label>BMI</label>
+                            <div class="controls" >
+                                <select name="BMI" ng-model="formData.BMI" ng-required="true" ng-blur="fillBar()">
+                                    <option ng-repeat="BMI in bmis">{{BMI}}</option>
+                                </select>
+                            </div>                        
+                        </div><br>                    
+
+                        <div class="control-group" >
+                            <div class="controls" >
+                                <label>Height: (inches)</label>
+                                <select name="Height" ng-model="formData.Height" ng-blur="fillBar()">
+                                    <option ng-repeat="Height in heights">{{Height}}</option>
+                                </select>&nbsp&nbsp
+
+                                <label>Weight</label>
+                                <select name="Weight" ng-model="formData.Weight" ng-blur="fillBar()">
+                                    <option ng-repeat="Weight in weights">{{Weight}}</option>
+                                </select>
+                            </div>                        
+                        </div><br>                         
+
+                        <hr>
+
+                        <input style="width: 200px" type="submit" id="submit" value="Submit" />
+
+                      </form>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="form">Patient Information</h2>
+
+
+
+            <pre>{{ formData }}</pre>
+
         </div>
-        
-        <!-- CODE TO ACCESS JSON FROM MSU2U API AND DISPLAY INDIVIDUAL PEICES 
-        <div ng-controller="newAPICtrl" class="container">
-            {{theVar}}
-            <button id="fetchbtn" ng-click="fetch()">fetch</button><br>
-
-            <ul>
-                <li ng-repeat="dater in data.records">
-                    {{dater.fname}} {{dater.lname}}
-                </li>
-            </ul>
-
-            {{data.records[1].lname | json}}
-        
-        </div>-->
-        
-
-    </body>
-</html>
-
-<script src="js/bootstrap.min.js"></script>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        </div>
+        </div>
+        </div>

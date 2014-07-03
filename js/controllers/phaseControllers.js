@@ -1,6 +1,6 @@
-(function(){
+/*(function(){
 
-var myApp = angular.module('phase.controllers', []);
+var myApp = angular.module('phaseControllers', []);
 
 var controllers = {};
 
@@ -91,7 +91,7 @@ controllers.existingPatientsCtrl = function ($scope, $http, $templateCache) {
 		$scope.bmis[$scope.i] = $scope.i + 10;
 	};
      */
-    
+   /* 
     
     $scope.patients = {};
     $scope.selected={};
