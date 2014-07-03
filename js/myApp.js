@@ -25,9 +25,9 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/mySettings.html'
   })
-  .when('/myHome',
+  .when('/dashboard',
   {
-      templateUrl: 'partials/myHome.html'
+      templateUrl: 'partials/dashboard.html'
   })
   .when('/messages',
   {
@@ -52,6 +52,10 @@ myApp.config(function ($routeProvider) {
   .when('/addUser',
   {
       templateUrl: 'partials/addUser.html'
+  })
+  .when('/patientDirectory',
+  {
+      templateUrl: 'partials/patientDirectory.html'
   })
   .otherwise({redirectTo: 'partials/myHome.html'});
 
