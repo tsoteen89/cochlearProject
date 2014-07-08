@@ -3,53 +3,71 @@
     
 	<head>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+        p{
+            margin-bottom: 0px;
+            font-size: 85%;
+        }
+        
+        </style>
 	</head>
     
 	<body style="width:100%;height:100%">
-        <div ng-controller="apiPatientsController" >
+    
+        
+        <div style="margin: 1% 1% 1% 1%; height:100%; width:98%; border-style: dashed dashed none dashed ; border-width: 2px;" 
+             ng-controller="apiPatientsController">
             <h1 style="color:#84a4b4"> Patient Overviews</h1>
-            <div style="width: 85%; height: 200px; padding:15px; border: 5px; border-color: #11ace9;
-                        border-style:solid; margin: 15px"
-                 data-ng-repeat="patients in patientsData.records">
-                
-                <div style="border: 3px; border-color: #5f9ccf; border-style:solid; float:left; width: 150px; height: 150px; 
-                            text-align:center">
-                    Picture Here
-                </div>
-                <div style="font-size:100%; margin: 15px; display:inline-block">
-                 <a href="" style="font-size:125%;">
-                     {{patients.First}}  {{patients.Last}}</a>
-                    <br>
-                    <p ng-if=patients.Sex=='f'>
-                        Female
-                    </p>
-                    <p ng-if=patients.Sex=='m'>
-                        Male
-                    </p>
-                    <p>
-                    {{patients.BMI}}
-                    </p>
-                    <button style="margin-left: 200px"> Details </button>
-                </div>
-                
-                <div style="border: 5px; border-color: #5f9ccf;  border-left-style:solid; float:right; 
-                            width: 70%; height: 195px; margin: -15px">
-                    <!--
-                    {{getPatientCareTeam(patients)}}
-                    
-                    {{patientCareTeams.records}}
+            <div ng-repeat="patient in patientsData.records">
+                <div ng-controller="CollapseCtrl">
+                <div style="float: left; border-width: medium thin thin medium; border: #11ace9 solid; 
+                            margin-left: 20px ; width:20%; padding:8px;">
 
--->
-                    <p style="font-size:125%; margin: 15px;"> 
-                        Treatment Phase <br>
-                        <span data-ng-repeat="careTeams in patientCareTeams.records">
-                            {{careTeams.CareTeamID}} <br> <br> <br>
-                        </span>
-                        
-                    </p>
+                    <p ><b>{{patient.First }}  {{patient.Last |uppercase }} </b></p> 
+                    <p ng-if=patient.Sex=='m'>Male</p>
+                    <p ng-if=patient.Sex=='f'>Female</p>
+                    <p> Age </p>
+                    <p ng-if="patient.CareTeams.length==2"> <br> </p>
+                    <p ng-if="patient.CareTeams.length==3"> <br> <br> </p>
+                    <p ng-if="patient.CareTeams.length==4"> <br> <br> <br> </p>
+                    <button style="margin-left: 40%; margin-bottom:8px" ng-click="isPatientCollapsed = !isPatientCollapsed">
+                        Patient Details </button>
+                    
                 </div>
-            </div>
+                
+                <div style="float: left; border-width: thin medium thin medium; border: #11ace9 solid; 
+                            margin: auto; width:70%; padding:8px;"> 
+                    <p ng-repeat="careTeam in patient.CareTeams"> {{careTeam.CareTeamID}} </p>
+                    <p><br> </p>
+                    <p> <br> </p>
+                    <button style="margin-left: 75%; margin-bottom:8px" ng-click="isDataCollapsed = !isDataCollapsed; getCareTeamFacilities(patient.CareTeams[0])"> Enter Patient Data </button>
+                    
+                </div>
+                <br> <br> <br> <br>  <br>  <br>
+                
+                <div collapse="isPatientCollapsed">
+                    <div class="well well-lg" style="width:90%; margin-left: 20px;">
+                        More Patient Data <br>
+                        BMI: {{patient.BMI}} <br>
+                        Weight: {{patient.Weight}} <br>
+                        Height: {{patient.Height}} <br>
+                    </div> 
+            
+                </div>
+                    
+                <div collapse="isDataCollapsed">
+                    <div class="well well-lg" style="width:90%; margin-left: 20px;">
+                        CareTeam Facilities
+                        <p ng-repeat="facility in facilityData.records">
+                            {{facility.Name}}
+                        </p>
+                    </div> 
+            
+                </div>
+                
+            
         </div>
+    </div>
 <!--
         <div ng-controller="apiPatientsController">    
         
