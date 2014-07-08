@@ -27,9 +27,9 @@
                     <p ng-if=patient.Sex=='m'>Male</p>
                     <p ng-if=patient.Sex=='f'>Female</p>
                     <p> Age </p>
-                    <p ng-if="patient.CareTeams.length==2"> <br> </p>
-                    <p ng-if="patient.CareTeams.length==3"> <br> <br> </p>
-                    <p ng-if="patient.CareTeams.length==4"> <br> <br> <br> </p>
+                    <p ng-if="patient.CareTeams.length==2"> <br> <br> <br>  </p>
+                    <p ng-if="patient.CareTeams.length==3"> <br> <br> <br> <br> <br> <br> </p>
+                    <p ng-if="patient.CareTeams.length==4"> <br> <br> <br> <br> <br> <br> <br> <br> <br>  </p>
                     <button style="margin-left: 40%; margin-bottom:8px" ng-click="isPatientCollapsed = !isPatientCollapsed">
                         Patient Details </button>
                     
@@ -37,9 +37,9 @@
                 
                 <div style="float: left; border-width: thin medium thin medium; border: #11ace9 solid; 
                             margin: auto; width:70%; padding:8px;"> 
-                    <p ng-repeat="careTeam in patient.CareTeams"> {{careTeam.CareTeamID}} </p>
-                    <p><br> </p>
-                    <p> <br> </p>
+                    <p ng-repeat="careTeam in patient.CareTeams">
+                        EventID:{{careTeam.CareTeamID}} <br> 
+                        Current Phase : {{careTeam.CurrentPhaseID}} <br> <br></p>
                     <button style="margin-left: 75%; margin-bottom:8px" ng-click="isDataCollapsed = !isDataCollapsed; getCareTeamFacilities(patient.CareTeams[0])"> Enter Patient Data </button>
                     
                 </div>
@@ -57,10 +57,12 @@
                     
                 <div collapse="isDataCollapsed">
                     <div class="well well-lg" style="width:90%; margin-left: 20px;">
-                        CareTeam Facilities
+                        CareTeam 1's Facilities
                         <p ng-repeat="facility in facilityData.records">
                             {{facility.Name}}
                         </p>
+                        
+                        <a href="#/questions"><button>Questions</button></a>
                     </div> 
             
                 </div>
