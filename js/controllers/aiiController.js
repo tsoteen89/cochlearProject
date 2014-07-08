@@ -389,9 +389,19 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
     $scope.textBox= $sce.trustAsHtml('<input  type="text" > </input>'); 
 };
 
-controllers.CollapseCtrl = function($scope) {
+controllers.collapseCtrl = function($scope) {
     $scope.isPatientCollapsed = true;
     $scope.isDataCollapsed = true;
+    $scope.toggleDataCollapse = function(){
+        $scope.isDataCollapsed = !$scope.isDataCollapsed;  
+    }
+}
+controllers.phaseProgressCtrl = function ($scope){
+    
+    $scope.setProgress = function(careTeam){
+        $scope.progress = parseInt(careTeam.CurrentPhaseID/11 * 100);
+    }
+    
 }
 //********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
