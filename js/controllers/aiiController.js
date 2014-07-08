@@ -389,7 +389,10 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
     $scope.textBox= $sce.trustAsHtml('<input  type="text" > </input>'); 
 };
 
-
+controllers.CollapseCtrl = function($scope) {
+    $scope.isPatientCollapsed = true;
+    $scope.isDataCollapsed = true;
+}
 //********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
 myApp.controller(controllers);
