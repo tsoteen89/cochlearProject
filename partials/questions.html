@@ -3,7 +3,7 @@
         <hr>
         
         <div class="col-md-6" data-ng-controller="questionsController">
-        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="postAnswers()">
+        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="nextPage()">
             <div class="control-group" >
                 CareTeamID: {{answer.CareTeamID}}
                 
@@ -11,7 +11,7 @@
                 
                 <!-- Display All Questions -->
                 <ul>
-                    <li ng-repeat= "question in questionJson">
+                    <li ng-repeat= "question in finalQuestions">
                         <div ng-hide="question.IsChild">
                             <label class="description" >{{question.QuestionText}} </label>
                             <span>
@@ -56,7 +56,17 @@
                 <!-- End Display Of All Questions -->
                 
             </div>
-            <input style="width: 200px" type="submit" id="submit" value="Submit" />
+            <a href="#/dashboard"><button ng-if="finished == true">Home</button></a><br>
+            <input ng-if="finished == false" style="width: 200px" type="submit" id="submit" value="Next" />
+            LIMIT: {{limit}}<br><br>
+            finalQuestionsURL: {{finalQuestionsURL}}<br><br>
+            displayedQuestions URL: {{displayedQuestionsURL}}<br><br>
+            questionJson URL: {{initialQuestions}}<br><br>
+            NUM OF QUESTIONS: {{numberOfQuestions}}<br><br>
+            FINISHED BOOL: {{finished}}<br><br>
+            CHILD NUMBER: {{childNumber}}<br><br>
+            PARENT NUMBER: {{parentNumber}}<br><br>
+            Final Questions: {{finalQuestions}}<br><br>
         </form>
         </div>
 

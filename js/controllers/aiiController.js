@@ -81,21 +81,126 @@ myApp.factory('persistData', function () {
 
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http){
+    
+    $scope.limit = 5;
+    $scope.offSet = 0;
+    $scope.n = 0;
+    $scope.finished = false;
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
+    
+    //Get Number of Questions contained in a phase
+    getData.get($scope.questionsURL).success(function(data) {
+        $scope.numberOfQuestions = data.records.length;
+    });
     
     //Get all questions for a particular Phase
-    getData.get($scope.questionsURL).success(function(data) {
-        $scope.questionJson = data.records;
+    getData.get($scope.initialQuestionsURL).success(function(data) {
+        $scope.childNumber = 0;
+        $scope.parentNumber = 0;
+        
+        //Go through initial batch of Questions to find Children of Parents
+        for($scope.n = 0;$scope.n < data.records.length;$scope.n++){
+            $scope.childNumber += data.records[$scope.n].Children.length;
+            if(data.records[$scope.n].IsChild == 0){
+                $scope.parentNumber += 1;
+            }
+        }
+
+    //Set the sorted data equal to a new HTTP request
+    }).then(function() {
+        $scope.limit = $scope.childNumber + $scope.parentNumber;
+        $scope.displayedQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+        getData.get($scope.displayedQuestionsURL).success(function(data) {
+            $scope.displayedQuestions = data.records;  
+            $scope.childNumber = 0;
+            $scope.parentNumber = 0;
+
+            //Go through Second batch of Questions to find Children of Children
+            for($scope.n = 0;$scope.n < data.records.length;$scope.n++){
+                $scope.childNumber += data.records[$scope.n].Children.length;
+                if(data.records[$scope.n].IsChild == 0){
+                    $scope.parentNumber += 1;
+                }
+            }
+            
+        //Set the final sorted data equal to a final HTTP request
+        }).then(function() {
+            $scope.limit = $scope.childNumber + $scope.parentNumber;
+            $scope.finalQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
+            getData.get($scope.finalQuestionsURL).success(function(data4) {
+                $scope.finalQuestions = data4.records;
+            });
+        });
+    });
+
+    //Get any previously answered questions
+    getData.get($scope.answersURL).success(function(data) {
+        $scope.answer.Answers = data.records.Answers;            
     });
     
-    getData.get($scope.answersURL).success(function(data) {
-        $scope.answer.Answers = data.records.Answers;
-    });
+    //Post all answers saved 
+    $scope.postAnswers = function() {
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+    };
+    
+    //Display the next set of questions for a phase
+    $scope.nextPage = function() {
+        
+        $scope.offSet += $scope.limit;
+        $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=5";
+        
+        //Set finished bool when all questions have been listed
+        if(($scope.offSet + $scope.limit) >= $scope.numberOfQuestions){
+            $scope.finished = true;
+        }
+        
+        //Grab Initial Batch of Questions
+        getData.get($scope.initialQuestionsURL).success(function(data) {
+            $scope.childNumber = 0;
+            $scope.parentNumber = 0;
+            
+            //Go through initial batch of Questions to find Children of Parents
+            for($scope.n = 0;$scope.n < data.records.length;$scope.n++){
+                $scope.childNumber += data.records[$scope.n].Children.length;
+                if(data.records[$scope.n].IsChild == 0){
+                    $scope.parentNumber += 1;
+                }
+            }
+            
+        //Set the sorted data equal to a new HTTP request
+        }).then(function() {
+            $scope.limit = $scope.childNumber + $scope.parentNumber;
+            $scope.displayedQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+            getData.get($scope.displayedQuestionsURL).success(function(data) {
+                $scope.displayedQuestions = data.records;  
+                $scope.childNumber = 0;
+                $scope.parentNumber = 0;
+                
+                //Go through Second batch of Questions to find Children of Children
+                for($scope.n = 0;$scope.n < data.records.length;$scope.n++){
+                    $scope.childNumber += data.records[$scope.n].Children.length;
+                    if(data.records[$scope.n].IsChild == 0){
+                        $scope.parentNumber += 1;
+                    }
+                }
+                
+            //Set the final sorted data equal to a final HTTP request
+            }).then(function() {
+                $scope.limit = $scope.childNumber + $scope.parentNumber;
+                $scope.finalQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
+                getData.get($scope.finalQuestionsURL).success(function(data4) {
+                    $scope.finalQuestions = data4.records;
+                });
+            });
+        });
+    }
+    
     
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
@@ -103,13 +208,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         var indexB;
         
         for(index=0; index < data.length; index++) {
-            for(indexB=0; indexB < $scope.questionJson.length; indexB++) {
-                if($scope.questionJson[indexB].QuestionID == data[index]) {
-                    $scope.questionJson[indexB].IsChild = 0;
+            for(indexB=0; indexB < $scope.finalQuestions.length; indexB++) {
+                if($scope.finalQuestions[indexB].QuestionID == data[index]) {
+                    $scope.finalQuestions[indexB].IsChild = 0;
                 }
             }
         }
     }
+    
     
     //Hide a child if the Trigger has been reset
     $scope.hideChild = function(data){
@@ -117,18 +223,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         var indexB;
         
         for(index=0; index < data.length; index++) {
-            for(indexB=0; indexB < $scope.questionJson.length; indexB++) {
-                if($scope.questionJson[indexB].QuestionID == data[index]) {
-                    $scope.questionJson[indexB].IsChild = 1;
+            for(indexB=0; indexB < $scope.finalQuestions.length; indexB++) {
+                if($scope.finalQuestions[indexB].QuestionID == data[index]) {
+                    $scope.finalQuestions[indexB].IsChild = 1;
                 }
             }
         }
     }
-    
-    //Post all answers saved 
-    $scope.postAnswers = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
-    };
 
 };
 
