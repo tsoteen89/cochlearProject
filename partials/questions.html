@@ -18,24 +18,24 @@
 
                                 <!-- Else Display only the single Input field -->
                                 <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                        ng-model="answer.Answers[question.QuestionID]">
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} checklist-value="values" 
-                                           checklist-model="answer.Answers[question.QuestionID]">
+                                           checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <br>

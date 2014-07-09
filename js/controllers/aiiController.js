@@ -74,15 +74,15 @@ myApp.factory('persistData', function () {
         },
     };
 });
-
-
+    
 //*****************************************END FACTORIES*******************************************//
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.questionsController = function($scope, persistData, getData, postData, $http){
+controllers.questionsController = function($scope, persistData, getData, postData, putData, $http){
     $scope.answer = {};
+    $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
@@ -92,11 +92,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     getData.get($scope.questionsURL).success(function(data) {
         $scope.questionJson = data.records;
     });
-    
+    /*
     getData.get($scope.answersURL).success(function(data) {
         $scope.answer = data.records;
     });
-    
+    */
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
