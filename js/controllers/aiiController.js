@@ -92,11 +92,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     getData.get($scope.questionsURL).success(function(data) {
         $scope.questionJson = data.records;
     });
-    /*
+    
     getData.get($scope.answersURL).success(function(data) {
-        $scope.answer = data.records;
+        $scope.answer.Answers = data.records.Answers;
     });
-    */
+    
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
@@ -396,8 +396,14 @@ controllers.collapseCtrl = function($scope) {
         $scope.isDataCollapsed = !$scope.isDataCollapsed;  
     }
 }
+
+controllers.dotProgressCtrl = function($scope, getData){
+    $scope.phases = "";
+    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
+        $scope.phases = data.records;
+    });
+}
 controllers.phaseProgressCtrl = function ($scope){
-    
     $scope.setProgress = function(careTeam){
         $scope.progress = parseInt(careTeam.CurrentPhaseID/11 * 100);
     }
