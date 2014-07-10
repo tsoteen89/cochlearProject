@@ -57,7 +57,7 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/patientDirectory.html'
   })
-  .otherwise({redirectTo: 'partials/myHome.html'});
+  .otherwise({redirectTo: 'partials/dashboard.html'});
 
 });
 
