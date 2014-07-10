@@ -17,161 +17,108 @@
 	</head>
     
 	<body style="width:100%;height:100%">
-     
-        Messing with griffins bootsnipp find
-        <div class="row bs-wizard" style="border-bottom:0;"ng-controller="dotProgressCtrl">
-                <!--class="col-xs-1 bs-wizard-step complete/ACTIVE?DISABLE"-->
-                <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases">
-                  <div class="text-center bs-wizard-stepnum">Phase {{phase.PhaseID}}</div>
-                  <div class="progress"><div class="progress-bar"></div></div>
-                  <a href="#/questions" class="bs-wizard-dot"></a>
-                  <div class="bs-wizard-info text-center">{{phase.Description}}</div>
-                </div>
-            
-        </div>
         <div style="margin: 1% 1% 1% 1%; height:100%; width:98%; border-style: dashed dashed none dashed ; border-width: 2px;" 
              ng-controller="apiPatientsController">
             <h1 style="color:#84a4b4"> Patient Overviews</h1>
             
             <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
-                <div ng-controller="collapseCtrl">
-                    <div ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
-
-                    <div style="float: left; border: 1px #96b2b4 solid; 
-                                margin-left:3% ; width:20%; padding:8px;">
-
-                        <p ><b>{{patient.First }}  {{patient.Last |uppercase }} </b></p> 
-                        <p ng-if=patient.Sex=='m'>Male</p>
-                        <p ng-if=patient.Sex=='f'>Female</p>
-                        <p> Age </p> 
-                        <p ng-if="patient.CareTeams.length==1" style="margin:1.5px"> <br> <br> <br> </p>
-                        <p ng-if="patient.CareTeams.length==2" style="margin:3px"> <br> <br> <br><br> <br><br><br><br><br><br><br> </p>
-                        <button style="margin-left: 40%; margin-bottom:8px" ng-click="isPatientCollapsed = !isPatientCollapsed">
-                            Patient Details </button>
-
-                    </div>
-
-                    <div style="float: left; border: 1px #11ace9 solid; margin-right: 7%; width:70%; padding:8px;"> 
-                        <p ng-repeat="careTeam in patient.CareTeams">
-                            EventID:{{careTeam.CareTeamID}} <br> 
-                            Current Phase : {{careTeam.CurrentPhaseID}} <br> <br> 
-                            <b>Overall Progress in Care : </b>
-                            <progressbar value="progress" type="success">
-                                <b>{{setProgress(careTeam)}} {{progress}}%</b>
-                            </progressbar>
-
-                            <button style="margin-left: 75%; margin-bottom:8px" ng-click="toggleDataCollapse(); getCareTeamFacilities(careTeam)"> Enter Patient Data </button>  
-                            
-                        </p>
-
-                    </div>
+                <div ng-controller="collapseCtrl" class="container" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
+                    <div class="container"  >
+ <!--ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true"-->
                         
+                        <div  style="float: left; border: 1px #96b2b4 solid; 
+                                    margin-left:3% ; width:20%; padding:8px;">
 
-                    <br> <br> <br> <br>  <br>  <br> <br>   <br> 
-                    
+                            <p ><b>{{patient.First }}  {{patient.Last |uppercase }} </b></p> 
+                            <p ng-if=patient.Sex=='m'>Male</p>
+                            <p ng-if=patient.Sex=='f'>Female</p>
+                            <p> Age </p> 
+                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:10px"> <br> <br><br><br><br><br><br><br> </p>
+                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:2.5px"> 
+                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> </p>
+                            <button style="margin-left: 40%; margin-bottom:8px" ng-click="isPatientCollapsed = !isPatientCollapsed">
+                                Patient Details </button>
 
-                    <div collapse="isPatientCollapsed">
-                        <p ng-if="patient.CareTeams.length==2" style="margin:1.5px"> <br> <br> <br> <br><br> <br> <br></p>
-                        <div class="well well-lg" style="width:90%; margin-left: 3%; margin-top:2%">
-                            More Patient Data <br>
-                            BMI: {{patient.BMI}} <br>
-                            Weight: {{patient.Weight}} <br>
-                            Height: {{patient.Height}} <br>
-                        </div> 
+                        </div>
 
-                    </div>
+                        <div style="float: left; border: 1px #11ace9 solid; width:70%; " class="container" ng-controller="dotProgressCtrl"> 
+                            <div ng-repeat="careTeam in patient.CareTeams" style="margin-top:5px" >
+                                EventID:{{careTeam.CareTeamID}} <br> 
+                                Current Phase : {{careTeam.CurrentPhaseID}} <br> 
+                                {{setProgress(careTeam)}}
+                                <!--
+                                <progressbar value="progress" type="success">
+                                    <b> {{progress}}%</b>
+                                </progressbar>
+                                -->
+                                <div class="row bs-wizard" style="border-bottom:0;" >
+                                    <!--class="col-xs-1 bs-wizard-step complete/ACTIVE?DISABLE"-->
+                                    <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1">
+                                      <div class="text-center bs-wizard-stepnum">Phase {{phase.PhaseID}}</div>
+                                      <div class="progress" ><div class="progress-bar"></div></div>
+                                      <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID)" class="bs-wizard-dot"></a>
+                                      <div class="bs-wizard-info text-center">{{phase.Name}}</div>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-xs-1 bs-wizard-step active" >
+                                      <div class="text-center bs-wizard-stepnum">Phase {{phases[careTeam.CurrentPhaseID-1].PhaseID}}</div>
+                                      <div class="progress" ><div class="progress-bar"></div></div>
+                                      <a href="#/questions" ng-click="goToQuestions(careTeam,careTeam.CurrentPhaseID)" class="bs-wizard-dot"></a>
+                                      <div class="bs-wizard-info text-center">{{phases[careTeam.CurrentPhaseID-1].Name}}</div>
+                                    </div>
+                                    
+
+                                    
+                                    <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
+                                      <div class="text-center bs-wizard-stepnum">Phase {{phase.PhaseID}}</div>
+                                      <div class="progress" ><div class="progress-bar"></div></div>
+                                      <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID)" class="bs-wizard-dot"></a>
+                                      <div class="bs-wizard-info text-center">{{phase.Name}}</div>
+                                    </div>
 
 
-                    <div collapse="isDataCollapsed">
+                                </div>
+                                <button style="margin-left: 75%; margin-bottom:8px" 
+                                        ng-click="toggleDataCollapse(); getCareTeamFacilities(careTeam)"> 
+                                    See Care Team Details </button>  
+
+                            </div>
+
+                        </div>
                         
-                        <p ng-if="patient.CareTeams.length==2 && isPatientCollapsed == true" style="margin:1.5px"> <br> <br> <br> <br><br> <br> <br><br><br></p>
-                        <div class="well well-lg" style="width:90%; margin-left: 3%;">
-                            CareTeam Facilities
-                            <p ng-repeat="facility in facilityData.records">
-                                {{facility.Name}}
-                            </p>
+                    </div>
+                    <!--Collapseable Content-->
+                    <div class="container" style="margin:1%">
+                        <div collapse="isPatientCollapsed">
 
-                            <a href="#/questions"><button>Questions</button></a>
-                        </div> 
+                            <div class="well well-lg" style="width: 35%; margin-left:2%; float:left">
+                                More Patient Data <br>
+                                BMI: {{patient.BMI}} <br>
+                                Weight: {{patient.Weight}} <br>
+                                Height: {{patient.Height}} <br>
+                            </div> 
 
+                        </div>
+
+
+                        <div collapse="isDataCollapsed">
+
+
+                            <div class="well well-lg" style="width:53%; margin-left:2%; float:left">
+                                CareTeam Facilities
+                                <p ng-repeat="facility in facilityData.records">
+                                    {{facility.Name}}
+                                </p>
+                            </div> 
+
+                        </div>
                     </div>
 
-                    </div>
-                </div>
                 
             </div>
         </div>
-<!--
-        <div ng-controller="apiPatientsController">    
-        
-        <h1>Patients</h1>
-        <h3>Search Patient:</h3> 
-        Name: <input type="text" data-ng-model="searchName">
-        <br>
-        <br>
--->
-            <!-- Patients -->
-    <!--
-            <div style="width:25%;float:left">
-                
-                <table class="table table-hover">
-                    <tr>
-                        <td><strong>First Name</strong></td>
-                        <td><strong>Last Name</strong></td>
-                        <td><strong>Patient ID</strong></td>
-                    </tr>
-                    <tr data-ng-repeat="patients in patientsData.records | filter: searchName">
-                        <td class="col-md-1">
-                            <a href="" ng-click="getPatientCareTeam(patients)">{{patients.First}}</a>
-                        </td>
-                        <td class="col-md-1">
-                            {{patients.Last}}
-                        </td>
-                        <td class="col-md-1">
-                            {{patients.PatientID}}
-                        </td>
-                    </tr>
-                </table>
+            
 
-            </div>
-    -->
-            <!-- Care Teams -->
-    <!--
-           <div style="width:30%;float:left;margin-left:10%">
-                
-                <table class="table table-hover">
-                    <tr>
-                        <td><strong>Care Teams</strong></td>
-                        <td><strong>Current Phase</strong></td>
-                    </tr>
-                    <tr data-ng-repeat="careTeams in patientCareTeams.records | filter: searchName">
-                        <td class="col-md-1">
-                            <a href="" ng-click="getCareTeamFacilities(careTeams)">{{careTeams.CareTeamID}}</a>
-                        </td>
-                        <td class="col-md-1">
-                            {{careTeams.CurrentPhaseID}}
-                        </td>
-                    </tr>
-                </table>
-            </div>
-    -->   
-            <!-- Facilities -->
-    <!--
-            <div style="width:30%;float:left;margin-left:10%">
-                
-                <table class="table table-hover">
-                    <tr>
-                        <td><strong>Facility Name</strong></td>
-                    </tr>
-                    <tr data-ng-repeat="facility in facilityData.records | filter: searchName">
-                        <td class="col-md-1">
-                            {{facility.Name}}
-                        </td>
-                    </tr>
-                </table>
-                <a href="#/questions"><button>Edit Patient</button></a>
-            </div>
-        </div>
-    -->
 	</body>
 </html>
