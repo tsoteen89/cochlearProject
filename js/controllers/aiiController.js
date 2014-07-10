@@ -310,9 +310,14 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.facilityData = data;
         });
         
-        persistData.setCareTeamID(careTeams.CareTeamID);
-        persistData.setPhaseID(careTeams.CurrentPhaseID);
+        
     }    
+    
+    $scope.goToQuestions = function(careTeam, phase){
+        
+        persistData.setCareTeamID(careTeam.CareTeamID);
+        persistData.setPhaseID(phase);
+    };
 
 };  
     
