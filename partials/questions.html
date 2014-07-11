@@ -38,7 +38,6 @@
                                            checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
-                                <br>
                             </span>
                             <p class="guidelines">
                                 <small>{{question.QuestionHelp}}</small>
@@ -51,13 +50,15 @@
                             {{hideChild(question.Children)}}
                         </div>
                     </li>
+
+                    <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
+                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Finish</button></a><br>
                     </div>
                 </ul>
                 <!-- End Display Of All Questions -->
                 
             </div>
-            <a href="#/dashboard"><button ng-if="finished == true">Home</button></a><br>
-            <input ng-if="finished == false" style="width: 200px" type="submit" id="submit" value="Next" />
+
         </form>
         </div>
 
