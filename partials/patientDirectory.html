@@ -26,8 +26,8 @@
                     <div class="container"  >
  <!--ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true"-->
                         
-                        <div  style="float: left; border: 1px #96b2b4 solid; 
-                                    margin-left:3% ; width:20%; padding:8px;">
+                        <div  style="float: left; border: 1px #96b2b4 solid; border-radius:5px; 
+                                    margin-left:3% ; width:20%; padding:8px; background-color:#cae5f0">
 
                             <p ><b>{{patient.First }}  {{patient.Last |uppercase }} </b></p> 
                             <p ng-if=patient.Sex=='m'>Male</p>
@@ -41,7 +41,7 @@
 
                         </div>
 
-                        <div style="float: left; border: 1px #11ace9 solid; width:70%; " class="container" ng-controller="dotProgressCtrl"> 
+                        <div style="float: left; border: 1px #11ace9 solid; width:70%;  border-radius:5px; background-color:#cae5f0 " class="container" ng-controller="dotProgressCtrl"> 
                             <div ng-repeat="careTeam in patient.CareTeams" style="margin-top:5px" >
                                 EventID:{{careTeam.CareTeamID}} <br> 
                                 Current Phase : {{careTeam.CurrentPhaseID}} <br> 
