@@ -218,6 +218,7 @@
             console.log("facility registration");
             $http({
                 method  : 'POST',
+                //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
                 url     : '../aii-api/v1/facilities',
                 data    : $scope.facilityData,  // pass in data as strings
                 headers : { 'Content-Type': 'application/json' } 
@@ -231,12 +232,14 @@
             console.log("admin registration");
             $http({
                 method  : 'POST',
+                // url     : 'http://killzombieswith.us/aii-api/v1/users',
                 url     : '../aii-api/v1/users',
                 data    : $scope.administratorData,  // pass in data as strings
-                headers : { 'Content-Type': 'application/json' } 
+                headers : { 'Content-Type': 'application/json' }   
             })
             .success(function(data) {
                 console.log(data);
+                  
             });
         }
         

@@ -1,6 +1,6 @@
 //Travis Osteen
 (function(){
-var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
+var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui-bootstrap',
                                      'aiiController','myApp.directives']);
 
 
@@ -57,7 +57,7 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/patientDirectory.html'
   })
-  .otherwise({redirectTo: 'partials/myHome.html'});
+  .otherwise({redirectTo: 'partials/dashboard.html'});
 
 });
 
