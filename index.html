@@ -1,63 +1,108 @@
 <!DOCTYPE html>
-<html ng-app="login" style="height:100%">
+<html data-ng-app="login" style="height:100%">
     
     
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
         <script type="text/javascript" src="http://code.angularjs.org/1.2.15/angular.js"></script>
+        <!--<script src="js/controllers/loginController.js"></script>-->
     </head>
 
 
-    <body ng-controller="loginControl" style="background-color: #DDEAEB;height:100%;width:100%">
+    <body style="background-color: #DDEAEB;height:100%;width:100%">
 
-    <!-- Header -->
+    <!-- Header -->        
         <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:10%">
             <a class="navbar-brand" style="color: black" href="#">Auditory Implant Initiative</a>
         </div><br>
-        
-        <div style="width:20%; margin-left:40%">
-            <h1 style="text-align:center">Audio Implant Initiative</h1>
-            <br>
-            <br>
-            <label>Username</label>
-            <input type='text' class="form-control" name='username' placeholder="Enter Username" ng-model="login.username">
-            <br>
-            <label>Password</label>
-            <input type='password' class="form-control" name='password' placeholder="Enter Password" ng-model="login.password">
-            <br>
-            <a href="route.html">Forgot Password</a>
-            <a href="route.html"><button label="Login" style="float:right">Login</button></a>
-            <br><br>
-            <p>This site is for autorized <b>Auditory Implant Initiative</b> members only.  
-            Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
+
+
+        <div class = "container" ng-controller = "loginControl"> 
+            <div class = "row">
+                <div class = "col-sm-4 col-sm-push-4" style = "text-align:center">
+                    <h1>Audio Implant Initiative</h1>
+                    <form name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
+                        <label style = "margin-top: 50px;'">Username</label><br>
+                        <input type = "text" name = "username" placeholder = "Enter Username" ng-model = "userlogin.username"><br>
+                        <label style = "margin-top: 50px;">Password</label><br>
+                        <input type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
+                        <br><br>
+                        <a href="route.html">Forgot Password</a>
+                        <input type="submit" form="loginForm" value="Login" ng-disabled="loginForm.username.$pristine || loginForm.username.$dirty && loginForm.username.$invalid"></input><br><br>
+                       
+                        <p>This site is for autorized <b>Auditory Implant Initiative</b> members only.  
+                        Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
+                    </form>            
+                </div>
+            </div>
         </div>
-      
-    
+        <div class = "container">
+            <div class = "row">
+                <div class = "col-md-12" style = "text-align:center;">
+                    <div ng-controller = "logoutControl">
+                        <p><button ng-click = "logout()">logout</button></p>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
     </body>
 </html>
 
 <script>
+    
+        var login = angular.module("login", []);
+        var controllers = {};
 
-    var login  = angular.module('login', []); 
-    var controllers = {};
+        controllers.loginControl = function ($scope,$http,$window){
+    
+            $scope.userlogin = {};
+            $scope.dataObj = {};
+            
+            $scope.submit = function(){
+             
+                $http({
+                    method  : 'POST',
+                    url     : '../aii-api/v1/sessionLogs',
+                    data    : $scope.userlogin,
+                    headers : { 'Content-Type': 'application/json' }
+                })
+                .then(function(response){
+                    console.log(response);
+                    console.log(response.data.records);
+                    if(response.data.records == true){
+                        // $scope.x = response.data.records;
+                        $window.location.href = "partials/addUser.html";
+                    }
+                    else {}
+                        console.log("Mando");
+                       // $window.location = "./";
+                });    
+            }
+        }
 
-    controllers.loginControl = function ($scope){
-        $scope.open = function($event){
-            $event.preventDefault();
-            $event.stopPropagation();
+        controllers.logoutControl = function($scope,$http,$window){
 
-            $scope.opened = true;
-        };
+            $scope.x = 0;
 
-        $scope.login = {};
+            $scope.logout = function() {
 
-        $scope.submit = function(){
-            $scope.list.push({'username':this.username, 'password':this.password});
-        };
-    }
+                $http({
+                    method  : "DELETE",
+                    url     : "../aii-api/v1/sessionLogs",
+                    headers : { 'Content-Type': 'application/json' }
+                })
+                .then(function(response){
+                    console.log(response)
+                    $scope.x+=1;
+                });
+            }
+        }
 
-    login.controller(controllers);
+        login.controller(controllers);
 
 </script>
 
