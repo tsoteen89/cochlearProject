@@ -1,0 +1,29 @@
+<div class = "container" ng-controller = "loginControl"> 
+    <div class = "row">
+        <div class = "col-sm-4 col-sm-push-4" style = "text-align:center">
+            <h1>Audio Implant Initiative</h1>
+            <form name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
+                <label style = "margin-top: 50px;'">Username</label><br>
+                <input type = "text" name = "username" placeholder = "Enter Username" ng-model = "userlogin.username"><br>
+                <label style = "margin-top: 50px;">Password</label><br>
+                <input type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
+                <br><br>
+                <a href="route.html">Forgot Password</a>
+                <input type="submit" form="loginForm" value="Login" ng-disabled="loginForm.username.$pristine || loginForm.username.$dirty && loginForm.username.$invalid"></input><br><br>
+
+                <p>This site is for autorized <b>Auditory Implant Initiative</b> members only.  
+                Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
+            </form>            
+        </div>
+    </div>
+</div>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-12" style = "text-align:center;">
+            <div ng-controller = "logoutControl">
+                <p><button ng-click = "logout()">logout</button></p>
+
+            </div>
+        </div>
+    </div>
+</div>

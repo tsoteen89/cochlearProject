@@ -536,6 +536,58 @@ controllers.phaseProgressCtrl = function ($scope){
 }
 //********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
+
+
+controllers.loginControl = function ($scope,$http,$window){
+
+    $scope.userlogin = {};
+    $scope.dataObj = {};
+    $scope.loggedIn = false;
+    
+    $scope.makeTrue = function(){
+        $scope.loggedIn = true;
+    };
+
+    $scope.submit = function(){
+
+        $http({
+            method  : 'POST',
+            url     : '../aii-api/v1/sessionLogs',
+            data    : $scope.userlogin,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .then(function(response){
+            console.log(response);
+            console.log(response.data.records);
+            if(response.data.records == true){
+                // $scope.x = response.data.records;
+                $window.location.href = "partials/addUser.html";
+            }
+            else {}
+                console.log("Mando");
+               // $window.location = "./";
+        });    
+    }
+}
+
+controllers.logoutControl = function($scope,$http,$window){
+
+    $scope.x = 0;
+
+    $scope.logout = function() {
+
+        $http({
+            method  : "DELETE",
+            url     : "../aii-api/v1/sessionLogs",
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .then(function(response){
+            console.log(response)
+            $scope.x+=1;
+        });
+    }
+}
+
 myApp.controller(controllers);
 
 })();
