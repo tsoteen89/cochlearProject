@@ -1,6 +1,6 @@
 //Travis Osteen
 (function(){
-var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui-bootstrap',
+var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
                                      'aiiController','myApp.directives']);
 
 
