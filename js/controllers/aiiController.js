@@ -79,6 +79,7 @@ myApp.factory('persistData', function () {
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
+    
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http){
     
@@ -232,6 +233,24 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     }
 
 };
+    
+    
+//Controller used to handle display of Questions for a Patient's CareTeam  
+controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
+    
+    $scope.answer = {};
+    $scope.answer.Answers = {};
+    $scope.answer.PhaseID = persistData.getPhaseID();
+    $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    
+    getData.get($scope.initialQuestionsURL).success(function(data) {
+        $scope.audioQuestions = data.records;
+    });
+    
+};
+    
 
 //************************************END QUESTION CONTROLLERS***************************************//
 

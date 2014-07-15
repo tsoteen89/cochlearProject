@@ -17,6 +17,10 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/accntSettings.html'
   })
+  .when('/audioQuestions',
+  {
+      templateUrl: 'partials/audioQuestions.html'
+  })  
   .when('/logout',
   {
       templateUrl: 'partials/logout.html'
