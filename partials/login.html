@@ -1,4 +1,4 @@
-<div class = "container" ng-controller = "loginControl"> 
+<div class = "container"> 
     <div class = "row">
         <div class = "col-sm-4 col-sm-push-4" style = "text-align:center">
             <h1>Audio Implant Initiative</h1>
@@ -9,7 +9,7 @@
                 <input type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
                 <br><br>
                 <a href="route.html">Forgot Password</a>
-                <input type="submit" form="loginForm" value="Login" ng-disabled="loginForm.username.$pristine || loginForm.username.$dirty && loginForm.username.$invalid"></input><br><br>
+                <input type="submit" form="loginForm" value="Login" ng-click="makeTrue()" ng-disabled="loginForm.username.$pristine || loginForm.username.$dirty && loginForm.username.$invalid"></input><br><br>
 
                 <p>This site is for autorized <b>Auditory Implant Initiative</b> members only.  
                 Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
