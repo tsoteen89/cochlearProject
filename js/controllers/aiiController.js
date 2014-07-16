@@ -552,16 +552,16 @@ controllers.loginControl = function ($scope,$http,$window){
 
         $http({
             method  : 'POST',
-            url     : '../aii-api/v1/sessionLogs',
+            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
             data    : $scope.userlogin,
             headers : { 'Content-Type': 'application/json' }
         })
-        .then(function(response){
-            console.log(response);
-            console.log(response.data.records);
-            if(response.data.records == true){
+        .then(function(data){
+            console.log(data);
+            console.log(data.data);
+            if(data.data == 'true'){
                 // $scope.x = response.data.records;
-                $window.location.href = "partials/addUser.html";
+                $window.location.href = "#/dashboard";
             }
             else {}
                 console.log("Mando");
@@ -578,7 +578,7 @@ controllers.logoutControl = function($scope,$http,$window){
 
         $http({
             method  : "DELETE",
-            url     : "../aii-api/v1/sessionLogs",
+            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(response){
