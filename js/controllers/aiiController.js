@@ -56,6 +56,7 @@ myApp.factory('putData', function($http){
 myApp.factory('persistData', function () {
     var CareTeamID;
     var PhaseID;
+    var loggedIn;
 
     return {
         setCareTeamID:function (data) {
@@ -72,6 +73,14 @@ myApp.factory('persistData', function () {
         getPhaseID: function (data) {
             return PhaseID;
         },
+        setLoggedIn: function (data) {
+            loggedIn = data;
+            console.log(loggedIn);
+        },
+        getLoggedIn: function() {
+            console.log(loggedIn);
+            return loggedIn;
+        }
     };
 });
     
@@ -238,6 +247,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
+    $scope.loggedIn = persistData.getLoggedIn();
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
@@ -245,7 +255,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
-    getData.get($scope.initialQuestionsURL).success(function(data) {
+    getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
     
@@ -538,13 +548,19 @@ controllers.phaseProgressCtrl = function ($scope){
 
 
 
-controllers.loginControl = function ($scope,$http,$window){
+controllers.loginControl = function ($scope,$http,$window,persistData){
 
     $scope.userlogin = {};
     $scope.dataObj = {};
-    $scope.loggedIn = false;
+    $scope.loggedIn;
     
-    $scope.makeTrue = function(){
+    $scope.loginStatus = function(){
+        $scope.loggedIn = persistData.getLogged();
+        console.log("Logged In Status Called");
+        console.log($scope.loggedIn);
+    };
+    
+    $scope.devLogin = function(){
         $scope.loggedIn = true;
     };
 
@@ -561,12 +577,15 @@ controllers.loginControl = function ($scope,$http,$window){
             //console.log(data);
             if(data.data.records == true){
                 // $scope.x = response.data.records;
+                persistData.setLoggedIn(true);
+                $scope.loggedIn = true;
                 $window.location.href = "#/dashboard";
             }
-            else {}
+            else {
                 console.log("Mando");
                // $window.location = "./";
-        });    
+            }
+        });
     }
 }
 
