@@ -7,7 +7,7 @@ var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
 myApp.config(function ($routeProvider) {
 
   $routeProvider.when('/', {
-      templateUrl: 'partials/dashboard.html'
+      templateUrl: 'partials/login.html'
   })
   .when('/newPatient',
   {
@@ -17,6 +17,10 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/accntSettings.html'
   })
+  .when('/audioQuestions',
+  {
+      templateUrl: 'partials/audioQuestions.html'
+  })  
   .when('/logout',
   {
       templateUrl: 'partials/logout.html'
