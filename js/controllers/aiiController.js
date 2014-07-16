@@ -394,7 +394,7 @@ controllers.formController = function($scope, $http, postData) {
 //*****************************************USER CONTROLLERS**********************************************//
 
 //Controller used to handle addition of NEW Users to the system
-controllers.addUserController = function($scope, $http, postData){
+controllers.addUserController = function($scope, $http, postData, getData){
     
     // create a blank object to hold form information
     $scope.formData = {};
@@ -403,6 +403,14 @@ controllers.addUserController = function($scope, $http, postData){
     $scope.processForm = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
     };
+        
+    //getting the userlevels from the api and posting it to the form
+    $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
+        
+    getData.get($scope.UserLevelsURL).success(function(data) {
+        $scope.formData.UserLevels = data;
+        console.log($scope.formData.UserLevels);
+    });
 }
 
 

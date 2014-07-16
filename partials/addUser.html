@@ -29,7 +29,7 @@
                         <div class="control-group" >
                           <label>Password</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="password" ng-model="formData.password" ng-required="true" placeholder="Enter Password">
+                            <input style="width: 200px" type="password" class="form-control" name="password" ng-model="formData.password" ng-required="true" placeholder="Enter Password" ng-minlength="7">
                           </div>
                         </div><br>
 
@@ -63,7 +63,11 @@
                         <div class="control-group" >
                           <label>User Level ID</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID" min=1 max=20 integer>
+                            <!--<input style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID" min=1 max=20 integer>-->
+                             
+                             <select style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true">
+                                  <option ng-repeat="UserLevel in formData.UserLevels.records">{{UserLevel.Name}}</option>
+                              </select>
                         </div>                       
                         </div><br>
                             
@@ -99,7 +103,8 @@
 
                         <hr>
 
-                        <input style="width: 200px" type="submit" id="submit" value="Submit" />
+                        <!--<input style="width: 200px" type="submit" id="submit" value="Submit" />-->
+                        <button class="btn btn-primary" type="submit" value="submit">Submit</button>
 
                       </form>
                     </div>
