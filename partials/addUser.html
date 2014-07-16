@@ -15,7 +15,9 @@
             <div class="panel-body" ng-controller="TabController as tab">
                 <div class="tabbable"> 
                     <div class="tab-pane">
-                      <form ng-submit="processForm()" class="form form-vertical">
+                        
+                        
+                      <form name="userForm" ng-submit="processForm()" class="form form-vertical" novalidate>
 
                         <div class="control-group" >
                           <label>User Name</label>
@@ -34,7 +36,7 @@
                         <div class="control-group" >
                           <label>E-Mail</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter Email">
+                            <input style="width: 200px" type="email" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter Email">
                           </div>
                         </div><br>
 
@@ -42,8 +44,8 @@
 
                         <div class="control-group" >
                           <label>Phone Number</label>
-                          <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number">
+                          <div class="controls">
+                            <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number" phone>
                         </div>
 
                         <hr>
@@ -51,14 +53,17 @@
                         <div class="control-group" >
                           <label>Facility ID</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="formData.FacilityID" ng-required="true" placeholder="Enter Facility ID">
+                            <input style="width: 200px" type="number" class="form-control" name="facilityID" ng-model="formData.FacilityID" ng-required="true" placeholder="Enter Facility ID" min=100 max=999 integer>
+                              <span ng-show="FacilityID.$error.integer">This is not valid integer!</span>
+                            <span ng-show="userForm.facilityID.$error.min || userForm.facilityID.$error.max">
+      The value must be in range 100 to 999!</span>
                         </div>                       
                         </div><br>
                             
                         <div class="control-group" >
                           <label>User Level ID</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID">
+                            <input style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID" min=1 max=20 integer>
                         </div>                       
                         </div><br>
                             
@@ -74,14 +79,14 @@
                         <div class="control-group" >
                           <label>First Name</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="formData.first_name" ng-required="true" placeholder="Enter First Name">
+                            <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="formData.first_name" ng-required="true" placeholder="Enter First Name" alphabet>
                         </div>                       
                         </div><br>
 
                         <div class="control-group" >
                           <label>Last Name</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="formData.last_name" ng-required="true" placeholder="Enter Last Name">
+                            <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="formData.last_name" ng-required="true" placeholder="Enter Last Name" alphabet>
                         </div>                       
                         </div><br>     
                             
