@@ -557,9 +557,9 @@ controllers.loginControl = function ($scope,$http,$window){
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            console.log(data);
-            console.log(data.data);
-            if(data.data == 'true'){
+            console.log(data.data.records);
+            //console.log(data);
+            if(data.data.records == true){
                 // $scope.x = response.data.records;
                 $window.location.href = "#/dashboard";
             }
