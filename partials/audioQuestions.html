@@ -38,10 +38,11 @@
                     <br>
 
                     <div ng-repeat="categories in audioQuestions.Categories">
-                        <input type="Checkbox" checklist-value="categories.AudioCategory"
+                        <input ng-click="addOne()" type="Checkbox" checklist-value="categories.AudioCategory"
                                checklist-model="answer.tests">
-                        <label class="choice">{{categories.AudioCategory}}</label>
+                        <label class="choice">{{categories.AudioCategory}}</label> 
                     </div>
+
                 </div>
                 <br>
                 
@@ -74,11 +75,10 @@
         
 
     </div>
-
-    CDA: {{CDA}}
-    AZBio: {{AZBio}}
-    CNC: {{CNC}}
-    BKBSIN: {{BKBSIN}}
+    CDA: {{CDA}}<br>
+    AZBio: {{AZBio}}<br>
+    CNC: {{CNC}}<br>
+    BKBSIN: {{BKBSIN}}<br>
     
     <button ng-click="printTests()">PRINT TESTS</button>
 </div>

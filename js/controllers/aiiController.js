@@ -264,6 +264,15 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.audioQuestions = data.records;
     });
     
+    
+    $scope.addMore = function(data){
+        console.log(data);
+        
+        $scope.answer.tests += ',[Azbio]';
+        console.log($scope.answer.tests);
+    }
+
+    
     $scope.printTests = function(){
 
         for($scope.counter = 0;$scope.counter < $scope.answer.tests.length;$scope.counter++){
@@ -271,19 +280,31 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             if($scope.answer.tests[$scope.counter] == 'Comprehensive Diagnostic Audiogram'){
                 $scope.CDA.leftCondition = $scope.answer.leftCondition;
                 $scope.CDA.rightCondition = $scope.answer.rightCondition;
+                $scope.CDA.CDAPTAScore = $scope.answer.CDAPTAScore;
+                $scope.CDA.CDASRTScore = $scope.answer.CDASRTScore;
+                $scope.CDA.CDASDSScore = $scope.answer.CDASDSScore;
+                $scope.CDA.CDADecibels = $scope.answer.CDADecibels;
+                $scope.CDA.CDASNR = $scope.answer.CDASNR;
             }
             if($scope.answer.tests[$scope.counter] == 'AZBio'){
                 $scope.AZBio.leftCondition = $scope.answer.leftCondition;
                 $scope.AZBio.rightCondition = $scope.answer.rightCondition;
+                $scope.AZBio.AzBioScore = $scope.answer.AzBioScore;
+                $scope.AZBio.AzBioDecibels = $scope.answer.AzBioDecibels;
+                $scope.AZBio.AzBioSNR = $scope.answer.AzBioSNR;
             }
             if($scope.answer.tests[$scope.counter] == 'CNC'){
                 $scope.CNC.leftCondition = $scope.answer.leftCondition;
                 $scope.CNC.rightCondition = $scope.answer.rightCondition;
+                $scope.CNC.CNCWords = $scope.answer.CNCWords;
+                $scope.CNC.CNCPhonemes = $scope.answer.CNCPhonemes;
+                $scope.CNC.CNCList = $scope.answer.CNCList
             }
             if($scope.answer.tests[$scope.counter] == 'BKB-SIN'){
                 $scope.BKBSIN.leftCondition = $scope.answer.leftCondition;
                 $scope.BKBSIN.rightCondition = $scope.answer.rightCondition;
                 $scope.BKBSIN.BKBScore = $scope.answer.BKBScore;
+                $scope.BKBSIN.BKBList = $scope.answer.BKBList;
             }
         }
 
