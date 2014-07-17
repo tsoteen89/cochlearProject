@@ -263,17 +263,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
-    
-    
-    $scope.addMore = function(data){
-        console.log(data);
-        
-        $scope.answer.tests += ',[Azbio]';
-        console.log($scope.answer.tests);
-    }
 
     
-    $scope.printTests = function(){
+    $scope.addAnswerObject = function(){
 
         for($scope.counter = 0;$scope.counter < $scope.answer.tests.length;$scope.counter++){
             console.log($scope.answer.tests[$scope.counter]);
@@ -308,6 +300,10 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             }
         }
 
+    }
+    
+    $scope.submitQuestions = function(){
+        console.log("Submit Questions Called");
     }
     
     
