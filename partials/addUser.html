@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             
             <!-- New Patient Header --> 
-            <div style="margin-left: 5%; margin-top:5%; background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:90%; float: left;">
+            <div style="margin-left: 10%; margin-top:10%; background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:90%; float: left; display:block;">
             <div class="panel panel-default">    
                 <div class="panel-heading">
                   <div class="panel-title">
@@ -47,7 +47,7 @@
                           <label>Phone Number</label>
                           <div class="controls">
                             <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number" phone>
-                        </div>
+                        </div><br>
 
                         <hr>
                             
@@ -80,18 +80,15 @@
                         <div class="control-group" >
                           <label>Title</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="formData.TitleID" ng-required="true" placeholder="Enter Title ID (1)">
-                              
-                              <select style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserTitleID" ng-required="true">
+                            <select style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserTitleID" ng-required="true">
                                   <option ng-repeat="UserTitle in formData.UserTitles.records">{{UserTitle.Abbreviation}}</option>
-                              </select>
+                            </select>
                               
                         </div>                       
                         </div><br>    
 
                         <hr>
 
-                        <!--<input style="width: 200px" type="submit" id="submit" value="Submit" />-->
                         <button class="btn btn-primary" type="submit" value="submit">Submit</button>
 
                       </form>
