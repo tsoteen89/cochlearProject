@@ -101,10 +101,10 @@
                             <div class="well well-lg" style="width: 35%; margin-left:2%; float:left">
                                 More Patient Data <br>
                                 <b> BMI: </b> {{patient.BMI}} <br>
-                                <b> Weight: </b>{{patient.Weight}} <br>
-                                <b> Height: </b>{{patient.Height}} <br>
-                                <b>Phone: </b> {{patient.Phone}} <br>
-                                <b>Email: </b> <a>{{patient.Email}} </a><br>
+                                <b> Weight: </b>{{patient.Weight}} lbs <br>
+                                <b> Height: </b>{{patient.Height/12 | number:0}} ft {{patient.Height%12}} in <br>
+                                <b>Phone: </b> ({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}} <br>
+                                <b>Email: </b> <a href="mailto:{{patient.Email}}">{{patient.Email}} </a><br>
                                 <b>Address: </b> {{patient.Address1}} <br>
                                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{patient.City}}, {{patient.State}} {{patient.Zipcode}} <br>
                                 

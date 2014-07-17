@@ -258,9 +258,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.audioQuestions = data.records;
     });
     
-    $scope.inputIsArray = function(data) {
-        return Array.isArray(data);
-    }
     
 };
     
