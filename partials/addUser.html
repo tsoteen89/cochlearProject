@@ -28,7 +28,10 @@
                         </div><br>
 
                         <div class="control-group" >
-                          <label>Password</label>
+                          <label>Password</label> 
+                            <span class="glyphicon glyphicon-question-sign" ng-mouseenter="help=true" ng-mouseleave="help=false"></span> 
+                            <span ng-show="help">Password has to be atleast 7 characters long</span>
+                            
                           <div class="controls" >
                             <input style="width: 200px" type="password" class="form-control" name="password" ng-model="formData.password" ng-required="true" placeholder="Enter Password" ng-minlength="7">
                           </div>
