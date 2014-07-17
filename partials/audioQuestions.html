@@ -50,12 +50,19 @@
                                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">{{categories.AudioCategory}} </label>
                                 <div ng-repeat="tests in categories.Tests">
                                     <label style="font-size: .8vw;">{{tests.AudioTestName}}</label>
-                                    <div>
-                                        {{tests.AudioTestInput.Type}}
-                                    </div>
-                                    <div ng-if="inputIsArray(tests.AudioTestInput)" ng-repeat="type in tests.AudioTestInput">
+                                    <div ng-repeat="type in tests.AudioTestInput">
                                         Label: {{type.Label}} <br>
-                                        &nbsp Type:{{type.Type}}
+                                        &nbsp Type:{{type.Type}}<br>
+                                        Values: {{type.Values}}
+                                        
+                                        <div ng-if="type.Type == 'number'">
+                                            <input type="number" name="type.Label" min={{type.Values.Min}} max={{type.Values.Max}} ng-model="answer[type.Label]">
+                                        </div>
+
+                                        <select ng-if="type.Type == 'select'" ng-options="values for values in type.Values"
+                                                ng-model="answer[type.Label]">IN SELECT
+                                        </select>
+
                                     </div>
                                 </div>
                             </div>
