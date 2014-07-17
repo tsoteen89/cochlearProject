@@ -248,6 +248,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
     $scope.loggedIn = persistData.getLoggedIn();
+    $scope.counter = 0;
+    $scope.CDA = {};
+    $scope.AZBio = {};
+    $scope.CNC = {};
+    $scope.BKBSIN = {};
+    
     $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
@@ -257,6 +263,31 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
+    
+    $scope.printTests = function(){
+
+        for($scope.counter = 0;$scope.counter < $scope.answer.tests.length;$scope.counter++){
+            console.log($scope.answer.tests[$scope.counter]);
+            if($scope.answer.tests[$scope.counter] == 'Comprehensive Diagnostic Audiogram'){
+                $scope.CDA.leftCondition = $scope.answer.leftCondition;
+                $scope.CDA.rightCondition = $scope.answer.rightCondition;
+            }
+            if($scope.answer.tests[$scope.counter] == 'AZBio'){
+                $scope.AZBio.leftCondition = $scope.answer.leftCondition;
+                $scope.AZBio.rightCondition = $scope.answer.rightCondition;
+            }
+            if($scope.answer.tests[$scope.counter] == 'CNC'){
+                $scope.CNC.leftCondition = $scope.answer.leftCondition;
+                $scope.CNC.rightCondition = $scope.answer.rightCondition;
+            }
+            if($scope.answer.tests[$scope.counter] == 'BKB-SIN'){
+                $scope.BKBSIN.leftCondition = $scope.answer.leftCondition;
+                $scope.BKBSIN.rightCondition = $scope.answer.rightCondition;
+                $scope.BKBSIN.BKBScore = $scope.answer.BKBScore;
+            }
+        }
+
+    }
     
     
 };

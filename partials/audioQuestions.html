@@ -3,7 +3,7 @@
     <label style="font-size:2vw; color:#4B92AE">Audio Questions Page</label>
     <hr>
 
-    <div class="col-md-8" style="margin-left: 5%; border: 1px; border-style:dashed">
+    <div class="col-md-8" style="margin-left: 5%">
             
             <!-- DISPLAY CONDITIONS -->
             <div style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:35%; margin-left: 10%; float:left;">
@@ -74,6 +74,12 @@
         
 
     </div>
-    Answer:{{answer}}
+
+    CDA: {{CDA}}
+    AZBio: {{AZBio}}
+    CNC: {{CNC}}
+    BKBSIN: {{BKBSIN}}
+    
+    <button ng-click="printTests()">PRINT TESTS</button>
 </div>
     
