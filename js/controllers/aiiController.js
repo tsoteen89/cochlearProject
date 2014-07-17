@@ -409,7 +409,15 @@ controllers.addUserController = function($scope, $http, postData, getData){
         
     getData.get($scope.UserLevelsURL).success(function(data) {
         $scope.formData.UserLevels = data;
-        console.log($scope.formData.UserLevels);
+        //console.log($scope.formData.UserLevels);
+    });
+    
+    $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
+    
+    getData.get($scope.UserTitlesURL).success(function(data) {
+        $scope.formData.UserTitles = data;
+        //console.log(data);
+        console.log($scope.formData.UserTitles);
     });
 }
 
