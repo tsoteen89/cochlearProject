@@ -488,6 +488,73 @@ controllers.editUserController = function($scope, $http, getData, putData){
 
 //**************************************END USER CONTROLLERS******************************************//
 
+//*************************************MESSAGING CONTROLLERS******************************************//
+
+//Controller used on messages to process API methods for Users' Messages
+controllers.apiMessagingController = function ($scope, $http, $templateCache, persistData, getData) {   
+    
+    $scope.messages = {};
+    $scope.currentContent = "";
+    $scope.isPopupVisible = false;
+    
+    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
+	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
+	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/30/deleted";
+    
+    //Grab all inbox messages using patientURL 
+    getData.get($scope.inboxURL).success(function(data) {
+		//Alter the data to use full names instead of id numbers
+		/* for(i = 0; i < (data.records).length; i++){
+			senderName = getName((data.records[i]).SenderID);
+			receiverName = getName((data.records[i]).ReceiverID);
+			console.log("Received: " + senderName);
+			console.log("Received: " + receiverName);
+			
+			data.records[i].SenderID = senderName;
+			data.records[i].ReceiverID = receiverName;
+		} */
+		$scope.inboxMessages = data;
+    });
+	
+	 //Grab all sent messages using patientURL 
+    getData.get($scope.sentURL).success(function(data) {
+        $scope.sentMessages = data;
+    });
+	
+	 //Grab all draft messages using patientURL 
+    getData.get($scope.draftsURL).success(function(data) {
+        $scope.draftMessages = data;
+    });
+	
+	 //Grab all deleted messages using patientURL 
+    getData.get($scope.deletedURL).success(function(data) {
+        $scope.deletedMessages = data;
+    });
+	
+	$scope.togglePopup = function(message){
+		if($scope.selectedMessage == message || message == null){
+			$scope.isPopupVisible = false;
+			$scope.selectedMessage = null;
+		}
+		else{
+			$scope.isPopupVisible = true;
+			$scope.selectedMessage = message;
+		}
+	};
+	
+	function getName(userID){
+		userURL = "http://killzombieswith.us/aii-api/v1/users/" + userID + "/";
+		getData.get(userURL).success(function(data){
+			userName = (data.records[0]).first_name + " " + (data.records[0]).last_name;
+			console.log("Returning: " + userName);
+			return userName;
+		});
+	};
+};  
+
+//************************************END MESSAGING CONTROLLERS***************************************//
+
 //************************************MISCELLANEOUS CONTROLLERS***************************************//
 
 
