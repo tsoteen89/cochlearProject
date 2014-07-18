@@ -16,26 +16,26 @@
             <div class="panel-body" ng-controller="TabController as tab">
                 <div class="tabbable"> 
                     <div class="tab-pane">
-                      <form ng-submit="processForm()" class="form form-vertical">
+                      <form ng-submit="processForm()" class="form form-vertical" novalidate>
 
                         <div class="control-group" >
                           <label>Patient ID</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.PatientID" ng-required="true" placeholder="Enter Patient ID" ng-blur="fillBar()">
+                            <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.PatientID" ng-required="true" placeholder="Enter Patient ID" ng-blur="fillBar()" integer ng-minlength="4" ng-maxlength="4">
                           </div>
                         </div><br>
 
                         <div class="control-group" >
                           <label>First Name</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.First" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()">
+                            <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.First" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()" alphabet>
                           </div>
                         </div><br>
 
                         <div class="control-group" >
                           <label>Last Name</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.Last" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()">
+                            <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.Last" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()" alphabet>
                           </div>
                         </div><br>
 
@@ -44,7 +44,8 @@
                         <div class="control-group" >
                           <label>DOB</label>
                           <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="DOB" ng-model="formData.DOB" ng-required="true" placeholder="Enter Date of Birth" ng-blur="fillBar()">
+                            <input style="width: 200px" class="form-control" name="DOB" ng-model="formData.DOB" ng-required="true" placeholder="Enter Date of Birth" ng-blur="fillBar()" date-input>
+                              <!--<p>{{formData.DOB}}</p>-->
                         </div>
 
                         <hr>

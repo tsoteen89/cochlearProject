@@ -400,7 +400,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     
 
 //Controller used to handle addition of new Patients to the system
-controllers.formController = function($scope, $http, postData) {
+controllers.formController = function($scope, $http, postData,dateFilter) {
     // create a blank object to hold form information
     $scope.formData = {};
     
@@ -431,6 +431,8 @@ controllers.formController = function($scope, $http, postData) {
     $scope.processForm = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
     };
+    
+    $scope.date = new Date();
 
 }
 
