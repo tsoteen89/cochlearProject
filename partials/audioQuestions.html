@@ -38,7 +38,7 @@
                     <br>
 
                     <div ng-repeat="categories in audioQuestions.Categories">
-                        <input ng-click="addOne()" type="Checkbox" checklist-value="categories.AudioCategory"
+                        <input  type="Checkbox" checklist-value="categories.AudioCategory"
                                checklist-model="answer.tests" ng-blur="addAnswerObject()">
                         <label class="choice">{{categories.AudioCategory}}</label> 
                     </div>
