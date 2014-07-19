@@ -85,12 +85,12 @@
 
 
                                 </div>
-                                <button style="margin-left: 75%; margin-bottom:8px" 
-                                        ng-click="toggleDataCollapse(); getCareTeamFacilities(careTeam)"> 
-                                    See Care Team Details </button>  
+                                 
 
                             </div>
-
+                            <button style="margin-left: 75%; margin-bottom:8px" 
+                                        ng-click="toggleDataCollapse()"> 
+                                    See Care Team Details </button> 
                         </div>
                         
                     </div>
@@ -117,7 +117,7 @@
                             
                             <div class="well well-lg" style="width:53%; margin-left:2%; float:left">
                                 CareTeam Facilities
-                                <p ng-repeat="facility in facilityData.records">
+                                <p ng-repeat="facility in patient.Providers">
                                     {{facility.Name}}
                                 </p>
                                 <br>
