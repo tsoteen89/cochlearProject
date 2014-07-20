@@ -683,6 +683,9 @@ controllers.phaseProgressCtrl = function ($scope){
 
 controllers.loginControl = function ($scope,$http,$window,persistData){
 
+    console.log($scope);
+    
+
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
