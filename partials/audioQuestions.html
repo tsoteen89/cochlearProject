@@ -56,11 +56,11 @@
                                     <div ng-repeat="type in tests.AudioTestInput">
                                         <label style="font-size:.9vw;">{{type.Name}}</label> <br>
                                         
-                                        <div ng-if="type.Type == 'number'">
-                                            <input type="number" name="type.Label" min={{type.Values.Min}} max={{type.Values.Max}} ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
+                                        <div ng-if="type.InputType == 'Number'">
+                                            <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}} ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
                                         </div>
 
-                                        <select ng-if="type.Type == 'select'" ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
+                                        <select ng-if="type.InputType == 'Select'" ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
 
