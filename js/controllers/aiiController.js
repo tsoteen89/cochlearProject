@@ -717,6 +717,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
             else {
                 console.log("Mando");
                // $window.location = "./";
+               console.log($scope.userLogin);
             }
         });
     }
