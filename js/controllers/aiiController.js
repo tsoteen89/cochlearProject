@@ -709,8 +709,8 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            console.log(data.data.records);
-            //console.log(data);
+            console.log(data);
+            console.log(data.data);
             if(data.data.records == true){
                 // $scope.x = response.data.records;
                 persistData.setLoggedIn(true);
