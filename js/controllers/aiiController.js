@@ -718,7 +718,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
                 $window.location.href = "#/dashboard";
             }
             else {
-                console.log("Mando");
+                //console.log("Mando");
                // $window.location = "./";
                console.log($scope.userLogin);
             }
