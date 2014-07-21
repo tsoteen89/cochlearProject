@@ -58,22 +58,17 @@
                                         
                                         <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
                                             <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                   ng-model="answer[someNumber][type.TestFieldID]" ng-blur="addAnswerObject()">
+                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="addAnswerObject()">
                                         </div>
 
 
                                         <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
-                                                ng-model="answer[someNumber][type.TestFieldID]" ng-blur="addAnswerObject()">
+                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="addAnswerObject()">
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
                                         
 
                                     </div>
-                                </div>
-                            </div>
-                            <div ng-repeat="array in answer">
-                                <div style="float:left" ng-repeat="item in array">
-                                    {{item}}
                                 </div>
                             </div>
                         </div>
@@ -85,13 +80,11 @@
         
 
     </div>
-    <button ng-click="numInc()">INCREMEENTNENTE NUBMER</button><br>
+    <button ng-click="incAnswerArray()">Increment Answer Array</button><br>
     
-    {{someNumber}}<br>
+    {{answerArrayIndex}}<br>
     
     Answer: {{answer}}
 
-    
-    <button ng-click="addAnswerObject()">PRINT TESTS</button>
 </div>
     

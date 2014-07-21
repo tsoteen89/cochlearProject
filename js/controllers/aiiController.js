@@ -3,8 +3,11 @@
 var myApp = angular.module('aiiController', []);
 
 var controllers = {};
+    
+
 
 //************************************FACTORIES***************************************//
+
 
 //Factory to dynamically GET from api
 myApp.factory('getData', function($http){
@@ -83,8 +86,11 @@ myApp.factory('persistData', function () {
         }
     };
 });
+
     
 //*****************************************END FACTORIES*******************************************//
+
+
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
@@ -250,14 +256,8 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.answer = [];
     $scope.answer[0] = {};
-    $scope.counter = 0;
-    $scope.CDA = {};
-    $scope.AZBio = {};
-    $scope.CNC = {};
-    $scope.BKBSIN = {};
-    $scope.someNumber = 1;
+    $scope.answerArrayIndex = 1;
     $scope.answer[1] = {};
-    
     $scope.answer[0]["PhaseID"] = persistData.getPhaseID();
     $scope.answer[0]["CareTeamID"] = persistData.getCareTeamID();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
@@ -266,53 +266,15 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
-
-    
-    $scope.addAnswerObject = function(){
-
-        for($scope.counter = 0;$scope.counter < $scope.answer.tests.length;$scope.counter++){
-            console.log($scope.answer.tests[$scope.counter]);
-            if($scope.answer.tests[$scope.counter] == 'Comprehensive Diagnostic Audiogram'){
-                $scope.CDA.leftCondition = $scope.answer.leftCondition;
-                $scope.CDA.rightCondition = $scope.answer.rightCondition;
-                $scope.CDA.CDAPTAScore = $scope.answer.CDAPTAScore;
-                $scope.CDA.CDASRTScore = $scope.answer.CDASRTScore;
-                $scope.CDA.CDASDSScore = $scope.answer.CDASDSScore;
-                $scope.CDA.CDADecibels = $scope.answer.CDADecibels;
-                $scope.CDA.CDASNR = $scope.answer.CDASNR;
-            }
-            if($scope.answer.tests[$scope.counter] == 'AZBio'){
-                $scope.AZBio.leftCondition = $scope.answer.leftCondition;
-                $scope.AZBio.rightCondition = $scope.answer.rightCondition;
-                $scope.AZBio.AzBioScore = $scope.answer.AzBioScore;
-                $scope.AZBio.AzBioDecibels = $scope.answer.AzBioDecibels;
-                $scope.AZBio.AzBioSNR = $scope.answer.AzBioSNR;
-            }
-            if($scope.answer.tests[$scope.counter] == 'CNC'){
-                $scope.CNC.leftCondition = $scope.answer.leftCondition;
-                $scope.CNC.rightCondition = $scope.answer.rightCondition;
-                $scope.CNC.CNCWords = $scope.answer.CNCWords;
-                $scope.CNC.CNCPhonemes = $scope.answer.CNCPhonemes;
-                $scope.CNC.CNCList = $scope.answer.CNCList
-            }
-            if($scope.answer.tests[$scope.counter] == 'BKB-SIN'){
-                $scope.BKBSIN.leftCondition = $scope.answer.leftCondition;
-                $scope.BKBSIN.rightCondition = $scope.answer.rightCondition;
-                $scope.BKBSIN.BKBScore = $scope.answer.BKBScore;
-                $scope.BKBSIN.BKBList = $scope.answer.BKBList;
-            }
-        }
-
-    }
     
     $scope.submitQuestions = function(){
         console.log("Submit Questions Called");
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.answer);
     }
     
-    $scope.numInc = function(){
-        $scope.someNumber += 1;
-        $scope.answer[$scope.someNumber] = {};
+    $scope.incAnswerArray = function(){
+        $scope.answerArrayIndex += 1;
+        $scope.answer[$scope.answerArrayIndex] = {};
     }
     
     
@@ -320,8 +282,11 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
 
 //************************************END QUESTION CONTROLLERS***************************************//
+    
+
 
 //**************************************PATIENT CONTROLLERS******************************************//
+
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData) {   
@@ -445,9 +410,13 @@ controllers.formController = function($scope, $http, postData,dateFilter) {
 
 }
 
+
 //**************************************END PATIENT CONTROLLERS******************************************//
 
+
+
 //*****************************************USER CONTROLLERS**********************************************//
+
 
 //Controller used to handle addition of NEW Users to the system
 controllers.addUserController = function($scope, $http, postData, getData){
@@ -495,9 +464,13 @@ controllers.editUserController = function($scope, $http, getData, putData){
     
 }
 
+
 //**************************************END USER CONTROLLERS******************************************//
 
+
+
 //*************************************MESSAGING CONTROLLERS******************************************//
+
 
 //Controller used on messages to process API methods for Users' Messages
 controllers.apiMessagingController = function ($scope, $http, $templateCache, persistData, getData) {   
@@ -562,7 +535,81 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, pe
 	};
 };  
 
+
 //************************************END MESSAGING CONTROLLERS***************************************//
+ 
+    
+
+//************************************LOGIN/LOGOUT CONTROLLERS****************************************//
+    
+
+controllers.loginControl = function ($scope,$http,$window,persistData){
+
+    console.log($scope);
+    
+
+    $scope.userlogin = {};
+    $scope.dataObj = {};
+    $scope.loggedIn;
+    
+    $scope.loginStatus = function(){
+        $scope.loggedIn = persistData.getLogged();
+        console.log("Logged In Status Called");
+        console.log($scope.loggedIn);
+    };
+    
+    $scope.devLogin = function(){
+        $scope.loggedIn = true;
+    };
+
+    $scope.submit = function(){
+
+        $http({
+            method  : 'POST',
+            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+            data    : $scope.userlogin,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .then(function(data){
+            console.log(data);
+            console.log(data.data);
+            if(data.data.records == true){
+                // $scope.x = response.data.records;
+                persistData.setLoggedIn(true);
+                $scope.loggedIn = true;
+                $window.location.href = "#/dashboard";
+            }
+            else {
+                //console.log("Mando");
+               // $window.location = "./";
+               console.log($scope.userLogin);
+            }
+        });
+    }
+}
+
+controllers.logoutControl = function($scope,$http,$window){
+
+    $scope.x = 0;
+
+    $scope.logout = function() {
+
+        $http({
+            method  : "DELETE",
+            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .then(function(response){
+            console.log(response)
+            $scope.x+=1;
+        });
+    }
+}
+
+    
+//**********************************END LOGIN/LOGOUT CONTROLLERS**************************************//
+
+
 
 //************************************MISCELLANEOUS CONTROLLERS***************************************//
 
@@ -686,72 +733,11 @@ controllers.phaseProgressCtrl = function ($scope){
     }
     
 }
+
+
 //********************************END MISCELLANEOUS CONTROLLERS***************************************//
 
 
-
-controllers.loginControl = function ($scope,$http,$window,persistData){
-
-    console.log($scope);
-    
-
-    $scope.userlogin = {};
-    $scope.dataObj = {};
-    $scope.loggedIn;
-    
-    $scope.loginStatus = function(){
-        $scope.loggedIn = persistData.getLogged();
-        console.log("Logged In Status Called");
-        console.log($scope.loggedIn);
-    };
-    
-    $scope.devLogin = function(){
-        $scope.loggedIn = true;
-    };
-
-    $scope.submit = function(){
-
-        $http({
-            method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
-            data    : $scope.userlogin,
-            headers : { 'Content-Type': 'application/json' }
-        })
-        .then(function(data){
-            console.log(data);
-            console.log(data.data);
-            if(data.data.records == true){
-                // $scope.x = response.data.records;
-                persistData.setLoggedIn(true);
-                $scope.loggedIn = true;
-                $window.location.href = "#/dashboard";
-            }
-            else {
-                //console.log("Mando");
-               // $window.location = "./";
-               console.log($scope.userLogin);
-            }
-        });
-    }
-}
-
-controllers.logoutControl = function($scope,$http,$window){
-
-    $scope.x = 0;
-
-    $scope.logout = function() {
-
-        $http({
-            method  : "DELETE",
-            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
-            headers : { 'Content-Type': 'application/json' }
-        })
-        .then(function(response){
-            console.log(response)
-            $scope.x+=1;
-        });
-    }
-}
 
 myApp.controller(controllers);
 
