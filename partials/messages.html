@@ -1,11 +1,7 @@
-
-
-
+ 
     <div class = "container" ng-controller="apiMessagingController">
 
-      <div class = "row"  ng-controller = "TabController as tab">
-        <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong></a>
-        
+      <div class = "row"  ng-controller = "TabController as tab">        
 
         <div class = "messaging-system">
           <div class = "col-xs-10 button-wrapper">
@@ -21,10 +17,10 @@
           <div class = "col-xs-3">
             <ul class = "nav nav-pills nav-stacked">
               <hr>
-              <li ng-class = "{ active:tab.isSelected(-1) }"><a href ng-click = "tab.selectTab(-1); togglePopup()">Inbox</a></li>
-              <li ng-class = "{ active:tab.isSelected(2) }"><a href ng-click = "tab.selectTab(2); togglePopup()">Sent</a></li>
-              <li ng-class = "{ active:tab.isSelected(3) } "><a href ng-click = "tab.selectTab(3); togglePopup()">Drafts</a></li>
-              <li ng-class = "{ active:tab.isSelected(4) }"><a href ng-click = "tab.selectTab(4); togglePopup()">Deleted</a></li>
+              <li ng-class = "{ active:tab.isSelected(-1) }"><a href ng-click = "tab.selectTab(-1); togglePopup()"><i class="glyphicon glyphicon-envelope"></i>&nbsp Inbox</a></li>
+              <li ng-class = "{ active:tab.isSelected(2) }"><a href ng-click = "tab.selectTab(2); togglePopup()"><i class="glyphicon glyphicon-send"></i>&nbsp Sent</a></li>
+              <li ng-class = "{ active:tab.isSelected(3) } "><a href ng-click = "tab.selectTab(3); togglePopup()"><i class="glyphicon glyphicon-pencil"></i>&nbsp Drafts</a></li>
+              <li ng-class = "{ active:tab.isSelected(4) }"><a href ng-click = "tab.selectTab(4); togglePopup()"><i class="glyphicon glyphicon-trash"></i>&nbsp Deleted</a></li>
               <hr>
             </ul>
           </div>
@@ -50,12 +46,17 @@
 
         
           <div class = "col-xs-7 message-inbox" ng-show = "tab.isSelected(-1)">
-            <hr>
+            <div class="messageToolbar"> 
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
+				<hr></br>
+			</div>
             <div class = "table-responsive">
-              <table class = "table table-striped table-hover">
-                <tr>
+              <table class="table table-striped table-hover">
+				<tr>
                   <th>
-                    <input type = "checkbox"> <a href = ""><span><i class = "glyphicon glyphicon-chevron-down"></i></span>
+                    <input type="checkbox"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
                     </a>
                   </th>
                   <th>From</th>
@@ -100,7 +101,12 @@
 
 
           <div class = "col-xs-7 message-sent" ng-show = "tab.isSelected(2)">
-            <hr>
+             <div class="messageToolbar"> 
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
+				<hr></br>
+			</div>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
                 <tr>
@@ -151,7 +157,12 @@
 
 
           <div class = "col-xs-7 message-drafts" ng-show = "tab.isSelected(3)">
-            <hr>
+             <div class="messageToolbar"> 
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
+				<hr></br>
+			</div>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
                 <tr>
@@ -199,7 +210,12 @@
 
 
            <div class = "col-xs-7 message-deleted" ng-show = "tab.isSelected(4)">
-            <hr>
+             <div class="messageToolbar"> 
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
+				<hr></br>
+			</div>
             <div class = "table-responsive">
               <table class = "table table-striped table-hover">
                 <tr>
