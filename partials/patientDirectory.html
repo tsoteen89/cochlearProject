@@ -33,10 +33,10 @@
                             <p ng-if=patient.Sex=='m'>Male</p>
                             <p ng-if=patient.Sex=='f'>Female</p>
                             <p> Age </p> 
-                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:10px"> <br> <br><br><br><br><br><br><br> </p>
-                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:2.5px"> 
-                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> </p>
-                            <button style="margin-left: 45%; margin-bottom:8px" ng-click="isPatientCollapsed = !isPatientCollapsed">
+                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:15px"> <br> <br><br><br><br><br><br><br> <br> </p>
+                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:7px"> 
+                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <br> <br></p>
+                            <button style="margin-left: 45%; margin-bottom:8x" ng-click="isPatientCollapsed = !isPatientCollapsed">
                                 Patient Details </button>
                             <div collapse="isPatientCollapsed">
 
