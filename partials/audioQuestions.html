@@ -11,7 +11,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Left Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.0.leftCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.LeftAidCondition" ng-blur="addAnswerObject()">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
                 
@@ -22,7 +22,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Right Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.0.rightCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.RightAidCondition" ng-blur="addAnswerObject()">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
 
