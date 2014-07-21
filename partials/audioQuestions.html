@@ -11,7 +11,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Left Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.leftCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.leftCondition" ng-blur="addAnswerObject()">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
                 
@@ -22,7 +22,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Right Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.rightCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.rightCondition" ng-blur="addAnswerObject()">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
 
@@ -49,37 +49,48 @@
                 <div ng-repeat="test in answer.tests">
                     <div ng-repeat="categories in audioQuestions.Categories">
                         <div ng-if="categories.AudioCategory == test">
-                            <div style="margin-top:5%;">
-                                <label class="description" style="font-size: 1.8vw; color:#4B92AE">{{categories.AudioCategory}} </label><hr>
-                                <div ng-repeat="tests in categories.Tests">
-                                    <label style="font-size: 1.3vw;">{{tests.AudioTestName}}</label>
-                                    <div ng-repeat="type in tests.AudioTestInput">
-                                        <label style="font-size:.9vw;">{{type.Name}}</label> <br>
+                            <div class="container">
+                                <label class="description" style="margin-top: 2%;font-size: 1.8vw; color:#4B92AE;">{{categories.AudioCategory}} </label><hr>
+                                <div class="container" ng-repeat="tests in categories.Tests">
+                                    <label style="font-size: 1.3vw;">{{tests.AudioTestName}}</label><br>
+                                    <div ng-repeat="type in tests.AudioTestInput" style="margin-left:5%;float:left;">
+                                        <label style="font-size:.9vw;">{{type.Name}}</label><br>
                                         
-                                        <div ng-if="type.InputType == 'Number'">
-                                            <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}} ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
+                                        <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
+                                            <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
+                                                   ng-model="answer[someNumber][type.TestFieldID]" ng-blur="addAnswerObject()">
                                         </div>
 
-                                        <select ng-if="type.InputType == 'Select'" ng-model="answer[type.Label]" ng-blur="addAnswerObject()">
+
+                                        <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
+                                                ng-model="answer[someNumber][type.TestFieldID]" ng-blur="addAnswerObject()">
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
+                                        
 
                                     </div>
+                                </div>
+                            </div>
+                            <div ng-repeat="array in answer">
+                                <div style="float:left" ng-repeat="item in array">
+                                    {{item}}
                                 </div>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <br>
+                <br><br><br><br><br>
                 <button class="questionsButton" ng-click="submitQuestions()">SUBMIT</button>
             </div>
         
 
     </div>
-    CDA: {{CDA}}<br>
-    AZBio: {{AZBio}}<br>
-    CNC: {{CNC}}<br>
-    BKBSIN: {{BKBSIN}}<br>
+    <button ng-click="numInc()">INCREMEENTNENTE NUBMER</button><br>
+    
+    {{someNumber}}<br>
+    
+    Answer: {{answer}}
+
     
     <button ng-click="addAnswerObject()">PRINT TESTS</button>
 </div>

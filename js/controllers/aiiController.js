@@ -248,13 +248,15 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
     $scope.loggedIn = persistData.getLoggedIn();
+    $scope.answer = [];
+    $scope.answer[0] = {};
     $scope.counter = 0;
     $scope.CDA = {};
     $scope.AZBio = {};
     $scope.CNC = {};
     $scope.BKBSIN = {};
+    $scope.someNumber = 0;
     
-    $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
@@ -304,6 +306,11 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.submitQuestions = function(){
         console.log("Submit Questions Called");
+    }
+    
+    $scope.numInc = function(){
+        $scope.someNumber += 1;
+        $scope.answer[$scope.someNumber] = {};
     }
     
     
