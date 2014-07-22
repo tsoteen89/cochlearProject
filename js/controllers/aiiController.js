@@ -276,7 +276,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
-    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
+    $scope.patientURL = "../../aii-api/v1/facilities/100/patients";
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
     //Grab all Patients using patientURL 
@@ -401,7 +401,8 @@ controllers.addUserController = function($scope, $http, postData){
 
     // Post function to add a new User to the system
     $scope.processForm = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        postData.post('../../aii-api/v1/users',$scope.formData);
     };
 }
 
@@ -552,7 +553,7 @@ controllers.phaseProgressCtrl = function ($scope){
 
 
 controllers.loginControl = function ($scope,$http,$window,persistData){
-
+    console.log($scope);
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
@@ -569,20 +570,22 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
 
     $scope.submit = function(){
 
+        
         $http({
             method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+            //url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+            url     : '../../aii-api/v1/sessionLogs',
             data    : $scope.userlogin,
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            console.log(data.data.records);
-            //console.log(data);
+            //console.log(data.data.records);
+            console.log(data.data);
             if(data.data.records == true){
                 // $scope.x = response.data.records;
                 persistData.setLoggedIn(true);
                 $scope.loggedIn = true;
-                $window.location.href = "#/dashboard";
+                //$window.location.href = "#/dashboard";
             }
             else {
                 console.log("Mando");
@@ -600,7 +603,8 @@ controllers.logoutControl = function($scope,$http,$window){
 
         $http({
             method  : "DELETE",
-            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
+            url     : '../aii-api/v1/sessionLogs',
+            //url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(response){
