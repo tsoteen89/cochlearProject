@@ -260,14 +260,22 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.answer[1] = {};
     $scope.answer[0]["PhaseID"] = persistData.getPhaseID();
     $scope.answer[0]["CareTeamID"] = persistData.getCareTeamID();
+    $scope.results = {};
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
-    $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7";
+    //$scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/hearing%20aid/right/hearing%20aid";
     
-    $scope.results = {};
+    
+    /*
     getData.get($scope.resultsURL).success(function(data) {
         $scope.results = data.records;
     });
+    */
+    
+    $scope.buildResultsURL = function(){
+        console.log("buildResults Called");
+        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.answer[0].LeftAidCondition + "/right/" + $scope.answer[0].RightAidCondition;
+    }
     
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
@@ -284,9 +292,39 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     }
     
     $scope.updateResults = function(){
+        console.log("updateResults Called");
+        $scope.buildResultsURL();
         getData.get($scope.resultsURL).success(function(data) {
             $scope.results = data.records;
         });
+    }
+    
+    $scope.clearCurrentTest = function(data){
+        console.log("clearCurrentTest Called");
+        console.log(data);
+        if(data == "Comprehensive Diagnostic Audiogram"){
+            $scope.answer[1]['10'] = null;
+            $scope.answer[1]['20'] = null;
+            $scope.answer[1]['30'] = null;
+            $scope.answer[1]['40'] = null;
+            $scope.answer[1]['50'] = null;
+        }
+        else if(data == 'AzBio'){
+            $scope.answer[1]['60'] = null;
+            $scope.answer[1]['70'] = null;
+            $scope.answer[1]['80'] = null;
+            $scope.answer[1]['90'] = null;
+        }
+        else if(data == 'CNC'){
+            $scope.answer[1]['100'] = null;
+            $scope.answer[1]['110'] = null;
+            $scope.answer[1]['120'] = null;
+        }
+        else if(data == 'BKB-SIN'){
+            $scope.answer[1]['130'] = null;
+            $scope.answer[1]['140'] = null;
+        }
+        $scope.updateResults();
     }
     
     
