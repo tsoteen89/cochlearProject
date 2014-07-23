@@ -529,6 +529,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	$scope.userID = 30;
     $scope.currentContent = "";
     $scope.isPopupVisible = false;
+	$scope.reverse = true;
     
     $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
 	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
@@ -547,16 +548,31 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			data.records[i].SenderID = senderName;
 			data.records[i].ReceiverID = receiverName;
 		} */
+		for(i = 0; i < data.records.length; i++)
+		{
+			data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
+			data.records[i].ReceiverName = "Me";
+		}
 		$scope.inboxMessages = data;
     });
 	
 	 //Grab all sent messages using patientURL 
     getData.get($scope.sentURL).success(function(data) {
+		for(i = 0; i < data.records.length; i++)
+		{
+			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+			data.records[i].SenderName = "Me";
+		}
         $scope.sentMessages = data;
     });
 	
 	 //Grab all draft messages using patientURL 
     getData.get($scope.draftsURL).success(function(data) {
+		for(i = 0; i < data.records.length; i++)
+		{
+			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+			data.records[i].SenderName = "Me";
+		}
         $scope.draftMessages = data;
     });
 	
@@ -565,10 +581,12 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		for(i = 0; i < data.records.length; i++)
 		{
 			if(data.records[i].Sender_First == null && data.records[i].Sender_Last == null){
-				data.records[i].Sender_First = 'Me';
+				data.records[i].SenderName = 'Me';
+				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			}
 			if(data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null){
-				data.records[i].Receiver_First = 'Me';
+				data.records[i].ReceiverName = 'Me';
+				data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 			}
 		}
         $scope.deletedMessages = data;
@@ -620,6 +638,8 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		//Format the new reply message with info from the original message
 		$scope.composeMessage.Subject = "FWD: " + $scope.selectedMessage.Subject;
 		$scope.composeMessage.Content = "\n\n------------------------------\n"
+									+	"From: " + $scope.selectedMessage.SenderName + "\n"
+									+	"To: " + $scope.selectedMessage.ReceiverName + "\n"
 									+	"Subject: " + $scope.selectedMessage.Subject + "\n"
 									+	"Time: " + messageTime + "\n"
 									+	"Date: " + messageDate + "\n\n"
@@ -679,7 +699,8 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	}
 	
 	$scope.order = function(filter){
-		$scope.filter = filter;
+		$scope.reverse = !($scope.reverse);
+		$scope.orderFilter = filter;
 	}
 };  
 
@@ -828,30 +849,6 @@ controllers.TabController = function(){
 		return this.tab===checkTab;
 	};
 } 
-
-
-// Delete this when finished with it.
-controllers.homeController = function($scope){
-    $scope.test = "howdy";
-
-    $scope.alerts = 
-        [{ content: 'John Smith: Care phase has changed to Preoperative Visit'}];
-    
-    $scope.notifications = [{content: 'Dr. Charlie Bravo has accepted your invitation to John Smith\'s care team'},
-                         {content: 'Dr. Sierra Victor has invited you to join Jane Doe\'s care team'}];
-    
-    $scope.messages = [{
-            from: 'Dr. Charlie Bravo',
-            subject: 'Re: Surgical Consultation for John Smith',
-            content: '...'
-        },
-        {
-            from: 'Dr. Sierra Victor',
-            subject: 'Could I send Jane Doe your way for candidacy testing?',
-            content: '.......'
-    }];
-};
-
 
 //EXAMPLE FOR BINDING HTML CONTROLLER
 controllers.ngBindHtmlCtrl = function ($scope, $sce) {
