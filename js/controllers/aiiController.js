@@ -283,6 +283,12 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.answer[$scope.answerArrayIndex] = {};
     }
     
+    $scope.updateResults = function(){
+        getData.get($scope.resultsURL).success(function(data) {
+            $scope.results = data.records;
+        });
+    }
+    
     
 };
     

@@ -39,7 +39,7 @@
 
                     <div ng-repeat="categories in audioQuestions.Categories">
                         <input  type="Checkbox" checklist-value="categories.AudioCategory"
-                               checklist-model="answer.tests" ng-blur="">
+                               checklist-model="answer.tests" ng-blur="submitQuestions()">
                         <label class="choice">{{categories.AudioCategory}}</label> 
                     </div>
 
@@ -58,12 +58,12 @@
                                         
                                         <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
                                             <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="">
+                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="submitQuestions()">
                                         </div>
 
 
                                         <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
-                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="">
+                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="submitQuestions()">
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
                                         
@@ -114,23 +114,15 @@
                     </div> 
                 </div>
                 <br><br><br><br><br>
-                <button class="questionsButton" ng-click="submitQuestions()">SUBMIT</button>
+                <button class="questionsButton" ng-click="updateResults()">SUBMIT</button>
             </div>
         
 
     </div>
     <button ng-click="incAnswerArray()">Increment Answer Array</button><br>
-
-    
-
-    
-    <!--{{results.Comprehensive_Diagnostic_Audiogram}}-->
-
-    <div ng-repeat="this in results.Comprehensive_Diagnostic_Audiogram">
-        <div ng-repeat="inside in this">
-            {{inside.Field_Name}}
-        </div>
-    </div>
+    <button ng-click="updateResults()">Update Results</button>
+    <br>
+    Results: {{results}}
 
 
 </div>
