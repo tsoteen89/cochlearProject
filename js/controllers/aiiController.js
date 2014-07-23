@@ -479,7 +479,7 @@ controllers.editUserController = function($scope, $http, getData, putData){
 
 
 //Controller used on messages to process API methods for Users' Messages
-controllers.apiMessagingController = function ($scope, $http, $templateCache, persistData, getData) {   
+controllers.apiMessagingController = function ($scope, $http, $templateCache, persistData, getData, postData) {   
     
     $scope.messages = {};
     $scope.currentContent = "";
@@ -539,6 +539,32 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, pe
 			return userName;
 		});
 	};
+	
+	$scope.reply = function(message){
+		$scope.composeMessage = null;
+		$scope.composeMessage.ReceiverID = message.ReceiverID;
+		$scope.composeMessage.Subject = "RE: " + message.Subject;
+		//$scope.composeMessage
+		newMessage.ReceiverID = message.SenderID;
+	}
+	
+	$scope.sendMessage = function(message){
+		//Post the user defined message to the database
+		//input 'message' should only contain the recipient username (currently UserID instead),
+		//the subject, and the message content.
+		
+		currentUser = 30;
+		
+		//Define the SenderID as the current user
+		message.SenderID = currentUser;
+		//Generate Timestamp
+		message.Timestamp = Math.round((new Date().getTime()) / 1000);
+		message.Sent = 1;
+		message.SenderDeleted = 0;
+		message.ReceiverDeleted = 0;
+		
+		postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+	}
 };  
 
 
