@@ -10,7 +10,7 @@
               <span><i class = "glyphicon glyphicon-plus"></i></span> New Message
             </button>
 
-            <input class = "search-message pull-right" type = "search" placeholder = "Search Messages.." ng-hide = "tab.isSelected(1)">
+            <input class = "search-message pull-right" type = "search" placeholder = "Search Messages.." ng-hide = "tab.isSelected(1)" ng-model="search">
           </div>
 
           
@@ -47,9 +47,9 @@
         
           <div class = "col-xs-7 message-inbox" ng-show = "tab.isSelected(-1)">
             <div class="messageToolbar"> 
-				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
-				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
-				<span class="col-xs-4"><button class="btn btn-default"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-sm"><strong><i class="glyphicon glyphicon-remove"></i>&nbsp Delete</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-sm"><strong><i class="glyphicon glyphicon-bookmark"></i>&nbsp Mark as Read</strong></button></span>
+				<span class="col-xs-4"><button class="btn btn-sm"><strong><i class="glyphicon glyphicon-tag"></i>&nbsp Mark as Unread</strong></button></span>
 				<hr></br>
 			</div>
             <div class = "table-responsive">
@@ -64,9 +64,9 @@
                   <th>Time</th>
 				  <th>Date</th>
                 </tr>
-				<tr ng-repeat="message in inboxMessages.records" ng-click="togglePopup(message)">
+				<tr ng-repeat="message in inboxMessages.records | filter:search" ng-click="togglePopup(message)">
 				  <td><input type = "checkbox"> </td>
-				  <td>{{message.SenderID}}</td>
+				  <td>{{message.Sender_First}} {{message.Sender_Last}}</td>
 				  <td>{{message.Subject}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
@@ -84,7 +84,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderID}} </br>
+					<strong>From:</strong> {{selectedMessage.Sender_First}} {{selectedMessage.Sender_Last}} </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -119,9 +119,9 @@
 				  <th>Time</th>
                   <th>Date</th>
                 </tr>
-                <tr ng-repeat="message in sentMessages.records" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in sentMessages.records | filter:search" ng-click="togglePopup(message)">
                   <td><input type = "checkbox"> </td>
-                  <td>{{message.SenderID}}</td>
+                  <td>{{message.Receiver_First}} {{message.Receiver_Last}}</td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
@@ -140,7 +140,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderID}} </br>
+					<strong>To:</strong> {{selectedMessage.Receiver_First}} {{selectedMessage.Receiver_Last}} </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -174,7 +174,7 @@
 				  <th>Time</th>
                   <th>Date</th>
                 </tr>
-                <tr ng-repeat="message in draftMessages.records" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in draftMessages.records | filter:search" ng-click="togglePopup(message)">
                   <td><input type = "checkbox"> </td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
@@ -193,7 +193,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderID}} </br>
+					<strong>From:</strong> Me </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -229,9 +229,9 @@
 				  <th>Time</th>
 				  <th>Date</th>
                 </tr>
-                <tr ng-repeat="message in deletedMessages.records" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in deletedMessages.records | filter:search" ng-click="togglePopup(message)">
                   <td><input type = "checkbox"> </td>
-				  <td>{{message.SenderID}}</td>
+				  <td>{{message.Receiver_First}} {{message.Receiver_Last}} {{message.Sender_First}} {{message.Sender_Last}}</td>
 				  <td>{{message.ReceiverID}}</td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
@@ -250,7 +250,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderID}} </br>
+					<strong>From:</strong> {{selectedMessage.Receiver_First}} {{selectedMessage.Receiver_Last}} {{selectedMessage.Sender_First}} {{selectedMessage.Sender_Last}} </br>
 					<strong>To:</strong> {{selectedMessage.ReceiverID}} </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
