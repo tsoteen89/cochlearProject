@@ -11,7 +11,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Left Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.0.LeftAidCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.LeftAidCondition" ng-blur="">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
                 
@@ -22,7 +22,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Right Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.0.RightAidCondition" ng-blur="addAnswerObject()">
+                <select ng-model="answer.0.RightAidCondition" ng-blur="">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
 
@@ -39,7 +39,7 @@
 
                     <div ng-repeat="categories in audioQuestions.Categories">
                         <input  type="Checkbox" checklist-value="categories.AudioCategory"
-                               checklist-model="answer.tests" ng-blur="addAnswerObject()">
+                               checklist-model="answer.tests" ng-blur="">
                         <label class="choice">{{categories.AudioCategory}}</label> 
                     </div>
 
@@ -58,17 +58,56 @@
                                         
                                         <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
                                             <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="addAnswerObject()">
+                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="">
                                         </div>
 
 
                                         <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
-                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="addAnswerObject()">
+                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="">
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
                                         
+                                        <div ng-if="categories.AudioCategory == 'Comprehensive Diagnostic Audiogram'">
+                                            <div ng-repeat="testCategories in results.Comprehensive_Diagnostic_Audiogram">
+                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                    <div ng-if="type.Name == testResults.Field_Name">
+                                                        {{type.Name}}: {{testResults.Value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div ng-if="categories.AudioCategory == 'AzBio'">
+                                            <div ng-repeat="testCategories in results.AzBio">
+                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                    <div ng-if="type.Name == testResults.Field_Name">
+                                                        {{type.Name}}: {{testResults.Value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div ng-if="categories.AudioCategory == 'CNC'">
+                                            <div ng-repeat="testCategories in results.CNC">
+                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                    <div ng-if="type.Name == testResults.Field_Name">
+                                                        {{type.Name}}: {{testResults.Value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div ng-if="categories.AudioCategory == 'BKB-SIN'">
+                                            <div ng-repeat="testCategories in results.BKB_SIN">
+                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                    <div ng-if="type.Name == testResults.Field_Name">
+                                                        {{type.Name}}: {{testResults.Value}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    </div>
+                                    </div>          
                                 </div>
                             </div>
                         </div>
@@ -81,10 +120,18 @@
 
     </div>
     <button ng-click="incAnswerArray()">Increment Answer Array</button><br>
+
     
-    {{answerArrayIndex}}<br>
+
     
-    Answer: {{answer}}
+    <!--{{results.Comprehensive_Diagnostic_Audiogram}}-->
+
+    <div ng-repeat="this in results.Comprehensive_Diagnostic_Audiogram">
+        <div ng-repeat="inside in this">
+            {{inside.Field_Name}}
+        </div>
+    </div>
+
 
 </div>
     

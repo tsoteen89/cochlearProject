@@ -262,6 +262,12 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.answer[0]["CareTeamID"] = persistData.getCareTeamID();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7";
+    
+    $scope.results = {};
+    getData.get($scope.resultsURL).success(function(data) {
+        $scope.results = data.records;
+    });
     
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
