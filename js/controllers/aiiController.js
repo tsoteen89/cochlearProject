@@ -479,9 +479,10 @@ controllers.editUserController = function($scope, $http, getData, putData){
 
 
 //Controller used on messages to process API methods for Users' Messages
-controllers.apiMessagingController = function ($scope, $http, $templateCache, persistData, getData) {   
+controllers.apiMessagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData) {   
     
     $scope.messages = {};
+	$scope.userID = 30;
     $scope.currentContent = "";
     $scope.isPopupVisible = false;
     
@@ -517,6 +518,15 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, pe
 	
 	 //Grab all deleted messages using patientURL 
     getData.get($scope.deletedURL).success(function(data) {
+		for(i = 0; i < data.records.length; i++)
+		{
+			if(data.records[i].Sender_First == null && data.records[i].Sender_Last == null){
+				data.records[i].Sender_First = 'Me';
+			}
+			if(data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null){
+				data.records[i].Receiver_First = 'Me';
+			}
+		}
         $scope.deletedMessages = data;
     });
 	
@@ -539,6 +549,94 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, pe
 			return userName;
 		});
 	};
+	
+	$scope.reply = function(){
+		$scope.composeMessage = {};
+		
+		messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
+		messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
+		
+		//Format the new reply message with info from the original message
+		$scope.composeMessage.ReceiverID = $scope.selectedMessage.SenderID;
+		$scope.composeMessage.Subject = "RE: " + $scope.selectedMessage.Subject;
+		$scope.composeMessage.Content = "\n\n------------------------------\n"
+									+	"From: " + $scope.selectedMessage.Sender_First + " " + $scope.selectedMessage.Sender_Last + "\n"
+									+	"Subject: " + $scope.selectedMessage.Subject + "\n"
+									+	"Time: " + messageTime + "\n"
+									+	"Date: " + messageDate + "\n\n"
+									+ 	$scope.selectedMessage.Content;
+	}	
+	
+	$scope.forward = function(){
+		$scope.composeMessage = {};
+		
+		messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
+		messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
+		
+		//Format the new reply message with info from the original message
+		$scope.composeMessage.Subject = "FWD: " + $scope.selectedMessage.Subject;
+		$scope.composeMessage.Content = "\n\n------------------------------\n"
+									+	"Subject: " + $scope.selectedMessage.Subject + "\n"
+									+	"Time: " + messageTime + "\n"
+									+	"Date: " + messageDate + "\n\n"
+									+ 	$scope.selectedMessage.Content;
+	}	
+	
+	$scope.edit = function(){
+		$scope.composeMessage = {};
+		
+		$scope.composeMessage.ReceiverID = $scope.selectedMessage.ReceiverID;
+		$scope.composeMessage.Subject = $scope.selectedMessage.Subject;
+		$scope.composeMessage.Content = $scope.selectedMessage.Content;
+	}	
+	
+	$scope.sendMessage = function(message){
+		//Post the user defined message to the database
+		//input 'message' should only contain the recipient username (currently UserID instead),
+		//the subject, and the message content.
+		
+		//Define the SenderID as the current user
+		message.SenderID = $scope.userID;
+		//Generate Timestamp
+		message.Timestamp = Math.round((new Date().getTime()) / 1000);
+		message.Sent = 1;
+		message.SenderDeleted = 0;
+		message.ReceiverDeleted = 0;
+		
+		//Insure that all elements contain data before posting
+		if(message.ReceiverID && message.Subject && message.Content){
+			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+		}
+		else{
+			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+		}
+	}
+	
+	$scope.saveDraft = function(message){
+		//POST a message where Sent is false. Only the content is required to be filled.
+		message.SenderID = $scope.userID;
+		//Generate Timestamp
+		message.Timestamp = Math.round((new Date().getTime()) / 1000);
+		message.Sent = 0;
+		message.SenderDeleted = 0;
+		message.ReceiverDeleted = 0;
+		
+		//Insure that all elements contain data before posting
+		if(message.Content){
+			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+		}
+		else{
+			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+		}
+	}
+	
+	$scope.clearComposedMessage = function(){
+		$scope.composeMessage = {};
+	}
+	
+	$scope.order = function(filter){
+		$scope.filter = filter;
+	}
 };  
 
 
