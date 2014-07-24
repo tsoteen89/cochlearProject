@@ -525,12 +525,15 @@ controllers.editUserController = function($scope, $http, getData, putData){
 //Controller used on messages to process API methods for Users' Messages
 controllers.apiMessagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData) {   
     
-    $scope.messages = {};
+	//User's ID (will be retrieved using session data)
 	$scope.userID = 30;
-    $scope.currentContent = "";
+	//Controls the message display popup
     $scope.isPopupVisible = false;
+	//OrderBy property : true means display contents in reverse order  
 	$scope.reverse = true;
-    
+    //Messages that have been marked (for deleting, marking as read, or marking as unread)
+	$scope.markedMessages = [];
+	
     $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
 	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
 	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
@@ -538,16 +541,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
     
     //Grab all inbox messages using patientURL 
     getData.get($scope.inboxURL).success(function(data) {
-		//Alter the data to use full names instead of id numbers
-		/* for(i = 0; i < (data.records).length; i++){
-			senderName = getName((data.records[i]).SenderID);
-			receiverName = getName((data.records[i]).ReceiverID);
-			console.log("Received: " + senderName);
-			console.log("Received: " + receiverName);
-			
-			data.records[i].SenderID = senderName;
-			data.records[i].ReceiverID = receiverName;
-		} */
+		//Combine First and Last into Name for each message
 		for(i = 0; i < data.records.length; i++)
 		{
 			data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
@@ -558,6 +552,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	
 	 //Grab all sent messages using patientURL 
     getData.get($scope.sentURL).success(function(data) {
+		//Combine First and Last into Name for each message
 		for(i = 0; i < data.records.length; i++)
 		{
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
@@ -568,6 +563,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	
 	 //Grab all draft messages using patientURL 
     getData.get($scope.draftsURL).success(function(data) {
+		//Combine First and Last into Name for each message
 		for(i = 0; i < data.records.length; i++)
 		{
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
@@ -578,6 +574,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	
 	 //Grab all deleted messages using patientURL 
     getData.get($scope.deletedURL).success(function(data) {
+		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
 		for(i = 0; i < data.records.length; i++)
 		{
 			if(data.records[i].Sender_First == null && data.records[i].Sender_Last == null){
@@ -592,6 +589,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
         $scope.deletedMessages = data;
     });
 	
+	//Toggles visibility of the message content display
 	$scope.togglePopup = function(message){
 		if($scope.selectedMessage == message || message == null){
 			$scope.isPopupVisible = false;
@@ -603,15 +601,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 	};
 	
-	function getName(userID){
-		userURL = "http://killzombieswith.us/aii-api/v1/users/" + userID + "/";
-		getData.get(userURL).success(function(data){
-			userName = (data.records[0]).first_name + " " + (data.records[0]).last_name;
-			console.log("Returning: " + userName);
-			return userName;
-		});
-	};
-	
+	//Handles creation of replies to the selectedMessage
 	$scope.reply = function(){
 		$scope.composeMessage = {};
 		
@@ -629,6 +619,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 									+ 	$scope.selectedMessage.Content;
 	}	
 	
+	//Handles creation of 'forwards' of the selectedMessage
 	$scope.forward = function(){
 		$scope.composeMessage = {};
 		
@@ -646,6 +637,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 									+ 	$scope.selectedMessage.Content;
 	}	
 	
+	//Moves the contents of a draft message into the composing message
 	$scope.edit = function(){
 		$scope.composeMessage = {};
 		
@@ -654,6 +646,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		$scope.composeMessage.Content = $scope.selectedMessage.Content;
 	}	
 	
+	//Posts the input message after properly filling out the appropriate fields of the message
 	$scope.sendMessage = function(message){
 		//Post the user defined message to the database
 		//input 'message' should only contain the recipient username (currently UserID instead),
@@ -676,6 +669,8 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 	}
 	
+	//Posts the input message similarly to the 'sendMessage' function, but marks the Sent property as
+	//false. This message will populate the user's 'draft' section instead of their 'sent' section
 	$scope.saveDraft = function(message){
 		//POST a message where Sent is false. Only the content is required to be filled.
 		message.SenderID = $scope.userID;
@@ -694,13 +689,52 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 	}
 	
+	//Erases the content in the composed message fields
 	$scope.clearComposedMessage = function(){
 		$scope.composeMessage = {};
 	}
 	
+	//Controls the ordering of messages. Filter is the field AngularJS will order messages by.
 	$scope.order = function(filter){
 		$scope.reverse = !($scope.reverse);
 		$scope.orderFilter = filter;
+	}
+	
+	//Controls the marking of messages for different PUT functions (marking as deleted, read, or unread)
+	$scope.markMessage = function(message){
+		//If the message has already been marked, unmark it by removing it from the array
+		foundMessage = false;
+		foundMessageIndex = -1;
+		for(i = 0; i < $scope.markedMessages.length; i++){
+			if($scope.markedMessages[i] == message){
+				foundMessage = true;
+				//Remove the input message from the marked array
+				$scope.markedMessages.splice(i,1);
+			}
+		}
+		//If the message was not a marked message, mark it
+		if(!foundMessage){
+			$scope.markedMessages.push(message);
+		}
+	}
+	
+	$scope.markAllMessages = function(messages){
+	
+	}
+	
+	//Changes the marked messages to have Read = true with a PUT request 
+	$scope.markAsRead = function(){
+	
+	}
+	
+	//Changes the marked messages to have Read = false with a PUT request 
+	$scope.markAsUnread = function(){
+	
+	}
+	
+	//Changes the marked messages to have Read = true with a PUT request 
+	$scope.markAsDeleted = function(){
+	
 	}
 };  
 
