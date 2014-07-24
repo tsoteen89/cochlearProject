@@ -789,7 +789,25 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	$scope.deleteSelectedMessage = function(){
 		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
 		//Change the message's Deleted attribute to true
-		$scope.selectedMessage.Deleted = 1;
+		if($scope.selectedMessage.ReceiverName == "Me"){
+			$scope.selectedMessage.ReceiverDeleted = 1;
+		}
+		else{
+			$scope.selectedMessage.SenderDeleted = 1;
+		}
+		//PUT the message using the message URL
+		putData.put(messageURL,$scope.selectedMessage);
+	}
+	
+	$scope.restoreSelectedMessage = function(){
+		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+		//Change the message's Deleted attribute to true
+		if($scope.selectedMessage.ReceiverName == "Me"){
+			$scope.selectedMessage.ReceiverDeleted = 0;
+		}
+		else{
+			$scope.selectedMessage.SenderDeleted = 0;
+		}
 		//PUT the message using the message URL
 		putData.put(messageURL,$scope.selectedMessage);
 	}
