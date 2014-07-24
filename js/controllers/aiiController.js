@@ -303,8 +303,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         console.log("clearCurrentTest Called");
         console.log(data);
         if(data == "Comprehensive Diagnostic Audiogram"){
-            $scope.answer[1]['10'] = null;
-            $scope.answer[1]['20'] = null;
             $scope.answer[1]['30'] = null;
             $scope.answer[1]['40'] = null;
             $scope.answer[1]['50'] = null;
