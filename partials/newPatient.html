@@ -20,6 +20,8 @@
             <!-- New Patient Header --> 
             <div style="margin-left: 70%; margin-top:10%; background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:120%; float: left; display:block;">
                 
+                <div style="float:right">Patient ID: {Placeholder}</div>
+                
                 
             <div class="panel-body" ng-controller="TabController as tab">
                 <div class="tabbable"> 
@@ -32,24 +34,18 @@
                           <div class="controls" >
                             <input style="width: 200px" type="text" class="form-control" name="fname" ng-model="formData.First" ng-required="true" placeholder="Enter First Name" ng-blur="fillBar()" alphabet>
                           </div>
-                        </div>
-                        
-                        <div class="control-group col-md-5" >
-                          <label>Patient ID</label>
-                          <div class="controls" >
-                            <input style="width: 200px" type="text" class="form-control" name="PatientID" ng-model="formData.PatientID" ng-required="true" placeholder="Enter Patient ID" ng-blur="fillBar()" integer ng-minlength="4" ng-maxlength="4">
-                          </div>
-                        </div>    
-                          
-                    </div><br>
-
-                    <div class="row">      
+                        </div>  
+            
                         <div class="control-group col-md-5" >
                           <label>Last Name</label>
                           <div class="controls" >
                             <input style="width: 200px" type="text" class="form-control" name="lname" ng-model="formData.Last" ng-required="true" placeholder="Enter Last Name" ng-blur="fillBar()" alphabet>
                           </div>
                         </div>
+                          
+                    </div><br>
+
+                    <div class="row">      
 
                         <hr>        
 
@@ -86,36 +82,7 @@
                                 </select>
                             </div>                        
                         </div>
-                    </div><br>
-
-                    <div class="row">      
-                        <div class="control-group col-md-3" >
-                            <label>BMI</label>
-                            <div class="controls" >
-                                <select name="BMI" ng-model="formData.BMI" ng-required="true" ng-blur="fillBar()">
-                                    <option ng-repeat="BMI in bmis">{{BMI}}</option>
-                                </select>
-                            </div>                        
-                        </div>                    
-
-                        <div class="control-group col-md-3" >
-                            <div class="controls" >
-                                <label>Height: (inches)</label>
-                                <select name="Height" ng-model="formData.Height" ng-blur="fillBar()">
-                                    <option ng-repeat="Height in heights">{{Height}}</option>
-                                </select>
-                            </div>    
-                        </div>    
-                            <div class="control-group col-md-3" >
-                            <div class="controls" >
-
-                                <label>Weight</label><br>
-                                <select name="Weight" ng-model="formData.Weight" ng-blur="fillBar()">
-                                    <option ng-repeat="Weight in weights">{{Weight}}</option>
-                                </select>
-                                </div>
-                                </div>                        
-                        </div><br>                         
+                    </div><br>                       
 
                         <hr>
 
