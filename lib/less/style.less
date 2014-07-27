@@ -27,11 +27,27 @@
 		
 		font-size: 20px;
 		color: #787878;
-		@media (max-width: 300px) {
+		@media (max-width: 310px) {
 			top: 20px;
-		    font-size: 13px;
+		    font-size: 11px;
+		    font-weight: bold;
 		}
+	}
 
+	.nav-items {
+		@media (max-width: 805px) {
+			button {
+
+				margin-left: 5px;
+			}
+		}
+		@media (min-width: 806px) {
+
+			button {
+
+				margin-left: 23px;
+			}
+		}
 	}
 }
 /************************************END TOP NAVBAR*************************************/
@@ -49,6 +65,11 @@
 
 #cp_loginContainer {
 	
+	@media (max-width: 770px){
+	
+		margin-top: 110px;	
+	} 
+
 	margin-top: 150px;
 
 	#loginForm {
