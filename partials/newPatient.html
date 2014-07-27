@@ -16,9 +16,10 @@
                 </div>
             </div> 
         -->
+<div class="container">
 <div class="col-md-5">        
             <!-- New Patient Header --> 
-            <div style="margin-left: 70%; margin-top:10%; background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:120%; float: left; display:block;">
+            <div style="margin-left: 25%; margin-top:5%; background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:180%; float: left; display:block;">
                 
                 <div style="float:right">Patient ID: {Placeholder}</div>
                 
@@ -82,7 +83,39 @@
                                 </select>
                             </div>                        
                         </div>
+
+                    </div><br>
+
+                    <div class="row">      
+                        <div class="control-group col-md-2" >
+                            <label>BMI</label>
+                            <div class="controls" >
+                                <select name="BMI" ng-model="formData.BMI" ng-required="true" ng-blur="fillBar()">
+                                    <option ng-repeat="BMI in bmis">{{BMI}}</option>
+                                </select>
+                            </div>                        
+                        </div>                    
+
+                        <div class="control-group col-md-2" >
+                            <div class="controls" >
+                                <label>Height: (inches)</label>
+                                <select name="Height" ng-model="formData.Height" ng-blur="fillBar()">
+                                    <option ng-repeat="Height in heights">{{Height}}</option>
+                                </select>
+                            </div>    
+                        </div>    
+                            <div class="control-group col-md-2" >
+                            <div class="controls" >
+
+                                <label>Weight</label><br>
+                                <select name="Weight" ng-model="formData.Weight" ng-blur="fillBar()">
+                                    <option ng-repeat="Weight in weights">{{Weight}}</option>
+                                </select>
+                                </div>
+                                </div>                        
+                        </div><br>                         
                     </div><br>                       
+
 
                         <hr>
 
@@ -99,5 +132,7 @@
 </div>
 <!--        </div>
         </div>-->
+        </div>
+    </div>
         </div>
         </div>
