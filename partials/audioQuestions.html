@@ -1,6 +1,6 @@
 <!--Audio Questions-->
 <div data-ng-controller="audioQuestionsController" >
-    <label style="font-size:2vw; color:#4B92AE">Audio Questions Page</label>
+    <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
     <hr>
 
     <div class="col-md-8" style="margin-left: 5%">
@@ -22,7 +22,7 @@
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Right Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="answer.0.RightAidCondition" ng-blur="">
+                <select ng-model="answer.0.RightAidCondition" ng-blur="updateResults()">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
 
@@ -67,21 +67,23 @@
                                             <option ng-repeat="values in type.Values">{{values}}</option>
                                         </select>
                                         
+                                        <br>
+                                        <br>
                                         <div ng-if="categories.AudioCategory == 'Comprehensive Diagnostic Audiogram'">
                                             <div ng-repeat="testCategories in results.Comprehensive_Diagnostic_Audiogram">
-                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
-                                                        {{type.Name}}: {{testResults.Value}}
+                                                        {{type.Name}}: {{testResults.Value}} <br>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div ng-if="categories.AudioCategory == 'AzBio'">
                                             <div ng-repeat="testCategories in results.AzBio">
-                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
-                                                        {{type.Name}}: {{testResults.Value}}
+                                                        {{type.Name}}: {{testResults.Value}} <br>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,9 +91,9 @@
                                         
                                         <div ng-if="categories.AudioCategory == 'CNC'">
                                             <div ng-repeat="testCategories in results.CNC">
-                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
-                                                        {{type.Name}}: {{testResults.Value}}
+                                                        {{type.Name}}: {{testResults.Value}} <br>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,9 +101,9 @@
                                         
                                         <div ng-if="categories.AudioCategory == 'BKB-SIN'">
                                             <div ng-repeat="testCategories in results.BKB_SIN">
-                                                <div style="float:left" ng-repeat="testResults in testCategories">
+                                                <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
-                                                        {{type.Name}}: {{testResults.Value}}
+                                                        {{type.Name}}: {{testResults.Value}} <br>
                                                     </div>
                                                 </div>
                                             </div>
@@ -109,21 +111,17 @@
 
                                     </div>          
                                 </div>
+                                <button ng-click="clearCurrentTest(test)">Add Test Under Current Conditions</button>
                             </div>
                         </div>
                     </div> 
                 </div>
-                <br><br><br><br><br>
-                <button class="questionsButton" ng-click="updateResults()">SUBMIT</button>
+                <br><br><br>
             </div>
         
 
     </div>
-    <button ng-click="incAnswerArray()">Increment Answer Array</button><br>
-    <button ng-click="updateResults()">Update Results</button>
     <br>
-    Results: {{results}}
-
 
 </div>
     

@@ -58,17 +58,17 @@
               <table class="table table-striped table-hover">
 				<tr>
                   <th>
-                    <input type="checkbox"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
+                    <input type="checkbox" name="selectAllMessages" ng-click="markAllMessages(this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
                     </a>
                   </th>
-                  <th ng-click="order(Sender_First)">From</th>
-                  <th ng-click="order(Subject)">Subject</th>
-                  <th ng-click="order(Timestamp)">Time</th>
-				  <th ng-click="order(Timestamp)">Date</th>
+                  <th ng-click="order('SenderName')">From</th>
+                  <th ng-click="order('Subject')">Subject</th>
+                  <th ng-click="order('Timestamp')">Time</th>
+				  <th ng-click="order('Timestamp')">Date</th>
                 </tr>
-				<tr ng-repeat="message in inboxMessages.records | filter:search" ng-click="togglePopup(message)">
-				  <td><input type="checkbox"> </td>
-				  <td>{{message.Sender_First}} {{message.Sender_Last}}</td>
+				<tr ng-repeat="message in inboxMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
+				  <td><input type="checkbox" name="messageCheckbox" onclick="markMessage(message, this)"> </td>
+				  <td>{{message.SenderName}}</td>
 				  <td>{{message.Subject}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
@@ -82,7 +82,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.Sender_First}} {{selectedMessage.Sender_Last}} </br>
+					<strong>From:</strong> {{selectedMessage.SenderName}} </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -91,6 +91,7 @@
 					</p>
 				</div>
 				<div class="modal-footer">
+					<a class="btn btn-primary" ng-click="tab.selectTab(-1); deleteSelectedMessage()">Delete</a>
 					<a class="btn btn-primary" ng-click="tab.selectTab(1); reply()">Reply</a>
 					<a class="btn btn-primary" ng-click="tab.selectTab(1); forward()">Forward</a>
 					<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
@@ -115,14 +116,14 @@
                      <input type="checkbox"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
                     </a>
                   </th>
-                  <th>To</th>
-                  <th>Subject</th>
-				  <th>Time</th>
-                  <th>Date</th>
+                  <th ng-click="order('ReceiverName')">To</th>
+                  <th ng-click="order('Subject')">Subject</th>
+				  <th ng-click="order('Timestamp')">Time</th>
+                  <th ng-click="order('Timestamp')">Date</th>
                 </tr>
-                <tr ng-repeat="message in sentMessages.records | filter:search" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in sentMessages.records | filter:search | orderBy:'Timestamp'" ng-click="togglePopup(message)">
                   <td><input type="checkbox"> </td>
-                  <td>{{message.Receiver_First}} {{message.Receiver_Last}}</td>
+                  <td>{{message.ReceiverName}}</td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
@@ -136,7 +137,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>To:</strong> {{selectedMessage.Receiver_First}} {{selectedMessage.Receiver_Last}} </br>
+					<strong>To:</strong> {{selectedMessage.ReceiverName}} </br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -172,7 +173,7 @@
 				  <th>Time</th>
                   <th>Date</th>
                 </tr>
-                <tr ng-repeat="message in draftMessages.records | filter:search" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in draftMessages.records | filter:search | orderBy:'Timestamp'" ng-click="togglePopup(message)">
                   <td><input type="checkbox"> </td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
@@ -186,7 +187,7 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> Me </br>
+					<strong>From:</strong> {{selectedMessage.SenderName}}</br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
@@ -224,10 +225,10 @@
 				  <th>Time</th>
 				  <th>Date</th>
                 </tr>
-                <tr ng-repeat="message in deletedMessages.records | filter:search" ng-click="togglePopup(message)">
+                <tr ng-repeat="message in deletedMessages.records | filter:search | orderBy:'Timestamp'" ng-click="togglePopup(message)">
                   <td><input type="checkbox"> </td>
-				  <td>{{message.Sender_First}} {{message.Sender_Last}}</td>
-				  <td>{{message.Receiver_First}} {{message.Receiver_Last}}</td>
+				  <td>{{message.SenderName}}</td>
+				  <td>{{message.ReceiverName}}</td>
                   <td>{{message.Subject}}</td>
                   <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
@@ -240,8 +241,8 @@
 					<h3>{{selectedMessage.Subject}}</h3>
 				</div>
 				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.Sender_First}} {{selectedMessage.Sender_Last}}</br>
-					<strong>To:</strong> {{selectedMessage.Receiver_First}} {{selectedMessage.Receiver_Last}}</br>
+					<strong>From:</strong> {{selectedMessage.SenderName}}</br>
+					<strong>To:</strong> {{selectedMessage.ReceiverName}}</br>
 					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
 					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
 					</br>
