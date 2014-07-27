@@ -1,4 +1,14 @@
 <body>
+     <div class = "container" ng-if = "!loggedIn" style = "margin-top: 10px;">
+        <div class = "row">
+            <div class = "col-md-12" style = "text-align:center;">
+                <div ng-controller = "logoutControl">
+                    <p style = "margin-right: 5px;">Logout button for testing purposes only!</p><button class = "btn btn-primary" ng-click = "logout()">logout</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div id = "cp_loginContainer" ng-if = "!loggedIn">
         <div class = "container"> 
             <div class = "row">
@@ -20,18 +30,9 @@
                             <p><a class = "cp_forgotPasswordLink" href="route.html">Forgot Password</a></p>
 
                             <button type="submit" class = "btn btn-primary" form="loginForm" ng-click="makeTrue()">Login</button>
-                        </div>   
+                        </div>
+   
                     </form>            
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class = "container" ng-if = "!loggedIn" style = "margin-top: 10px;">
-        <div class = "row">
-            <div class = "col-md-12" style = "text-align:center;">
-                <div ng-controller = "logoutControl">
-                    <p style = "margin-right: 5px;">Logout button for testing purposes only!</p><button class = "btn btn-primary" ng-click = "logout()">logout</button>
-
                 </div>
             </div>
         </div>
