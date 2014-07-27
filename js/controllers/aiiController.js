@@ -553,7 +553,7 @@ controllers.phaseProgressCtrl = function ($scope){
 
 
 controllers.loginControl = function ($scope,$http,$window,persistData){
-    console.log($scope);
+    
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
@@ -573,23 +573,22 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
         
         $http({
             method  : 'POST',
-            //url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
-            url     : '../../aii-api/v1/sessionLogs',
+            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+            //url     : '../../aii-api/v1/sessionLogs',
             data    : $scope.userlogin,
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            //console.log(data.data.records);
-            console.log(data.data);
+            
             if(data.data.records == true){
-                // $scope.x = response.data.records;
+                
                 persistData.setLoggedIn(true);
                 $scope.loggedIn = true;
-                //$window.location.href = "#/dashboard";
+                $window.location.href = "#/dashboard";
             }
             else {
-                console.log("Mando");
-               // $window.location = "./";
+                
+                $window.location = "./";
             }
         });
     }
