@@ -2,62 +2,6 @@
 
 var myApp = angular.module('myApp.directives', []);
 
-myApp.directive('newPatientForm', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/new-patient-form.html'
-	}
-});	
-
-myApp.directive('editPatientContact', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/edit-patient-contact.html'
-	}
-});	
-
-myApp.directive('periopTab', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/periop-tab.html'
-	}
-});	
-
-myApp.directive('candidacyTab', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/candidacy-tab.html'
-	}
-});	
-
-myApp.directive('audiometricTesting', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/audiometric-testing.html'
-	}
-});
-
-myApp.directive('demographicsTab', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/demographics-tab.html'
-	}
-});
-
-myApp.directive('surgicalConsultTab', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/surgical-consult-tab.html'
-	}
-});
-
-myApp.directive('oneWeekTab', function() {
-	return {
-		restrict: 'E',
-		templateUrl: 'directives/one-week-tab.html'
-	}
-});
-
 var INTEGER_REGEXP = /^\-?\d+$/;
 myApp.directive('integer', function() {
     
@@ -130,3 +74,20 @@ myApp.directive('phone', function(){
     
 
 });
+
+myApp.directive('dateInput', function(dateFilter) {
+            return {
+                require: 'ngModel',
+                template: '<input type="date"></input>',
+                replace: true,
+                link: function(scope, elm, attrs, ngModelCtrl) {
+                    ngModelCtrl.$formatters.unshift(function (modelValue) {
+                        return dateFilter(modelValue, 'yyyy-MM-dd');
+                    });
+                    
+                    ngModelCtrl.$parsers.unshift(function(viewValue) {
+                        return new Date(viewValue);
+                    });
+                },
+            };
+    });
