@@ -1,0 +1,48 @@
+Time: 1404635297
+careTeams (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404752669
+careTeams (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404752749
+careTeams (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404980017
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404980081
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404981761
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND (Result: {"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404981768
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND (Result: {"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404981955
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND (Result: {"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
+Time: 1404982798
+careTeams (GET) - Tests Successful
+careTeams (POST) - POSTED CARE TEAM NOT FOUND (Result: {"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+careTeams/(id) (GET) - Tests Successful
+careTeams/(id)/facilities (GET) - Tests Successful
+
