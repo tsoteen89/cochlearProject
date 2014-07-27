@@ -60,7 +60,7 @@ myApp.factory('persistData', function () {
     var CareTeamID;
     var PhaseID;
     var loggedIn;
-
+    var PhaseName;
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
@@ -70,11 +70,18 @@ myApp.factory('persistData', function () {
             PhaseID = data;
             console.log(data);
         },
+        setPhaseName: function (data) {
+            PhaseName = data;
+            console.log(data);
+        },
         getCareTeamID:function () {
             return CareTeamID;
         },
         getPhaseID: function (data) {
             return PhaseID;
+        },
+        getPhaseName:function () {
+            return PhaseName;
         },
         setLoggedIn: function (data) {
             loggedIn = data;
@@ -106,6 +113,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.phaseName=persistData.getPhaseName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
@@ -254,6 +262,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
     $scope.loggedIn = persistData.getLoggedIn();
+    $scope.phaseName= persistData.getPhaseName();
     $scope.answer = [];
     $scope.answer[0] = {};
     $scope.answerArrayIndex = 1;
@@ -415,7 +424,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.goToQuestions = function(careTeam, phase){
         
         persistData.setCareTeamID(careTeam.CareTeamID);
-        persistData.setPhaseID(phase);
+        persistData.setPhaseID(phase.PhaseID);
+        persistData.setPhaseName(phase.Name);
     };
 
 };  
