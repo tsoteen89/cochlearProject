@@ -118,6 +118,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
     
+    $scope.patientSummaryAnswers = {};
+    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + 1;
+    
+    getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+        $scope.patientSummaryAnswers = data.records.Answers;            
+    });
+    
     //Get Number of Questions contained in a phase
     getData.get($scope.questionsURL).success(function(data) {
         $scope.numberOfQuestions = data.records.length;
@@ -266,8 +273,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             }
         }
     }
+    
+    $scope.patientSummary = function(phaseNumber){
+        console.log(phaseNumber);
+        $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
+        getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+            $scope.patientSummaryAnswers = data.records.Answers;            
+        });
+    }
 };
+    
     
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
