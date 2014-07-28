@@ -22,7 +22,7 @@
 <body ng-controller="loginControl" id = "cp_background-gradient"> 
     
     <div id = "cp_topNavigation"> 
-        <nav class = "navbar navbar-default" role = "navigation">
+        <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
             <div class = "container-fluid">
                 <div class = "navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-responsive-collapse" data-target-2 = "#nav-responsive-collapse-1">
@@ -61,8 +61,8 @@
     </div>
     
     <!-- Left Side Bar -->
-    
-    <div ng-if="loggedIn" class="col-sm-2 col-md-1"style="background-color: #5CB8E6;padding: 0 0 0 0; width:8%; height:90%">
+
+    <!-- <div ng-if="loggedIn" class="col-sm-2 col-md-1"style="background-color: #5CB8E6;padding: 0 0 0 0; width:8%; height:90%">
         <a href="#/dashboard"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-tachometer fa-3x"></i><br><text style="font-size: .8vw">Dashboard</text>
         </div></a>
         <a href="#/messages"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-envelope fa-3x"></i><br><text style="font-size: .8vw">Messages</text>
@@ -73,12 +73,63 @@
         </div></a>
         <a href="#/addUser"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-user fa-3x"><i class="fa fa-plus fa-1x"></i></i><br><text style="font-size: .8vw">Add User</text>
         </div></a>
-    </div>
-      
-    <div ng-view=""></div>
+    </div> -->
+     <!-- Sidebar -->
 
+    <div id = "wrapper">
+        <div id="sidebar-wrapper">     
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    <li>
+                        <a href="#/dashboard" data-scroll>
+                            <span class = "fa fa-tachometer fa-3x"></span>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/messages" data-scroll>
+                            <span class = "fa fa-envelope fa-3x"></span>
+                            <p>Messages</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/patientDirectory" data-scroll>
+                            <span class = "fa fa-users fa-3x"></span>
+                            <p>Patient Directory</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/newPatient" data-scroll>
+                            <span class = "fa fa-plus-circle fa-3x"></span>
+                            <p>New Patient</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/addUser" data-scroll>
+                            <span class = "fa fa-user fa-3x"></span>
+                            <i class = "plus-user fa fa-plus fa-1x"></i>
+                            <p>Add User</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id = "page-content-wrapper">
+             <div class="content-header" style = "margin-top: 50px;">
+                <h1 id="home">
+                    <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                        
+                    </a>
+                </h1>
+            </div>
+            <div class = "page-content inset" data-spy = "scroll" data-target = "#spy">
+                <!-- <div class = "row"> -->
+                    <div ng-view=""></div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div> 
 </body>
-
 
 </html>
 
@@ -91,3 +142,4 @@
 <script src="js/myApp.directives.js"></script>
 <script src="js/controllers/aiiController.js"></script>
 <script src="js/ui-bootstrap.min.js"></script>
+<script src="lib/sideToggle.js"></script>
