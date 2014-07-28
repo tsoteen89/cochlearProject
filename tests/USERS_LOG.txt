@@ -1,0 +1,361 @@
+Time: 1404636034
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404752044
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404753642
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404753660
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404847816
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404848195
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404848283
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+Time: 1404848381
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404848725
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404924829
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404925054
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404925100
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404925160
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404925909
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404929368
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404929445
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404932165
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404932181
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404932371
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+Time: 1404932425
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404932492
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404933199
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404934426
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404934523
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404972584
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404973784
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404973811
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+Time: 1404973907
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404974713
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 169 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users (POST) - Tests Successful
+users/(id) (GET) - Tests Successful
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404975109
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 169 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 170 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users (POST) - Tests Successful
+users/(id) (GET) - Tests Successful
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404978183
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 169 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 170 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 171 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users (POST) - Tests Successful
+users/(id) (GET) - Tests Successful
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1404980890
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 169 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 170 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 171 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 172 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID's are not sequential
+users (POST) - Tests Successful
+users/(id) (GET) - Tests Successful
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+
+Time: 1406502897
+users (GET) - UserID: 162 - PASSWORD LESS THAN 6 CHARACTERS (password: adsfs)
+users (GET) - UserID: 164 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 165 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 165 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 166 - DUPLICATE USERNAME (username: TEST)
+users (GET) - UserID: 166 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 167 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 168 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 169 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 170 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 171 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 172 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 173 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 174 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 175 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 176 - PASSWORD LESS THAN 6 CHARACTERS (password: TEST)
+users (GET) - UserID: 178 - PASSWORD LESS THAN 6 CHARACTERS (password: 3141)
+users (GET) - UserID's are not sequential
+users (POST) - POSTED USER NOT FOUND (Result: User: )
+users/(id) (GET) - Tests Successful
+users/(id)/inbox (GET) - Tests Successful
+users/(id)/sent (GET) - Tests Successful
+users/(id)/drafts (GET) - Tests Successful
+users/(id)/deleted (GET) - Tests Successful
+

@@ -1,0 +1,251 @@
+Time: 1404376040
+Tests Successful
+
+Time: 1404376048
+Tests Successful
+
+Time: 1404400497
+Tests Successful
+
+Time: 1404633555
+facilities (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+
+Time: 1404633928
+facilities (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404634062
+facilities (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404978226
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND
+facilities/(id) (GET) - 'facilities/(id)' RECORD DOES NOT MATCH THE 'facilities' RECORD
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404978733
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND
+facilities/(id) (GET) - 'facilities/(id)' RECORD DOES NOT MATCH THE 'facilities' RECORD
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404978791
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND
+facilities/(id) (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404981803
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND (Result: Sorry, the following problems were generated: City is required<br/>State is required<br/>Zipcode is required<br/>{"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+facilities/(id) (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404981913
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND (Result: )
+facilities/(id) (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+
+Time: 1404982714
+facilities (GET) - FacilityID: 100 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 101 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 102 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 103 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 104 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 105 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 106 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 107 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 108 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 109 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 110 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 111 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 112 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 113 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 114 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 115 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 116 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 117 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 118 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 119 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 120 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 121 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 122 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 123 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 124 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 125 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 126 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 127 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 128 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 129 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 130 - EMPTY ZIPCODE FIELD
+facilities (GET) - FacilityID: 131 - EMPTY ZIPCODE FIELD
+facilities (POST) - POSTED FACILITY NOT FOUND (Result: Sorry, the following problems were generated: City is required<br/>State is required<br/>Zipcode is required<br/>{"_meta":{"status":"SUCCESS","count":1},"records":["Post \/ stub"]})
+facilities/(id) (GET) - Tests Successful
+facilities/(id)/patients (GET) - Tests Successful
+facilities/(id)/careTeams (GET) - Tests Successful
+

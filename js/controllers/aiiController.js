@@ -606,6 +606,15 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		else{
 			$scope.isPopupVisible = true;
 			$scope.selectedMessage = message;
+			//If the message is a user received message and has not already been marked as read, mark it
+			if($scope.selectedMessage.ReceiverName == 'Me' && $scope.selectedMessage.IsRead == 0)
+			{
+				messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+				//Change the message's Read attribute to true
+				$scope.selectedMessage.IsRead = 1;
+				//PUT the message using the message URL
+				putData.put(messageURL,$scope.selectedMessage);
+			}
 		}
 	};
 	
@@ -727,36 +736,70 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	}
 	
 	//Add all the messages in the input to the marked messages
-	$scope.markAllMessages = function(sourceCheckbox){
+	markAllMessages = function(messageType, sourceCheckbox){
+	
+		switch(messageType){
+			case 'inbox':
+				messages = $scope.inboxMessages.records;
+				checkboxName = 'inboxCheckbox';
+				break;
+			case 'sent':
+				messages = $scope.sentMessages.records;
+				checkboxName = 'sentCheckbox';
+				break;
+			case 'drafts':
+				messages = $scope.draftMessages.records;
+				checkboxName = 'draftCheckbox';
+				break;
+			case 'deleted':
+				messages = $scope.deletedMessages.records;
+				checkboxName = 'deletedCheckbox';
+				break;
+			default:
+				messages = [];
+				break;
+		}
+		
 		//Find all the checkboxes that will be affected by this function
-		checkboxes = document.getElementsByName('messageCheckbox');
-		console.log(checkboxes);
+		checkboxes = document.getElementsByName(checkboxName);
 		for(i = 0; i < checkboxes.length; i++){
 			checkboxes[i].checked = sourceCheckbox.checked;
 		}
 		//If the checkbox is checked, add all messages as marked
-		/*if(sourceCheckbox.checked){
+		if(sourceCheckbox.checked){
 			for(i = 0; i < messages.length; i++){
 				$scope.markedMessages.push(messages[i]);
 			}
 		}
 		//When unchecked, remove all messages from marked
 		else{
-			$scope.markedMessages = {};
-		}*/
+			$scope.markedMessages = [];
+		}
 	}
 	
 	//Remove all messages from the marked messages array
 	$scope.clearMarkedMessages = function(){
-		$scope.markedMessages = {};
+		$scope.markedMessages = [];
+		
+		//Mark all the checkboxes as unchecked
+		checkboxNames = ['inboxCheckbox', 'sentCheckbox','draftCheckbox' ,'deletedCheckbox'];
+		
+		for(i = 0; i < checkboxNames.length; i++)
+		{
+			checkboxes = document.getElementsByName(checkboxNames[i]);
+			for(j = 0; j < checkboxes.length; j++)
+			{
+				checkboxes[j].checked = false;
+			}
+		}
 	}
 	
 	//Changes the marked messages to have Read = true with a PUT request 
 	$scope.markAsRead = function(){
 		for(i = 0; i < $scope.markedMessages.length; i++){
 			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].Read = 1;
+			//Change the message's Read attribute to true
+			$scope.markedMessages[i].IsRead = 1;
 			//PUT the message using the message URL
 			putData.put(messageURL,$scope.markedMessages[i]);
 		}
@@ -767,32 +810,80 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		for(i = 0; i < $scope.markedMessages.length; i++){
 			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
 			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].Read = 0;
+			$scope.markedMessages[i].IsRead = 0;
 			//PUT the message using the message URL
 			putData.put(messageURL,$scope.markedMessages[i]);
 		}
 	}
 	
-	//Changes the marked messages to have Read = true with a PUT request 
+	//Changes the marked messages to have Deleted = true with a PUT request 
 	$scope.markAsDeleted = function(){
 		for(i = 0; i < $scope.markedMessages.length; i++){
 			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
 			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].Deleted = 1;
+			if($scope.markedMessages[i].ReceiverName == "Me"){
+				$scope.markedMessages[i].ReceiverDeleted = 1;
+			}
+			else if($scope.markedMessages[i].SenderName == "Me"){
+				$scope.markedMessages[i].SenderDeleted = 1;
+			}
+			//PUT the message using the message URL
+			putData.put(messageURL,$scope.markedMessages[i]);
+		}
+		$scope.refreshMessages();
+	}
+	
+	//Changes the marked messages not appear in the Deleted section
+	$scope.markAsFullyDeleted = function(){
+		for(i = 0; i < $scope.markedMessages.length; i++){
+			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
+			//Change the message's Deleted attribute to true
+			$scope.markedMessages[i].Deleted = 2;
 			//PUT the message using the message URL
 			putData.put(messageURL,$scope.markedMessages[i]);
 		}
 	}
 	
-	$scope.refreshInbox = function(){
+	//Refreshes all of the user's messages
+	$scope.refreshMessages = function(){
 		getData.get($scope.inboxURL).success(function(data) {
-			//Combine First and Last into Name for each message
 			for(i = 0; i < data.records.length; i++)
 			{
 				data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 				data.records[i].ReceiverName = "Me";
 			}
 			$scope.inboxMessages = data;
+		});
+		getData.get($scope.sentURL).success(function(data) {
+			for(i = 0; i < data.records.length; i++)
+			{
+				data.records[i].SenderName = "Me";
+				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+			}
+			$scope.sentMessages = data;
+		});
+		getData.get($scope.draftsURL).success(function(data) {
+			for(i = 0; i < data.records.length; i++)
+			{
+				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+				data.records[i].SenderName = "Me";
+			}
+			$scope.draftMessages = data;
+		});
+		getData.get($scope.deletedURL).success(function(data) {
+		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
+			for(i = 0; i < data.records.length; i++)
+			{
+				if(data.records[i].Sender_First == null && data.records[i].Sender_Last == null){
+					data.records[i].SenderName = 'Me';
+					data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+				}
+				if(data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null){
+					data.records[i].ReceiverName = 'Me';
+					data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
+				}
+			}
+			$scope.deletedMessages = data;
 		});
 	}
 	
@@ -802,11 +893,25 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		if($scope.selectedMessage.ReceiverName == "Me"){
 			$scope.selectedMessage.ReceiverDeleted = 1;
 		}
-		else{
+		else if($scope.selectedMessage.SenderName == "Me"){
 			$scope.selectedMessage.SenderDeleted = 1;
 		}
-		//PUT the message using the message URL
-		putData.put(messageURL,$scope.selectedMessage);
+		//PUT the message using the message URL and then refresh the messages
+		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+	}
+	
+	//Marks the message as deleted, however the message will no longer appear in the Deleted messages.
+	$scope.fullyDeleteSelectedMessage = function(){
+		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+		//Change the message's Deleted attribute to true
+		if($scope.selectedMessage.ReceiverName == "Me"){
+			$scope.selectedMessage.ReceiverDeleted = 2;
+		}
+		else{
+			$scope.selectedMessage.SenderDeleted = 2;
+		}
+		//PUT the message using the message URL and then refresh the messages
+		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
 	}
 	
 	$scope.restoreSelectedMessage = function(){
@@ -818,8 +923,8 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		else{
 			$scope.selectedMessage.SenderDeleted = 0;
 		}
-		//PUT the message using the message URL
-		putData.put(messageURL,$scope.selectedMessage);
+		//PUT the message using the message URL and then refresh the messages
+		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
 	}
 	
 	$scope.markSelectedAsRead = function(isRead){
