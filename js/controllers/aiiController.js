@@ -226,6 +226,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     }
     
     
+    $scope.checkboxTrigger = function(data){
+
+        var other = false;
+        for(var i=0;i<data.length;i++){
+            if(data[i] == 'Other'){
+                other = true;
+            }
+        }
+        return other;
+    }
+    
+    
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
