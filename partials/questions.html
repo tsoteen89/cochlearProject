@@ -44,12 +44,30 @@
                         <small>{{question.QuestionHelp}}</small>
                     </p>
                 </div>
-                <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
-                    {{showChild(question.Children)}}
+                
+                <!-- Divs with logic used to display or hide children questions -->
+                
+                <div ng-if="question.Input.Type != 'Checkbox'">
+                    <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
+                        {{showChild(question.Children)}}
+                    </div>
+
+                    <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
+                        {{hideChild(question.Children)}}
+                    </div>
                 </div>
-                <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
-                    {{hideChild(question.Children)}}
+                
+                <div ng-if="question.Input.Type == 'Checkbox'">
+                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
+                        {{showChild(question.Children)}}
+                    </div>
+                    
+                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
+                        {{hideChild(question.Children)}}                        
+                    </div>
                 </div>
+                
+                
             </li>
 
             <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
