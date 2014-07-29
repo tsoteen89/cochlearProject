@@ -8,7 +8,6 @@
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
   </head>
     
     <style>
@@ -77,7 +76,7 @@
      <!-- Sidebar -->
 
     <div id = "wrapper">
-        <div id="sidebar-wrapper">     
+        <div ng-show = "loggedIn" id="sidebar-wrapper">     
             <nav id="spy">
                 <ul class="sidebar-nav nav">
                     <li>
@@ -108,24 +107,22 @@
                         <a href="#/addUser" data-scroll>
                             <span class = "fa fa-user fa-3x"></span>
                             <i class = "plus-user fa fa-plus fa-1x"></i>
-                            <p>Add User</p>
+                            <p id = "add-user">Add User</p>
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
         <div id = "page-content-wrapper">
-             <div class="content-header" style = "margin-top: 50px;">
+            <div class="content-header" style = "margin-top: 50px;">
                 <h1 id="home">
-                    <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                    <a ng-show = "loggedIn" id="menu-toggle" href="" class="glyphicon glyphicon-align-justify btn-menu toggle">
                         
                     </a>
                 </h1>
             </div>
             <div class = "page-content inset" data-spy = "scroll" data-target = "#spy">
-                <!-- <div class = "row"> -->
-                    <div ng-view=""></div>
-                <!-- </div> -->
+                <div ng-view=""></div>
             </div>
         </div>
     </div> 

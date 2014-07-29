@@ -856,7 +856,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
             }
             else {
               
-               $window.location = "./";
+               $window.location = "#/";
             
             }
         });

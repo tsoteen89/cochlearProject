@@ -55,14 +55,15 @@
 
 /*************************************LEFT NAVBAR**************************************/
 #wrapper {
-  padding-left: 220px;
+
+  padding-left: 150px;
   transition: all 0.4s ease 0s;
 }
 
 #sidebar-wrapper {
-  margin-left: -210px;
-  left: 210px;
-  width: 200px;
+  margin-left: -150px;
+  left: 150px;
+  width: 150px;
   background: #5CB8E6;
   position: fixed;
   height: 90%;
@@ -88,7 +89,7 @@
 .sidebar-nav {
   position: absolute;
   top: 0px;
-  width: 200px;
+  width: 150px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -96,8 +97,9 @@
 }
 
 .sidebar-nav li {
-  line-height: 40px;
-  text-indent: 20px;
+  line-height: 33px;
+  text-indent: 0px;
+  min-height: 100px;
   border-bottom: 1px solid #325bbd;
   box-shadow: 0 6px 6px -6px #000;
 }
@@ -113,7 +115,8 @@
 .sidebar-nav li a p {
 
 	position: relative;
-	left: -18px;
+	left: 0px;
+	top: 10px;
 	text-align:center;
 }
 
@@ -124,18 +127,21 @@
 			.plus-user {
 				position: relative;
 				top: 13px;
-				left: 47px;
+				left: 69px;
 			}
+		}
+		#add-user {
+
+			position:relative;
+			left: -7px;
 		}
 	}
 }
 
 .sidebar-nav li a span:before {
   position: absolute;
-  left: 50px;
+  left: 54px;
   color: #325bbd;
-  text-align: center;
-  width: 20px;
   line-height: 10px;
 }
 
@@ -169,32 +175,32 @@
 
 @media (max-width:767px) {
 
-#wrapper {
-  padding-left: 0;
-}
+	#wrapper {
+	  padding-left: 0;
+	}
 
-#sidebar-wrapper {
-  left: 0;
-}
+	#sidebar-wrapper {
+	  left: 0;
+	}
 
-#wrapper.active {
-  position: relative;
-  left: 0px;
-}
+	#wrapper.active {
+	  position: relative;
+	  left: 250px;
+	}
 
-#wrapper.active #sidebar-wrapper {
-  left: 200px;
-  width: 200px;
-  transition: all 0.4s ease 0s;
-}
+	#wrapper.active #sidebar-wrapper {
+	  left: 250px;
+	  width: 250px;
+	  transition: all 0.4s ease 0s;
+	}
 
-#menu-toggle {
-  display: inline-block;
-}
+	#menu-toggle {
+	  display: inline-block;
+	}
 
-.inset {
-  padding: 15px;
-}
+	.inset {
+	  padding: 15px;
+	}
 
 }
 
@@ -204,21 +210,17 @@
 
 #cp_developerLogin {
 	
-	.container {
-		
-	}
-
+	margin-top: 20px;	
 }
 
 #cp_loginContainer {
 	
 	@media (max-width: 770px){
 	
-		margin-top: 110px;	
+		margin-top: 70px;	
 	} 
 
-	margin-top: 130px;
-	// margin-bottom: 50px;
+	margin-top: 100px;
 	#loginForm {
 		padding:25px;
 		border: 3px solid #000;
@@ -277,6 +279,33 @@
 		margin-botom: 60px;
 	}
 }
+
+@media (min-width: 1170px) {
+	
+	#cp_loginContainer {
+		position: relative;
+		left: -80px;
+	}
+}
+
+@media (min-width:970px) and (max-width:1169px) {
+
+	#cp_loginContainer {
+
+		position: relative;
+		left: -120px;
+	}
+}
+
+@media (min-width:760px) and (max-width:969px) {
+
+	#cp_loginContainer {
+
+		position: relative;
+		left: -85px;
+	}
+}
+
 
 /*************************************END LOGIN.HTML*************************************/
 
