@@ -364,7 +364,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
-    $scope.patientURL = "../../aii-api/v1/facilities/100/patients";
+    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
     //Grab all Patients using patientURL 
@@ -497,7 +497,7 @@ controllers.addUserController = function($scope, $http, postData, getData){
     // Post function to add a new User to the system
     $scope.processForm = function() {
         //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
-        postData.post('../../aii-api/v1/users',$scope.formData);
+        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
     };
         
     //getting the userlevels from the api and posting it to the form
