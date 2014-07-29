@@ -1,13 +1,13 @@
-<!-- Test Comment -->
 <!DOCTYPE html>
-<html ng-app="myApp" style="width:100%;height:100%">
+<html ng-app="myApp">
 
   <head>
 	<title> Auditory Implant Initiative </title>
+
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css/historyForm.css" />
   </head>
     
     <style>
@@ -18,25 +18,50 @@
             border-color: #78FA89
         }
     </style>
+<body ng-controller="loginControl" id = "cp_background-gradient"> 
+    
+    <div id = "cp_topNavigation"> 
+        <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
+            <div class = "container-fluid">
+                <div class = "navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-responsive-collapse" data-target-2 = "#nav-responsive-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand cp_navbar-brand" href="#">Auditory Implant Initiative</a>
+                </div>
+                <div ng-if = "!loggedIn" class = "nav-items collapse navbar-collapse pull-right" id = "nav-responsive-collapse">
+                    <ul class = "nav navbar-nav">
+                        <li><a href = "">Home</a></li>
+                        <li><a href = "">About</a></li>
+                        <li><a href = "">Contact Us</a></li>
+                    </ul>
 
-  <body ng-controller="loginControl" style="background-color: #E7EEF1;width:100%; height:100%; margin-top:0px;">
-    <!-- Header -->
-    <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:10%">
-        <a class="navbar-brand" style="color: grey;font-size:2vw;height:100%" href="#">Auditory Implant Initiative</a>
-        <ul class="nav navbar-nav navbar-right">
-            <li ng-if="loggedIn" class="dropdown">
-                <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-                    <i class="glyphicon glyphicon-user"></i> User <span class="caret"></span></a>
-                <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                    <li><a href="#/mySettings">My Settings</a></li>
-                    <li><a href="#/logout"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
-                </ul>
-            </li>
-        </ul>
+                    <button type="button" class="btn btn-default navbar-btn pull-right"><a href = "#/">Sign in</a></button>
+                    <button type="button" class="btn btn-default navbar-btn pull-right"><a href="register.html">Facility Registration</a></button>
+                    
+                </div>
+                <div ng-if = "loggedIn" class = "collapse navbar-collapse" id = "nav-responsive-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                                <i class="glyphicon glyphicon-user"></i> User <span class="caret"></span></a>
+                            <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                                <li><a href="#/mySettings">My Settings</a></li>
+                                <li><a href="#/logout"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>   
     </div>
     
     <!-- Left Side Bar -->
-    <div ng-if="loggedIn" class="col-sm-2 col-md-1"style="background-color: #5CB8E6;padding: 0 0 0 0; width:8%; height:90%">
+
+    <!-- <div ng-if="loggedIn" class="col-sm-2 col-md-1"style="background-color: #5CB8E6;padding: 0 0 0 0; width:8%; height:90%">
         <a href="#/dashboard"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-tachometer fa-3x"></i><br><text style="font-size: .8vw">Dashboard</text>
         </div></a>
         <a href="#/messages"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-envelope fa-3x"></i><br><text style="font-size: .8vw">Messages</text>
@@ -47,27 +72,71 @@
         </div></a>
         <a href="#/addUser"><div class="buttonlink" style="width:100%; height:15%;"><i class="fa fa-user fa-3x"><i class="fa fa-plus fa-1x"></i></i><br><text style="font-size: .8vw">Add User</text>
         </div></a>
-    </div>
-      
-      LOGGED IN: {{loggedIn}}
-      <br>
-      <button ng-click="devLogin()">Instant Login</button>
-      
+    </div> -->
+     <!-- Sidebar -->
 
-    <div ng-view="" class="col-md-11" style="height:86%"></div>
-
-
-    </body>
-
+    <div id = "wrapper">
+        <div ng-show = "loggedIn" id="sidebar-wrapper">     
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    <li>
+                        <a href="#/dashboard" data-scroll>
+                            <span class = "fa fa-tachometer fa-3x"></span>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/messages" data-scroll>
+                            <span class = "fa fa-envelope fa-3x"></span>
+                            <p>Messages</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/patientDirectory" data-scroll>
+                            <span class = "fa fa-users fa-3x"></span>
+                            <p>Patient Directory</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/newPatient" data-scroll>
+                            <span class = "fa fa-plus-circle fa-3x"></span>
+                            <p>New Patient</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#/addUser" data-scroll>
+                            <span class = "fa fa-user fa-3x"></span>
+                            <i class = "plus-user fa fa-plus fa-1x"></i>
+                            <p id = "add-user">Add User</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id = "page-content-wrapper">
+            <div class="content-header" style = "margin-top: 50px;">
+                <h1 id="home">
+                    <a ng-show = "loggedIn" id="menu-toggle" href="" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                        
+                    </a>
+                </h1>
+            </div>
+            <div class = "page-content inset" data-spy = "scroll" data-target = "#spy">
+                <div ng-view=""></div>
+            </div>
+        </div>
+    </div> 
+</body>
 
 </html>
 
 <!-- All Dependencies Here -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
 <script src="js/angular-route.js"></script>
 <script src="js/checklist-model.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script src="js/myApp.js"></script>
 <script src="js/myApp.directives.js"></script>
 <script src="js/controllers/aiiController.js"></script>
 <script src="js/ui-bootstrap.min.js"></script>
+<script src="lib/sideToggle.js"></script>

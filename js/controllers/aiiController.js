@@ -364,7 +364,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
-    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
+    $scope.patientURL = "../../aii-api/v1/facilities/100/patients";
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
     //Grab all Patients using patientURL 
@@ -496,7 +496,8 @@ controllers.addUserController = function($scope, $http, postData, getData){
 
     // Post function to add a new User to the system
     $scope.processForm = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        postData.post('../../aii-api/v1/users',$scope.formData);
     };
         
     //getting the userlevels from the api and posting it to the form
@@ -957,10 +958,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
     
 
 controllers.loginControl = function ($scope,$http,$window,persistData){
-
-    console.log($scope);
     
-
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
@@ -984,18 +982,17 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            console.log(data);
-            console.log(data.data);
+         
             if(data.data.records == true){
-                // $scope.x = response.data.records;
+           
                 persistData.setLoggedIn(true);
                 $scope.loggedIn = true;
                 $window.location.href = "#/dashboard";
             }
             else {
-                //console.log("Mando");
-               // $window.location = "./";
-               console.log($scope.userLogin);
+              
+               $window.location = "#/";
+            
             }
         });
     }
@@ -1122,11 +1119,6 @@ controllers.phaseProgressCtrl = function ($scope){
     }
     
 }
-
-
-//********************************END MISCELLANEOUS CONTROLLERS***************************************//
-
-
 
 myApp.controller(controllers);
 
