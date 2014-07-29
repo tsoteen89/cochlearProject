@@ -1,0 +1,31 @@
+Time: 1404631795
+phases (GET) - Tests Successful
+PhaseID: 3 - NO QUESTIONS EXIST
+PhaseID: 6 - NO QUESTIONS EXIST
+PhaseID: 7 - NO QUESTIONS EXIST
+PhaseID: 8 - NO QUESTIONS EXIST
+PhaseID: 9 - NO QUESTIONS EXIST
+PhaseID: 10 - NO QUESTIONS EXIST
+PhaseID: 11 - NO QUESTIONS EXIST
+
+Time: 1404634084
+phases (GET) - Tests Successful
+phases/(id)/questions (GET) - PhaseID: 3 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 6 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 7 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 8 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 9 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 10 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 11 - NO QUESTIONS EXIST
+
+Time: 1404982591
+phases (GET) - Tests Successful
+phases/(id) (GET) - Tests Successful
+phases/(id)/questions (GET) - PhaseID: 3 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 6 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 7 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 8 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 9 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 10 - NO QUESTIONS EXIST
+phases/(id)/questions (GET) - PhaseID: 11 - NO QUESTIONS EXIST
+
