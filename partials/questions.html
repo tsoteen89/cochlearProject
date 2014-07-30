@@ -1,84 +1,114 @@
 
 
+<div data-ng-controller="questionsController">
+    <div class="col-md-6">
+        <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
+        <hr>
+        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="nextPage()">
+            <div class="control-group" >
+                CareTeamID: {{answer.CareTeamID}}
 
-<div class="col-md-6" data-ng-controller="questionsController">
-    <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
-<hr>
-<form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="nextPage()">
-    <div class="control-group" >
-        CareTeamID: {{answer.CareTeamID}}
+                <!-- Display All Questions -->
+                <ul>
+                    <div style="margin-left: 20%; width: 100%;">
+                    <li ng-repeat= "question in finalQuestions">
+                        <div ng-hide="question.IsChild">
 
-        <!-- Display All Questions -->
-        <ul>
-            <div style="margin-left: 20%; width: 100%;">
-            <li ng-repeat= "question in finalQuestions">
-                <div ng-hide="question.IsChild">
+                            <span style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:100%;">
+                            <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
 
-                    <span style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:100%;">
-                    <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
-
-                        <!-- Else Display only the single Input field -->
-                        <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
-                        </select>
-                        <div ng-if="question.Input.Type == 'Date'">
-                            <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                   ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                <!-- Else Display only the single Input field -->
+                                <select ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                </select>
+                                <div ng-if="question.Input.Type == 'Date'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Text'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                </div>
+                                <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} checklist-value="values" 
+                                           checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                            </span>
+                            <p class="guidelines">
+                                <small>{{question.QuestionHelp}}</small>
+                            </p>
                         </div>
-                        <div ng-if="question.Input.Type == 'Text'">
-                            <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                   ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
-                        </div>
-                        <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
-                            <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                   ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
-                            <label class="choice" >{{values}}</label>
-                        </div>
-                        <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                            <input type={{question.Input.Type}} checklist-value="values" 
-                                   checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
-                            <label class="choice" >{{values}}</label>
-                        </div>
-                    </span>
-                    <p class="guidelines">
-                        <small>{{question.QuestionHelp}}</small>
-                    </p>
-                </div>
-                
-                <!-- Divs with logic used to display or hide children questions -->
-                
-                <div ng-if="question.Input.Type != 'Checkbox'">
-                    <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
-                        {{showChild(question.Children)}}
-                    </div>
 
-                    <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
-                        {{hideChild(question.Children)}}
-                    </div>
-                </div>
-                
-                <div ng-if="question.Input.Type == 'Checkbox'">
-                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
-                        {{showChild(question.Children)}}
-                    </div>
-                    
-                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
-                        {{hideChild(question.Children)}}                        
-                    </div>
-                </div>
-                
-                
-            </li>
+                        <!-- Divs with logic used to display or hide children questions -->
 
-            <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
-            <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Finish</button></a><br>
+                        <div ng-if="question.Input.Type != 'Checkbox'">
+                            <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
+                                {{showChild(question.Children)}}
+                            </div>
+
+                            <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
+                                {{hideChild(question.Children)}}
+                            </div>
+                        </div>
+
+                        <div ng-if="question.Input.Type == 'Checkbox'">
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
+                                {{showChild(question.Children)}}
+                            </div>
+
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
+                                {{hideChild(question.Children)}}               
+                            </div>
+                        </div>
+
+
+                    </li>
+
+                    <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
+                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Finish</button></a><br>
+                    </div>
+                </ul>
+                <!-- End Display Of All Questions -->
+
             </div>
-        </ul>
-        <!-- End Display Of All Questions -->
+        </form>
 
     </div>
 
-</form>
+    <div style="background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%;margin-left:55%;position:fixed">
+        <h3>Patient Summary for {Patient Name}</h3><br>
+        
+        <div class="btn-group" dropdown is-open="status.isopen">
+          <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
+            Choose Care Phase <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="" ng-click="patientSummary(1)">Demographics</a></li>
+            <li><a href="" ng-click="patientSummary(2)">Candidacy Testing</a></li>
+            <li><a href="" ng-click="patientSummary(3)">Initial Surgical Consultation</a></li>
+            <li><a href="" ng-click="patientSummary(4)">Preoperative Visit</a></li>
+            <li><a href="" ng-click="patientSummary(5)">One Week Postoperative</a></li>
+            <li><a href="" ng-click="patientSummary(6)">Activation</a></li>
+            <li class="divider"></li>
+            <li><a href="" ng-click="patientSummary(7)">1 Month</a></li>
+            <li><a href="" ng-click="patientSummary(8)">3 Month</a></li>
+            <li><a href="" ng-click="patientSummary(9)">6 Month</a></li>
+            <li><a href="" ng-click="patientSummary(10)">12 Month</a></li>
+            <li><a href="" ng-click="patientSummary(11">24 Month</a></li>
+          </ul>
+        </div>
+        
+        <br>
+        <div ng-repeat="(question, answer) in patientSummaryAnswers">
+            {{question}} : {{answer}}<br><br>
+        </div>
+    </div>
+    
 </div>
-
     

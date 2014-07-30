@@ -1,29 +1,40 @@
-<div class = "container"> 
-    <div class = "row">
-        <div class = "col-sm-4 col-sm-push-4" style = "text-align:center">
-            <h1>Audio Implant Initiative</h1>
-            <form name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
-                <label style = "margin-top: 50px;'">Username</label><br>
-                <input type = "text" name = "username" placeholder = "Enter Username" ng-model = "userlogin.username"><br>
-                <label style = "margin-top: 50px;">Password</label><br>
-                <input type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
-                <br><br>
-                <a href="route.html">Forgot Password</a>
-                <input type="submit" form="loginForm" value="Login" ng-click="makeTrue()" ng-disabled="loginForm.username.$pristine || loginForm.username.$dirty && loginForm.username.$invalid"></input><br><br>
+<body>
+    <div id = "cp_loginContainer" ng-if = "!loggedIn">
+        <div class = "container"> 
+            <div class = "row">
+                <div class = "col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+                   
+                    <form role = "form" name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
+                         <h4>Sign in</h4>
+                         <hr>
+                        <div class = "form-group">
+                            <label for = "inputUsername" class = "cp_loginLabel">Username</label>
+                            <input class = "form-control cp_loginInput" type = "text" name = "username" placeholder = "Enter Username" ng-model = "userlogin.username">
+                        </div>
+                        <div class = "form-group">
+                            <label for = "inputPassword" class = "cp_loginLabel">Password</label>
+                            <input class = "form-control cp_loginInput" type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
+                        </div>
+                        
+                        <div class = "form-group">  
+                            <p><a class = "cp_forgotPasswordLink" href="route.html">Forgot Password</a></p>
 
-                <p>This site is for autorized <b>Auditory Implant Initiative</b> members only.  
-                Please see our <a href="register.html"><b>registration page</b></a> to gain access, otherwise continue.</p>
-            </form>            
-        </div>
-    </div>
-</div>
-<div class = "container">
-    <div class = "row">
-        <div class = "col-md-12" style = "text-align:center;">
-            <div ng-controller = "logoutControl">
-                <p><button ng-click = "logout()">logout</button></p>
-
+                            <button type="submit" class = "btn btn-primary" form="loginForm" ng-click="makeTrue()">Login</button>
+                        </div>
+   
+                    </form>            
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class = "container cp_tempLogout" ng-if = "!loggedIn" style = "margin-top: 10px;">
+        <div class = "row">
+            <div class = "col-md-12" style = "text-align:center;">
+                <div ng-controller = "logoutControl">
+                    <p style = "margin-right: 5px;">Logout button for testing purposes only!</p><button class = "btn btn-primary" ng-click = "logout()">logout</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
