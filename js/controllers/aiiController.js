@@ -118,6 +118,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
     
+    $scope.patientSummaryAnswers = {};
+    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + 1;
+    
+    getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+        $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+    });
+    
     //Get Number of Questions contained in a phase
     getData.get($scope.questionsURL).success(function(data) {
         $scope.numberOfQuestions = data.records.length;
@@ -266,8 +273,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             }
         }
     }
+    
+    $scope.patientSummary = function(phaseNumber){
+        console.log(phaseNumber);
+        $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
+        getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+            $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+        });
+    }
 };
+    
     
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
@@ -496,6 +512,7 @@ controllers.addUserController = function($scope, $http, postData, getData){
 
     // Post function to add a new User to the system
     $scope.processForm = function() {
+        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
         postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
     };
         
@@ -957,10 +974,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
     
 
 controllers.loginControl = function ($scope,$http,$window,persistData){
-
-    console.log($scope);
     
-
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
@@ -984,18 +998,17 @@ controllers.loginControl = function ($scope,$http,$window,persistData){
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-            console.log(data);
-            console.log(data.data);
+         
             if(data.data.records == true){
-                // $scope.x = response.data.records;
+           
                 persistData.setLoggedIn(true);
                 $scope.loggedIn = true;
                 $window.location.href = "#/dashboard";
             }
             else {
-                //console.log("Mando");
-               // $window.location = "./";
-               console.log($scope.userLogin);
+              
+               $window.location = "#/";
+            
             }
         });
     }
@@ -1122,11 +1135,6 @@ controllers.phaseProgressCtrl = function ($scope){
     }
     
 }
-
-
-//********************************END MISCELLANEOUS CONTROLLERS***************************************//
-
-
 
 myApp.controller(controllers);
 
