@@ -81,7 +81,7 @@
 
     </div>
 
-    <div style="background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%;height:20%;margin-left:55%;position:fixed">
+    <div style="background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%;margin-left:55%;position:fixed">
         <h3>Patient Summary for {Patient Name}</h3><br>
         
         <div class="btn-group" dropdown is-open="status.isopen">
@@ -92,20 +92,22 @@
             <li><a href="" ng-click="patientSummary(1)">Demographics</a></li>
             <li><a href="" ng-click="patientSummary(2)">Candidacy Testing</a></li>
             <li><a href="" ng-click="patientSummary(3)">Initial Surgical Consultation</a></li>
-            <li><a href="" ng-click="patientSummary(1)">Preoperative Visit</a></li>
-            <li><a href="" ng-click="patientSummary(1)">One Week Postoperative</a></li>
-            <li><a href="" ng-click="patientSummary(1)">Activation</a></li>
+            <li><a href="" ng-click="patientSummary(4)">Preoperative Visit</a></li>
+            <li><a href="" ng-click="patientSummary(5)">One Week Postoperative</a></li>
+            <li><a href="" ng-click="patientSummary(6)">Activation</a></li>
             <li class="divider"></li>
-            <li><a href="" ng-click="patientSummary(1)">1 Month</a></li>
-            <li><a href="" ng-click="patientSummary(1)">3 Month</a></li>
-            <li><a href="" ng-click="patientSummary(1)">6 Month</a></li>
-            <li><a href="" ng-click="patientSummary(1)">12 Month</a></li>
-            <li><a href="" ng-click="patientSummary(1)">24 Month</a></li>
+            <li><a href="" ng-click="patientSummary(7)">1 Month</a></li>
+            <li><a href="" ng-click="patientSummary(8)">3 Month</a></li>
+            <li><a href="" ng-click="patientSummary(9)">6 Month</a></li>
+            <li><a href="" ng-click="patientSummary(10)">12 Month</a></li>
+            <li><a href="" ng-click="patientSummary(11">24 Month</a></li>
           </ul>
         </div>
         
         <br>
-        {{patientSummaryAnswers}}
+        <div ng-repeat="(key, value) in patientSummaryAnswers">
+            {{key}} : {{value}}<br><br>
+        </div>
     </div>
     
 </div>

@@ -122,7 +122,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + 1;
     
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-        $scope.patientSummaryAnswers = data.records.Answers;            
+        $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
     });
     
     //Get Number of Questions contained in a phase
@@ -279,7 +279,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-            $scope.patientSummaryAnswers = data.records.Answers;            
+            $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
         });
     }
 };
