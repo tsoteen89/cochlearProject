@@ -291,23 +291,18 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
-    $scope.answer = [];
-    $scope.answer[0] = {};
     $scope.answerArrayIndex = 1;
-    $scope.answer[1] = {};
-    $scope.answer[0]["PhaseID"] = persistData.getPhaseID();
-    $scope.answer[0]["CareTeamID"] = persistData.getCareTeamID();
+    $scope.answer = {};
+    $scope.answer.PhaseID = persistData.getPhaseID();
+    $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.answer.CDA = {};
+    $scope.answer.AzBio = {};
+    $scope.answer.CNC = {};
+    $scope.answer.BKBSIN = {};
     $scope.results = {};
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
-    //$scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/hearing%20aid/right/hearing%20aid";
     
-    
-    /*
-    getData.get($scope.resultsURL).success(function(data) {
-        $scope.results = data.records;
-    });
-    */
     
     $scope.buildResultsURL = function(){
         console.log("buildResults Called");
@@ -340,24 +335,24 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         console.log("clearCurrentTest Called");
         console.log(data);
         if(data == "Comprehensive Diagnostic Audiogram"){
-            $scope.answer[1]['30'] = null;
-            $scope.answer[1]['40'] = null;
-            $scope.answer[1]['50'] = null;
+            $scope.answer.CDA['30'] = null;
+            $scope.answer.CDA['40'] = null;
+            $scope.answer.CDA['50'] = null;
         }
         else if(data == 'AzBio'){
-            $scope.answer[1]['60'] = null;
-            $scope.answer[1]['70'] = null;
-            $scope.answer[1]['80'] = null;
-            $scope.answer[1]['90'] = null;
+            $scope.answer.AzBio['60'] = null;
+            $scope.answer.AzBio['70'] = null;
+            $scope.answer.AzBio['80'] = null;
+            $scope.answer.AzBio['90'] = null;
         }
         else if(data == 'CNC'){
-            $scope.answer[1]['100'] = null;
-            $scope.answer[1]['110'] = null;
-            $scope.answer[1]['120'] = null;
+            $scope.answer.CNC['100'] = null;
+            $scope.answer.CNC['110'] = null;
+            $scope.answer.CNC['120'] = null;
         }
         else if(data == 'BKB-SIN'){
-            $scope.answer[1]['130'] = null;
-            $scope.answer[1]['140'] = null;
+            $scope.answer.BKBSIN['130'] = null;
+            $scope.answer.BKBSIN['140'] = null;
         }
         $scope.updateResults();
     }
