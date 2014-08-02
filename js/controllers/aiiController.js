@@ -566,6 +566,10 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
     //Messages that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedMessages = [];
 	
+	//The type of message currently being displayed - inbox, sent, drafts, deleted
+	$scope.currentMessageType;
+	$scope.currentMessages;
+	
     $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
 	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
 	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
@@ -580,6 +584,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			data.records[i].ReceiverName = "Me";
 		}
 		$scope.inboxMessages = data;
+		$scope.currentMessages = $scope.inboxMessages;
     });
 	
 	 //Grab all sent messages using patientURL 
@@ -620,6 +625,88 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
         $scope.deletedMessages = data;
     });
+	
+	//Sets the current message type. This updates the current messages and
+	//alters the components of the message display.
+	$scope.setMessageType = function(messageType){
+		$scope.currentMessageType = messageType;
+		
+		switch($scope.currentMessageType){
+			case 'inbox':
+				$scope.currentMessages = $scope.inboxMessages;
+				$scope.displayMessages = true;
+				//Message table columns
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = true;
+				$scope.showForward = true;
+				$scope.showEdit = false;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'sent':
+				$scope.currentMessages = $scope.sentMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = false;
+				$scope.showTo = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = true;
+				$scope.showEdit = false;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'drafts':
+				$scope.currentMessages = $scope.draftMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = false;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = false;
+				$scope.showEdit = true;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentMessages = $scope.deletedMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = true;
+				$scope.showTo = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = false;
+				$scope.showEdit = false;
+				$scope.showRestore = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+			case 'composeMessage':
+				$scope.displayMessages = false;
+				break;
+			default:
+				break;
+		}
+		//$scope.$apply();
+	}
+	
+	$scope.isTypeSelected = function(messageType){
+		if($scope.currentMessageType == messageType)
+			return true;
+		return false;
+	}
 	
 	//Toggles visibility of the message content display
 	$scope.togglePopup = function(message){
@@ -706,7 +793,24 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
 		}
 		else{
-			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+			var errorMessage = "The message could not be sent due to:"
+			if(!message.ReceiverID){
+				errorMessage += "\n     -No receiver defined."
+			}
+			if(!message.Subject){
+				errorMessage += "\n     -No subject defined."
+			}
+			if(!message.Content){
+				errorMessage += "\n     -No message content\nThe message has not been saved."
+			}
+			else if(message.Content){
+				//If the message had content, save it as a draft.
+				message.sent = 0;
+				postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+				
+				errorMessage += "\nThe message has been saved as a draft."
+			}
+			alert(errorMessage);
 		}
 	}
 	
@@ -726,7 +830,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
 		}
 		else{
-			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+			alert("The message could not be saved as it contained no content.");
 		}
 	}
 	
@@ -909,6 +1013,8 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			}
 			$scope.deletedMessages = data;
 		});
+		//Reset the current messages to the newly refreshed messages
+		$scope.setMessageType($scope.currentMessageType);
 	}
 	
 	$scope.deleteSelectedMessage = function(){
@@ -922,6 +1028,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	//Marks the message as deleted, however the message will no longer appear in the Deleted messages.
@@ -936,6 +1043,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	$scope.restoreSelectedMessage = function(){
@@ -949,6 +1057,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	$scope.markSelectedAsRead = function(isRead){
