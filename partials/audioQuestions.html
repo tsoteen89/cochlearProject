@@ -5,7 +5,7 @@
 
     <div class="col-md-8" style="margin-left: 5%">
             
-            <!-- DISPLAY CONDITIONS -->
+            <!-- DISPLAY Left Ear Condition -->
             <div style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:35%; margin-left: 10%; float:left;">
 
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Left Ear </label>
@@ -17,6 +17,7 @@
                 
             </div>
 
+            <!-- DISPLAY Right Ear Condition -->
             <div style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:35%; margin-left: 10%; float:left; ">
 
                 <label class="description" style="font-size: 1.5vw; color:#4B92AE">Right Ear </label>
@@ -52,24 +53,24 @@
                             <div class="container">
                                 <label class="description" style="margin-top: 2%;font-size: 1.8vw; color:#4B92AE;">{{categories.AudioCategory}} </label><hr>
                                 <div class="container" ng-repeat="tests in categories.Tests">
-                                    <label style="font-size: 1.3vw;">{{tests.AudioTestName}}</label><br>
+                                    <label style="font-size: 1.3vw;">{{tests.AudioTestName}}</label><br><br>
                                     <div ng-repeat="type in tests.AudioTestInput" style="margin-left:5%;float:left;">
-                                        <label style="font-size:.9vw;">{{type.Name}}</label><br>
-                                        
-                                        <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
-                                            <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                   ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="submitQuestions()">
-                                        </div>
-
-
-                                        <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
-                                                ng-model="answer[answerArrayIndex][type.TestFieldID]" ng-blur="submitQuestions()">
-                                            <option ng-repeat="values in type.Values">{{values}}</option>
-                                        </select>
-                                        
+                                        <label style="font-size:.9vw;">{{type.Name}}</label>
                                         <br>
                                         <br>
-                                        <div ng-if="categories.AudioCategory == 'Comprehensive Diagnostic Audiogram'">
+                                        
+                                        <!-- Comprehensive Diagnostic Audiogram Question Inputs Displayed -->
+                                        <div ng-if="categories.AudioCategory == 'Comprehensive Diagnostic Audiogram'">     
+                                            <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
+                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
+                                                       ng-model="answer.CDA[type.TestFieldID]" ng-blur="submitQuestions()">
+                                            </div>
+
+                                            <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
+                                                    ng-model="answer.CDA[type.TestFieldID]" ng-blur="submitQuestions()">
+                                                <option ng-repeat="values in type.Values">{{values}}</option>
+                                            </select>
+                                            
                                             <div ng-repeat="testCategories in results.Comprehensive_Diagnostic_Audiogram">
                                                 <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
@@ -79,7 +80,18 @@
                                             </div>
                                         </div>
 
+                                        <!-- AzBio Question Inputs Displayed -->
                                         <div ng-if="categories.AudioCategory == 'AzBio'">
+                                            <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
+                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
+                                                       ng-model="answer.AzBio[type.TestFieldID]" ng-blur="submitQuestions()">
+                                            </div>
+
+                                            <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
+                                                    ng-model="answer.AzBio[type.TestFieldID]" ng-blur="submitQuestions()">
+                                                <option ng-repeat="values in type.Values">{{values}}</option>
+                                            </select>
+                                            
                                             <div ng-repeat="testCategories in results.AzBio">
                                                 <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
@@ -89,7 +101,18 @@
                                             </div>
                                         </div>
                                         
-                                        <div ng-if="categories.AudioCategory == 'CNC'">
+                                        <!-- CNC Question Inputs Displayed -->
+                                        <div ng-if="categories.AudioCategory == 'CNC'">                                            
+                                            <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
+                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
+                                                       ng-model="answer.CNC[type.TestFieldID]" ng-blur="submitQuestions()">
+                                            </div>
+
+                                            <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
+                                                    ng-model="answer.CNC[type.TestFieldID]" ng-blur="submitQuestions()">
+                                                <option ng-repeat="values in type.Values">{{values}}</option>
+                                            </select>
+                                            
                                             <div ng-repeat="testCategories in results.CNC">
                                                 <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
@@ -99,7 +122,18 @@
                                             </div>
                                         </div>
                                         
-                                        <div ng-if="categories.AudioCategory == 'BKB-SIN'">
+                                        <!-- BKB-SIN Question Inputs Displayed -->
+                                        <div ng-if="categories.AudioCategory == 'BKB-SIN'">                                            
+                                            <div ng-if="type.InputType == 'Number'" style="margin-right:5%; float:left;">
+                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
+                                                       ng-model="answer.BKBSIN[type.TestFieldID]" ng-blur="submitQuestions()">
+                                            </div>
+
+                                            <select style="margin-right:5%; float:left;" ng-if="type.InputType == 'Select'"
+                                                    ng-model="answer.BKBSIN[type.TestFieldID]" ng-blur="submitQuestions()">
+                                                <option ng-repeat="values in type.Values">{{values}}</option>
+                                            </select>
+                                            
                                             <div ng-repeat="testCategories in results.BKB_SIN">
                                                 <div ng-repeat="testResults in testCategories">
                                                     <div ng-if="type.Name == testResults.Field_Name">
@@ -111,6 +145,7 @@
 
                                     </div>          
                                 </div>
+                                <br>
                                 <button ng-click="clearCurrentTest(test)">Add Test Under Current Conditions</button>
                             </div>
                         </div>
@@ -118,6 +153,11 @@
                 </div>
                 <br><br><br>
             </div>
+        
+        Answer Object: {{answer}}
+        <br>
+
+        
         
 
     </div>

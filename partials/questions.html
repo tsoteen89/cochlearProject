@@ -63,7 +63,7 @@
                             </div>
 
                             <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
-                                {{hideChild(question.Children)}}                        
+                                {{hideChild(question.Children)}}               
                             </div>
                         </div>
 
@@ -105,8 +105,8 @@
         </div>
         
         <br>
-        <div ng-repeat="(key, value) in patientSummaryAnswers">
-            {{key}} : {{value}}<br><br>
+        <div ng-repeat="(question, answer) in patientSummaryAnswers">
+            {{question}} : {{answer}}<br><br>
         </div>
     </div>
     
