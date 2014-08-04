@@ -289,25 +289,25 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
+    $scope.conditions = {};
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
     $scope.answerArrayIndex = 1;
     $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
-    $scope.answer.CDA = {};
-    $scope.answer.AzBio = {};
-    $scope.answer.CNC = {};
-    $scope.answer.BKBSIN = {};
-    $scope.results = {};
+    $scope.answer.Results = { "Comprehensive Diagnostic Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}}, "AzBio" :{ "AzBio Test": {}}, "CNC": {"CNC Test": {}}, "BKB-SIN": {"BKB-SIN Test": {}}};
+
+    //$scope.results = {};
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
-    
+    /*
     $scope.buildResultsURL = function(){
         console.log("buildResults Called");
-        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.answer[0].LeftAidCondition + "/right/" + $scope.answer[0].RightAidCondition;
+        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.conditions.Left + "/right/" + $scope.conditions.Right;
     }
+    */
     
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
@@ -325,9 +325,17 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.updateResults = function(){
         console.log("updateResults Called");
-        $scope.buildResultsURL();
+        //$scope.buildResultsURL();
+        $scope.getConditionsID();
         getData.get($scope.resultsURL).success(function(data) {
             $scope.results = data.records;
+        });
+    }
+    
+    $scope.getConditionsID = function(){
+        console.log("getConditionsID Called");
+        getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
+            $scope.answer.ConditionsID = data.records.ConditionsID;
         });
     }
     
@@ -335,24 +343,18 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         console.log("clearCurrentTest Called");
         console.log(data);
         if(data == "Comprehensive Diagnostic Audiogram"){
-            $scope.answer.CDA['30'] = null;
-            $scope.answer.CDA['40'] = null;
-            $scope.answer.CDA['50'] = null;
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Pure Tone Average"] = {};
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Speech Reception Threshold"] = {};
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Speech Discrimination Score"] = {};
         }
         else if(data == 'AzBio'){
-            $scope.answer.AzBio['60'] = null;
-            $scope.answer.AzBio['70'] = null;
-            $scope.answer.AzBio['80'] = null;
-            $scope.answer.AzBio['90'] = null;
+            $scope.answer.Results["AzBio"]["AzBio Test"] = {};
         }
         else if(data == 'CNC'){
-            $scope.answer.CNC['100'] = null;
-            $scope.answer.CNC['110'] = null;
-            $scope.answer.CNC['120'] = null;
+            $scope.answer.Results["CNC"]["CNC Test"] = {};
         }
         else if(data == 'BKB-SIN'){
-            $scope.answer.BKBSIN['130'] = null;
-            $scope.answer.BKBSIN['140'] = null;
+            $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
         $scope.updateResults();
     }
