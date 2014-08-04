@@ -576,6 +576,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
 	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/30/deleted";
+	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
     
     //Grab all inbox messages using patientURL 
     getData.get($scope.inboxURL).success(function(data) {
@@ -924,58 +925,45 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 	}
 	
-	//Changes the marked messages to have Read = true with a PUT request 
-	$scope.markAsRead = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Read attribute to true
-			$scope.markedMessages[i].IsRead = 1;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
-	}
-	
-	//Changes the marked messages to have Read = false with a PUT request 
-	$scope.markAsUnread = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].IsRead = 0;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
-	}
-	
-	//Changes the marked messages to have Deleted = true with a PUT request 
-	$scope.markAsDeleted = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			if($scope.markedMessages[i].ReceiverName == "Me"){
-				$scope.markedMessages[i].ReceiverDeleted = 1;
+	//Send a PUT request with the user-defined property and value
+	$scope.putMarkedMessages = function(property, value){
+		//Parse value (string) as an int (in base 10)
+		value = parseInt(value, 10);
+		if(property == 'read'){
+			for(i = 0; i < $scope.markedMessages.length; i++){
+				putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
+				//Change the message's Deleted attribute to true
+				$scope.markedMessages[i].IsRead = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
 			}
-			else if($scope.markedMessages[i].SenderName == "Me"){
-				$scope.markedMessages[i].SenderDeleted = 1;
+		}
+		else if(property == 'deleted'){
+			for(i = 0; i < $scope.markedMessages.length; i++){
+				putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
+				//Change the message's Deleted attribute to true
+				if($scope.markedMessages[i].ReceiverName == "Me"){
+					$scope.markedMessages[i].ReceiverDeleted = value;
+				}
+				else if($scope.markedMessages[i].SenderName == "Me"){
+					$scope.markedMessages[i].SenderDeleted = value;
+				}
+				//PUT the message using the message URL
+				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
 			}
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
 		}
-		$scope.refreshMessages();
-	}
-	
-	//Changes the marked messages not appear in the Deleted section
-	$scope.markAsFullyDeleted = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].Deleted = 2;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
+		//$scope.refreshCurrentMessages();
 	}
 	
 	//Refreshes all of the user's messages
 	$scope.refreshMessages = function(){
+		$scope.refreshInbox();
+		$scope.refreshSent();
+		$scope.refreshDrafts();
+		$.when($scope.refreshDeleted()).then($scope.$apply());
+	}
+	
+	$scope.refreshInbox = function(){
 		getData.get($scope.inboxURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -983,7 +971,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].ReceiverName = "Me";
 			}
 			$scope.inboxMessages = data;
+			if($scope.currentMessageType == 'inbox'){
+				$scope.currentMessages = $scope.inboxMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshSent = function(){
 		getData.get($scope.sentURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -991,7 +986,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			}
 			$scope.sentMessages = data;
+			if($scope.currentMessageType == 'sent'){
+				$scope.currentMessages = $scope.sentMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshDrafts = function(){
 		getData.get($scope.draftsURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -999,7 +1001,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].SenderName = "Me";
 			}
 			$scope.draftMessages = data;
+			if($scope.currentMessageType == 'drafts'){
+				$scope.currentMessages = $scope.draftMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshDeleted = function(){
 		getData.get($scope.deletedURL).success(function(data) {
 		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
 			for(i = 0; i < data.records.length; i++)
@@ -1014,9 +1023,28 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				}
 			}
 			$scope.deletedMessages = data;
+			if($scope.currentMessageType == 'deleted'){
+				$scope.currentMessages = $scope.deletedMessages;
+				$scope.$apply();
+			}
 		});
-		//Reset the current messages to the newly refreshed messages
-		$scope.setMessageType($scope.currentMessageType);
+	}
+	
+	$scope.refreshCurrentMessages = function(){
+		switch($scope.currentMessageType){
+			case 'inbox':
+				$scope.refreshInbox();
+				break;
+			case 'sent':
+				$scope.refreshSent();
+				break;
+			case 'drafts':
+				$scope.refreshDrafts();
+				break;
+			case 'deleted':
+				$scope.refreshDeleted();
+				break;
+		}
 	}
 	
 	$scope.deleteSelectedMessage = function(){

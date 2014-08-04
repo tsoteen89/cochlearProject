@@ -6,7 +6,7 @@
 		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
 		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
 		</button>
-		<input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="tab.isSelected('composeMessage')" ng-model="search">
+		<input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="isTypeSelected('composeMessage')" ng-model="search">
 	  </div>
 	  
 	  <div class="col-xs-3">
@@ -41,9 +41,10 @@
 	
 	  <div class="col-xs-7 message-display" ng-show="displayMessages">
 		<div class="messageToolbar"> 
-			<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsDeleted()"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="markAsRead()"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
-			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="markAsUnread()"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
+			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
 			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
 			<hr></br>
 		</div>
