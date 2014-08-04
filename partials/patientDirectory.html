@@ -33,9 +33,9 @@
                             <p ng-if=patient.Sex=='m'>Male</p>
                             <p ng-if=patient.Sex=='f'>Female</p>
                             <p> Age </p> 
-                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:15px"> <br> <br><br><br><br><br><br><br> <br> </p>
-                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:7px"> 
-                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <br> <br></p>
+                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:10px"> <br> <br><br><br><br><br> </p>
+                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:10px"> 
+                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br> <br></p>
                             <button style="margin-left: 45%; margin-bottom:8x" ng-click="isPatientCollapsed = !isPatientCollapsed">
                                 Patient Details </button>
                             <div collapse="isPatientCollapsed">
@@ -58,7 +58,7 @@
 
                         <div style="float: left; border: 1px #11ace9 solid; width:65%;  border-radius:5px; background-color:#cae5f0 " class="container" ng-controller="dotProgressCtrl"> 
                             <div ng-repeat="careTeam in patient.CareTeams" style="margin-top:5px" >
-                                EventID:{{careTeam.CareTeamID}} <br> 
+                                Event : {{careTeam.Description}} <br> 
                                 Current Phase : {{careTeam.CurrentPhaseID}} <br> 
                                 {{setProgress(careTeam)}}
                                 <!--
