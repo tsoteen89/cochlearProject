@@ -1,6 +1,6 @@
-<div class="container" ng-controller="apiMessagingController" ng-init="setMessageType('inbox')">
+<div class="container" ng-controller="TabController as tab" ng-init="tab.selectTab('messages')">
   <div class="row">
-	<div class="messaging-system">
+	<div class="messaging-system" ng-show="tab.isSelected('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox')">
 	
 	  <div class="col-xs-10 button-wrapper">
 		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
@@ -99,5 +99,14 @@
 		  </div>
 	  </div>
 	</div>
+	
+	<div class="alertSystem" ng-show="tab.isSelected('alerts')" ng-controller="alertsController">
+		
+	</div>
+	
+	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController">
+		
+	</div>
+	
   </div>
 </div>

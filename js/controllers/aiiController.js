@@ -557,7 +557,7 @@ controllers.editUserController = function($scope, $http, getData, putData){
 
 
 //Controller used on messages to process API methods for Users' Messages
-controllers.apiMessagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData) {   
+controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData) {   
     
 	//User's ID (will be retrieved using session data)
 	$scope.userID = 30;
@@ -572,10 +572,10 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 	$scope.currentMessageType;
 	$scope.currentMessages;
 	
-    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
-	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
-	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/30/deleted";
+    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/inbox";
+	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/sent";
+	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/drafts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/deleted";
 	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
     
     //Grab all inbox messages using patientURL 
@@ -1102,8 +1102,44 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 
 //************************************END MESSAGING CONTROLLERS***************************************//
  
-    
 
+ 
+//***************************************ALERT CONTROLLERS********************************************// 
+ 
+ 
+controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+
+	$scope.careTeamID = 10;
+	$scope.userLevelID = 1;
+
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/alerts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedAlerts";
+
+};
+ 
+ 
+//*************************************END ALERT CONTROLLERS******************************************//
+ 
+
+ 
+//***********************************NOTIFICATION CONTROLLERS*****************************************// 
+ 
+ 
+controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+
+	$scope.careTeamID = 10;
+	$scope.userLevelID = 1;
+
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
+
+};
+
+
+//*********************************END NOTIFICATION CONTROLLERS***************************************// 
+ 
+ 
+ 
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
