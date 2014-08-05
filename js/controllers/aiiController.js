@@ -124,7 +124,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.phaseName=persistData.getPhaseName();
     $scope.patientName= persistData.getPatientName();
-    $scope.questionsURL = "../aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
     
@@ -191,7 +191,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     };
     
     $scope.postSurgery = function() {
-        postData.post('../aii-api/v1/surgeryHistory',$scope.surgery);
+        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
     //Display the next set of questions for a phase
