@@ -1,147 +1,104 @@
-<!DOCTYPE html>
-<html lang="en" data-ng-app="myApp" style="width:100%;height:100%">
-    
-	<head>
-		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/progressDots.css" rel="stylesheet" type="text/css">
-        <style>
-       /* p{
-            margin-bottom: 0px;
-            font-size: 85%;
-        }*/
-        hr{
-            border-top: 1px solid #11ace9;
-        }
-        
-        </style>
-	</head>
-    
-	<body style="width:100%;height:100%">
-        <div style="margin: 1% 1% 1% 1%; height:100%; width:98%; border-style: dashed dashed none dashed ; border-width: 2px;" 
-             ng-controller="apiPatientsController">
-            <h1 style="color:#84a4b4"> Patient Overviews</h1>
-            
-            <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
-                <div ng-controller="collapseCtrl" class="container" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
-                    <div class="container"  >
- <!--ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true"-->
-                        
-                        <div  style="float: left; border: 1px #96b2b4 solid; border-radius:5px; 
-                                    margin-left:3% ; width:25%; padding:8px; background-color:#cae5f0">
-
-                            <p ><b>{{patient.First }}  {{patient.Last |uppercase }} </b></p> 
-                            <p ng-if=patient.Sex=='m'>Male</p>
-                            <p ng-if=patient.Sex=='f'>Female</p>
-                            <p> Age </p> 
-                            <p ng-if="patient.CareTeams.length==1" style="margin-bottom:10px"> <br> <br><br><br><br><br> </p>
-                            <p ng-if="patient.CareTeams.length==2" style="margin-bottom:10px"> 
-                                <br> <br> <br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br> <br></p>
-                            <button style="margin-left: 45%; margin-bottom:8x" ng-click="isPatientCollapsed = !isPatientCollapsed">
-                                Patient Details </button>
-                            <div collapse="isPatientCollapsed">
-
-                                <div style=" margin-left:1%; padding:2px; font-size:90% ">
-                                    More Patient Data <br>
-                                    <b> BMI: </b> {{patient.BMI}} <br>
-                                    <b> Weight: </b>{{patient.Weight}} lbs <br>
-                                    <b> Height: </b>{{patient.Height/12 | number:0}} ft {{patient.Height%12}} in <br>
-                                    <b>Phone: </b> ({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}} <br>
-                                    <b>Email: </b> <a href="mailto:{{patient.Email}}">{{patient.Email}} </a><br>
-                                    <b>Address: </b> {{patient.Address1}} <br>
-                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{patient.City}}, {{patient.State}} {{patient.Zipcode}} <br>
-
-                                </div> 
-
-                            </div>
-
-                        </div>
-
-                        <div style="float: left; border: 1px #11ace9 solid; width:65%;  border-radius:5px; background-color:#cae5f0 " class="container" ng-controller="dotProgressCtrl"> 
-                            <div ng-repeat="careTeam in patient.CareTeams" style="margin-top:5px" >
-                                Event : {{careTeam.Description}} <br> 
-                                Current Phase : {{careTeam.CurrentPhaseID}} <br> 
-                                {{setProgress(careTeam)}}
-                                <!--
-                                <progressbar value="progress" type="success">
-                                    <b> {{progress}}%</b>
-                                </progressbar>
-                                -->
-                                <div class="row bs-wizard" style="border-bottom:0; margin-left:1%" >
-                                    <!--class="col-xs-1 bs-wizard-step complete/ACTIVE?DISABLE"-->
-                                    <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1">
-                                     <div class="text-center bs-wizard-stepnum"> &nbsp;</div>
-                                      <div class="progress" ><div class="progress-bar"></div></div>
-                                      <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2"
-                                         href="#/questions" ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
-                                      <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)"
-                                         href="#/audioQuestions" ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
-                                      <div class="bs-wizard-info text-center">{{phase.Name}}</div>
-                                    </div>
-                                    
-                                    
-                                    <div class="col-xs-1 bs-wizard-step active" >
-                                      <div class="text-center bs-wizard-stepnum"> &nbsp;</div>
-                                      <div class="progress" ><div class="progress-bar" style="padding-top:10px"></div></div>
-                                      <a ng-if="careTeam.CurrentPhaseID < 7 && careTeam.CurrentPhaseID != 2"
-                                         href="#/questions"
-                                         ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
-                                         class="bs-wizard-dot"></a>
-                                        <a ng-if="careTeam.CurrentPhaseID < 12 && (careTeam.CurrentPhaseID > 6 || careTeam.CurrentPhaseID ==2)"
-                                         href="#/audioQuestions" 
-                                           ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)"
-                                           class="bs-wizard-dot"></a>
-                                      <div class="bs-wizard-info text-center">{{phases[careTeam.CurrentPhaseID-1].Name}}</div>
-                                    </div>
-                                    
-
-                                    
-                                    <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
-                                     <div class="text-center bs-wizard-stepnum"> &nbsp;</div>
-                                      <div class="progress" ><div class="progress-bar"></div></div>
-                                      <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, phase.Name, patient)" class="bs-wizard-dot"></a>
-                                      <div class="bs-wizard-info text-center">{{phase.Name}}</div>
-                                    </div>
-
-
-                                </div>
-                                 
-
-                            </div>
-                            <button style="margin-left: 75%; margin-bottom:8px" 
-                                        ng-click="toggleDataCollapse()"> 
-                                    See Care Team Details </button> 
-                            
-                            <div collapse="isDataCollapsed" style="font-size:90%">
-                            
-                            <div style=" margin-left:2%; padding:2px">
-                                {{patient.First}} {{patient.Last}}'s Implant Providers <br>
-                                <a ng-repeat="facility in patient.Providers" >
-                                    {{facility.Name}} <br>
-                                </a>
-                                <br>
-                                <div style="float:left">
-                                    Implant type: Cochlear Nucleus CI422 with Slim Straight Electrode <br>
-                                    Sound Processor Type: CP920 (without Accessory Port)
-                                </div>
-                            </div> 
-                            
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <!--Collapseable Content-->
-                    <div class="container" style="margin:1%">
-                        
-
-
-                        
-                        </div>
-                    </div>
-
-                
+<div id = "cp_patientDirectory">
+  <div ng-controller="apiPatientsController">
+    <h1>Patient Overviews</h1>
+    <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
+      <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
+        <div class="container">
+          <div class = "cp_patientInfo">
+            <div id = "cp_patientContainer">
+              <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+              <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
+              <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+              <p class = "cp_patientAge">Age</p>
+              <p ng-if="patient.CareTeams.length==1"></p>
+              <p ng-if="patient.CareTeams.length==2"></p>
             </div>
-        </div>
-            
+            <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">    Patient Details
+            </button>
+            <div id = "cp_patientCollapse" collapse="isPatientCollapsed">
+                <hr>
+                <span class = "cp_extraPatientInfo">BMI:</span> &nbsp; {{patient.BMI}}<br>
+                <span class = "cp_extraPatientInfo">Weight:</span> &nbsp; {{patient.Weight}} lbs<br>
+                <span class = "cp_extraPatientInfo">Height:</span> &nbsp; {{patient.Height/12 | number:0}} ft {{patient.Height%12}} in<br>
+                <span class = "cp_extraPatientInfo">Phone:</span> &nbsp; ({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
+                <span class = "cp_extraPatientInfo">Email:</span> &nbsp; <a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
+                <span class = "cp_extraPatientInfo">Address:</span> &nbsp; {{patient.Address1}} {{patient.City}}, {{patient.State}} {{patient.Zipcode}}<br>
+            </div>
+          </div>
 
-	</body>
-</html>
+          <div class="cp_patientPhase" ng-controller="dotProgressCtrl">
+            <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
+              Event: {{careTeam.Description}}<br>
+              Current Phase : {{careTeam.CurrentPhaseID}}<br>
+              {{setProgress(careTeam)}}
+              <div class="row bs-wizard">
+                <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1">
+                  <div class="text-center bs-wizard-stepnum">
+                    &nbsp;
+                  </div>
+                  <div class="progress" >
+                    <div class="progress-bar">
+                    </div>
+                  </div>
+                  <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/questions" ng-click="goToQuestions(careTeam, phase)" class="bs-wizard-dot"></a>
+                  <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/audioQuestions" ng-click="goToQuestions(careTeam, phase)" class="bs-wizard-dot"></a>
+                  <div class="bs-wizard-info text-center">
+                    {{phase.Name}}
+                  </div>
+                </div>
+                <div class="col-xs-1 bs-wizard-step active" >
+                  <div class="text-center bs-wizard-stepnum">
+                    &nbsp;
+                  </div>
+                  <div class="progress" >
+                    <div class="progress-bar">
+                    </div>
+                  </div>
+                  <a ng-if="careTeam.CurrentPhaseID < 7 && careTeam.CurrentPhaseID != 2" href="#/questions"
+                  ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot"></a>
+                  <a ng-if="careTeam.CurrentPhaseID < 12 && (careTeam.CurrentPhaseID > 6 || careTeam.CurrentPhaseID ==2)" href="#/audioQuestions" ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot"></a>
+                  <div class="bs-wizard-info text-center">
+                    {{phases[careTeam.CurrentPhaseID-1].Name}}
+                  </div>
+                </div>
+                <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
+                  <div class="text-center bs-wizard-stepnum">
+                    &nbsp;
+                  </div>
+                  <div class="progress" >
+                    <div class="progress-bar">
+                    </div>
+                  </div>
+                  <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, phase.Name)" class="bs-wizard-dot"></a>
+                  <div class="bs-wizard-info text-center">
+                    {{phase.Name}}
+                  </div>
+                </div>
+              
+              </div>
+              <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()">
+                See Care Team Details 
+              </button>
+              <div id = "cp_phaseDetails" collapse="isDataCollapsed">
+                  <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
+                  <a ng-repeat="facility in patient.Providers">
+                    <span>{{facility.Name}}</span><br>
+                  </a><br>
+                  <div style="float:left">
+                    Implant type: Cochlear Nucleus CI422 with Slim Straight Electrode<br>
+                    Sound Processor Type: CP920 (without Accessory Port)
+                </div>
+              </div>
+            </div>
+          </div>
+        <div>
+        <!--Collapseable Content-->
+        <!-- 
+        <div class="container" style="margin:1%">
+        </div>
+        -->
+      </div>
+    </div>
+  </div>
+</div>
+
