@@ -61,6 +61,7 @@ myApp.factory('persistData', function () {
     var PhaseID;
     var loggedIn;
     var PhaseName;
+    var PatientName;
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
@@ -73,6 +74,13 @@ myApp.factory('persistData', function () {
         setPhaseName: function (data) {
             PhaseName = data;
             console.log(data);
+        },
+        setPatientName:function(data){
+            PatientName = data;
+            console.log(data);
+        },
+        getPatientName:function(data){
+            return PatientName;
         },
         getCareTeamID:function () {
             return CareTeamID;
@@ -109,11 +117,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.offSet = 0;
     $scope.n = 0;
     $scope.finished = false;
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()}
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.phaseName=persistData.getPhaseName();
+    $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
@@ -178,6 +188,10 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     //Post all answers saved 
     $scope.postAnswers = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+    };
+    
+    $scope.postSurgery = function() {
+        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
     //Display the next set of questions for a phase
@@ -446,11 +460,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
     }    
     
-    $scope.goToQuestions = function(careTeam, phase){
+    $scope.goToQuestions = function(careTeam, phase, patient){
         
         persistData.setCareTeamID(careTeam.CareTeamID);
         persistData.setPhaseID(phase.PhaseID);
         persistData.setPhaseName(phase.Name);
+        persistData.setPatientName(patient.First + " " + patient.Last);
     };
 
 };  
