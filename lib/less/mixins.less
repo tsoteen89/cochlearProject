@@ -1,0 +1,21 @@
+.box-shadow (@h-shadow, @v-shadow, @blur, @spread, @boxShadowColor){
+
+	box-shadow: @arguments;
+}
+
+.cp_formProperties() {
+
+	@{cp_margin}-left: 20%; 
+    @{cp_margin}-top:2%; 
+    background-@{cp_color}: @cp_formBgColor;
+    border-@{cp_color}: @cp_borderColor;
+    border-style: solid; 
+    border-@{cp_width}: 1px;
+    border-radius:7px; 
+    box-shadow: 0 2px 10px -1px gray; 
+    padding: 2% 2% 2% 2%; 
+    @{cp_margin}-bottom:1%; 
+    @{cp_width}:60%; 
+    float: left; 
+    display:block;
+}
