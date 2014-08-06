@@ -1122,7 +1122,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 //***************************************ALERT CONTROLLERS********************************************// 
  
  
-controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
 	$scope.careTeamID = 10;
 	$scope.userLevelID = 1;
@@ -1130,6 +1130,17 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/alerts";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedAlerts";
 
+	$scope.currentAlerts;
+	
+	/* getData.get($scope.receivedURL).success(function(data) {
+		$scope.receivedAlerts = data;
+		$scope.currentAlerts = $scope.receivedAlerts;
+    });
+	
+	getData.get($scope.deletedURL).success(function(data) {
+		$scope.deletedAlerts = data;
+    }); */
+	
 };
  
  
