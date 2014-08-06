@@ -1132,14 +1132,14 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 
 	$scope.currentAlerts;
 	
-	/* getData.get($scope.receivedURL).success(function(data) {
+	getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedAlerts = data;
 		$scope.currentAlerts = $scope.receivedAlerts;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		$scope.deletedAlerts = data;
-    }); */
+    }); 
 	
 };
  
@@ -1153,12 +1153,47 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
  
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
-	$scope.careTeamID = 10;
+	$scope.careTeamID = 1010;
 	$scope.userLevelID = 1;
 
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
 
+	$scope.currentNotificationType = 'received';
+	
+	/* Miscellaneous Variables */
+	$scope.selectedNotification;
+	$scope.showPopup = false;
+	
+	getData.get($scope.receivedURL).success(function(data) {
+		$scope.receivedNotifications = data;
+		$scope.currentNotifications = $scope.receivedAlerts;
+    });
+	
+	getData.get($scope.deletedURL).success(function(data) {
+		$scope.deletedNotifications = data;
+    }); 
+	
+	$scope.setNotificationType = function(notificationType){
+		$scope.currentNotificationType = notificationType;
+	}
+	
+	$scope.isTypeSelected = function(notificationType){
+		if(notificationType == $scope.currentNotificationType)
+			return true;
+		return false;
+	}
+	
+	$scope.togglePopup = function(notification){
+		if($scope.showPopup){
+			$scope.selectedNotification = [];
+		}
+		else{
+			$scope.selectedNotification = notification;
+		}
+		$scope.showPopup = !$scope.showPopup;
+	}
+	
 };
 
 
