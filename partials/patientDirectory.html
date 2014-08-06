@@ -10,11 +10,14 @@
               <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
               <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
               <p class = "cp_patientAge">Age</p>
-              <p ng-if="patient.CareTeams.length==1"></p>
-              <p ng-if="patient.CareTeams.length==2"></p>
+              <p ng-if="patient.CareTeams.length==1"> </p>
+              <p ng-if="patient.CareTeams.length==2" ng-style="{'height': '243px'}"></p>
             </div>
-            <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">    Patient Details
+              <!--Collapse Patient Details under basic patient info-->
+            <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">
+                Patient Details
             </button>
+              <!--Patient Details Well that collapses on click of "Patient Details" -->
             <div id = "cp_patientCollapse" collapse="isPatientCollapsed">
                 <hr>
                 <span class = "cp_extraPatientInfo">BMI:</span> &nbsp; {{patient.BMI}}<br>
@@ -26,6 +29,7 @@
             </div>
           </div>
 
+            
           <div class="cp_patientPhase" ng-controller="dotProgressCtrl">
             <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
               Event: {{careTeam.Description}}<br>
@@ -40,12 +44,15 @@
                     <div class="progress-bar">
                     </div>
                   </div>
-                  <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/questions" ng-click="goToQuestions(careTeam, phase)" class="bs-wizard-dot"></a>
-                  <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/audioQuestions" ng-click="goToQuestions(careTeam, phase)" class="bs-wizard-dot"></a>
+                  <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/questions" 
+                     ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
+                  <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/audioQuestions" 
+                     ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
                   <div class="bs-wizard-info text-center">
                     {{phase.Name}}
                   </div>
                 </div>
+                  
                 <div class="col-xs-1 bs-wizard-step active" >
                   <div class="text-center bs-wizard-stepnum">
                     &nbsp;
@@ -56,11 +63,13 @@
                   </div>
                   <a ng-if="careTeam.CurrentPhaseID < 7 && careTeam.CurrentPhaseID != 2" href="#/questions"
                   ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot"></a>
-                  <a ng-if="careTeam.CurrentPhaseID < 12 && (careTeam.CurrentPhaseID > 6 || careTeam.CurrentPhaseID ==2)" href="#/audioQuestions" ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot"></a>
+                  <a ng-if="careTeam.CurrentPhaseID < 12 && (careTeam.CurrentPhaseID > 6 || careTeam.CurrentPhaseID ==2)" href="#/audioQuestions" 
+                     ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot"></a>
                   <div class="bs-wizard-info text-center">
                     {{phases[careTeam.CurrentPhaseID-1].Name}}
                   </div>
                 </div>
+                  
                 <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
                   <div class="text-center bs-wizard-stepnum">
                     &nbsp;
@@ -69,19 +78,25 @@
                     <div class="progress-bar">
                     </div>
                   </div>
-                  <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, phase.Name)" class="bs-wizard-dot"></a>
+                  <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, , patient)" class="bs-wizard-dot"></a>
                   <div class="bs-wizard-info text-center">
                     {{phase.Name}}
                   </div>
                 </div>
               
               </div>
+            </div> <!-- End phaseProgress repeat for careTeams -->
+              
+              <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
               <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()">
                 See Care Team Details 
               </button>
+              
+              <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
               <div id = "cp_phaseDetails" collapse="isDataCollapsed">
+                  <hr>
                   <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
-                  <a ng-repeat="facility in patient.Providers">
+                  <a ng-repeat="facility in patient.Providers"> <!--patient.Providers = all facilities ever involved with patient-->
                     <span>{{facility.Name}}</span><br>
                   </a><br>
                   <div style="float:left">
@@ -89,14 +104,9 @@
                     Sound Processor Type: CP920 (without Accessory Port)
                 </div>
               </div>
-            </div>
+            
           </div>
-        <div>
-        <!--Collapseable Content-->
-        <!-- 
-        <div class="container" style="margin:1%">
         </div>
-        -->
       </div>
     </div>
   </div>
