@@ -1,43 +1,34 @@
+@import "variables";
+@import "mixins";
+@import "properties";
+
+
 /************************************BACKGROUND COLOR************************************/
 
 #cp_background-gradient {
 
-	// background: -webkit-linear-gradient(#E7EEF1, #5CB8E6); /* For Safari 5.1 to 6.0 */
- // 	background: -o-linear-gradient(#E7EEF1, #5CB8E6); /* For Opera 11.1 to 12.0 */
- // 	background: -moz-linear-gradient(#E7EEF1, #5CB8E6); /* For Firefox 3.6 to 15 */
- // 	background: linear-gradient(#E7EEF1, #5CB8E6); /* Standard syntax */
- // 	background-repeat: no-repeat;
- // 	background-attachment: fixed;
- 	background-color: #DDEAEB;
+ 	background-@{cp_color}: @cp_lightBlueBg;
 }
-
-.cp_fixedbgStyle {
-
-	//background-color: #000;
-	//
-}
-
-/*********************************END BACKGROUND COLOR**********************************/
-
 
 /**************************************TOP NAVBAR***************************************/
 #cp_topNavigation {
 
 	.navbar{
-		background-color: #FFFFFF;
-		box-shadow: 0 0 20px 0 #787878;
-		height: 50px;
+		background-@{cp_color}: @cp_navbarBg; 
+		.box-shadow(0,0,20px,0,@cp_boxShadowColor);
+		@{cp_height}: @cp_navbarHeight;
 	}
 
 	.cp_navbar-brand {
 		
 		
-		font-size: 20px;
-		color: #787878;
+		font-size: @cp_navbarBrandSize;
+		@{cp_color}: @cp_boxShadowColor;
+		
 		@media (max-width: 310px) {
 			top: 20px;
-		    font-size: 11px;
-		    font-weight: bold;
+		    font-size: 10px;
+		    font-@{cp_weight}: bold;
 		}
 	}
 
@@ -45,14 +36,14 @@
 		@media (max-width: 816px) {
 			button {
 
-				margin-left: 5px;
+				@{cp_margin}-left: 5px;
 			}
 		}
 		@media (min-width: 817px) {
 
 			button {
 
-				margin-left: 23px;
+				@{cp_margin}-left: 23px;
 			}
 		}
 	}
@@ -68,12 +59,12 @@
 }
 
 #sidebar-wrapper {
-  margin-left: -150px;
+  @{cp_margin}-left: -150px;
   left: 150px;
-  width: 150px;
+  @{cp_width}: 150px;
   background: #5CB8E6;
   position: fixed;
-  height: 100%;
+  @{cp_height}: 100%;
   overflow-y: auto;
   z-index: 1000;
   transition: all 0.4s ease 0s;
@@ -90,30 +81,30 @@
 }
 
 #page-content-wrapper {
-  width: 100%;
+	@{cp_width}: 100%;
 }
 
 .sidebar-nav {
   position: absolute;
   top: 0px;
-  width: 150px;
+  @{cp_width}: 150px;
   list-style: none;
-  margin: 0;
+  @{cp_margin}: 0;
   padding: 0;
   //border: 1px solid #000;
 }
 
 .sidebar-nav li {
-  line-height: 33px;
+  line-@{cp_height}: 33px;
   text-indent: 0px;
-  min-height: 100px;
+  min-@{cp_height}: 100px;
   border-bottom: 1px solid #325bbd;
   box-shadow: 0 6px 6px -6px #000;
 }
 
 .sidebar-nav li a {
-	font-weight: bold;
-  	color: #325bbd;
+	font-@{cp_weight}: bold;
+  	@{cp_color}: #325bbd;
   	display: block;
   	text-decoration: none;
   	padding-left: 60px;
@@ -148,13 +139,13 @@
 .sidebar-nav li a span:before {
   position: absolute;
   left: 54px;
-  color: #325bbd;
-  line-height: 10px;
+  @{cp_color}: #325bbd;
+  line-@{cp_height}: 10px;
 }
 
 .sidebar-nav li a:hover,
 .sidebar-nav li.active {
-  color: #fff;
+  @{cp_color}: #fff;
   background: rgba(255,255,255,0.2);
   text-decoration: none;
 }
@@ -165,14 +156,14 @@
 }
 
 .content-header {
-  height: 65px;
-  line-height: 65px;
+  @{cp_height}: 65px;
+  line-@{cp_height}: 65px;
 }
 
 .content-header h1 {
-  margin: 0;
-  margin-left: 20px;
-  line-height: 65px;
+  @{cp_margin}: 0;
+  @{cp_margin}-left: 20px;
+  line-@{cp_height}: 65px;
   display: inline-block;
 }
 
@@ -197,7 +188,7 @@
 
 	#wrapper.active #sidebar-wrapper {
 	  left: 250px;
-	  width: 250px;
+	  @{cp_width}: 250px;
 	  transition: all 0.4s ease 0s;
 	}
 
@@ -213,77 +204,67 @@
 
 /***********************************END LEFT NAVBAR************************************/
 
+
+
+
+
+
 /**************************************LOGIN.HTML**************************************/
 
 #cp_developerLogin {
 	
-	margin-top: 20px;	
+	@{cp_margin}-top: 20px;	
 }
 
 #cp_loginContainer {
 	
 	@media (max-width: 770px){
 	
-		margin-top: 70px;	
+		@{cp_margin}-top: 70px;	
 	} 
 
-	margin-top: 100px;
+	@{cp_margin}-top: 100px;
 	#loginForm {
 		padding:25px;
-		border: 3px solid #000;
-		// border: 3px solid #5CB8E6;
-		box-shadow: 0 0 20px 0 #FFF;
+		border: 3px solid @cp_borderColor;
+		.box-shadow(0, 0, 20px, 0, @cp_boxShadowColor);
+		//box-shadow: 0 0 20px 0 @cp_boxShadowColor;
 		border-radius: 10px;
 		h4 {
 			padding: 5px 5px 5px 5px;
-			font-weight: bold;
+			font-@{cp_weight}: bold;
 		}
 		hr{
-			border-color: #000;
-			// border-color: #5CB8E6;
+			border-@{cp_color}: @cp_borderColor;
 		}
 		
 	}
 
 	.cp_loginLabel { 
 
-		margin: 15px 0 12px 0;
+		@{cp_margin}: 15px 0 12px 0;
 	}
 
 	.cp_loginInput {
 
-		margin-bottom: 15px;
-	}
-
-	.cp_forgotPasswordLink {
-
-		text-decoration: none;
-		color: #000;
-		margin: 3px 10px 5px 0;
-		float: left;
-	}
-
-	.cp_forgotPasswordLink:hover {
-		
-		color: red;
-		font-weight: bold;
+		@{cp_margin}-bottom: 15px;
 	}
 
 	.cp_registrationLink {
 
-		color: #000;
+		@{cp_color}: #000;
 		text-decoration: none;
 	}
 
 	.cp_registrationLink:hover {
 
-		color: #3fbd32;
-		font-weight: bold;
+		@{cp_color}: #3fbd32;
+		font-@{cp_weight}: bold;
 	}
 
 	.cp_tempLogout{
 
-		margin-botom: 60px;
+		@{cp_margin}-botom: 60px;
 	}
 }
 
@@ -319,53 +300,152 @@
 
 /******************************Add User Form*************************************/
  #cp_addUserForm{
-     margin-left: 20%; 
-     margin-top:2%; 
-     background-color: #EDF8FF;
-     border-style: solid; 
-     border-width: 1px;
-     border-radius:7px; 
-     box-shadow: 0 2px 10px -1px gray; 
-     padding: 2% 2% 2% 2%; 
-     margin-bottom:1%; 
-     width:60%; 
-     float: left; 
-     display:block;
+ 	 .cp_formProperties();
  }
+
  
- 
- 
- 
- 
- 
- 
- 
- /******************************End Add User**************************************/
- 
- 
- 
- /******************************New Patient Form**********************************/
- #cp_newPatientForm{
-         
-     margin-left: 20%; 
-     margin-top:2%; 
-     background-color: #EDF8FF;
-     border-style: solid; 
-     border-width: 1px;
-     border-radius:7px; 
-     box-shadow: 0 2px 10px -1px gray; 
-     padding: 2% 2% 2% 2%; 
-     margin-bottom:1%; 
-     width:60%; 
-     float: left; 
-     display:block;
-     
-     
- }
- 
- 
- 
- /******************************End Patient Form**********************************/
+/******************************New Patient Form**********************************/
+ #cp_newPatientForm{    
+     .cp_formProperties();
+ } 
+
+
+ /*****************************Patient Directory**********************************/
+
+#cp_patientDirectory {
+
+	margin-bottom: 10px;
+
+	h1 {
+		@{cp_color}: #84a4b4;
+		@{cp_margin}-left: 20px;
+	}
+
+	p{
+        @{cp_margin}-bottom: 0px;
+        font-size: 85%;
+    }
+
+    .cp_patientInfo {
+
+    	float: left; 
+    	border: 1px #96b2b4 solid; 
+    	border-radius:5px;
+        margin-left:3%; 
+        width:25%; 
+        padding:10px; 
+        background-color:#cae5f0;
+        min-height: 281px;
+        margin-bottom: 18px;
+
+        #cp_patientContainer {
+
+	    	margin-bottom: 171px;
+
+	    	#cp_patientFname {
+
+	    		font-weight: bold;
+	    		font-size: 15px;
+	    	}
+
+	    	.cp_patientSex {
+
+	    		font-size: 13px;
+	    	}
+
+	    	.cp_patientAge {
+
+	    		font-size: 13px;
+	    	}
+	    }
+	    #cp_patientCollapse {
+
+    		padding: 10px 0 10px 0;
+
+    		.cp_extraPatientInfo {
+    			font-weight: bold;
+    			font-size: 12px;
+    		}
+    	}
+    }
+
+    #cp_email {
+    	font-size: 12px;
+    }
+
+    #cp_patientDetailsButton {
+
+    	position: relative;
+    	left: 55%;
+    }
+
+    .cp_patientPhase {
+
+    	float: left; 
+    	border: 1px #11ace9 solid; 
+    	width:65%;  
+    	border-radius:5px; 
+    	background-color:#cae5f0;
+    	min-height: 260px;
+    	margin-bottom: 18px;
+
+    	.cp_patientPhaseData {
+
+    		padding: 12px 0 0 8px;
+    		font-size: 14px;
+    		.bs-wizard {margin-top: 40px;border-bottom:0; margin-left:1%;}
+
+			/*Form Wizard*/
+			.bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;}
+			.bs-wizard > .bs-wizard-step {padding: 0; position: relative;}
+			.bs-wizard > .bs-wizard-step + .bs-wizard-step {}
+			.bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: black; font-size: 10px; -webkit-transform: rotate(-55deg);}
+			.bs-wizard > .bs-wizard-step .bs-wizard-info {color: #777; font-size: 11px; margin-top:20%; -webkit-transform: rotate(-65deg); float: left;}
+			.bs-wizard > .bs-wizard-step > .bs-wizard-dot {position: absolute; width: 30px; height: 30px; display: block; background: #11ace9; top: 45px; left: 50%; margin-top: -15px; margin-left: -15px; border-radius: 50%;} 
+			.bs-wizard > .bs-wizard-step > .bs-wizard-dot:after {content: ' '; width: 14px; height: 14px; background: #00cff9; border-radius: 50px; position: absolute; top: 8px; left: 8px; } 
+			.bs-wizard > .bs-wizard-step > .progress {position: relative; border-radius: 0px; height: 8px; box-shadow: none; margin: 27px 0;}
+			.bs-wizard > .bs-wizard-step > .progress > .progress-bar {width:0px; box-shadow: none; background: #11ace9;}
+			.bs-wizard > .bs-wizard-step.complete > .progress > .progress-bar {width:100%;}
+			.bs-wizard > .bs-wizard-step.active > .progress > .progress-bar {width:50%;padding-top:10px;}
+			.bs-wizard > .bs-wizard-step:first-child.active > .progress > .progress-bar {width:0%;}
+			.bs-wizard > .bs-wizard-step:last-child.active > .progress > .progress-bar {width: 100%;}
+			.bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot {background-color: #f5f5f5;}
+			.bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot:after {opacity: 0;}
+			.bs-wizard > .bs-wizard-step:first-child  > .progress {left: 50%; width: 50%;}
+			.bs-wizard > .bs-wizard-step:last-child  > .progress {width: 50%;}
+			.bs-wizard > .bs-wizard-step.disabled a.bs-wizard-dot{ pointer-events: none; }
+			/*END Form Wizard*/
+    	}
+    }
+
+	#cp_patientPhaseDetails {
+
+		margin-left: 75%;
+		margin-bottom:18px
+	}
+
+	#cp_phaseDetails {
+
+		font-size: 11px;
+		margin-left:2%;
+		padding:2px;
+
+		.cp_patientName {
+
+			font-weight: bold;
+			
+		}
+		span{
+			font-size: 13px;
+		}
+	}
+}
+
+
+ /***************************End Patient Directory********************************/
+
+
+
 // .navbar-static-top {
 //   margin-bottom:20px;
 // }
