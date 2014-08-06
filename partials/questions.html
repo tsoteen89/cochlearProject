@@ -39,6 +39,32 @@
                                            checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
+                                
+                                <div ng-if="question.Input.Type == 'SurgeryHistory'">
+                                    {{surgery}}
+                                    <div ng-repeat="subfield in question.Input.Values">
+                                        <br>
+                                        <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{subfield.Name}} </label>
+                                        <div ng-if="subfield.Type == 'Date'">
+                                            <input type="Date" name={{question.QuestionID}} 
+                                                   ng-model="surgery.Date" ng-blur="">
+                                        </div>
+                                        <div ng-if="subfield.Type == 'Text'">
+                                            <input type="Text" name={{question.QuestionID}} 
+                                                   ng-model="surgery.Other" ng-if="$!last">
+                                            <input type="Text" name={{question.QuestionID}} 
+                                                   ng-model="surgery.Other" ng-if="$last" ng-blur="postSurgery()">
+                                        </div>
+                                        <div ng-if="subfield.Type == 'Radio'" ng-repeat="values in subfield.Values" >
+                                            <input type="Radio" value={{values}} name={{question.QuestionID}} 
+                                                   ng-model="surgery[subfield.Name]" ng-if="$last" ng-blur="postSurgery()">
+                                            <input type="Radio" value={{values}} name={{question.QuestionID}} 
+                                                   ng-model="surgery[subfield.Name]" ng-if="!$last">
+                                            <label class="choice" >{{values}}</label>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </span>
                             <p class="guidelines">
                                 <small>{{question.QuestionHelp}}</small>
@@ -82,7 +108,7 @@
     </div>
 
     <div style="background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%;margin-left:55%;position:fixed">
-        <h3>Patient Summary for {Patient Name}</h3><br>
+        <h3>Patient Summary for {{patientName}}</h3><br>
         
         <div class="btn-group" dropdown is-open="status.isopen">
           <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
