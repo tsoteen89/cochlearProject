@@ -105,7 +105,22 @@ myApp.factory('persistData', function () {
     
 //*****************************************END FACTORIES*******************************************//
 
+//**************************************Dashboard CONTROLLERS***************************************//
 
+    
+//Controller used to handle display of Questions for a Patient's CareTeam  
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http){
+    
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
+
+    //Grab Facility info  using facilityURL
+    getData.get($scope.facilityURL).success(function(data) {
+        $scope.facData = data;
+    });
+    
+};
+    
+//*****************************************END Dashboard*******************************************//
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
@@ -391,6 +406,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
     $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
@@ -403,6 +419,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     getData.get($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
+    
     
     //Put method for patient.
     $scope.processPut = function() {
