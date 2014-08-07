@@ -61,6 +61,7 @@ myApp.factory('persistData', function () {
     var PhaseID;
     var loggedIn;
     var PhaseName;
+    var PatientName;
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
@@ -73,6 +74,13 @@ myApp.factory('persistData', function () {
         setPhaseName: function (data) {
             PhaseName = data;
             console.log(data);
+        },
+        setPatientName:function(data){
+            PatientName = data;
+            console.log(data);
+        },
+        getPatientName:function(data){
+            return PatientName;
         },
         getCareTeamID:function () {
             return CareTeamID;
@@ -109,11 +117,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.offSet = 0;
     $scope.n = 0;
     $scope.finished = false;
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()}
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.phaseName=persistData.getPhaseName();
+    $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
@@ -178,6 +188,10 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     //Post all answers saved 
     $scope.postAnswers = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+    };
+    
+    $scope.postSurgery = function() {
+        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
     //Display the next set of questions for a phase
@@ -289,25 +303,25 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
     
+    $scope.conditions = {};
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
     $scope.answerArrayIndex = 1;
     $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
-    $scope.answer.CDA = {};
-    $scope.answer.AzBio = {};
-    $scope.answer.CNC = {};
-    $scope.answer.BKBSIN = {};
-    $scope.results = {};
+    $scope.answer.Results = { "Comprehensive Diagnostic Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}}, "AzBio" :{ "AzBio Test": {}}, "CNC": {"CNC Test": {}}, "BKB-SIN": {"BKB-SIN Test": {}}};
+
+    //$scope.results = {};
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
-    
+    /*
     $scope.buildResultsURL = function(){
         console.log("buildResults Called");
-        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.answer[0].LeftAidCondition + "/right/" + $scope.answer[0].RightAidCondition;
+        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.conditions.Left + "/right/" + $scope.conditions.Right;
     }
+    */
     
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
@@ -325,9 +339,17 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.updateResults = function(){
         console.log("updateResults Called");
-        $scope.buildResultsURL();
+        //$scope.buildResultsURL();
+        $scope.getConditionsID();
         getData.get($scope.resultsURL).success(function(data) {
             $scope.results = data.records;
+        });
+    }
+    
+    $scope.getConditionsID = function(){
+        console.log("getConditionsID Called");
+        getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
+            $scope.answer.ConditionsID = data.records.ConditionsID;
         });
     }
     
@@ -335,24 +357,18 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         console.log("clearCurrentTest Called");
         console.log(data);
         if(data == "Comprehensive Diagnostic Audiogram"){
-            $scope.answer.CDA['30'] = null;
-            $scope.answer.CDA['40'] = null;
-            $scope.answer.CDA['50'] = null;
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Pure Tone Average"] = {};
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Speech Reception Threshold"] = {};
+            $scope.answer.Results["Comprehensive Diagnostic Audiogram"]["Speech Discrimination Score"] = {};
         }
         else if(data == 'AzBio'){
-            $scope.answer.AzBio['60'] = null;
-            $scope.answer.AzBio['70'] = null;
-            $scope.answer.AzBio['80'] = null;
-            $scope.answer.AzBio['90'] = null;
+            $scope.answer.Results["AzBio"]["AzBio Test"] = {};
         }
         else if(data == 'CNC'){
-            $scope.answer.CNC['100'] = null;
-            $scope.answer.CNC['110'] = null;
-            $scope.answer.CNC['120'] = null;
+            $scope.answer.Results["CNC"]["CNC Test"] = {};
         }
         else if(data == 'BKB-SIN'){
-            $scope.answer.BKBSIN['130'] = null;
-            $scope.answer.BKBSIN['140'] = null;
+            $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
         $scope.updateResults();
     }
@@ -444,11 +460,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
     }    
     
-    $scope.goToQuestions = function(careTeam, phase){
+    $scope.goToQuestions = function(careTeam, phase, patient){
         
         persistData.setCareTeamID(careTeam.CareTeamID);
         persistData.setPhaseID(phase.PhaseID);
         persistData.setPhaseName(phase.Name);
+        persistData.setPatientName(patient.First + " " + patient.Last);
     };
 
 };  
@@ -555,7 +572,7 @@ controllers.editUserController = function($scope, $http, getData, putData){
 
 
 //Controller used on messages to process API methods for Users' Messages
-controllers.apiMessagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData) {   
+controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData) {   
     
 	//User's ID (will be retrieved using session data)
 	$scope.userID = 30;
@@ -566,10 +583,15 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
     //Messages that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedMessages = [];
 	
-    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/30/inbox";
-	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/30/sent";
-	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/30/drafts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/30/deleted";
+	//The type of message currently being displayed - inbox, sent, drafts, deleted
+	$scope.currentMessageType;
+	$scope.currentMessages;
+	
+    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/inbox";
+	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/sent";
+	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/drafts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/deleted";
+	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
     
     //Grab all inbox messages using patientURL 
     getData.get($scope.inboxURL).success(function(data) {
@@ -580,6 +602,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			data.records[i].ReceiverName = "Me";
 		}
 		$scope.inboxMessages = data;
+		$scope.currentMessages = $scope.inboxMessages;
     });
 	
 	 //Grab all sent messages using patientURL 
@@ -620,6 +643,88 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
         $scope.deletedMessages = data;
     });
+	
+	//Sets the current message type. This updates the current messages and
+	//alters the components of the message display.
+	$scope.setMessageType = function(messageType){
+		$scope.currentMessageType = messageType;
+		
+		switch($scope.currentMessageType){
+			case 'inbox':
+				$scope.currentMessages = $scope.inboxMessages;
+				$scope.displayMessages = true;
+				//Message table columns
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = true;
+				$scope.showForward = true;
+				$scope.showEdit = false;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'sent':
+				$scope.currentMessages = $scope.sentMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = false;
+				$scope.showTo = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = true;
+				$scope.showEdit = false;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'drafts':
+				$scope.currentMessages = $scope.draftMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = false;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = false;
+				$scope.showEdit = true;
+				$scope.showRestore = false;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentMessages = $scope.deletedMessages;
+				$scope.displayMessages = true;
+				$scope.showFrom = true;
+				$scope.showTo = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				//Selected Message buttons
+				$scope.showReply = false;
+				$scope.showForward = false;
+				$scope.showEdit = false;
+				$scope.showRestore = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+			case 'composeMessage':
+				$scope.displayMessages = false;
+				break;
+			default:
+				break;
+		}
+		//$scope.$apply();
+	}
+	
+	$scope.isTypeSelected = function(messageType){
+		if($scope.currentMessageType == messageType)
+			return true;
+		return false;
+	}
 	
 	//Toggles visibility of the message content display
 	$scope.togglePopup = function(message){
@@ -706,7 +811,24 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
 		}
 		else{
-			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+			var errorMessage = "The message could not be sent due to:"
+			if(!message.ReceiverID){
+				errorMessage += "\n     -No receiver defined."
+			}
+			if(!message.Subject){
+				errorMessage += "\n     -No subject defined."
+			}
+			if(!message.Content){
+				errorMessage += "\n     -No message content\nThe message has not been saved."
+			}
+			else if(message.Content){
+				//If the message had content, save it as a draft.
+				message.sent = 0;
+				postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+				
+				errorMessage += "\nThe message has been saved as a draft."
+			}
+			alert(errorMessage);
 		}
 	}
 	
@@ -726,7 +848,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
 		}
 		else{
-			console.log("ERROR: COULD NOT POST MESSAGE. MISSING FIELDS.");
+			alert("The message could not be saved as it contained no content.");
 		}
 	}
 	
@@ -818,58 +940,45 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 	}
 	
-	//Changes the marked messages to have Read = true with a PUT request 
-	$scope.markAsRead = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Read attribute to true
-			$scope.markedMessages[i].IsRead = 1;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
-	}
-	
-	//Changes the marked messages to have Read = false with a PUT request 
-	$scope.markAsUnread = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].IsRead = 0;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
-	}
-	
-	//Changes the marked messages to have Deleted = true with a PUT request 
-	$scope.markAsDeleted = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			if($scope.markedMessages[i].ReceiverName == "Me"){
-				$scope.markedMessages[i].ReceiverDeleted = 1;
+	//Send a PUT request with the user-defined property and value
+	$scope.putMarkedMessages = function(property, value){
+		//Parse value (string) as an int (in base 10)
+		value = parseInt(value, 10);
+		if(property == 'read'){
+			for(i = 0; i < $scope.markedMessages.length; i++){
+				putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
+				//Change the message's Deleted attribute to true
+				$scope.markedMessages[i].IsRead = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
 			}
-			else if($scope.markedMessages[i].SenderName == "Me"){
-				$scope.markedMessages[i].SenderDeleted = 1;
+		}
+		else if(property == 'deleted'){
+			for(i = 0; i < $scope.markedMessages.length; i++){
+				putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
+				//Change the message's Deleted attribute to true
+				if($scope.markedMessages[i].ReceiverName == "Me"){
+					$scope.markedMessages[i].ReceiverDeleted = value;
+				}
+				else if($scope.markedMessages[i].SenderName == "Me"){
+					$scope.markedMessages[i].SenderDeleted = value;
+				}
+				//PUT the message using the message URL
+				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
 			}
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
 		}
-		$scope.refreshMessages();
-	}
-	
-	//Changes the marked messages not appear in the Deleted section
-	$scope.markAsFullyDeleted = function(){
-		for(i = 0; i < $scope.markedMessages.length; i++){
-			messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.markedMessages[i].MessageID;
-			//Change the message's Deleted attribute to true
-			$scope.markedMessages[i].Deleted = 2;
-			//PUT the message using the message URL
-			putData.put(messageURL,$scope.markedMessages[i]);
-		}
+		//$scope.refreshCurrentMessages();
 	}
 	
 	//Refreshes all of the user's messages
 	$scope.refreshMessages = function(){
+		$scope.refreshInbox();
+		$scope.refreshSent();
+		$scope.refreshDrafts();
+		$.when($scope.refreshDeleted()).then($scope.$apply());
+	}
+	
+	$scope.refreshInbox = function(){
 		getData.get($scope.inboxURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -877,7 +986,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].ReceiverName = "Me";
 			}
 			$scope.inboxMessages = data;
+			if($scope.currentMessageType == 'inbox'){
+				$scope.currentMessages = $scope.inboxMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshSent = function(){
 		getData.get($scope.sentURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -885,7 +1001,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			}
 			$scope.sentMessages = data;
+			if($scope.currentMessageType == 'sent'){
+				$scope.currentMessages = $scope.sentMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshDrafts = function(){
 		getData.get($scope.draftsURL).success(function(data) {
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -893,7 +1016,14 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				data.records[i].SenderName = "Me";
 			}
 			$scope.draftMessages = data;
+			if($scope.currentMessageType == 'drafts'){
+				$scope.currentMessages = $scope.draftMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshDeleted = function(){
 		getData.get($scope.deletedURL).success(function(data) {
 		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
 			for(i = 0; i < data.records.length; i++)
@@ -908,7 +1038,28 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 				}
 			}
 			$scope.deletedMessages = data;
+			if($scope.currentMessageType == 'deleted'){
+				$scope.currentMessages = $scope.deletedMessages;
+				$scope.$apply();
+			}
 		});
+	}
+	
+	$scope.refreshCurrentMessages = function(){
+		switch($scope.currentMessageType){
+			case 'inbox':
+				$scope.refreshInbox();
+				break;
+			case 'sent':
+				$scope.refreshSent();
+				break;
+			case 'drafts':
+				$scope.refreshDrafts();
+				break;
+			case 'deleted':
+				$scope.refreshDeleted();
+				break;
+		}
 	}
 	
 	$scope.deleteSelectedMessage = function(){
@@ -922,6 +1073,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	//Marks the message as deleted, however the message will no longer appear in the Deleted messages.
@@ -936,6 +1088,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	$scope.restoreSelectedMessage = function(){
@@ -949,6 +1102,7 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 		}
 		//PUT the message using the message URL and then refresh the messages
 		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		//$scope.$apply();
 	}
 	
 	$scope.markSelectedAsRead = function(isRead){
@@ -963,8 +1117,55 @@ controllers.apiMessagingController = function ($scope, $http, $templateCache, $f
 
 //************************************END MESSAGING CONTROLLERS***************************************//
  
-    
 
+ 
+//***************************************ALERT CONTROLLERS********************************************// 
+ 
+ 
+controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+
+	$scope.careTeamID = 10;
+	$scope.userLevelID = 1;
+
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/alerts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedAlerts";
+
+	$scope.currentAlerts;
+	
+	/* getData.get($scope.receivedURL).success(function(data) {
+		$scope.receivedAlerts = data;
+		$scope.currentAlerts = $scope.receivedAlerts;
+    });
+	
+	getData.get($scope.deletedURL).success(function(data) {
+		$scope.deletedAlerts = data;
+    }); */
+	
+};
+ 
+ 
+//*************************************END ALERT CONTROLLERS******************************************//
+ 
+
+ 
+//***********************************NOTIFICATION CONTROLLERS*****************************************// 
+ 
+ 
+controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+
+	$scope.careTeamID = 10;
+	$scope.userLevelID = 1;
+
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
+
+};
+
+
+//*********************************END NOTIFICATION CONTROLLERS***************************************// 
+ 
+ 
+ 
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 

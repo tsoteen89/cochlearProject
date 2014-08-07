@@ -1,260 +1,210 @@
- 
-    <div class="container" ng-controller="apiMessagingController">
+<div class="container" ng-controller="TabController as tab" ng-init="tab.selectTab('messages')">
 
-      <div class="row"  ng-controller="TabController as tab">        
+	<div class="PageButtons" style="margin-bottom: 15px">
+		<a class="btn btn-primary" ng-click="tab.selectTab('messages')">Messages</a>
+		<a class="btn btn-primary" ng-click="tab.selectTab('alerts')">Alerts</a>
+		<a class="btn btn-primary" ng-click="tab.selectTab('notifications')">Notifications</a>
+	</div>
+	
+  <div class="row">
+	<div class="messaging-system" ng-show="tab.isSelected('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox')">
+	
+	  <div class="col-xs-10 button-wrapper">
+		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
+		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
+		</button>
+		<input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="isTypeSelected('composeMessage')" ng-model="search">
+	  </div>
+	  
+	  <div class="col-xs-3">
+		<ul class="nav nav-pills nav-stacked">
+		  <hr>
+		  <li ng-class="{ active:isTypeSelected('inbox') }"><a href ng-click="setMessageType('inbox'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Inbox</a></li>
+		  <li ng-class="{ active:isTypeSelected('sent') }"><a href ng-click="setMessageType('sent'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-send" style="margin-right:5px"></i> Sent</a></li>
+		  <li ng-class="{ active:isTypeSelected('drafts') } "><a href ng-click="setMessageType('drafts'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-pencil" style="margin-right:5px"></i> Drafts</a></li>
+		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
+		  <hr>
+		</ul>
+	  </div>
+	
+	  <div class="col-xs-7 message-wrapper" ng-show="isTypeSelected('composeMessage')">
+		<!--  -->
+		<hr>
+		<form name="compose_Message">
+		  <span style="margin-right:5px">To:</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverID"> <br>
+		  
+		  <span style="margin-right:5px">Subject:</span> <input class="subject" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.Subject"> <br>
 
-        <div class="messaging-system">
-          <div class="col-xs-10 button-wrapper">
-            
-            <button type="button" class="btn btn-default" ng-click='tab.selectTab(1)'>
-              <span><i class="glyphicon glyphicon-plus"></i></span> New Message
-            </button>
+		  <span style="margin-right:5px">Message:</span> <textarea rows="10" cols="100" style="margin-bottom: 10px;" ng-required="true" ng-model="composeMessage.Content"></textarea><br>
 
-            <input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="tab.isSelected(1)" ng-model="search">
-          </div>
+		  <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
+		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft" ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
+		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();setMessageType('inbox')"></input>
+		</form>
 
-          
-          <div class="col-xs-3">
-            <ul class="nav nav-pills nav-stacked">
-              <hr>
-              <li ng-class="{ active:tab.isSelected(-1) }"><a href ng-click="tab.selectTab(-1); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Inbox</a></li>
-              <li ng-class="{ active:tab.isSelected(2) }"><a href ng-click="tab.selectTab(2); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-send" style="margin-right:5px"></i> Sent</a></li>
-              <li ng-class="{ active:tab.isSelected(3) } "><a href ng-click="tab.selectTab(3); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-pencil" style="margin-right:5px"></i> Drafts</a></li>
-              <li ng-class="{ active:tab.isSelected(4) }"><a href ng-click="tab.selectTab(4); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
-              <hr>
-            </ul>
-          </div>
-          
-        
-          <div class="col-xs-7 message-wrapper" ng-show="tab.isSelected(1)">
-            <!--  -->
-            <hr>
-            <form name="messageSender" class="message" ng-submit="messageSender.$valid && messageForm()">
-              <span style="margin-right:5px">To:</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverID"> <br>
-              
-              <span style="margin-right:5px">Subject:</span> <input class="subject" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.Subject"> <br>
-
-              <span style="margin-right:5px">Message:</span> <textarea rows="10" cols="100" style="margin-bottom: 10px;" ng-required="true" ng-model="composeMessage.Content"></textarea><br>
-
-              <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" ng-click="sendMessage(composeMessage);tab.selectTab(-1)"></input>
-              <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft" ng-click="saveDraft(composeMessage);tab.selectTab(-1)"></input>
-			  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();tab.selectTab(-1)"></input>
-            </form>
-
-            {{ composeMessage }}
-            <hr>
-          </div>
-
-        
-          <div class="col-xs-7 message-inbox" ng-show="tab.isSelected(-1)">
-            <div class="messageToolbar"> 
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsDeleted()"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsRead()"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsUnread()"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
-				<hr></br>
+		{{ composeMessage }}
+		<hr>
+	  </div>
+	
+	  <div class="col-xs-7 message-display" ng-show="displayMessages">
+		<div class="messageToolbar"> 
+			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
+			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
+			<hr></br>
+		</div>
+		<div class="table-responsive">
+		  <table class="table table-striped table-hover">
+			<tr>
+			  <th>
+				<input type="checkbox" name="inboxCheckbox" onclick="markAllMessages('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
+				</a>
+			  </th>
+			  <th ng-click="order('SenderName')" ng-if="showFrom">From</th>
+			  <th ng-click="order('ReceiverName')" ng-if="showTo">To</th>
+			  <th ng-click="order('Subject')" ng-if="showSubject">Subject</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
+			</tr>
+			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
+			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
+			  <td ng-if="showTo">{{message.ReceiverName}}</td>
+			  <td ng-if="showSubject">{{message.Subject}}</td>
+			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
+			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
+			</tr>
+			</table>
+		</div>
+	   
+		  <hr>
+		  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
+			<div class="modal-header">
+				<h3>{{selectedMessage.Subject}}</h3>
 			</div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
-				<tr>
-                  <th>
-                    <input type="checkbox" name="inboxCheckbox" onclick="markAllMessages('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
-                    </a>
-                  </th>
-                  <th ng-click="order('SenderName')">From</th>
-                  <th ng-click="order('Subject')">Subject</th>
-                  <th ng-click="order('Timestamp')">Time</th>
-				  <th ng-click="order('Timestamp')">Date</th>
-                </tr>
-				<tr ng-repeat="message in inboxMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
-				  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-				  <td><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
-				  <td>{{message.Subject}}</td>
-				  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
-				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
-				</tr>
-				</table>
+			<div class="modal-body">
+				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} </br></div>
+				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} </br></div>
+				<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+				<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+				</br>
+				<p>
+					{{selectedMessage.Content}}
+				</p>
 			</div>
-           
-              <hr>
-			  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
-				<div class="modal-header">
-					<h3>{{selectedMessage.Subject}}</h3>
-				</div>
-				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderName}} </br>
-					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
-					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
-					</br>
-					<p>
-						{{selectedMessage.Content}}
-					</p>
-				</div>
-				<div class="modal-footer">
-					<a class="btn btn-primary" ng-click="tab.selectTab(1); reply()">Reply</a>
-					<a class="btn btn-primary" ng-click="tab.selectTab(1); forward()">Forward</a>
-					<a class="btn btn-primary" ng-click="tab.selectTab(-1); deleteSelectedMessage()">Delete</a>
-					<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
-				</div>
-			  </div>
-          </div>
-
-
-
-          <div class="col-xs-7 message-sent" ng-show="tab.isSelected(2)">
-             <div class="messageToolbar"> 
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsDeleted()"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
-				<hr></br>
+			<div class="modal-footer">
+				<a class="btn btn-primary" ng-if="showReply" ng-click="setMessageType('composeMessage'); reply()">Reply</a>
+				<a class="btn btn-primary" ng-if="showForward" ng-click="setMessageType('composeMessage'); forward()">Forward</a>
+				<a class="btn btn-primary" ng-if="showEdit" ng-click="setMessageType('composeMessage'); edit()">Edit</a>
+				<a class="btn btn-primary" ng-if="showRestore" ng-click="restoreSelectedMessage()">Restore</a>
+				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedMessage()">Delete</a>
+				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="fullyDeleteSelectedMessage()">Delete</a>
+				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
 			</div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
-                <tr>
-                  <th>
-                     <input type="checkbox" name="sentCheckbox" onclick="markAllMessages('sent', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
-                    </a>
-                  </th>
-                  <th ng-click="order('ReceiverName')">To</th>
-                  <th ng-click="order('Subject')">Subject</th>
-				  <th ng-click="order('Timestamp')">Time</th>
-                  <th ng-click="order('Timestamp')">Date</th>
-                </tr>
-                <tr ng-repeat="message in sentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
-                  <td><input type="Checkbox" name="sentCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-                  <td>{{message.ReceiverName}}</td>
-                  <td>{{message.Subject}}</td>
-                  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
-				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
-                </tr>
-                
-              </table>
-            </div>
-              <hr>
-			  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
-				<div class="modal-header">
-					<h3>{{selectedMessage.Subject}}</h3>
-				</div>
-				<div class="modal-body">
-					<strong>To:</strong> {{selectedMessage.ReceiverName}} </br>
-					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
-					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
-					</br>
-					<p>
-						{{selectedMessage.Content}}
-					</p>
-				</div>
-				<div class="modal-footer">
-					<a class="btn btn-primary" ng-click="tab.selectTab(1); forward()">Forward</a>
-					<a class="btn btn-primary" ng-click="tab.selectTab(2); deleteSelectedMessage()">Delete</a>
-					<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
-				</div>
-			  </div>
-          </div>
+		  </div>
+	  </div>
+	</div>
+	
+	<div class="alertSystem" ng-show="tab.isSelected('alerts')" ng-controller="alertsController">
+		
+	</div>
+	
+	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController">
+		<div class="col-xs-10 button-wrapper">
+		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
+		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
+		</button>
+		<input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="isTypeSelected('composeMessage')" ng-model="search">
+	  </div>
+	  
+	  <div class="col-xs-3">
+		<ul class="nav nav-pills nav-stacked">
+		  <hr>
+		  <li ng-class="{ active:isTypeSelected('inbox') }"><a href ng-click="setMessageType('inbox'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Inbox</a></li>
+		  <li ng-class="{ active:isTypeSelected('sent') }"><a href ng-click="setMessageType('sent'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-send" style="margin-right:5px"></i> Sent</a></li>
+		  <li ng-class="{ active:isTypeSelected('drafts') } "><a href ng-click="setMessageType('drafts'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-pencil" style="margin-right:5px"></i> Drafts</a></li>
+		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
+		  <hr>
+		</ul>
+	  </div>
+	
+	  <div class="col-xs-7 message-wrapper" ng-show="isTypeSelected('composeMessage')">
+		<!--  -->
+		<hr>
+		<form name="compose_Message">
+		  <span style="margin-right:5px">To:</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverID"> <br>
+		  
+		  <span style="margin-right:5px">Subject:</span> <input class="subject" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.Subject"> <br>
 
+		  <span style="margin-right:5px">Message:</span> <textarea rows="10" cols="100" style="margin-bottom: 10px;" ng-required="true" ng-model="composeMessage.Content"></textarea><br>
 
+		  <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
+		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft" ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
+		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();setMessageType('inbox')"></input>
+		</form>
 
-          <div class="col-xs-7 message-drafts" ng-show="tab.isSelected(3)">
-             <div class="messageToolbar"> 
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsDeleted()"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
-				<hr></br>
+		{{ composeMessage }}
+		<hr>
+	  </div>
+	
+	  <div class="col-xs-7 message-display" ng-show="displayMessages">
+		<div class="messageToolbar"> 
+			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
+			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
+			<hr></br>
+		</div>
+		<div class="table-responsive">
+		  <table class="table table-striped table-hover">
+			<tr>
+			  <th>
+				<input type="checkbox" name="inboxCheckbox" onclick="markAllMessages('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
+				</a>
+			  </th>
+			  <th ng-click="order('SenderName')" ng-if="showFrom">From</th>
+			  <th ng-click="order('ReceiverName')" ng-if="showTo">To</th>
+			  <th ng-click="order('Subject')" ng-if="showSubject">Subject</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
+			</tr>
+			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
+			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
+			  <td ng-if="showTo">{{message.ReceiverName}}</td>
+			  <td ng-if="showSubject">{{message.Subject}}</td>
+			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
+			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
+			</tr>
+			</table>
+		</div>
+	   
+		  <hr>
+		  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
+			<div class="modal-header">
+				<h3>{{selectedMessage.Subject}}</h3>
 			</div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
-                <tr>
-                  <th>
-                    <input type="checkbox" name="draftCheckbox" onclick="markAllMessages('drafts', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
-                    </a>
-                  </th>
-                  <th ng-click="order('Subject')">Subject</th>
-				  <th ng-click="order('Timestamp')">Time</th>
-                  <th ng-click="order('Timestamp')">Date</th>
-                </tr>
-                <tr ng-repeat="message in draftMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
-                  <td><input type="Checkbox" name="draftCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-                  <td>{{message.Subject}}</td>
-                  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
-				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
-                </tr>
-              </table>
-            </div>
-              <hr>
-			  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
-				<div class="modal-header">
-					<h3>{{selectedMessage.Subject}}</h3>
-				</div>
-				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderName}}</br>
-					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
-					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
-					</br>
-					<p>
-						{{selectedMessage.Content}}
-					</p>
-				</div>
-				<div class="modal-footer">
-					<a class="btn btn-primary" ng-click="tab.selectTab(1); edit()">Edit</a>
-					<a class="btn btn-primary" ng-click="tab.selectTab(3); deleteSelectedMessage()">Delete</a>
-					<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
-				</div>
-			  </div>
-          </div>
-
-
-
-           <div class="col-xs-7 message-deleted" ng-show="tab.isSelected(4)">
-             <div class="messageToolbar"> 
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="markAsFullyDeleted()"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-				<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
-				<hr></br>
+			<div class="modal-body">
+				<div><strong>From:</strong> {{selectedMessage.SenderFacility}} </br></div>
+				<div><strong>To:</strong> {{selectedMessage.ReceiverFacility}} </br></div>
+				<div><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+				<div><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+				</br>
+				<p>
+					{{selectedMessage.Content}}
+				</p>
 			</div>
-            <div class="table-responsive">
-              <table class="table table-striped table-hover">
-                <tr>
-                  <th>
-                    <input type="checkbox" name="deletedCheckbox" onclick="markAllMessages('deleted', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
-                    </a>
-                  </th>
-                  <th ng-click="order('SenderName')">From</th>
-				  <th ng-click="order('SenderName')">To</th>
-                  <th ng-click="order('SenderName')">Subject</th>
-				  <th ng-click="order('SenderName')">Time</th>
-				  <th ng-click="order('SenderName')">Date</th>
-                </tr>
-                <tr ng-repeat="message in deletedMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
-                  <td><input type="Checkbox" name="deletedCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-				  <td>{{message.SenderName}}</td>
-				  <td>{{message.ReceiverName}}</td>
-                  <td>{{message.Subject}}</td>
-                  <td>{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
-				  <td>{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
-                </tr>
-              </table>
-            </div>
-              <hr>
-			  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
-				<div class="modal-header">
-					<h3>{{selectedMessage.Subject}}</h3>
-				</div>
-				<div class="modal-body">
-					<strong>From:</strong> {{selectedMessage.SenderName}}</br>
-					<strong>To:</strong> {{selectedMessage.ReceiverName}}</br>
-					<strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br>
-					<strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br>
-					</br>
-					<p>
-						{{selectedMessage.Content}}
-					</p>
-				</div>
-				<div class="modal-footer">
-					<a class="btn btn-primary" ng-click="tab.selectTab(4); restoreSelectedMessage()">Restore</a>
-					<a class="btn btn-primary" ng-click="tab.selectTab(4); fullyDeleteSelectedMessage()">Delete</a>
-					<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
-				</div>
-			  </div>
-          </div>
-          
-        </div>
-
-        </div>
-    </div>
+			<div class="modal-footer">
+				<a class="btn btn-success">Accept</a>
+				<a class="btn btn-warning">Reject</a>
+				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
+			</div>
+		  </div>
+	  </div>
+	</div>
+	
+  </div>
+</div>
