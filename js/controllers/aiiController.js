@@ -1149,14 +1149,14 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 
 	$scope.currentAlerts;
 	
-	/* getData.get($scope.receivedURL).success(function(data) {
+	getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedAlerts = data;
 		$scope.currentAlerts = $scope.receivedAlerts;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		$scope.deletedAlerts = data;
-    }); */
+    }); 
 	
 };
  
@@ -1170,12 +1170,108 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
  
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
-	$scope.careTeamID = 10;
+	$scope.careTeamID = 1010;
 	$scope.userLevelID = 1;
 
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
 
+	$scope.currentNotificationType = 'received';
+	
+	/* Miscellaneous Variables */
+	$scope.selectedNotification;
+	$scope.showPopup = false;
+	
+	$scope.DUMMY_RECEIVED = {'records': [{
+		'NotificationID': 1,
+		'SenderFacilityID': 110,
+		'ReceiverFacilityID': 105,
+		'CareTeamID': 1003,
+		'Timestamp': 1407398574,
+		'IsRequest': 1,
+		'Response': 0,
+		'IsRead': 0,
+		'IsArchived': 0,
+		'SenderFacility': 'OHSU Cochlear Implant program',
+		'ReceiverFacility': 'Midlands Cochlear Implant Center',
+		'Subject': 'Care team invitation',
+		'Content': 'OHSU Cochlear Implant program has invited your facility to join care team 1003.'
+	}]};
+	
+	$scope.DUMMY_DELETED = {'records': [{
+		'NotificationID': 1,
+		'SenderFacilityID': 105,
+		'ReceiverFacilityID': 110,
+		'CareTeamID': 1085,
+		'Timestamp': 1407380000,
+		'IsRequest': 0,
+		'Response': 2,
+		'IsRead': 1,
+		'IsArchived': 1,
+		'SenderFacility': 'Midlands Cochlear Implant Center',
+		'ReceiverFacility': 'OHSU Cochlear Implant program',
+		'Subject': 'Declined care team invitation',
+		'Content': 'OHSU Cochlear Implant program has declined your invitation to join care team 1085.'
+	}]};
+	
+	$scope.receivedNotifications = $scope.DUMMY_RECEIVED;
+	$scope.deletedNotifications = $scope.DUMMY_DELETED;
+	
+	/*getData.get($scope.receivedURL).success(function(data) {
+		$scope.receivedNotifications = data;
+    });
+	
+	getData.get($scope.deletedURL).success(function(data) {
+		$scope.deletedNotifications = data;
+    }); */
+	
+	$scope.setNotificationType = function(notificationType){
+		$scope.currentNotificationType = notificationType;
+		
+		switch($scope.currentNotificationType){
+			case 'received':
+				$scope.currentNotifications = $scope.receivedNotifications;
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentNotifications = $scope.deletedNotifications;
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+		}
+	}
+	
+	$scope.isTypeSelected = function(notificationType){
+		if(notificationType == $scope.currentNotificationType){
+			return true;
+		}
+		return false;
+	}
+	
+	$scope.togglePopup = function(notification){
+		if($scope.showPopup){
+			$scope.selectedNotification = [];
+		}
+		else{
+			$scope.selectedNotification = notification;
+		}
+		$scope.showPopup = !$scope.showPopup;
+	}
+	
+	$scope.hidePopup = function(){
+		$scope.showPopup = false;
+		$scope.selectedNotification = [];
+	}
+	
 };
 
 
