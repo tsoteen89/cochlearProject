@@ -1182,22 +1182,78 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	$scope.selectedNotification;
 	$scope.showPopup = false;
 	
-	getData.get($scope.receivedURL).success(function(data) {
+	$scope.DUMMY_RECEIVED = {'records': [{
+		'NotificationID': 1,
+		'SenderFacilityID': 110,
+		'ReceiverFacilityID': 105,
+		'CareTeamID': 1003,
+		'Timestamp': 1407398574,
+		'IsRequest': 1,
+		'Response': 0,
+		'IsRead': 0,
+		'IsArchived': 0,
+		'SenderFacility': 'OHSU Cochlear Implant program',
+		'ReceiverFacility': 'Midlands Cochlear Implant Center',
+		'Subject': 'Care team invitation',
+		'Content': 'OHSU Cochlear Implant program has invited your facility to join care team 1003.'
+	}]};
+	
+	$scope.DUMMY_DELETED = {'records': [{
+		'NotificationID': 1,
+		'SenderFacilityID': 105,
+		'ReceiverFacilityID': 110,
+		'CareTeamID': 1085,
+		'Timestamp': 1407380000,
+		'IsRequest': 0,
+		'Response': 2,
+		'IsRead': 1,
+		'IsArchived': 1,
+		'SenderFacility': 'Midlands Cochlear Implant Center',
+		'ReceiverFacility': 'OHSU Cochlear Implant program',
+		'Subject': 'Declined care team invitation',
+		'Content': 'OHSU Cochlear Implant program has declined your invitation to join care team 1085.'
+	}]};
+	
+	$scope.receivedNotifications = $scope.DUMMY_RECEIVED;
+	$scope.deletedNotifications = $scope.DUMMY_DELETED;
+	
+	/*getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedNotifications = data;
-		$scope.currentNotifications = $scope.receivedAlerts;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		$scope.deletedNotifications = data;
-    }); 
+    }); */
 	
 	$scope.setNotificationType = function(notificationType){
 		$scope.currentNotificationType = notificationType;
+		
+		switch($scope.currentNotificationType){
+			case 'received':
+				$scope.currentNotifications = $scope.receivedNotifications;
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentNotifications = $scope.deletedNotifications;
+				$scope.showFrom = true;
+				$scope.showTo = false;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+		}
 	}
 	
 	$scope.isTypeSelected = function(notificationType){
-		if(notificationType == $scope.currentNotificationType)
+		if(notificationType == $scope.currentNotificationType){
 			return true;
+		}
 		return false;
 	}
 	
@@ -1209,6 +1265,11 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			$scope.selectedNotification = notification;
 		}
 		$scope.showPopup = !$scope.showPopup;
+	}
+	
+	$scope.hidePopup = function(){
+		$scope.showPopup = false;
+		$scope.selectedNotification = [];
 	}
 	
 };

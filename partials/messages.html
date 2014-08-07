@@ -68,7 +68,7 @@
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
+			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)" >
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
 			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
 			  <td ng-if="showTo">{{message.ReceiverName}}</td>
@@ -111,19 +111,16 @@
 		
 	</div>
 	
-	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController">
-		<div class="col-xs-10 button-wrapper">
-		<button type="button" class="btn btn-default" ng-click="setNotificationType('composeMessage')">
-		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
-		</button>
+	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController" ng-init="setNotificationType('received')">
+	  <div class="col-xs-10 search-bar">
 		<input class="search-message pull-right" type="search" placeholder="Search Notifications.." ng-model="search">
 	  </div>
 	  
 	  <div class="col-xs-3">
 		<ul class="nav nav-pills nav-stacked">
 		  <hr>
-		  <li ng-class="{ active:isTypeSelected('received') }"><a href ng-click="setNotificationType('received'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received</a></li>
-		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setNotificationType('deleted'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
+		  <li ng-class="{ active:isTypeSelected('received') }"><a href ng-click="setNotificationType('received'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received</a></li>
+		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setNotificationType('deleted'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
 		  <hr>
 		</ul>
 	  </div>
@@ -152,7 +149,7 @@
 			</tr>
 			<tr ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(notification)">
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="notification" checklist-model="markedNotifications"> </td>
-			  <td ng-if="showFrom">{{notification.SenderFacility}}</td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="notification.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.SenderFacility}}</td>
 			  <td ng-if="showTo">{{notification.ReceiverFacility}}</td>
 			  <td ng-if="showSubject">{{notification.Subject}}</td>
 			  <td ng-if="showTimestamp">{{notification.Timestamp * 1000 | date:'h:mm a'}}</td>
@@ -162,7 +159,7 @@
 		</div>
 	   
 		  <hr>
-		  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
+		  <div class="modal-dialogue" ng-show="showPopup" style="background:white; border-style:solid; border-width:1px">
 			<div class="modal-header">
 				<h3>{{selectedNotification.Subject}}</h3>
 			</div>
@@ -177,8 +174,8 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<a class="btn btn-success">Accept</a>
-				<a class="btn btn-warning">Reject</a>
+				<a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="requestResponse(1)">Accept</a>
+				<a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="requestResponse(2)">Reject</a>
 				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
 			</div>
 		  </div>
