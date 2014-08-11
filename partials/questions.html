@@ -4,7 +4,7 @@
     <div class="col-md-6">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
         <hr>
-        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="nextPage()">
+        <form class="form form-verticle" id="form_850359" class="appnitro">
             <div class="control-group" >
                 CareTeamID: {{answer.CareTeamID}}
 
@@ -96,8 +96,12 @@
 
                     </li>
 
-                    <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
+                    <button ng-if="offSet > 0" class="questionsButton" ng-click="previousPage()" style="float:left">Back</button>
+                        
+                    <button ng-if="finished == false" class="questionsButton" ng-click="nextPage()" style="float:right">Continue</button>
+                        
                     <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Save</button></a>
+                        
                     <br><br>
                     <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" ng-click="completePhase()" class="questionsButton">Save & Complete</button></a><br>
                     </div>
