@@ -332,9 +332,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
     }
     
-    
+    $scope.clickedPhase = null;
     $scope.patientSummary = function(phaseNumber){
-        console.log(phaseNumber);
+        this.clickedPhase = phaseNumber;
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {

@@ -3,7 +3,7 @@
     <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
     <hr>
 
-    <div class="col-md-8" style="margin-left: 5%">
+    <div class="col-md-8" style="margin-left: 5%; float:left;">
             
             <!-- DISPLAY Left Ear Condition -->
             <div style="background-color: #EDF8FF;border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 2% 2% 2% 2%; margin-bottom:1%; width:35%; margin-left: 10%; float:left;">
@@ -106,14 +106,62 @@
                 </div>
                 <br><br><br>
                 <button ng-blur="submitQuestions()" > Submit Data</button>
-
+                </div>
             </div>
         
         Answer Object: {{answer}}
         <br>
 
+        <div style="background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%; margin-left: 10%;" class="col-md-4" ng-controller="questionsController">
+        <h3>Patient Summary for {{patientName}}</h3><br>
         
+        <div class="btn-group" dropdown is-open="status.isopen">
+          <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
+            Choose Care Phase <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="" ng-click="patientSummary(1)">Demographics</a></li>
+            <li><a href="" ng-click="patientSummary(2)">Candidacy Testing</a></li>
+            <li><a href="" ng-click="patientSummary(3)">Initial Surgical Consultation</a></li>
+            <li><a href="" ng-click="patientSummary(4)">Preoperative Visit</a></li>
+            <li><a href="" ng-click="patientSummary(5)">One Week Postoperative</a></li>
+            <li><a href="" ng-click="patientSummary(6)">Activation</a></li>
+            <li class="divider"></li>
+            <li><a href="" ng-click="patientSummary(7)">1 Month</a></li>
+            <li><a href="" ng-click="patientSummary(8)">3 Month</a></li>
+            <li><a href="" ng-click="patientSummary(9)">6 Month</a></li>
+            <li><a href="" ng-click="patientSummary(10)">12 Month</a></li>
+            <li><a href="" ng-click="patientSummary(11)">24 Month</a></li>
+          </ul>
+        </div>
         
+        <br>
+            
+            
+        <div ng-if="clickedPhase == 1 || clickedPhase == 3 || clickedPhase == 4 || clickedPhase == 5 || clickedPhase == 6"
+                    ng-repeat="(question, answer) in patientSummaryAnswers">
+            {{question}} : {{answer}}<br><br>
+        </div>
+        
+        <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
+             ng-repeat="condition in patientSummaryAnswers">
+            <b> Testing Conditions: </b> <br>
+            <b> Left Ear Condition : </b>{{condition.LeftAidCondition}} <br>
+            <b> Right Ear Condition : </b> {{condition.RightAidCondition}} <br> 
+            <b> Results : </b><br>
+            <div ng-repeat="(test, results) in condition.Results">
+               <b> {{test}} : </b> <br>
+                <div ng-repeat="result in results">
+                    <div ng-repeat="(field,value) in result"> {{field}}: {{value}}</div> 
+                    <hr>
+                </div> 
+            </div> 
+            <br>
+        </div>
+            
+
+    </div>
+
 
     </div>
     <br>
