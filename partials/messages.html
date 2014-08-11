@@ -7,6 +7,9 @@
 	</div>
 	
   <div class="row">
+	
+	<!-- *********************   MESSAGES    ************************* -->
+	
 	<div class="messaging-system" ng-show="tab.isSelected('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox')">
 	
 	  <div class="col-xs-10 button-wrapper">
@@ -68,7 +71,7 @@
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
+			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)" >
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
 			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
 			  <td ng-if="showTo">{{message.ReceiverName}}</td>
@@ -107,99 +110,138 @@
 	  </div>
 	</div>
 	
-	<div class="alertSystem" ng-show="tab.isSelected('alerts')" ng-controller="alertsController">
-		
-	</div>
+	<!-- *********************   ALERTS    ************************* -->
 	
-	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController">
-		<div class="col-xs-10 button-wrapper">
-		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
-		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
-		</button>
-		<input class="search-message pull-right" type="search" placeholder="Search Messages.." ng-hide="isTypeSelected('composeMessage')" ng-model="search">
+	<div class="alertSystem" ng-show="tab.isSelected('alerts')" ng-controller="alertsController" ng-init="setAlertType('received')">
+	  <div class="col-xs-10 search-bar">
+		<input class="search-message pull-right" type="search" placeholder="Search Alerts.." ng-model="search">
 	  </div>
 	  
 	  <div class="col-xs-3">
 		<ul class="nav nav-pills nav-stacked">
 		  <hr>
-		  <li ng-class="{ active:isTypeSelected('inbox') }"><a href ng-click="setMessageType('inbox'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Inbox</a></li>
-		  <li ng-class="{ active:isTypeSelected('sent') }"><a href ng-click="setMessageType('sent'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-send" style="margin-right:5px"></i> Sent</a></li>
-		  <li ng-class="{ active:isTypeSelected('drafts') } "><a href ng-click="setMessageType('drafts'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-pencil" style="margin-right:5px"></i> Drafts</a></li>
-		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
+		  <li ng-class="{ active:isTypeSelected('received') }"><a href ng-click="setAlertType('received'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received</a></li>
+		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setAlertType('deleted'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
 		  <hr>
 		</ul>
 	  </div>
 	
-	  <div class="col-xs-7 message-wrapper" ng-show="isTypeSelected('composeMessage')">
-		<!--  -->
-		<hr>
-		<form name="compose_Message">
-		  <span style="margin-right:5px">To:</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverID"> <br>
-		  
-		  <span style="margin-right:5px">Subject:</span> <input class="subject" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.Subject"> <br>
-
-		  <span style="margin-right:5px">Message:</span> <textarea rows="10" cols="100" style="margin-bottom: 10px;" ng-required="true" ng-model="composeMessage.Content"></textarea><br>
-
-		  <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
-		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft" ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
-		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();setMessageType('inbox')"></input>
-		</form>
-
-		{{ composeMessage }}
-		<hr>
-	  </div>
-	
-	  <div class="col-xs-7 message-display" ng-show="displayMessages">
+	  <div class="col-xs-7 message-display">
 		<div class="messageToolbar"> 
-			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedMessages('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
-			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
-			<span class="col-xs-3" ng-show="isTypeSelected('inbox')"><button class="btn btn-sm" ng-click="putMarkedMessages('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
-			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshMessages();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
+			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedAlerts('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedAlerts('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('received')"><button class="btn btn-sm" ng-click="putMarkedAlerts('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('received')"><button class="btn btn-sm" ng-click="putMarkedAlerts('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
+			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshAlerts();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
 			<hr></br>
 		</div>
 		<div class="table-responsive">
 		  <table class="table table-striped table-hover">
 			<tr>
 			  <th>
-				<input type="checkbox" name="inboxCheckbox" onclick="markAllMessages('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
+				<input type="checkbox" name="inboxCheckbox" onclick="markAllAlerts('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
 				</a>
 			  </th>
-			  <th ng-click="order('SenderName')" ng-if="showFrom">From</th>
-			  <th ng-click="order('ReceiverName')" ng-if="showTo">To</th>
+			  <th ng-click="order('SenderFacilityName')" ng-if="showFrom">From</th>
 			  <th ng-click="order('Subject')" ng-if="showSubject">Subject</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)">
-			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
-			  <td ng-if="showTo">{{message.ReceiverName}}</td>
-			  <td ng-if="showSubject">{{message.Subject}}</td>
-			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
-			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
+			<tr ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(alert)">
+			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="alert" checklist-model="markedAlerts"> </td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="alert.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.SenderFacilityName}}</td>
+			  <td ng-if="showSubject">{{alert.Subject}}</td>
+			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'h:mm a'}}</td>
+			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'M/d/yy'}}</td>
 			</tr>
 			</table>
 		</div>
 	   
 		  <hr>
-		  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
+		  <div class="modal-dialogue" ng-show="showPopup" style="background:white; border-style:solid; border-width:1px">
 			<div class="modal-header">
-				<h3>{{selectedMessage.Subject}}</h3>
+				<h3>{{selectedAlert.Subject}}</h3>
 			</div>
 			<div class="modal-body">
-				<div><strong>From:</strong> {{selectedMessage.SenderFacility}} </br></div>
-				<div><strong>To:</strong> {{selectedMessage.ReceiverFacility}} </br></div>
-				<div><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
-				<div><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+				<div><strong>From:</strong> {{selectedAlert.SenderFacilityName}} </br></div>
+				<div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+				<div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
 				<p>
-					{{selectedMessage.Content}}
+					{{selectedAlert.Content}}
 				</p>
 			</div>
 			<div class="modal-footer">
-				<a class="btn btn-success">Accept</a>
-				<a class="btn btn-warning">Reject</a>
+				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
+			</div>
+		  </div>
+	  </div>
+	</div>
+	
+	<!-- *********************   NOTIFICATIONS    ************************* -->
+	
+	<div class="notificationSystem" ng-show="tab.isSelected('notifications')" ng-controller="notificationsController" ng-init="setNotificationType('received')">
+	  <div class="col-xs-10 search-bar">
+		<input class="search-message pull-right" type="search" placeholder="Search Notifications.." ng-model="search">
+	  </div>
+	  
+	  <div class="col-xs-3">
+		<ul class="nav nav-pills nav-stacked">
+		  <hr>
+		  <li ng-class="{ active:isTypeSelected('received') }"><a href ng-click="setNotificationType('received'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received</a></li>
+		  <li ng-class="{ active:isTypeSelected('deleted') }"><a href ng-click="setNotificationType('deleted'); hidePopup(); clearMarkedMessages()"><i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted</a></li>
+		  <hr>
+		</ul>
+	  </div>
+	
+	  <div class="col-xs-7 message-display">
+		<div class="messageToolbar"> 
+			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-sm" ng-click="putMarkedNotifications('deleted',1)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-sm" ng-click="putMarkedNotifications('deleted',2)"><strong><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('received')"><button class="btn btn-sm" ng-click="putMarkedNotifications('read',1)"><strong><i class="glyphicon glyphicon-bookmark" style="margin-right:5px"></i>Mark as Read</strong></button></span>
+			<span class="col-xs-3" ng-show="isTypeSelected('received')"><button class="btn btn-sm" ng-click="putMarkedNotifications('read',0)"><strong><i class="glyphicon glyphicon-tag" style="margin-right:5px"></i>Mark as Unread</strong></button></span>
+			<span class="col-xs-3"><button class="btn btn-sm" ng-click="refreshNotifications();clearMarkedMessages()"><strong><i class="glyphicon glyphicon-repeat" style="margin-right:5px"></i>Refresh</strong></button></span>
+			<hr></br>
+		</div>
+		<div class="table-responsive">
+		  <table class="table table-striped table-hover">
+			<tr>
+			  <th>
+				<input type="checkbox" name="inboxCheckbox" onclick="markAllNotifications('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
+				</a>
+			  </th>
+			  <th ng-click="order('SenderFacilityName')" ng-if="showFrom">From</th>
+			  <th ng-click="order('Subject')" ng-if="showSubject">Subject</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
+			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
+			</tr>
+			<tr ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(notification)">
+			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="notification" checklist-model="markedNotifications"> </td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="notification.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.SenderFacilityName}}</td>
+			  <td ng-if="showSubject">{{notification.Subject}}</td>
+			  <td ng-if="showTimestamp">{{notification.Timestamp * 1000 | date:'h:mm a'}}</td>
+			  <td ng-if="showTimestamp">{{notification.Timestamp * 1000 | date:'M/d/yy'}}</td>
+			</tr>
+			</table>
+		</div>
+	   
+		  <hr>
+		  <div class="modal-dialogue" ng-show="showPopup" style="background:white; border-style:solid; border-width:1px">
+			<div class="modal-header">
+				<h3>{{selectedNotification.Subject}}</h3>
+			</div>
+			<div class="modal-body">
+				<div><strong>From:</strong> {{selectedNotification.SenderFacilityName}} </br></div>
+				<div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+				<div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+				</br>
+				<p>
+					{{selectedNotification.Content}}
+				</p>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="requestResponse(1)">Accept</a>
+				<a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="requestResponse(2)">Reject</a>
 				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
 			</div>
 		  </div>

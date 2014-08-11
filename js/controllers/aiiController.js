@@ -105,7 +105,22 @@ myApp.factory('persistData', function () {
     
 //*****************************************END FACTORIES*******************************************//
 
+//**************************************Dashboard CONTROLLERS***************************************//
 
+    
+//Controller used to handle display of Questions for a Patient's CareTeam  
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http){
+    
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
+
+    //Grab Facility info  using facilityURL
+    getData.get($scope.facilityURL).success(function(data) {
+        $scope.facData = data;
+    });
+    
+};
+    
+//*****************************************END Dashboard*******************************************//
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
@@ -391,6 +406,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
     $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
     $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     
@@ -403,6 +419,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     getData.get($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
+    
     
     //Put method for patient.
     $scope.processPut = function() {
@@ -1132,14 +1149,59 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 
 	$scope.currentAlerts;
 	
-	/* getData.get($scope.receivedURL).success(function(data) {
+	getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedAlerts = data;
 		$scope.currentAlerts = $scope.receivedAlerts;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		$scope.deletedAlerts = data;
-    }); */
+    }); 
+	
+	$scope.setAlertType = function(alertType){
+		$scope.currentAlertType = alertType;
+		
+		switch($scope.currentAlertType){
+			case 'received':
+				$scope.currentAlerts = $scope.receivedAlerts;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentAlerts = $scope.deletedAlerts;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+		}
+	}
+	
+	$scope.isTypeSelected = function(alertType){
+		if(alertType == $scope.currentAlertType){
+			return true;
+		}
+		return false;
+	}
+	
+	$scope.togglePopup = function(alert){
+		if($scope.showPopup){
+			$scope.selectedAlert = [];
+		}
+		else{
+			$scope.selectedAlert = alert;
+		}
+		$scope.showPopup = !$scope.showPopup;
+	}
+	
+	$scope.hidePopup = function(){
+		$scope.showPopup = false;
+		$scope.selectedAlert = [];
+	}
 	
 };
  
@@ -1153,12 +1215,107 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
  
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
-	$scope.careTeamID = 10;
+	/* User Data */
+	$scope.facilityID = 105
+	$scope.careTeamID = 1010;
 	$scope.userLevelID = 1;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
 
+	$scope.currentNotificationType = 'received';
+	
+	/* Miscellaneous Variables */
+	$scope.selectedNotification;
+	$scope.showPopup = false;
+	
+	/* Initially executed functions */
+	getData.get($scope.receivedURL).success(function(data) {
+		//Generate the subject for every notification
+		for(i = 0; i < data.records.length; i++){
+			//If the notification was a request to join a care team...
+			if(data.records[i].IsRequest == '1'){
+				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+			}
+			//Otherwise the notification is a response to a sent care team invitation
+			else{
+				if(data.records[i].Response == '1'){
+					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+				}
+				else if(data.records[i]['Response'] == '2'){
+					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+				}
+			}
+		}
+		$scope.receivedNotifications = data;
+		$scope.currentNotifications = $scope.receivedNotifications;
+    });
+	
+	getData.get($scope.deletedURL).success(function(data) {
+		//Generate the subject for every notification
+		for(i = 0; i < data.records.length; i++){
+			//If the notification was a request to join a care team...
+			if(data.records[i].IsRequest == '1'){
+				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+			}
+			//Otherwise the notification is a response to a sent care team invitation
+			else{
+				if(data.records[i].Response == '1'){
+					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+				}
+				else if(data.records[i]['Response'] == '2'){
+					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+				}
+			}
+		}
+		$scope.deletedNotifications = data;
+    });
+	
+	$scope.setNotificationType = function(notificationType){
+		$scope.currentNotificationType = notificationType;
+		
+		switch($scope.currentNotificationType){
+			case 'received':
+				$scope.currentNotifications = $scope.receivedNotifications;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentNotifications = $scope.deletedNotifications;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+		}
+	}
+	
+	$scope.isTypeSelected = function(notificationType){
+		if(notificationType == $scope.currentNotificationType){
+			return true;
+		}
+		return false;
+	}
+	
+	$scope.togglePopup = function(notification){
+		if($scope.showPopup){
+			$scope.selectedNotification = [];
+		}
+		else{
+			$scope.selectedNotification = notification;
+		}
+		$scope.showPopup = !$scope.showPopup;
+	}
+	
+	$scope.hidePopup = function(){
+		$scope.showPopup = false;
+		$scope.selectedNotification = [];
+	}
+	
 };
 
 
