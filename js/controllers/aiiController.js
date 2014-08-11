@@ -1158,6 +1158,51 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 		$scope.deletedAlerts = data;
     }); 
 	
+	$scope.setAlertType = function(alertType){
+		$scope.currentAlertType = alertType;
+		
+		switch($scope.currentAlertType){
+			case 'received':
+				$scope.currentAlerts = $scope.receivedAlerts;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = true;
+				$scope.showFullDelete = false;
+				break;
+			case 'deleted':
+				$scope.currentAlerts = $scope.deletedAlerts;
+				$scope.showFrom = true;
+				$scope.showSubject = true;
+				$scope.showTimestamp = true;
+				$scope.showDelete = false;
+				$scope.showFullDelete = true;
+				break;
+		}
+	}
+	
+	$scope.isTypeSelected = function(alertType){
+		if(alertType == $scope.currentAlertType){
+			return true;
+		}
+		return false;
+	}
+	
+	$scope.togglePopup = function(alert){
+		if($scope.showPopup){
+			$scope.selectedAlert = [];
+		}
+		else{
+			$scope.selectedAlert = alert;
+		}
+		$scope.showPopup = !$scope.showPopup;
+	}
+	
+	$scope.hidePopup = function(){
+		$scope.showPopup = false;
+		$scope.selectedAlert = [];
+	}
+	
 };
  
  
@@ -1170,11 +1215,13 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
  
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
+	/* User Data */
+	$scope.facilityID = 105
 	$scope.careTeamID = 1010;
 	$scope.userLevelID = 1;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/notifications";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedNotifications";
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
 
 	$scope.currentNotificationType = 'received';
 	
@@ -1182,48 +1229,47 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	$scope.selectedNotification;
 	$scope.showPopup = false;
 	
-	$scope.DUMMY_RECEIVED = {'records': [{
-		'NotificationID': 1,
-		'SenderFacilityID': 110,
-		'ReceiverFacilityID': 105,
-		'CareTeamID': 1003,
-		'Timestamp': 1407398574,
-		'IsRequest': 1,
-		'Response': 0,
-		'IsRead': 0,
-		'IsArchived': 0,
-		'SenderFacility': 'OHSU Cochlear Implant program',
-		'ReceiverFacility': 'Midlands Cochlear Implant Center',
-		'Subject': 'Care team invitation',
-		'Content': 'OHSU Cochlear Implant program has invited your facility to join care team 1003.'
-	}]};
-	
-	$scope.DUMMY_DELETED = {'records': [{
-		'NotificationID': 1,
-		'SenderFacilityID': 105,
-		'ReceiverFacilityID': 110,
-		'CareTeamID': 1085,
-		'Timestamp': 1407380000,
-		'IsRequest': 0,
-		'Response': 2,
-		'IsRead': 1,
-		'IsArchived': 1,
-		'SenderFacility': 'Midlands Cochlear Implant Center',
-		'ReceiverFacility': 'OHSU Cochlear Implant program',
-		'Subject': 'Declined care team invitation',
-		'Content': 'OHSU Cochlear Implant program has declined your invitation to join care team 1085.'
-	}]};
-	
-	$scope.receivedNotifications = $scope.DUMMY_RECEIVED;
-	$scope.deletedNotifications = $scope.DUMMY_DELETED;
-	
-	/*getData.get($scope.receivedURL).success(function(data) {
+	/* Initially executed functions */
+	getData.get($scope.receivedURL).success(function(data) {
+		//Generate the subject for every notification
+		for(i = 0; i < data.records.length; i++){
+			//If the notification was a request to join a care team...
+			if(data.records[i].IsRequest == '1'){
+				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+			}
+			//Otherwise the notification is a response to a sent care team invitation
+			else{
+				if(data.records[i].Response == '1'){
+					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+				}
+				else if(data.records[i]['Response'] == '2'){
+					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+				}
+			}
+		}
 		$scope.receivedNotifications = data;
+		$scope.currentNotifications = $scope.receivedNotifications;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
+		//Generate the subject for every notification
+		for(i = 0; i < data.records.length; i++){
+			//If the notification was a request to join a care team...
+			if(data.records[i].IsRequest == '1'){
+				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+			}
+			//Otherwise the notification is a response to a sent care team invitation
+			else{
+				if(data.records[i].Response == '1'){
+					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+				}
+				else if(data.records[i]['Response'] == '2'){
+					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+				}
+			}
+		}
 		$scope.deletedNotifications = data;
-    }); */
+    });
 	
 	$scope.setNotificationType = function(notificationType){
 		$scope.currentNotificationType = notificationType;
@@ -1232,7 +1278,6 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			case 'received':
 				$scope.currentNotifications = $scope.receivedNotifications;
 				$scope.showFrom = true;
-				$scope.showTo = false;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
 				$scope.showDelete = true;
@@ -1241,7 +1286,6 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			case 'deleted':
 				$scope.currentNotifications = $scope.deletedNotifications;
 				$scope.showFrom = true;
-				$scope.showTo = false;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
 				$scope.showDelete = false;
