@@ -137,8 +137,25 @@
         </div>
         
         <br>
-        <div ng-repeat="(question, answer) in patientSummaryAnswers">
+        <div ng-if="clickedPhase == 1 || clickedPhase == 3 || clickedPhase == 4 || clickedPhase == 5 || clickedPhase == 6"
+                    ng-repeat="(question, answer) in patientSummaryAnswers">
             {{question}} : {{answer}}<br><br>
+        </div>
+        
+        <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
+             ng-repeat="condition in patientSummaryAnswers">
+            <b> Testing Conditions: </b> <br>
+            <b> Left Ear Condition : </b>{{condition.LeftAidCondition}} <br>
+            <b> Right Ear Condition : </b> {{condition.RightAidCondition}} <br> 
+            <b> Results : </b><br>
+            <div ng-repeat="(test, results) in condition.Results">
+               <b> {{test}} : </b> <br>
+                <div ng-repeat="result in results">
+                    <div ng-repeat="(field,value) in result"> {{field}}: {{value}}</div> 
+                    <hr>
+                </div> 
+            </div> 
+            <br>
         </div>
     </div>
     
