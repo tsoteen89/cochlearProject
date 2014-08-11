@@ -1,1 +1,15 @@
-completed questions partial
+<div data-ng-controller="questionsController">
+    
+    <div class="col-md-6">
+        <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
+        <hr>
+        
+        <div ng-repeat="(question, answer) in patientSummaryAnswers">
+            {{question}} : {{answer}}<br><br>
+        </div>
+        
+        <hr>
+        <a href="#/patientDirectory"><button>Patient Directory</button></a>
+        
+    </div>
+</div>
