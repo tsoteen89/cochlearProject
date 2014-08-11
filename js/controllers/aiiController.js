@@ -303,6 +303,16 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
     }
     
+    
+    $scope.completePhase = function(){
+        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
+        // Post the changed currentPhaseID here
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
+        
+    }
+    
+    
     $scope.patientSummary = function(phaseNumber){
         console.log(phaseNumber);
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
