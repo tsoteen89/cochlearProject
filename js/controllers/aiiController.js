@@ -1171,11 +1171,11 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
  
 controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
 
-	$scope.careTeamID = 10;
+	$scope.facilityID = 105;
 	$scope.userLevelID = 1;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/alerts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.careTeamID + "/deletedAlerts";
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/alerts";
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedAlerts";
 
 	$scope.currentAlerts;
 	

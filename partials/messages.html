@@ -142,14 +142,14 @@
 				<input type="checkbox" name="inboxCheckbox" onclick="markAllAlerts('inbox', this)"> <a href=""><span><i class="glyphicon glyphicon-chevron-down"></i></span>
 				</a>
 			  </th>
-			  <th ng-click="order('SenderFacilityName')" ng-if="showFrom">From</th>
+			  <th ng-click="order('SenderFacilityName')" ng-if="showFrom">Patient</th>
 			  <th ng-click="order('Subject')" ng-if="showSubject">Subject</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
 			<tr ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(alert)">
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="alert" checklist-model="markedAlerts"> </td>
-			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="alert.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.SenderFacilityName}}</td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="alert.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{alert.Patient}}</td>
 			  <td ng-if="showSubject">{{alert.Subject}}</td>
 			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'h:mm a'}}</td>
 			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'M/d/yy'}}</td>
