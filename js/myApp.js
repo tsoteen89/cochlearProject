@@ -61,6 +61,14 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/patientDirectory.html'
   })
+  .when('/completedQuestions',
+  {
+      templateUrl: 'partials/completedQuestions.html'
+  })
+  .when('/completedAudiology',
+  {
+      templateUrl: 'partials/completedAudiology.html'
+  })
   .otherwise({redirectTo: 'partials/dashboard.html'});
 
 });

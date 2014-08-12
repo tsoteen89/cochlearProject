@@ -44,9 +44,9 @@
                     <div class="progress-bar">
                     </div>
                   </div>
-                  <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/questions" 
+                  <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/completedQuestions" 
                      ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
-                  <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/audioQuestions" 
+                  <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/completedAudiology" 
                      ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
                   <div class="bs-wizard-info text-center">
                     {{phase.Name}}
@@ -78,12 +78,12 @@
                     <div class="progress-bar">
                     </div>
                   </div>
-                  <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, , patient)" class="bs-wizard-dot"></a>
+                  <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot"></a>
                   <div class="bs-wizard-info text-center">
                     {{phase.Name}}
                   </div>
                 </div>
-              
+            
               </div>
             </div> <!-- End phaseProgress repeat for careTeams -->
               

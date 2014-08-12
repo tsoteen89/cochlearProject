@@ -4,7 +4,7 @@
     <div class="col-md-6">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
         <hr>
-        <form class="form form-verticle" id="form_850359" class="appnitro" ng-submit="nextPage()">
+        <form class="form form-verticle" id="form_850359" class="appnitro">
             <div class="control-group" >
                 CareTeamID: {{answer.CareTeamID}}
 
@@ -98,8 +98,14 @@
 
                     </li>
 
-                    <input ng-if="finished == false" class="questionsButton" style="float:right" type="submit" id="submit" value="Continue" />
-                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Finish</button></a><br>
+                    <button ng-if="offSet > 0" class="questionsButton" ng-click="previousPage()" style="float:left">Back</button>
+                        
+                    <button ng-if="finished == false" class="questionsButton" ng-click="nextPage()" style="float:right">Continue</button>
+                        
+                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton">Save</button></a>
+                        
+                    <br><br>
+                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" ng-click="completePhase()" class="questionsButton">Save & Complete</button></a><br>
                     </div>
                 </ul>
                 <!-- End Display Of All Questions -->
@@ -128,13 +134,30 @@
             <li><a href="" ng-click="patientSummary(8)">3 Month</a></li>
             <li><a href="" ng-click="patientSummary(9)">6 Month</a></li>
             <li><a href="" ng-click="patientSummary(10)">12 Month</a></li>
-            <li><a href="" ng-click="patientSummary(11">24 Month</a></li>
+            <li><a href="" ng-click="patientSummary(11)">24 Month</a></li>
           </ul>
         </div>
         
         <br>
-        <div ng-repeat="(question, answer) in patientSummaryAnswers">
+        <div ng-if="clickedPhase == 1 || clickedPhase == 3 || clickedPhase == 4 || clickedPhase == 5 || clickedPhase == 6"
+                    ng-repeat="(question, answer) in patientSummaryAnswers">
             {{question}} : {{answer}}<br><br>
+        </div>
+        
+        <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
+             ng-repeat="condition in patientSummaryAnswers">
+            <b> Testing Conditions: </b> <br>
+            <b> Left Ear Condition : </b>{{condition.LeftAidCondition}} <br>
+            <b> Right Ear Condition : </b> {{condition.RightAidCondition}} <br> 
+            <b> Results : </b><br>
+            <div ng-repeat="(test, results) in condition.Results">
+               <b> {{test}} : </b> <br>
+                <div ng-repeat="result in results">
+                    <div ng-repeat="(field,value) in result"> {{field}}: {{value}}</div> 
+                    <hr>
+                </div> 
+            </div> 
+            <br>
         </div>
     </div>
     

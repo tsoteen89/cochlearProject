@@ -130,6 +130,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.limit = 5;
     $scope.offSet = 0;
+    $scope.limitArray = new Array();
     $scope.n = 0;
     $scope.finished = false;
     $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()}
@@ -144,7 +145,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
     
     $scope.patientSummaryAnswers = {};
-    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + 1;
+    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
@@ -211,7 +212,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //Display the next set of questions for a phase
     $scope.nextPage = function() {
-        
+        $scope.limitArray.push($scope.limit);
         $scope.offSet += $scope.limit;
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=5";
         
@@ -257,7 +258,26 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
+                /*
+                if($scope.finished == false){
+                    $scope.limitArray.push($scope.limit);
+                }
+                */
             });
+        });
+    }
+    
+    
+    //function used to display questions from previous pages
+    $scope.previousPage = function() {
+        $scope.finished = false;
+        $scope.limit = $scope.limitArray.pop();
+        $scope.offSet = $scope.offSet - $scope.limit;
+        
+        $scope.finalQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
+        
+        getData.get($scope.finalQuestionsURL).success(function(data4) {
+            $scope.finalQuestions = data4.records;
         });
     }
     
@@ -303,8 +323,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
     }
     
+    
+    $scope.completePhase = function(){
+        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
+        // Post the changed currentPhaseID here
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
+        
+    }
+    
+    $scope.clickedPhase = null;
     $scope.patientSummary = function(phaseNumber){
-        console.log(phaseNumber);
+        this.clickedPhase = phaseNumber;
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {

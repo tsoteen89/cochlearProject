@@ -1,0 +1,22 @@
+Completed Audiology
+<div ng-controller="questionsController">
+    <div class="col-md-6">
+        <div ng-repeat="condition in patientSummaryAnswers">
+            <b> Testing Conditions: </b> <br><br>
+            <b> Left Ear Condition : </b>{{condition.LeftAidCondition}} <br>
+            <b> Right Ear Condition : </b> {{condition.RightAidCondition}} <br> 
+            <b> Results : </b><br>
+            <div ng-repeat="(test, results) in condition.Results">
+               <b> {{test}} : </b> <br>
+                <div ng-repeat="result in results">
+                    <div ng-repeat="(field,value) in result"> {{field}}: {{value}}</div> 
+                    <hr>
+                </div> 
+            </div> 
+            <br>
+        </div>
+    </div>
+    
+    <a href="#/patientDirectory"><button>Patient Directory</button></a>
+
+</div>
