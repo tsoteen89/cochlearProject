@@ -36,48 +36,56 @@
                                 </div>
                                 
                                 <!-- Facility Name -->
-                                <div class="control-group" >
+                            <div class="row">
+                                <div class="control-group col-md-3 col-md-offset-1" >
                                     <label>Facility Name</label>
                                     <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="Name" ng-model="facilityData.Name" ng-required="true" placeholder="Enter Facility Name">
+                                        <input type="text" class="form-control" name="Name" ng-model="facilityData.Name" ng-required="true" placeholder="Enter Facility Name">
                                     </div>
-                                </div><br><hr>
+                                </div>
 
                                 <!-- Facility Type -->
-                                <div class="control-group" >
+                                <div class="control-group col-md-3 col-md-offset-1" >
                                     <label>Facility Type</label>
                                     <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="FacilityTypeID" ng-model="facilityData.FacilityTypeID" ng-required="true" placeholder="Enter Facility Type">
+                                        <input type="text" class="form-control" name="FacilityTypeID" ng-model="facilityData.FacilityTypeID" ng-required="true" placeholder="Enter Facility Type">
                                     </div>
-                                </div><br><hr>
+                                </div>
+                                
+                            </div><br><hr><!--End first row-->
 
+                                
                                 <!-- Facility Street Address -->
-                                    <div class="controls" style="float:left;margin-left:4%">
+                            <div class="row">    
+                                    <div class="controls col-md-3 col-md-offset-1">
                                         <label>Facility Address</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="Address1" ng-model="facilityData.Address1" ng-required="true" placeholder="Enter Facility Street, City and State">
-                                    </div><br><br><br><br>
+                                        <input type="text" class="form-control" name="Address1" ng-model="facilityData.Address1" ng-required="true" placeholder="Enter Facility Street, City and State">
+                                    </div>
 
                                 <!-- Facility Zip -->
-                                    <div class="controls" >
+                                    <div class="controls col-md-3 col-md-offset-1" >
                                         <label>Facility Zipcode</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="ZipCode" ng-model="facilityData.ZipCode" ng-required="true" placeholder="Enter Facility Zipcode">
-                                    </div><br>
-
+                                        <input type="text" class="form-control" name="ZipCode" ng-model="facilityData.ZipCode" ng-required="true" placeholder="Enter Facility Zipcode">
+                                    </div>
+                            </div><br><hr>
+                                
+                            
+                            <div class="row">
                                 <!-- Facility Phone -->
-                                    <div class="controls">
+                                    <div class="controls col-md-3 col-md-offset-1">
                                         <label>Facility Phone Number</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="Phone" ng-model="facilityData.Phone" ng-required="true" placeholder="ex.(555-424-4243)">
-                                    </div><br><hr>
+                                        <input type="text" class="form-control" name="Phone" ng-model="facilityData.Phone" ng-required="true" placeholder="ex.(555-424-4243)">
+                                    </div>
                                 
                                 <!-- Facility Description -->
-                                    <div class="controls">
+                                    <div class="controls col-md-3 col-md-offset-1">
                                         <label>Facility Description</label>
-                                        <input style="width: 200px" type="text" class="form-control" name="Description" ng-model="facilityData.Description" ng-required="true" placeholder="Small Description">
-                                    </div><br><hr>
-                                    
-                                    
+                                        <input type="text" class="form-control" name="Description" ng-model="facilityData.Description" ng-required="true" placeholder="Small Description">
+                                    </div>
+                                </div>
+                                        
                                 </div><br>
-                                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+                                <input class="btn btn-primary col-md-2 col-md-offset-1" type="submit" id="submit" value="Submit" />
                                 Facility Data:{{ facilityData | json }}
 
                             </form>
@@ -97,85 +105,91 @@
                                         </div>
                                     </div>
 
+                                <div class="row">
                                 <!-- Administrator Name -->
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>User Name</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="userName" ng-model="administratorData.username" ng-required="true" placeholder="Enter UserName">
                                       </div>
-                                    </div><br>
+                                    </div>
 
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>Password</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="password" ng-model="administratorData.password" ng-required="true" placeholder="Enter Password">
                                       </div>
-                                    </div><br>
-
-                                    <div class="control-group" >
+                                    </div>
+                                </div><hr>
+                                
+                                <div class="row">
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>E-Mail</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="email" ng-model="administratorData.email" ng-required="true" placeholder="Enter Email">
                                       </div>
-                                    </div><br>
+                                    </div>        
 
-                                    <hr>        
-
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>Phone Number</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="phone" ng-model="administratorData.phone" ng-required="true" placeholder="Enter Phone Number">
                                     </div>
+                                    </div>
+                                    </div><hr>
 
-                                    <hr>
-
-                                    <div class="control-group" >
+                                <div class="row">
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>Facility ID</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="facilityID" ng-model="administratorData.FacilityID" ng-required="true" placeholder="Enter Facility ID">
                                     </div>                       
-                                    </div><br>
+                                    </div>
 
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>User Level ID</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="userLevelID" ng-model="administratorData.UserLevelID" ng-required="true" placeholder="Enter User Level ID">
                                     </div>                       
-                                    </div><br>
-
-                                    <div class="control-group" >
-                                      <label>Created On</label>
-                                      <div class="controls" >
-                                        <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="administratorData.created_on" ng-required="true" placeholder="Enter Created On (1374177302)">
-                                    </div>                       
-                                    </div><br>
+                                    </div>
+                                    </div><hr>
 
 
-
-                                    <div class="control-group" >
+                                <div class="row">
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>First Name</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="firstName" ng-model="administratorData.first_name" ng-required="true" placeholder="Enter First Name">
                                     </div>                       
-                                    </div><br>
+                                    </div>
 
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>Last Name</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="lastName" ng-model="administratorData.last_name" ng-required="true" placeholder="Enter Last Name">
                                     </div>                       
-                                    </div><br>     
+                                    </div>
+                                    </div><hr>
+                                
+                                <div class="row">
+                                    <div class="control-group col-md-3 col-md-offset-1" >
+                                      <label>Created On</label>
+                                      <div class="controls" >
+                                        <input style="width: 200px" type="text" class="form-control" name="createdOn" ng-model="administratorData.created_on" ng-required="true" placeholder="Enter Created On (1374177302)">
+                                    </div>                       
+                                    </div>
 
-                                    <div class="control-group" >
+                                    <div class="control-group col-md-3 col-md-offset-1" >
                                       <label>Title ID</label>
                                       <div class="controls" >
                                         <input style="width: 200px" type="text" class="form-control" name="titleID" ng-model="administratorData.TitleID" ng-required="true" placeholder="Enter Title ID (1)">
                                     </div>                       
+                                    </div>
                                     </div><br> 
 
 
-                                </div><br>
-                                <input style="width: 200px" type="submit" id="submit" value="Submit" />
+                                </div>
+                                <input class="btn btn-primary col-md-2 col-md-offset-1" type="submit" id="submit" value="Submit" />
                                 Administrator Data:{{ administratorData | json }}
 
                             </form>
