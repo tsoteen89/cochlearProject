@@ -1,36 +1,69 @@
 <style>
     div.scroll
     {
-        background-color:#A8CCEE;
-        
-        overflow:scroll;
+        background-color:#EDF2FF;
+        height:100px;
+        overflow:auto; 
     }
+    
+    .custom-search-form{
+        
+        margin-top:5px;
+    }
+
 </style>
 
+<div class="container">
+	<div class="row">
+		<div class="col-lg-5" style="float:right;">
+            <div class="input-group custom-search-form">
+              <input type="text" class="form-control" placeholder="Search Patients (not functional yet)">
+              <span class="input-group-btn">
+              <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-search"></span>
+             </button>
+             </span>
+             </div><!-- /input-group -->
+        </div>
+	</div>
+</div>
+
+<br>
 <div class="container" ng-controller="dashboardController">
 <container class = "cp_fixedbgStyle">
+<!--FIRST ROW------------------------------->
     <div class="row">
-
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
                 <h3 class="panel-title">{{facData.records[0].Name}}</h3>
               </div>
               <div class="panel-body">
-                  Facility Admin: <a> Their NAME</a>
-                  <br>
-                  <button> Facility Settings</button>
-             <!--
-                <div class="row-fluid">
-                    <div class="span4">
-                        4
-                    </div>
-
-                    <div class="span8">
-                        8
-                    </div>
+                  
+                <div class="col-md-4">
+                    <img src="images/facilityLogo.png" style="width:140%;"/> 
                 </div>
-                -->
+                <div class="col-md-8">
+                  <b> Address: </b> <br>
+                  {{facData.records[0].Address1}} <br>
+                  Facility Admin: <a> ADMIN NAME</a> <br>
+                  <button> Facility Settings</button> 
+                </div> 
+                
+                <p> Users @ {{facData.records[0].Name}}</p>    
+                <div class="scroll">
+                    <ul>
+                        <li ng-repeat="user in facUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+                    </ul>
+                </div>
+                  <br>
+                <div class= "container">
+                  <div class="row">
+                    <button type="button" class="btn btn-default btn-sm">
+                      <span class="glyphicon glyphicon-plus-sign"></span> Add User
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
         </div>
@@ -52,35 +85,40 @@
                 <h3 class="panel-title">Aii directory</h3>
               </div>
               <div class="panel-body">
-                Panel content
-                <div class="scroll">
-                    <ul>
-                        <li> FACILITY OR SOMETHING?</li>
-                        <li> FACILITY OR SOMETHING?</li>
-                        <li> FACILITY OR SOMETHING?</li>
-                        <li> FACILITY OR SOMETHING?</li>
-                    </ul>
-                </div>
+                  <div class="row">
+                    <div class="col-lg-12" style="float:right;" >
+                        <div class="input-group custom-search-form">
+                          <input type="text" class="form-control" placeholder="Search Aii Members (not functional yet)">
+                          <span class="input-group-btn">
+                          <button class="btn btn-default" type="button">
+                          <span class="glyphicon glyphicon-search"></span>
+                         </button>
+                         </span>
+                         </div><!-- /input-group -->
+                    </div>
+                   </div>
+                    <div class="scroll">
+                        <ul>
+                            <li ng-repeat="fac in allFacs.records"> <a> {{fac.Name}} </a> </li>
+                        </ul>
+                    </div>
+                    
+                
               </div>
             </div>
         </div>
     </div>
     
+    <!--SECOND ROW------------------------------->
     <div class="row">
 
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                <h3 class="panel-title">Add Users</h3>
+                <h3 class="panel-title">????</h3>
               </div>
               <div class="panel-body">
-                <div class= "container">
-                  <div class="row">
-                    <button type="button" class="btn btn-default btn-sm">
-                      <span class="glyphicon glyphicon-plus-sign"></span> Add User
-                    </button>
-                  </div>
-                </div>
+                Content
               </div>
             </div>
         </div>
@@ -90,8 +128,21 @@
               <div class="panel-heading">
                 <h3 class="panel-title">Messaging</h3>
               </div>
-              <div class="panel-body">
-                Panel content
+              <div class="panel-body" ng-controller="messagingController">
+                  <table class="table table-hover">
+                    <thead> Inbox...IDK what to put</thead>
+                    <tr>
+                      <th>Firstname</th>
+                      <th>Lastname</th> 
+                      <th>Subject</th>
+                    </tr>
+                    <tr ng-repeat="message in inboxMessages.records">
+                      <td>{{message.Sender_First}}</td>
+                      <td>{{message.Sender_Last}}</td> 
+                      <td>{{message.Subject}}</td>
+                    </tr>
+                  </table>
+                  
               </div>
             </div>
         </div>
