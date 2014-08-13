@@ -118,6 +118,16 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         $scope.facData = data;
     });
     
+    //Grab AII Facilities 
+    getData.get("http://killzombieswith.us/aii-api/v1/facilities/").success(function(data) {
+        $scope.allFacs = data;
+    });
+    
+    //Grab Facilities Users
+    getData.get($scope.facilityURL + 'users').success(function(data) {
+        $scope.facUsers = data;
+    });
+    
 };
     
 //*****************************************END Dashboard*******************************************//
