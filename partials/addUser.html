@@ -15,6 +15,28 @@
                         
                          
 <form name="userForm" ng-submit="processForm()" class="form form-vertical" novalidate>
+                    
+                <div class="row">        
+                            
+                        
+                        <div class="control-group col-md-4 col-md-offset-1" >
+                          <label>First Name</label>
+                          <div class="controls" >
+                            <input type="text" class="form-control" name="firstName" ng-model="formData.first_name" ng-required="true" placeholder="Enter First Name" alphabet>
+                        </div>                       
+                        </div>
+                        
+                        <div class="control-group col-md-4 col-md-offset-1" >
+                          <label>Last Name</label>
+                          <div class="controls" >
+                            <input type="text" class="form-control" name="lastName" ng-model="formData.last_name" ng-required="true" placeholder="Enter Last Name" alphabet>
+                        </div>                       
+                        </div>
+                        
+                        </div><br>
+    
+    
+
                     <div class="row">
                         <div class="control-group col-md-4 col-md-offset-1" >
                           <label>User Name</label>
@@ -33,67 +55,31 @@
                           </div>
                         </div>
                         </div><br>
+    
+    
 
                         <div class="row">
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>E-Mail</label>
-                          <div class="controls" >
-                            <input type="email" class="form-control" name="email" ng-model="formData.email" ng-required="true" placeholder="Enter Email">
-                          </div>
-                        </div>
 
                         <hr>        
 
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>Phone Number</label>
-                          <div class="controls">
-                            <input type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number" phone>
-                        </div>
+                            <div class="control-group col-md-4 col-md-offset-1" >
+                                <label>Phone Number</label>
+                                <div class="controls">
+                                    <input type="text" class="form-control" name="phone" ng-model="formData.phone" ng-required="true" placeholder="Enter Phone Number" phone>
+                                </div>
                             </div>
-                            </div><br>
-
-                        <hr>
-                    <div class="row">        
                             
-                        
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>First Name</label>
-                          <div class="controls" >
-                            <input type="text" class="form-control" name="firstName" ng-model="formData.first_name" ng-required="true" placeholder="Enter First Name" alphabet>
-                        </div>                       
-                        </div>
-                        
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>User Level</label>
-                          <div class="controls" >
-                            <!--<input style="width: 200px" type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true" placeholder="Enter User Level ID" min=1 max=20 integer>-->
-                             
-                             <select type="number" class="form-control" name="userLevelID" ng-model="formData.UserLevelID" ng-required="true">
-                                  <option ng-repeat="UserLevel in formData.UserLevels.records">{{UserLevel.Name}}</option>
-                              </select>
-                        </div>                       
-                        </div>
-                        
-                        </div><br>
-    
-    
-                        <div class="row">
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>Last Name</label>
-                          <div class="controls" >
-                            <input type="text" class="form-control" name="lastName" ng-model="formData.last_name" ng-required="true" placeholder="Enter Last Name" alphabet>
-                        </div>                       
-                        </div>     
-                            
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                          <label>Title</label>
-                          <div class="controls" >
-                            <select type="number" class="form-control" name="userLevelID" ng-model="formData.UserTitleID" ng-required="true">
-                                  <option ng-repeat="UserTitle in formData.UserTitles.records">{{UserTitle.Abbreviation}}</option>
-                            </select>
+                            <div class="control-group col-md-4 col-md-offset-1" >
+                                <label>Title</label>
+                                <div class="controls" >
+                                    <select type="number" class="form-control" name="userLevelID" ng-model="formData.UserTitleID" ng-required="true">
+                                        <option ng-repeat="UserTitle in formData.UserTitles.records">{{UserTitle.Abbreviation}}</option>
+                                    </select>
                               
-                        </div>                       
-                        </div>
+                                </div>                       
+                            </div>
+                            
+                            
                         </div><br>    
 
                         <hr>
