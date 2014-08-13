@@ -1187,7 +1187,16 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/alerts";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedAlerts";
 
+	$scope.alertURL = "http://killzombieswith.us/aii-api/v1/alerts/";	
+		
 	$scope.currentAlerts;
+	
+	/* Miscellaneous Variables */
+	//OrderBy property : true means display contents in reverse order  
+	$scope.reverse = true;
+	$scope.orderFilter = 'Timestamp';
+    //Alerts that have been marked (for deleting, marking as read, or marking as unread)
+	$scope.markedAlerts = [];
 	
 	getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedAlerts = data;
@@ -1207,6 +1216,7 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 				$scope.showFrom = true;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
+				$scope.showRestore = false;
 				$scope.showDelete = true;
 				$scope.showFullDelete = false;
 				break;
@@ -1215,6 +1225,7 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 				$scope.showFrom = true;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
+				$scope.showRestore = true;
 				$scope.showDelete = false;
 				$scope.showFullDelete = true;
 				break;
@@ -1234,6 +1245,12 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 		}
 		else{
 			$scope.selectedAlert = alert;
+			//Mark the selected alert as read
+			if($scope.selectedAlert.IsRead == 0){
+				putAlertURL = $scope.alertURL + $scope.selectedAlert.AlertID;
+				$scope.selectedAlert.IsRead = 1;
+				putData.put(putAlertURL, $scope.selectedAlert);
+			}
 		}
 		$scope.showPopup = !$scope.showPopup;
 	}
@@ -1243,6 +1260,133 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 		$scope.selectedAlert = [];
 	}
 	
+	$scope.deleteSelectedAlert = function(deletedState){
+		alertURL = "http://killzombieswith.us/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
+		//Change the alert's Deleted attribute to true
+		$scope.selectedAlert.IsArchived = deletedState;
+		//PUT the alert using the URL and then refresh the alerts
+		putData.put(alertURL, $scope.selectedAlert);
+		$scope.refreshAlerts();
+	}
+	
+	$scope.refreshAlerts = function(){
+		$scope.refreshReceived();
+		$scope.refreshDeleted();
+	}
+	
+	$scope.refreshReceived = function(){
+		getData.get($scope.receivedURL).success(function(data) {
+			$scope.receivedAlerts = data;
+			if($scope.currentAlertType == 'received'){
+				$scope.currentAlerts = $scope.receivedAlerts;
+			}
+		});
+	}
+	
+	$scope.refreshDeleted = function(){
+		getData.get($scope.deletedURL).success(function(data) {
+			$scope.deletedAlerts = data;
+			if($scope.currentAlertType == 'deleted'){
+				$scope.currentAlerts = $scope.deletedAlerts;
+			}
+		}); 
+	}
+	
+	$scope.order = function(filter){
+		$scope.reverse = !($scope.reverse);
+		$scope.orderFilter = filter;
+	}
+	
+	$scope.markAlert = function(alert, checkbox){
+		//If checkbox was just selected, add the message as marked
+		if(checkbox.checked){
+			$scope.markedAlerts.push(alert);
+		}
+		//On unselecting a checkbox, find the message and remove it from the marked messages
+		else{
+			for(i = 0; i < $scope.markedAlerts.length; i++){
+				if($scope.markedAlerts[i] == alert){
+					//Remove the input message from the marked array
+					$scope.markedAlerts.splice(i,1);
+				}
+			}
+		}
+	}
+	
+	//Add all the alerts in the input to the marked alerts
+	markAllAlerts = function(sourceCheckbox){
+	
+		switch($scope.currentAlertType){
+			case 'received':
+				alerts = $scope.receivedAlerts.records;
+				break;
+			case 'deleted':
+				alerts = $scope.deletedAlerts.records;
+				break;
+			default:
+				alerts = [];
+				break;
+		}
+		
+		checkboxName = 'alertCheckbox';
+		
+		//Find all the checkboxes that will be affected by this function
+		checkboxes = document.getElementsByName(checkboxName);
+		for(i = 0; i < checkboxes.length; i++){
+			checkboxes[i].checked = sourceCheckbox.checked;
+		}
+		//If the checkbox is checked, add all alerts as marked
+		if(sourceCheckbox.checked){
+			for(i = 0; i < alerts.length; i++){
+				$scope.markedAlerts.push(alerts[i]);
+			}
+		}
+		//When unchecked, remove all alerts from marked
+		else{
+			$scope.clearMarkedAlerts();
+		}
+	}
+	
+	//Remove all messages from the marked messages array
+	$scope.clearMarkedAlerts = function(){
+		$scope.markedAlerts = [];
+		
+		//Mark all the checkboxes as unchecked
+		checkboxNames = ['alertCheckbox', 'controlCheckbox'];
+		
+		for(i = 0; i < checkboxNames.length; i++)
+		{
+			checkboxes = document.getElementsByName(checkboxNames[i]);
+			for(j = 0; j < checkboxes.length; j++)
+			{
+				checkboxes[j].checked = false;
+			}
+		}
+	}
+	
+	//Send a PUT request with the user-defined property and value
+	$scope.putMarkedAlerts = function(property, value){
+		//Parse value (string) as an int (in base 10)
+		value = parseInt(value, 10);
+		if(property == 'read'){
+			for(i = 0; i < $scope.markedAlerts.length; i++){
+				putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
+				//Change the message's Deleted attribute to true
+				$scope.markedAlerts[i].IsRead = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putAlertURL,$scope.markedAlerts[i])).then($scope.refreshAlerts());
+			}
+		}
+		else if(property == 'deleted'){
+			for(i = 0; i < $scope.markedAlerts.length; i++){
+				putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
+				//Change the message's Deleted attribute to true
+				$scope.markedAlerts[i].IsArchived = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putAlertURL,$scope.markedAlerts[i])).then($scope.refreshAlerts());
+			}
+		}
+	}
 };
  
  
@@ -1263,11 +1407,16 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
 
+	$scope.notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+	
 	$scope.currentNotificationType = 'received';
 	
 	/* Miscellaneous Variables */
-	$scope.selectedNotification;
-	$scope.showPopup = false;
+	//OrderBy property : true means display contents in reverse order  
+	$scope.reverse = true;
+	$scope.orderFilter = 'Timestamp';
+    //Alerts that have been marked (for deleting, marking as read, or marking as unread)
+	$scope.markedNotifications = [];
 	
 	/* Initially executed functions */
 	getData.get($scope.receivedURL).success(function(data) {
@@ -1320,6 +1469,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				$scope.showFrom = true;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
+				$scope.showRestore = false;
 				$scope.showDelete = true;
 				$scope.showFullDelete = false;
 				break;
@@ -1328,6 +1478,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				$scope.showFrom = true;
 				$scope.showSubject = true;
 				$scope.showTimestamp = true;
+				$scope.showRestore = true;
 				$scope.showDelete = false;
 				$scope.showFullDelete = true;
 				break;
@@ -1347,6 +1498,12 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		}
 		else{
 			$scope.selectedNotification = notification;
+			//Mark the selected notification as read
+			if($scope.selectedNotification.IsRead == 0){
+				putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
+				$scope.selectedNotification.IsRead = 1;
+				putData.put(putNotificationURL, $scope.selectedNotification);
+			}
 		}
 		$scope.showPopup = !$scope.showPopup;
 	}
@@ -1356,6 +1513,173 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		$scope.selectedNotification = [];
 	}
 	
+	$scope.deleteSelectedNotification = function(deletedState){
+		notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
+		//Change the notification's Deleted attribute to true
+		$scope.selectedNotification.IsArchived = deletedState;
+		//PUT the notification using the URL and then refresh the notifications
+		putData.put(notificationURL, $scope.selectedNotification);
+		$scope.refreshNotifications();
+	}
+	
+	$scope.refreshNotifications = function(){
+		$scope.refreshReceived();
+		$scope.refreshDeleted();
+	}
+	
+	$scope.refreshReceived = function(){
+		getData.get($scope.receivedURL).success(function(data) {
+			//Generate the subject for every notification
+			for(i = 0; i < data.records.length; i++){
+				//If the notification was a request to join a care team...
+				if(data.records[i].IsRequest == '1'){
+					data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+				}
+				//Otherwise the notification is a response to a sent care team invitation
+				else{
+					if(data.records[i].Response == '1'){
+						data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+					}
+					else if(data.records[i]['Response'] == '2'){
+						data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+					}
+				}
+			}
+			$scope.receivedNotifications = data;
+			if($scope.currentNotificationType == 'received'){
+				$scope.currentNotifications = $scope.receivedNotifications;
+			}
+		});
+	}
+	
+	$scope.refreshDeleted = function(){
+		getData.get($scope.deletedURL).success(function(data) {
+			//Generate the subject for every notification
+			for(i = 0; i < data.records.length; i++){
+				//If the notification was a request to join a care team...
+				if(data.records[i].IsRequest == '1'){
+					data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+				}
+				//Otherwise the notification is a response to a sent care team invitation
+				else{
+					if(data.records[i].Response == '1'){
+						data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+					}
+					else if(data.records[i]['Response'] == '2'){
+						data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+					}
+				}
+			}
+			$scope.deletedNotifications = data;
+			if($scope.currentNotificationType == 'deleted'){
+				$scope.currentNotifications = $scope.deletedNotifications;
+			}
+		}); 
+	}
+	
+	$scope.order = function(filter){
+		$scope.reverse = !($scope.reverse);
+		$scope.orderFilter = filter;
+	}
+	
+	$scope.markNotification = function(notification, checkbox){
+		//If checkbox was just selected, add the message as marked
+		if(checkbox.checked){
+			$scope.markedNotifications.push(notification);
+		}
+		//On unselecting a checkbox, find the message and remove it from the marked messages
+		else{
+			for(i = 0; i < $scope.markedNotifications.length; i++){
+				if($scope.markedNotifications[i] == notification){
+					//Remove the input message from the marked array
+					$scope.markedNotifications.splice(i,1);
+				}
+			}
+		}
+	}
+	
+	//Add all the notifications in the input to the marked notifications
+	markAllNotifications = function(sourceCheckbox){
+	
+		switch($scope.currentNotificationType){
+			case 'received':
+				notifications = $scope.receivedNotifications.records;
+				break;
+			case 'deleted':
+				notifications = $scope.deletedNotifications.records;
+				break;
+			default:
+				notifications = [];
+				break;
+		}
+		
+		checkboxName = 'notificationCheckbox';
+		
+		//Find all the checkboxes that will be affected by this function
+		checkboxes = document.getElementsByName(checkboxName);
+		for(i = 0; i < checkboxes.length; i++){
+			checkboxes[i].checked = sourceCheckbox.checked;
+		}
+		//If the checkbox is checked, add all notifications as marked
+		if(sourceCheckbox.checked){
+			for(i = 0; i < notifications.length; i++){
+				$scope.markedNotifications.push(notifications[i]);
+			}
+		}
+		//When unchecked, remove all notifications from marked
+		else{
+			$scope.clearMarkedNotifications();
+		}
+	}
+	
+	//Remove all messages from the marked messages array
+	$scope.clearMarkedNotifications = function(){
+		$scope.markedNotifications = [];
+		
+		//Mark all the checkboxes as unchecked
+		checkboxNames = ['notificationCheckbox', 'controlCheckbox'];
+		
+		for(i = 0; i < checkboxNames.length; i++)
+		{
+			checkboxes = document.getElementsByName(checkboxNames[i]);
+			for(j = 0; j < checkboxes.length; j++)
+			{
+				checkboxes[j].checked = false;
+			}
+		}
+	}
+	
+	//Send a PUT request with the user-defined property and value
+	$scope.putMarkedNotifications = function(property, value){
+		//Parse value (string) as an int (in base 10)
+		value = parseInt(value, 10);
+		if(property == 'read'){
+			for(i = 0; i < $scope.markedNotifications.length; i++){
+				putNotificationURL = $scope.notificationURL + $scope.markedNotifications[i].NotificationID;
+				//Change the message's Deleted attribute to true
+				$scope.markedNotifications[i].IsRead = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putNotificationURL,$scope.markedNotifications[i])).then($scope.refreshNotifications());
+			}
+		}
+		else if(property == 'deleted'){
+			for(i = 0; i < $scope.markedNotifications.length; i++){
+				putNotificationURL = $scope.notificationURL + $scope.markedNotifications[i].NotificationID;
+				//Change the message's Deleted attribute to true
+				$scope.markedNotifications[i].IsArchived = value;
+				//PUT the message using the message URL
+				$.when(putData.put(putNotificationURL,$scope.markedNotifications[i])).then($scope.refreshNotifications());
+			}
+		}
+	}
+	
+	$scope.respondToRequest = function(status){
+		putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
+		$scope.selectedNotification.Response = status;
+		$scope.selectedNotification.IsArchived = 2;
+		putData.put(putNotificationURL, $scope.selectedNotification);
+		$scope.refreshNotifications();
+	}
 };
 
 
