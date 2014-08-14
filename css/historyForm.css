@@ -1,6 +1,6 @@
-body
+/*body
 {
-	/*background:#336699;*/
+	/*background:#336699;
 	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
 	font-size:small;
 	margin:8px 0 16px;
@@ -54,9 +54,7 @@ form.appnitro
 	padding:0 0 20px;
 }
 
-/**** Logo Section  *****/
-
-}
+/**** Logo Section
 
 h1 a
 {
@@ -75,7 +73,7 @@ img
 }
 
 
-/**** Form Section ****/
+/**** Form Section
 .appnitro
 {
 	font-family:Lucida Grande, Tahoma, Arial, Verdana, sans-serif;
@@ -287,7 +285,7 @@ form .section_break p
 	margin:0 0 10px;
 }
 
-/**** Buttons ****/
+/**** Buttons
 input.button_text
 {
 	overflow:visible;
@@ -301,7 +299,7 @@ input.button_text
 	margin-right:5px;
 }
 
-/**** Inputs and Labels ****/
+/**** Inputs and Labels
 label.description
 {
 	border:none;
@@ -464,7 +462,7 @@ textarea.large
 	height:20em;
 }
 
-/**** Errors ****/
+/**** Errors
 #error_message
 {
 	background:#fff;
@@ -528,7 +526,7 @@ form .required
 	font-weight:700;
 }
 
-/**** Guidelines and Error Highlight ****/
+/**** Guidelines and Error Highlight
 form li.highlighted
 {
 	background-color:#fff7c0;
@@ -581,7 +579,7 @@ form li:hover .guidelines
 	padding-left:9px;
 }
 
-/*** Success Message ****/
+/*** Success Message 
 .form_success 
 {
 	clear: both;
@@ -597,7 +595,7 @@ form li:hover .guidelines
     margin:0pt 0pt 3px;
 }
 
-/*** Password ****/
+/*** Password
 ul.password{
     margin-top:60px;
     margin-bottom: 60px;
@@ -630,7 +628,7 @@ ul.password{
 	float:none;
 }
 
-/** Embedded Form **/
+/*Embedded Form 
 
 .embed #form_container{
 	border: none;
@@ -661,6 +659,31 @@ ul.password{
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 #cp_questionForm{
     
     background-color: #EDF8FF;
@@ -682,4 +705,19 @@ ul.password{
 #cp_questionDivContainer{
     margin-left: 10%; width: 100%;
     
+}*/
+
+
+
+/*
+#cp_questionsReportForm{
+    
+    background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%;width:35%;margin-left:50%;position:absolute; margin-top:8%
+    
 }
+
+#cp_audioQuestionsReportForm{
+    background-color:#cae5f0; border-style: solid; border-width: 1px;border-radius:7px; box-shadow: 0 2px 10px -1px gray; padding: 1% 2% 1% 2%; margin-left: 63%;margin-right: 2%;margin-top: -2%
+}
+
+*/
