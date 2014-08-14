@@ -1,6 +1,6 @@
 <div id = "cp_patientDirectory">
   <div ng-controller="apiPatientsController">
-    <h1>Patient Overviews</h1>
+    <h1>Patient Directory</h1>
     <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
         <div class="container">

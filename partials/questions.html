@@ -55,21 +55,25 @@
                                             </div>
                                             <div ng-if="subfield.Type == 'Text'" ng-hide="surgery['Type of Surgery?']!='Other'">
                                                 <label id="cp_textStyle" class="description" >{{subfield.Name}} </label>
-                                                <input type="Text" name={{question.QuestionID}} 
-                                                       ng-model="surgery['Type of Surgery?']" ng-blur="postSurgery()" placeholder="Type in other type of surgery">
+                                                <input type="Text" name={{question.QuestionID}}
+                                                       ng-model="surgery['Other']" ng-blur="postSurgery()" 
+                                                       placeholder="Type in other type of surgery">
                                             </div>
                                             <div ng-if="subfield.Type == 'Radio'" ng-repeat="values in subfield.Values" >
                                                 <input type="Radio" value={{values}} name={{question.QuestionID}} 
-                                                       ng-model="surgery[subfield.Name]" ng-if="surgery['Type of Surgery?']!='Other'&& surgery['Type of Surgery?']!=null" ng-blur="postSurgery()">
+                                                       ng-model="surgery[subfield.Name]" 
+                                                       ng-if="surgery['Type of Surgery?']!='Other'&& surgery['Type of Surgery?']!=null"
+                                                       ng-blur="postSurgery()">
                                                 <input type="Radio" value={{values}} name={{question.QuestionID}} 
-                                                       ng-model="surgery[subfield.Name]" ng-if="surgery['Type of Surgery?']==null">
+                                                       ng-model="surgery[subfield.Name]" 
+                                                       ng-if="surgery['Type of Surgery?']=='Other' || surgery['Type of Surgery?']==null">
                                                 <label class="choice" >{{values}}</label>
                                             </div>
                                             
                                         </div>
 
                                     </div>
-                                    <button>Clear question to add another surgical history</button>
+                                    <button ng-click="clearSurgeryHistory()">Clear fields to add another surgical history</button>
                                 </div>
                             </span>
                             <p class="guidelines">
