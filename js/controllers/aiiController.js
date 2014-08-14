@@ -220,6 +220,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
+    $scope.clearSurgeryHistory = function(){
+        this.surgery["Date"] = null;
+        this.surgery["Other"] = null;
+        this.surgery["Type of Surgery?"] = null;
+        this.surgery["Side?"] = null;
+    }
     //Display the next set of questions for a phase
     $scope.nextPage = function() {
         $scope.limitArray.push($scope.limit);
