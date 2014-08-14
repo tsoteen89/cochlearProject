@@ -1,12 +1,29 @@
+<style>
+    table, th, td {
+           border: 1px solid #164a5e;
+        }
+</style>
 <div data-ng-controller="questionsController">
     
     <div class="col-md-6">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
-        <hr>
         
-        <div ng-repeat="(question, answer) in patientSummaryAnswers">
-            {{question}} : {{answer}}<br><br>
-        </div>
+            <table class="table table-condensed">
+              <caption></caption>
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Answer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="(question, answer) in patientSummaryAnswers">
+                  <td>{{question}}</td>
+                  <td>{{answer}}</td>
+                </tr>
+              </tbody>
+            </table>
+        
         
         <hr>
         <a href="#/patientDirectory"><button class="btn btn-primary">Patient Directory</button></a>
