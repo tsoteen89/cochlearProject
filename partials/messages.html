@@ -1,9 +1,9 @@
 <div class="container" ng-controller="TabController as tab" ng-init="tab.selectTab('messages')">
 
 	<div class="PageButtons" style="margin-bottom: 15px">
-		<a class="btn btn-primary" ng-click="tab.selectTab('messages')">Messages</a>
-		<a class="btn btn-primary" ng-click="tab.selectTab('alerts')">Alerts</a>
-		<a class="btn btn-primary" ng-click="tab.selectTab('notifications')">Notifications</a>
+		<a class="btn btn-primary" ng-class="{ active:tab.isSelected('messages') }" ng-click="tab.selectTab('messages')">Messages</a>
+		<a class="btn btn-primary" ng-class="{ active:tab.isSelected('alerts') }" ng-click="tab.selectTab('alerts')">Alerts</a>
+		<a class="btn btn-primary" ng-class="{ active:tab.isSelected('notifications') }" ng-click="tab.selectTab('notifications')">Notifications</a>
 	</div>
 	
   <div class="row">
