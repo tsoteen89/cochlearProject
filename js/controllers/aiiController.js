@@ -642,7 +642,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	//Controls the message display popup
     $scope.isPopupVisible = false;
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = true;
+	$scope.reverse = false;
+	$scope.orderFilter = 'Timestamp';
     //Messages that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedMessages = [];
 	
@@ -780,7 +781,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			default:
 				break;
 		}
-		//$scope.$apply();
 	}
 	
 	$scope.isTypeSelected = function(messageType){
@@ -805,7 +805,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				//Change the message's Read attribute to true
 				$scope.selectedMessage.IsRead = 1;
 				//PUT the message using the message URL
-				putData.put(messageURL,$scope.selectedMessage);
+				putData.put($scope.messageURL,message).success(function(data){
+					$scope.refreshMessages();
+				});
 			}
 		}
 	};
@@ -871,7 +873,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		
 		//Insure that all elements contain data before posting
 		if(message.ReceiverID && message.Subject && message.Content){
-			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+			postData.post($scope.messageURL,message).success(function(data){
+				$scope.refreshMessages();
+			});
 		}
 		else{
 			var errorMessage = "The message could not be sent due to:"
@@ -887,7 +891,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			else if(message.Content){
 				//If the message had content, save it as a draft.
 				message.sent = 0;
-				postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+				postData.post($scope.messageURL,message).success(function(data){
+					$scope.refreshMessages();
+				});
 				
 				errorMessage += "\nThe message has been saved as a draft."
 			}
@@ -908,7 +914,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		
 		//Insure that all elements contain data before posting
 		if(message.Content){
-			postData.post('http://killzombieswith.us/aii-api/v1/messages',message);
+			postData.post($scope.messageURL,message).success(function(data){
+				$scope.refreshMessages();
+			});
 		}
 		else{
 			alert("The message could not be saved as it contained no content.");
@@ -1013,7 +1021,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				//Change the message's Deleted attribute to true
 				$scope.markedMessages[i].IsRead = value;
 				//PUT the message using the message URL
-				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
+				putData.put(putMessageURL,$scope.markedMessages[i]).success(function(data){
+					$scope.refreshMessages();
+				});
 			}
 		}
 		else if(property == 'deleted'){
@@ -1027,7 +1037,12 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 					$scope.markedMessages[i].SenderDeleted = value;
 				}
 				//PUT the message using the message URL
-				$.when(putData.put(putMessageURL,$scope.markedMessages[i])).then($scope.refreshMessages());
+				console.log("About to PUT data");
+				putData.put(putMessageURL,$scope.markedMessages[i]).success(function(data) {
+					console.log("PUT complete - About to get messages");
+					$scope.refreshMessages();
+					console.log("Got messages");
+				});
 			}
 		}
 		//$scope.refreshCurrentMessages();
@@ -1038,7 +1053,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		$scope.refreshInbox();
 		$scope.refreshSent();
 		$scope.refreshDrafts();
-		$.when($scope.refreshDeleted()).then($scope.$apply());
+		$scope.refreshDeleted();
 	}
 	
 	$scope.refreshInbox = function(){
@@ -1051,7 +1066,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.inboxMessages = data;
 			if($scope.currentMessageType == 'inbox'){
 				$scope.currentMessages = $scope.inboxMessages;
-				$scope.$apply();
 			}
 		});
 	}
@@ -1066,7 +1080,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.sentMessages = data;
 			if($scope.currentMessageType == 'sent'){
 				$scope.currentMessages = $scope.sentMessages;
-				$scope.$apply();
 			}
 		});
 	}
@@ -1081,7 +1094,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.draftMessages = data;
 			if($scope.currentMessageType == 'drafts'){
 				$scope.currentMessages = $scope.draftMessages;
-				$scope.$apply();
 			}
 		});
 	}
@@ -1103,7 +1115,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.deletedMessages = data;
 			if($scope.currentMessageType == 'deleted'){
 				$scope.currentMessages = $scope.deletedMessages;
-				$scope.$apply();
 			}
 		});
 	}
@@ -1135,7 +1146,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.selectedMessage.SenderDeleted = 1;
 		}
 		//PUT the message using the message URL and then refresh the messages
-		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		putData.put(messageURL,$scope.selectedMessage).success(function(data){
+			$scope.refreshMessages();
+		});
 		//$scope.$apply();
 	}
 	
@@ -1150,8 +1163,9 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.selectedMessage.SenderDeleted = 2;
 		}
 		//PUT the message using the message URL and then refresh the messages
-		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
-		//$scope.$apply();
+		putData.put(messageURL,$scope.selectedMessage).success(function(data){
+			$scope.refreshMessages();
+		});
 	}
 	
 	$scope.restoreSelectedMessage = function(){
@@ -1164,16 +1178,10 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.selectedMessage.SenderDeleted = 0;
 		}
 		//PUT the message using the message URL and then refresh the messages
-		$.when(putData.put(messageURL,$scope.selectedMessage)).then($scope.refreshMessages());
+		putData.put(messageURL,$scope.selectedMessage).success(function(data){
+			$scope.refreshMessages();
+		});
 		//$scope.$apply();
-	}
-	
-	$scope.markSelectedAsRead = function(isRead){
-		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
-		//Change the message's Deleted attribute to true
-		$scope.selectedMessage.Read = isRead;
-		//PUT the message using the message URL
-		putData.put(messageURL,$scope.selectedMessage);
 	}
 };  
 
@@ -1199,7 +1207,7 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	
 	/* Miscellaneous Variables */
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = true;
+	$scope.reverse = false;
 	$scope.orderFilter = 'Timestamp';
     //Alerts that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedAlerts = [];
@@ -1255,7 +1263,9 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 			if($scope.selectedAlert.IsRead == 0){
 				putAlertURL = $scope.alertURL + $scope.selectedAlert.AlertID;
 				$scope.selectedAlert.IsRead = 1;
-				putData.put(putAlertURL, $scope.selectedAlert);
+				putData.put(putAlertURL, $scope.selectedAlert).success(function(data){
+					$scope.refreshAlerts();
+				});
 			}
 		}
 		$scope.showPopup = !$scope.showPopup;
@@ -1267,11 +1277,13 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	}
 	
 	$scope.deleteSelectedAlert = function(deletedState){
-		alertURL = "http://killzombieswith.us/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
+		putAlertURL = "http://killzombieswith.us/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
 		//Change the alert's Deleted attribute to true
 		$scope.selectedAlert.IsArchived = deletedState;
 		//PUT the alert using the URL and then refresh the alerts
-		putData.put(alertURL, $scope.selectedAlert);
+		putData.put(putAlertURL, $scope.selectedAlert).success(function(data){
+			$scope.refreshAlerts();
+		});
 		$scope.refreshAlerts();
 	}
 	
@@ -1377,19 +1389,23 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 		if(property == 'read'){
 			for(i = 0; i < $scope.markedAlerts.length; i++){
 				putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
-				//Change the message's Deleted attribute to true
+				//Change the alert's Deleted attribute to true
 				$scope.markedAlerts[i].IsRead = value;
-				//PUT the message using the message URL
-				$.when(putData.put(putAlertURL,$scope.markedAlerts[i])).then($scope.refreshAlerts());
+				//PUT the alert using the alert URL
+				putData.put(putAlertURL, $scope.markedAlerts[i]).success(function(data){
+					$scope.refreshAlerts();
+				});
 			}
 		}
 		else if(property == 'deleted'){
 			for(i = 0; i < $scope.markedAlerts.length; i++){
 				putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
-				//Change the message's Deleted attribute to true
+				//Change the alert's Deleted attribute to true
 				$scope.markedAlerts[i].IsArchived = value;
-				//PUT the message using the message URL
-				$.when(putData.put(putAlertURL,$scope.markedAlerts[i])).then($scope.refreshAlerts());
+				//PUT the alert using the alert URL
+				putData.put(putAlertURL, $scope.markedAlerts[i]).success(function(data){
+					$scope.refreshAlerts();
+				});
 			}
 		}
 	}
@@ -1419,7 +1435,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	
 	/* Miscellaneous Variables */
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = true;
+	$scope.reverse = false;
 	$scope.orderFilter = 'Timestamp';
     //Alerts that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedNotifications = [];
@@ -1508,7 +1524,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			if($scope.selectedNotification.IsRead == 0){
 				putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
 				$scope.selectedNotification.IsRead = 1;
-				putData.put(putNotificationURL, $scope.selectedNotification);
+				putData.put(putNotificationURL, $scope.selectedNotification).success(function(data){
+					$scope.refreshNotifications();
+				});
 			}
 		}
 		$scope.showPopup = !$scope.showPopup;
@@ -1524,7 +1542,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		//Change the notification's Deleted attribute to true
 		$scope.selectedNotification.IsArchived = deletedState;
 		//PUT the notification using the URL and then refresh the notifications
-		putData.put(notificationURL, $scope.selectedNotification);
+		putData.put(notificationURL, $scope.selectedNotification).success(function(data){
+			$scope.refreshNotifications();
+		});
 		$scope.refreshNotifications();
 	}
 	
@@ -1665,7 +1685,10 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				//Change the message's Deleted attribute to true
 				$scope.markedNotifications[i].IsRead = value;
 				//PUT the message using the message URL
-				$.when(putData.put(putNotificationURL,$scope.markedNotifications[i])).then($scope.refreshNotifications());
+				putData.put(putNotificationURL,$scope.markedNotifications[i]).success(function(data){
+					$scope.refreshNotifications();
+				});
+				
 			}
 		}
 		else if(property == 'deleted'){
@@ -1674,7 +1697,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				//Change the message's Deleted attribute to true
 				$scope.markedNotifications[i].IsArchived = value;
 				//PUT the message using the message URL
-				$.when(putData.put(putNotificationURL,$scope.markedNotifications[i])).then($scope.refreshNotifications());
+				putData.put(putNotificationURL,$scope.markedNotifications[i]).success(function(data){
+					$scope.refreshNotifications();
+				});
 			}
 		}
 	}
@@ -1683,8 +1708,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
 		$scope.selectedNotification.Response = status;
 		$scope.selectedNotification.IsArchived = 2;
-		putData.put(putNotificationURL, $scope.selectedNotification);
-		$scope.refreshNotifications();
+		putData.put(putNotificationURL, $scope.selectedNotification).success(function(data){
+			$scope.refreshNotifications();
+		});
 	}
 };
 
