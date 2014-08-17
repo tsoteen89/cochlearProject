@@ -1,6 +1,6 @@
 <div id = "cp_patientDirectory">
   <div ng-controller="apiPatientsController">
-    <h1>Patient Directory</h1>
+    <h1 style="color:#4B92AE;">Patient Directory</h1>
     <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
         <div class="container">
@@ -36,6 +36,7 @@
               Current Phase : {{careTeam.CurrentPhaseID}}<br>
               {{setProgress(careTeam)}}
               <div class="row bs-wizard">
+                  <!--Completed Phases-->
                 <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1">
                   <div class="text-center bs-wizard-stepnum">
                     &nbsp;
@@ -53,6 +54,7 @@
                   </div>
                 </div>
                   
+                  <!--Current Phase-->
                 <div class="col-xs-1 bs-wizard-step active" >
                   <div class="text-center bs-wizard-stepnum">
                     &nbsp;
@@ -70,6 +72,7 @@
                   </div>
                 </div>
                   
+                  <!--Future Phases-->
                 <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
                   <div class="text-center bs-wizard-stepnum">
                     &nbsp;

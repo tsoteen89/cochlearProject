@@ -112,14 +112,14 @@ myApp.factory('persistData', function () {
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http){
     
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
-
+    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
     });
     
     //Grab AII Facilities 
-    getData.get("http://killzombieswith.us/aii-api/v1/facilities/").success(function(data) {
+    getData.get($scope.baseFacilityURL).success(function(data) {
         $scope.allFacs = data;
     });
     
@@ -127,6 +127,26 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     getData.get($scope.facilityURL + 'users').success(function(data) {
         $scope.facUsers = data;
     });
+    
+    $scope.getFacCard = function(fac){
+        console.log(fac.FacilityID);
+        getData.get(this.baseFacilityURL + fac.FacilityID).success(function(data){
+            $scope.facCard = data;
+        });
+        getData.get(this.baseFacilityURL + fac.FacilityID + '/users').success(function(data) {
+            $scope.facCardUsers = data;
+        });                                                           
+                                                                   
+    }
+    
+    $scope.onSelect = function($item, $model, $label){
+        console.log($item);
+        console.log($model);
+        console.log($label);
+        $scope.$item = $item;
+        $scope.$model = $model;
+        $scope.$label = $label;
+  }
     
 };
     
@@ -447,7 +467,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData) {   
-    
+    $scope.selectedPatient = undefined;
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
