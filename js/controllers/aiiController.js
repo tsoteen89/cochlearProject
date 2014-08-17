@@ -139,6 +139,15 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
                                                                    
     }
     
+    $scope.onSelect = function($item, $model, $label){
+        console.log($item);
+        console.log($model);
+        console.log($label);
+        $scope.$item = $item;
+        $scope.$model = $model;
+        $scope.$label = $label;
+  }
+    
 };
     
 //*****************************************END Dashboard*******************************************//
@@ -458,7 +467,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData) {   
-    
+    $scope.selectedPatient = undefined;
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
