@@ -678,15 +678,27 @@ controllers.addUserController = function($scope, $http, postData, getData){
 controllers.editUserController = function($scope, $http, getData, putData){
     $scope.editUser = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
     
     //Grab single User by ID
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     });
     
-    //Put changed information into database
+    //Grab information about users Facility
+    getData.get($scope.faciltyURL).success(function(data) {
+        $scope.facilityData = data;
+    });
+    
+    
+    //Put changed User information into database
     $scope.editUserPut = function() {
         putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
+    };
+    
+    //Put changed Facility information into database
+    $scope.editFacilityPut = function() {
+        putData.put('http://killzombieswith.us/aii-api/v1/facilities/' + this.userData.records[0].FacilityID,$scope.editFacility);
     };
     
 }

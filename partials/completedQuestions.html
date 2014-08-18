@@ -3,6 +3,7 @@
            border: 1px solid #164a5e;
         }
 </style>
+<<<<<<< HEAD
 <div data-ng-controller="questionsController">
     
     <div class="col-md-6">
@@ -24,9 +25,37 @@
               </tbody>
             </table>
         
+=======
+
+<div data-ng-controller="questionsController">
+    
+    <div class="col-md-2">
+        <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label> <br>
+    </div>
+    
+    <div class="col-md-6" style="margin-top:5%">
+>>>>>>> origin/Tsoteen
         
+        <table class="table table-condensed">
+          <caption></caption>
+          <thead>
+            <tr align="Center">
+              <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Question</b></h3></td>
+              <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Answer</b></h3></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(question, answer) in patientSummaryAnswers">
+              <td><b>{{question}}</b></td>
+              <td>{{answer}}</td>
+            </tr>
+          </tbody>
+        </table>
         <hr>
-        <a href="#/patientDirectory"><button class="btn btn-primary">Patient Directory</button></a>
         
+    </div>
+    
+    <div class="col-md-3">
+        <a href="#/patientDirectory" style="position:fixed"><button class="btn btn-primary">Patient Directory</button></a>
     </div>
 </div>
