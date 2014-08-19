@@ -1,4 +1,6 @@
+
 <div class="container" ng-controller="TabController as tab" ng-init="tab.selectTab('messages')">
+    <label style="font-size:2vw; color:#4B92AE">Messages</label><br><br>
 
 	<div class="PageButtons" style="margin-bottom: 15px">
 		<a class="btn btn-primary" ng-class="{ active:tab.isSelected('messages') }" ng-click="tab.selectTab('messages')">Messages</a>

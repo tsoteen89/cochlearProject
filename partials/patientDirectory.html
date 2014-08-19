@@ -1,6 +1,6 @@
 <div id = "cp_patientDirectory">
   <div ng-controller="apiPatientsController">
-    <h1 style="color:#4B92AE;">Patient Directory</h1>
+    <label style="font-size:2vw; color:#4B92AE; margin-left:19%;">Patient Directory</label><br><br>
     <div ng-repeat="patient in patientsData.records">
         <div class="container"> <a id={{patient.Last}}></a> </div>
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
