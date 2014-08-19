@@ -45,7 +45,6 @@
 		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();setMessageType('inbox')"></input>
 		</form>
 
-		{{ composeMessage }}
 		<hr>
 	  </div>
 	
@@ -88,8 +87,8 @@
 				<h3>{{selectedMessage.Subject}}</h3>
 			</div>
 			<div class="modal-body">
-				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} </br></div>
-				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} </br></div>
+				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br></div>
+				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br></div>
 				<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
@@ -163,7 +162,8 @@
 				<h3>{{selectedAlert.Subject}}</h3>
 			</div>
 			<div class="modal-body">
-				<div><strong>From:</strong> {{selectedAlert.SenderFacilityName}} </br></div>
+				<div><strong>Patient:</strong> {{selectedAlert.Patient}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedAlert.PatientDOBMonth}}/{{selectedAlert.PatientDOBDay}}/{{selectedAlert.PatientDOBYear}} </br></div>
 				<div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
@@ -235,6 +235,8 @@
 			</div>
 			<div class="modal-body">
 				<div><strong>From:</strong> {{selectedNotification.SenderFacilityName}} </br></div>
+				<div><strong>Patient:</strong> {{selectedNotification.Patient}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedNotification.PatientDOBMonth}}/{{selectedNotification.PatientDOBDay}}/{{selectedNotification.PatientDOBYear}} </br></div>
 				<div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>

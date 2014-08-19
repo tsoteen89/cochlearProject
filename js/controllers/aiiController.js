@@ -975,7 +975,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
 		
 		//Format the new reply message with info from the original message
-		$scope.composeMessage.ReceiverID = $scope.selectedMessage.SenderID;
+		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.SenderUsername;
 		$scope.composeMessage.Subject = "RE: " + $scope.selectedMessage.Subject;
 		$scope.composeMessage.Content = "\n\n------------------------------\n"
 									+	"From: " + $scope.selectedMessage.Sender_First + " " + $scope.selectedMessage.Sender_Last + "\n"
@@ -1007,7 +1007,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.edit = function(){
 		$scope.composeMessage = {};
 		
-		$scope.composeMessage.ReceiverID = $scope.selectedMessage.ReceiverID;
+		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.ReceiverUsername;
 		$scope.composeMessage.Subject = $scope.selectedMessage.Subject;
 		$scope.composeMessage.Content = $scope.selectedMessage.Content;
 	}	
@@ -1027,14 +1027,14 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		message.ReceiverDeleted = 0;
 		
 		//Insure that all elements contain data before posting
-		if(message.ReceiverID && message.Subject && message.Content){
+		if(message.ReceiverUsername && message.Subject && message.Content){
 			postData.post($scope.messageURL,message).success(function(data){
 				$scope.refreshMessages();
 			});
 		}
 		else{
 			var errorMessage = "The message could not be sent due to:"
-			if(!message.ReceiverID){
+			if(!message.ReceiverUsername){
 				errorMessage += "\n     -No receiver defined."
 			}
 			if(!message.Subject){
@@ -1417,6 +1417,9 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 			if(data.records[i].Patient.length > 24){
 				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
 			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
 		$scope.currentAlerts = $scope.receivedAlerts;
     });
@@ -1432,6 +1435,9 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 			if(data.records[i].Patient.length > 24){
 				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
 			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
     }); 
 	
@@ -1518,6 +1524,9 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 				if(data.records[i].Patient.length > 24){
 					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
 				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			if($scope.currentAlertType == 'received'){
 				$scope.currentAlerts = $scope.receivedAlerts;
@@ -1537,6 +1546,9 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 				if(data.records[i].Patient.length > 24){
 					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
 				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			if($scope.currentAlertType == 'deleted'){
 				$scope.currentAlerts = $scope.deletedAlerts;
@@ -1699,6 +1711,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			if(data.records[i].SenderFacilityName.length > 24){
 				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
 			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
 		$scope.receivedNotifications = data;
 		$scope.currentNotifications = $scope.receivedNotifications;
@@ -1728,6 +1743,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			if(data.records[i].SenderFacilityName.length > 24){
 				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
 			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
 		$scope.deletedNotifications = data;
     });
@@ -1828,6 +1846,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				if(data.records[i].SenderFacilityName.length > 24){
 					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
 				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			$scope.receivedNotifications = data;
 			if($scope.currentNotificationType == 'received'){
@@ -1861,6 +1882,9 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				if(data.records[i].SenderFacilityName.length > 24){
 					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
 				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			$scope.deletedNotifications = data;
 			if($scope.currentNotificationType == 'deleted'){
