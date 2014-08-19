@@ -69,7 +69,8 @@
                       <span class="glyphicon glyphicon-plus-sign"></span> Add User
                     </button>
                   </div>
-             <!-- Modal -->
+                </div>    
+             <!-- Modal for add user -->
             <script type="text/ng-template" id="addUser.html">
                 <div class="modal-header">
                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -80,46 +81,45 @@
                     
                         <div class="row">        
 
-                                <div class="control-group col-md-4 col-md-offset-1" >
-                                  <label>First Name</label>
-                                  <div class="controls" >
-                                    <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" placeholder="Enter First Name" alphabet>
-                                </div>                       
-                                </div>
+                            <div class="control-group col-md-4 col-md-offset-1" >
+                              <label>First Name</label>
+                              <div class="controls" >
+                                <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" placeholder="Enter First Name" alphabet>
+                            </div>                       
+                            </div>
 
-                                <div class="control-group col-md-4" >
-                                  <label>Last Name</label>
-                                  <div class="controls" >
-                                    <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" placeholder="Enter Last Name" alphabet>
-                                </div>                       
-                                </div>
+                            <div class="control-group col-md-4" >
+                              <label>Last Name</label>
+                              <div class="controls" >
+                                <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" placeholder="Enter Last Name" alphabet>
+                            </div>                       
+                        </div>
 
-                                </div><br>
+                        </div><br>
 
-                            <div class="row">
-                                <div class="control-group col-md-8 col-md-offset-1" >
-                                  <label>Email</label>
-                                  <div class="controls" >
-                                    <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" placeholder="Enter email of user to be invited">
-                                  </div>
-                                </div>
-                                </div><br>
+                        <div class="row">
+                            <div class="control-group col-md-8 col-md-offset-1" >
+                              <label>Email</label>
+                              <div class="controls" >
+                                <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" placeholder="Enter email of user to be invited">
+                              </div>
+                            </div>
+                        </div><br>
 
-                                <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">Submit</button>
-                                <br>
+                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">Submit</button>
+                        <br>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" ng-click="ok()">OK</button>
                 </div>
-                </script>
-                </div>
+            </script>
+                
               </div>
             </div>
-    <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
-            
         </div>
-        
+        <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
+        <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
@@ -177,7 +177,8 @@
               </div>
             </div>
         </div>
-        
+        <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
+        <!---------------------------------------------Aii directory------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
@@ -206,7 +207,7 @@
               </div>
             </div>
     
-                <!-- Modal -->
+                <!-- Modal for each different facility clicked -->
             <script type="text/ng-template" id="myModalContent.html">
                 <div class="modal-header">
                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -236,14 +237,13 @@
                 </div>
             </script>
             
-        
-            
         </div>
+        <!---------------------------------------------Aii directory CARD------------------------------------------------------------------->
     </div>
     
     <!--SECOND ROW------------------------------->
     <div class="row">
-
+     <!---------------------------------------------Quick Reports CARD------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
            <div class="panel panel-primary">
               <div class="panel-heading">

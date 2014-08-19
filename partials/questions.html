@@ -178,69 +178,7 @@
         
         <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
              ng-repeat="condition in patientSummaryAnswers">
-            <table class="table table-condensed table table-bordered">
-              <caption></caption>
-              <thead >
-                <tr align= "center" >
-                  <td colspan="2" style="background-color:#cae5f0"><br><h4><b>Testing Conditions</b></h4></td>
-                </tr>    
-                <tr>
-                  <td><b> Left Ear Condition : </b> </td>
-                  <td>{{condition.LeftAidCondition}}</td>    
-                </tr>
-                <tr>
-                  <td><b> Right Ear Condition : </b> </td>
-                  <td>{{condition.RightAidCondition}}</td>
-                </tr>
-                <tr align= "center">
-                  <td colspan="2" style="background-color:#cae5f0"><br><h4><b>Results</b></h4></td>
-                </tr> 
-              </thead>
-              <tbody>
-                <tr align="center">       
-                  <td COLSPAN="2" ><h5><b>AzBio Test</b></h5> </td>
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['AzBio Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h5><b>BKB-SIN Test</b></h5> </td> 
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['BKB-SIN Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h5><b>CNC Test</b></h5> </td> 
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['CNC Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">  
-                  <td COLSPAN="2" ><h5><b>Pure Tone Average</b></h5></td> 
-                </tr>     
-                <tr ng-repeat="(field,value) in condition.Results['Pure Tone Average'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h5><b>Speech Discrimination Score</b></h5> </td>
-                </tr>    
-                <tr ng-repeat="(field,value) in condition.Results['Speech Discrimination Score'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>  
-                <tr align="center">   
-                  <td COLSPAN="2" ><h5><b>Speech Reception Threshold</b></h5> </td>
-                </tr>      
-                <tr ng-repeat="(field,value) in condition.Results['Speech Reception Threshold'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-              </tbody>
-            </table>
+           <completed-audiology></completed-audiology>
         </div>
     </div>
     

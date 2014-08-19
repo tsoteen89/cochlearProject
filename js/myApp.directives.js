@@ -91,3 +91,9 @@ myApp.directive('dateInput', function(dateFilter) {
                 },
             };
     });
+myApp.directive('completedAudiology', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/completed-audiology.html'
+	}
+});
