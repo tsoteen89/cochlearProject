@@ -1,13 +1,16 @@
 <div id = "cp_patientDirectory">
   <div ng-controller="apiPatientsController">
     <h1 style="color:#4B92AE;">Patient Directory</h1>
-    <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
+    <div ng-repeat="patient in patientsData.records">
+        <div class="container"> <a id={{patient.Last}}></a> </div>
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
-          <a id={{patient.Last}}></a>
         <div class="container">
           <div class = "cp_patientInfo">
+              
             <div id = "cp_patientContainer">
+                
               <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+                
               <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
               <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
               <p class = "cp_patientAge">Age</p>
@@ -18,6 +21,7 @@
             <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">
                 Patient Details
             </button>
+              <a id="{{patientsData.records[$index+1].Last}}"></a>
               <!--Patient Details Well that collapses on click of "Patient Details" -->
             <div id = "cp_patientCollapse" collapse="isPatientCollapsed">
                 <hr>
@@ -31,7 +35,7 @@
           </div>
 
             
-          <div class="cp_patientPhase" ng-controller="dotProgressCtrl">
+          <div class="cp_patientPhase">
             <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
               Event: {{careTeam.Description}}<br>
               Current Phase : {{careTeam.CurrentPhaseID}}<br>
@@ -100,7 +104,7 @@
               <div id = "cp_phaseDetails" collapse="isDataCollapsed">
                   <hr>
                   <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
-                  <a ng-repeat="facility in patient.Providers"> <!--patient.Providers = all facilities ever involved with patient-->
+                  <a href="" ng-repeat="facility in patient.Providers" ng-click="getFacCard(facility)"> <!--patient.Providers = all facilities ever involved with patient-->
                     <span>{{facility.Name}}</span><br>
                   </a><br>
                   <div style="float:left">
@@ -116,3 +120,32 @@
   </div>
 </div>
 
+   <!-- Modal for each different facility clicked -->
+            <script type="text/ng-template" id="myModalContent.html">
+                <div class="modal-header">
+                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">  
+                        <div class="col-md-4">
+                            <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
+                        </div>
+                        <div class="col-md-8">
+                          <b> {{facCard.records[0].Name}} </b> <br>
+                          <b> Address: </b> <br>
+                          {{facCard.records[0].Address1}} <br>
+                          Facility Admin: <a> ADMIN NAME</a> <br>
+                        </div> 
+                    </div>
+                    <p> Users @ {{facCard.records[0].Name}}</p>    
+                    <div class="scroll">
+                        <ul>
+                            <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                </div>
+            </script>

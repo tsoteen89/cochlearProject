@@ -1,86 +1,13 @@
-<style>
-    table, th, td {
-       border: 1px solid #164a5e;
-    }
-</style>
 <div ng-controller="questionsController">
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label> <br>
     </div>
     <div class="col-md-4">
-        
-        
-
         <div ng-repeat="condition in patientSummaryAnswers" style="margin-top:5%">
-
-            <table class="table table-condensed">
-              <caption></caption>
-              <thead >
-                <tr align= "center" >
-                  <td colspan="2" style="background-color:#cae5f0"><br><h3><b>Testing Conditions</b></h3></td>
-                </tr>    
-                <tr>
-                  <td><b> Left Ear Condition : </b> </td>
-                  <td>{{condition.LeftAidCondition}}</td>    
-                </tr>
-                <tr>
-                  <td><b> Right Ear Condition : </b> </td>
-                  <td>{{condition.RightAidCondition}}</td>
-                </tr>
-                <tr align= "center">
-                  <td colspan="2" style="background-color:#cae5f0"><br><h3><b>Results</b></h3></td>
-                </tr> 
-              </thead>
-              <tbody>
-                <tr align="center">       
-                  <td COLSPAN="2" ><h4><b>AzBio Test</b></h4> </td>
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['AzBio Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h4><b>BKB-SIN Test</b></h4> </td> 
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['BKB-SIN Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h4><b>CNC Test</b></h4> </td> 
-                </tr>  
-                <tr ng-repeat="(field,value) in condition.Results['CNC Test'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">  
-                  <td COLSPAN="2" ><h4><b>Pure Tone Average</b></h4></td> 
-                </tr>     
-                <tr ng-repeat="(field,value) in condition.Results['Pure Tone Average'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-                <tr align="center">   
-                  <td COLSPAN="2" ><h4><b>Speech Discrimination Score</b></h4> </td>
-                </tr>    
-                <tr ng-repeat="(field,value) in condition.Results['Speech Discrimination Score'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>  
-                <tr align="center">   
-                  <td COLSPAN="2" ><h4><b>Speech Reception Threshold</b></h4> </td>
-                </tr>      
-                <tr ng-repeat="(field,value) in condition.Results['Speech Reception Threshold'][0]">
-                  <td><b> {{field}} </b></td>
-                  <td>{{value}}</td>
-                </tr>
-              </tbody>
-            </table>
-            <br>
-        </div>
+            <completed-audiology></completed-audiology>
       
-
+        </div>
     </div>
     <div class="col-md-4">
         <a href="#/patientDirectory" style="position:fixed"><button class="btn btn-primary">Patient Directory</button></a>
