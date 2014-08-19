@@ -4,13 +4,16 @@
     }
 </style>
 <div ng-controller="questionsController">
+
     <div class="col-md-3">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label> <br>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         
         
-        <div ng-repeat="condition in patientSummaryAnswers" style="margin-top:80px">
+
+        <div ng-repeat="condition in patientSummaryAnswers" style="margin-top:5%">
+
             <table class="table table-condensed">
               <caption></caption>
               <thead >
@@ -79,7 +82,7 @@
       
 
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <a href="#/patientDirectory" style="position:fixed"><button class="btn btn-primary">Patient Directory</button></a>
     </div>
 

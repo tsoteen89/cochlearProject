@@ -109,7 +109,7 @@ myApp.factory('persistData', function () {
 
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http){
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal){
     
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
@@ -129,15 +129,41 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     });
     
     $scope.getFacCard = function(fac){
-        console.log(fac.FacilityID);
-        getData.get(this.baseFacilityURL + fac.FacilityID).success(function(data){
-            $scope.facCard = data;
+            
+        var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
+            console.log(fac.FacilityID);
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
+                $scope.facCard = data;
+            });
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+                $scope.facCardUsers = data;
+            });          
+
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'myModalContent.html',
+          controller: ModalInstanceCtrl,
+          size: 'md',
+          resolve: {
+            fac: function () {
+              return fac;
+            }
+          }
+         
         });
-        getData.get(this.baseFacilityURL + fac.FacilityID + '/users').success(function(data) {
-            $scope.facCardUsers = data;
-        });                                                           
-                                                                   
+        
+                                                         
     }
+    
     
     $scope.onSelect = function($item, $model, $label){
         console.log($item);
@@ -149,6 +175,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
   }
     
 };
+    
+
     
 //*****************************************END Dashboard*******************************************//
 
@@ -466,8 +494,25 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout) {   
     $scope.selectedPatient = undefined;
+    $scope.goToPatDir = function(last){
+        $location.path('/patientDirectory/');
+        
+        $scope.scrollTo(last);
+                
+    };
+    
+    $scope.scrollTo = function(id) {
+        $location.hash(id);
+        console.log($location.hash());
+        $timeout(function(){
+            $anchorScroll();
+        }, 1000);
+        
+    };
+    
+    
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
@@ -633,15 +678,27 @@ controllers.addUserController = function($scope, $http, postData, getData){
 controllers.editUserController = function($scope, $http, getData, putData){
     $scope.editUser = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
     
     //Grab single User by ID
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     });
     
-    //Put changed information into database
+    //Grab information about users Facility
+    getData.get($scope.faciltyURL).success(function(data) {
+        $scope.facilityData = data;
+    });
+    
+    
+    //Put changed User information into database
     $scope.editUserPut = function() {
         putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
+    };
+    
+    //Put changed Facility information into database
+    $scope.editFacilityPut = function() {
+        putData.put('http://killzombieswith.us/aii-api/v1/facilities/' + this.userData.records[0].FacilityID,$scope.editFacility);
     };
     
 }

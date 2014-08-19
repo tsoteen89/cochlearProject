@@ -21,7 +21,7 @@
 		<div class="col-lg-5" >
             <div class="input-group custom-search-form">
                <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
-              <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.Last for patient in patientsData.records | filter:{Last:$viewValue}" ng-model ="selectedPatient">
+              <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last)">
               <span class="input-group-btn">
               <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
@@ -141,7 +141,7 @@
                   <div class="row">
                     <div class="col-lg-12" style="float:right;" >
                         <div class="input-group custom-search-form">
-                          <input type="text" class="form-control" placeholder="Search Aii Members" typeahead="facility as facility.Name for facility in allFacs.records | filter:{Name:$viewValue}" ng-model ="selectedFacility" typeahead-on-select="onSelect($item, $model, $label)" >
+                          <input type="text" class="form-control" placeholder="Search Aii Members" typeahead="facility as facility.Name for facility in allFacs.records | filter:{Name:$viewValue}" ng-model ="selectedFacility" typeahead-on-select="getFacCard($item)" >
                           <span class="input-group-btn">
                           <button class="btn btn-default" type="button">
                           <span class="glyphicon glyphicon-search"></span>
@@ -150,9 +150,9 @@
                          </div><!-- /input-group -->
                     </div>
                    </div>
-                    <div class="scroll">
+                    <div class="scroll" style="height:300px">
                         <ul>
-                            <li ng-repeat="fac in allFacs.records"> <a href="" ng-click = getFacCard(fac) data-toggle="modal" data-target="#myModal"> {{fac.Name}} </a> </li>
+                            <li ng-repeat="fac in allFacs.records"> <a href="" ng-click = getFacCard(fac)> {{fac.Name}} </a> </li>
                         </ul>
                     </div>
                     
@@ -161,38 +161,37 @@
             </div>
     
                 <!-- Modal -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                      </div>
-                      <div class="modal-body">
-                        <div class="row">  
-                            <div class="col-md-4">
-                                <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
-                            </div>
-                            <div class="col-md-8">
-                              <b> Address: </b> <br>
-                              {{facCard.records[0].Address1}} <br>
-                              Facility Admin: <a> ADMIN NAME</a> <br>
-                              <button> Facility Settings</button> 
-                            </div> 
-                        </div>
-                        <p> Users @ {{facCard.records[0].Name}}</p>    
-                        <div class="scroll">
-                            <ul>
-                                <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
-                            </ul>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-                  </div>
+            <script type="text/ng-template" id="myModalContent.html">
+                <div class="modal-header">
+                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
                 </div>
+                <div class="modal-body">
+                    <div class="row">  
+                        <div class="col-md-4">
+                            <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
+                        </div>
+                        <div class="col-md-8">
+                          <b> Address: </b> <br>
+                          {{facCard.records[0].Address1}} <br>
+                          Facility Admin: <a> ADMIN NAME</a> <br>
+                          <button> Facility Settings</button> 
+                        </div> 
+                    </div>
+                    <p> Users @ {{facCard.records[0].Name}}</p>    
+                    <div class="scroll">
+                        <ul>
+                            <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                </div>
+            </script>
+            
+        
+            
         </div>
     </div>
     

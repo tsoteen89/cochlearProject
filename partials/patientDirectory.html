@@ -3,6 +3,7 @@
     <h1 style="color:#4B92AE;">Patient Directory</h1>
     <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
+          <a id={{patient.Last}}></a>
         <div class="container">
           <div class = "cp_patientInfo">
             <div id = "cp_patientContainer">
