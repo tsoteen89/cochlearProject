@@ -142,25 +142,13 @@
             
             
         <div ng-if="clickedPhase == 1 || clickedPhase == 3 || clickedPhase == 4 || clickedPhase == 5 || clickedPhase == 6">
-            <table class="table table-condensed table table-bordered">
-              <caption></caption>
-              <thead>
-                <tr>
-                  <th>Question</th>
-                  <th>Answer</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="(question, answer) in patientSummaryAnswers">
-                  <td>{{question}}</td>
-                  <td>{{answer}}</td>
-                </tr>
-              </tbody>
-            </table>
+            <br>
+            <completed-questions></completed-questions>
         </div>
         
         <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
              ng-repeat="condition in patientSummaryAnswers">
+            <br>
            <completed-audiology></completed-audiology>
         </div>
             

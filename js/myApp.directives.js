@@ -97,3 +97,10 @@ myApp.directive('completedAudiology', function() {
 		templateUrl: 'directives/completed-audiology.html'
 	}
 });
+
+myApp.directive('completedQuestions', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/completed-questions.html'
+	}
+});
