@@ -128,6 +128,28 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         $scope.facUsers = data;
     });
     
+    $scope.addUser= function(){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'addUser.html',
+          controller: ModalInstanceCtrl,
+          size: 'md'
+          
+         
+        });
+
+    }
+    
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {

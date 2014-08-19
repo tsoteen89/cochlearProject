@@ -2,12 +2,15 @@
   <div ng-controller="apiPatientsController">
     <h1 style="color:#4B92AE;">Patient Directory</h1>
     <div ng-repeat="patient in patientsData.records" ng-controller="phaseProgressCtrl">
+        <div class="container"> <a id={{patient.Last}}></a> </div>
       <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
-          <a id={{patient.Last}}></a>
         <div class="container">
           <div class = "cp_patientInfo">
+              
             <div id = "cp_patientContainer">
+                
               <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+                
               <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
               <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
               <p class = "cp_patientAge">Age</p>
@@ -18,6 +21,7 @@
             <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">
                 Patient Details
             </button>
+              <a id="{{patientsData.records[$index+1].Last}}"></a>
               <!--Patient Details Well that collapses on click of "Patient Details" -->
             <div id = "cp_patientCollapse" collapse="isPatientCollapsed">
                 <hr>

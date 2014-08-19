@@ -107,14 +107,24 @@
                     </li>
 
                         <!--Don't know what that is doing ng-if="offSet 0" -->
+                    
                     <button ng-if="offSet > 0" class="questionsButton btn btn-primary" ng-click="previousPage()" style="float:left">Back</button>
                         
                     <button ng-if="finished == false" class="btn btn-primary" ng-click="nextPage()" style="float:right">Continue</button>
                         
-                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" class="questionsButton btn btn-primary">Save</button></a>
+                    <a href="#/patientDirectory" >
+                    <button ng-if="finished == true" class="questionsButton btn btn-primary" style="float:right" 
+                            popover="Click to save data but remain in this phase" popover-trigger="mouseenter" popover-placement="right">
                         
-                    <br><br>
-                    <a href="#/patientDirectory" style="float:right"><button ng-if="finished == true" ng-click="completePhase()" class="questionsButton">Save & Complete</button></a><br>
+                        Save
+                        </button> &nbsp;
+                        </a>
+                        
+                    <a href="#/patientDirectory" >
+                    <button ng-if="finished == true" ng-click="completePhase()" class="btn btn-default"
+                            popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" style="float:right">
+                        Save & Complete
+                    </button></a><br>
                     </div>
                 </ul>
                 <!-- End Display Of All Questions -->
