@@ -186,16 +186,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
                                                          
     }
     
-    
-    $scope.onSelect = function($item, $model, $label){
-        console.log($item);
-        console.log($model);
-        console.log($label);
-        $scope.$item = $item;
-        $scope.$model = $model;
-        $scope.$label = $label;
-  }
-    
 };
     
 
@@ -516,8 +506,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal) {   
     $scope.selectedPatient = undefined;
+    
     $scope.goToPatDir = function(last){
         $location.path('/patientDirectory/');
         
@@ -539,20 +530,66 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
     $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
-    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
-    
     //Grab all Patients using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     });
     
+    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     //Grab all CareTeams using careTeamURL
     getData.get($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
     
+    //Get all phase info!!
+    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
+        $scope.phases = data.records;
+    });
+    
+    $scope.goToQuestions = function(careTeam, phase, patient){
+        
+        persistData.setCareTeamID(careTeam.CareTeamID);
+        persistData.setPhaseID(phase.PhaseID);
+        persistData.setPhaseName(phase.Name);
+        persistData.setPatientName(patient.First + " " + patient.Last);
+    };
+    
+    $scope.getFacCard = function(fac){
+            
+        var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
+            console.log(fac.FacilityID);
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
+                $scope.facCard = data;
+            });
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+                $scope.facCardUsers = data;
+            });          
+
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'myModalContent.html',
+          controller: ModalInstanceCtrl,
+          size: 'md',
+          resolve: {
+            fac: function () {
+              return fac;
+            }
+          }
+         
+        });
+        
+                                                         
+    }
     
     //Put method for patient.
     $scope.processPut = function() {
@@ -589,34 +626,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
-    
-    //Return a CareTeam for a specific Patient ID    
-    $scope.getPatientCareTeam = function(patients){
-        $scope.PatientCareTeamsURL = 'http://killzombieswith.us/aii-api/v1/patients/' + patients.PatientID + '/careTeams';
-        
-        getData.get($scope.PatientCareTeamsURL).success(function(data) {
-            $scope.patientCareTeams = data;
-        });
-    }
-    
-    //Return a Facility for a specific CareTeam ID
-    $scope.getCareTeamFacilities = function(careTeams){
-        $scope.CareTeamFacilitiesURL = 'http://killzombieswith.us/aii-api/v1/careTeams/' + careTeams.CareTeamID + '/facilities';
-        
-        getData.get($scope.CareTeamFacilitiesURL).success(function(data) {
-            $scope.facilityData = data;
-        });
-        
-        
-    }    
-    
-    $scope.goToQuestions = function(careTeam, phase, patient){
-        
-        persistData.setCareTeamID(careTeam.CareTeamID);
-        persistData.setPhaseID(phase.PhaseID);
-        persistData.setPhaseName(phase.Name);
-        persistData.setPatientName(patient.First + " " + patient.Last);
-    };
 
 };  
     
@@ -656,6 +665,14 @@ controllers.formController = function($scope, $http, postData,dateFilter) {
     
     $scope.date = new Date();
 
+}
+
+controllers.collapseCtrl = function($scope) {
+    $scope.isPatientCollapsed = true;
+    $scope.isDataCollapsed = true;
+    $scope.toggleDataCollapse = function(){
+        $scope.isDataCollapsed = !$scope.isDataCollapsed;  
+    }
 }
 
 
@@ -1963,26 +1980,8 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
     $scope.textBox= $sce.trustAsHtml('<input  type="text" > </input>'); 
 };
 
-controllers.collapseCtrl = function($scope) {
-    $scope.isPatientCollapsed = true;
-    $scope.isDataCollapsed = true;
-    $scope.toggleDataCollapse = function(){
-        $scope.isDataCollapsed = !$scope.isDataCollapsed;  
-    }
-}
 
-controllers.dotProgressCtrl = function($scope, getData){
-    $scope.phases = "";
-    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
-        $scope.phases = data.records;
-    });
-}
-controllers.phaseProgressCtrl = function ($scope){
-    $scope.setProgress = function(careTeam){
-        $scope.progress = parseInt(careTeam.CurrentPhaseID/11 * 100);
-    }
-    
-}
+
 
 myApp.controller(controllers);
 
