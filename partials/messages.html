@@ -31,10 +31,10 @@
 	  </div>
 	
 	  <div class="col-xs-7 message-wrapper" ng-show="isTypeSelected('composeMessage')">
-		<!--  -->
+		
 		<hr>
 		<form name="compose_Message">
-		  <span style="margin-right:5px">To:</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverID"> <br>
+		  <span style="margin-right:5px">To (Username):</span> <input class="send" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.ReceiverUsername"> <br>
 		  
 		  <span style="margin-right:5px">Subject:</span> <input class="subject" type="text" style="width: 75%; margin-bottom: 5px;" ng-required="true" ng-model="composeMessage.Subject"> <br>
 
@@ -45,7 +45,6 @@
 		  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" ng-click="clearComposedMessage();setMessageType('inbox')"></input>
 		</form>
 
-		{{ composeMessage }}
 		<hr>
 	  </div>
 	
@@ -73,9 +72,9 @@
 			</tr>
 			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)" >
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
-			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.SenderName}}</td>
-			  <td ng-if="showTo">{{message.ReceiverName}}</td>
-			  <td ng-if="showSubject">{{message.Subject}}</td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.ShortSenderName}}</td>
+			  <td ng-if="showTo">{{message.ShortReceiverName}}</td>
+			  <td ng-if="showSubject">{{message.ShortSubject}}</td>
 			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'h:mm a'}}</td>
 			  <td ng-if="showTimestamp">{{message.Timestamp * 1000 | date:'M/d/yy'}}</td>
 			</tr>
@@ -88,8 +87,8 @@
 				<h3>{{selectedMessage.Subject}}</h3>
 			</div>
 			<div class="modal-body">
-				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} </br></div>
-				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} </br></div>
+				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br></div>
+				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br></div>
 				<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
@@ -149,8 +148,8 @@
 			</tr>
 			<tr ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(alert)">
 			  <td><input type="Checkbox" name="alertCheckbox" checklist-value="alert" checklist-model="markedAlerts"> </td>
-			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="alert.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{alert.Patient}}</td>
-			  <td ng-if="showSubject">{{alert.Subject}}</td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="alert.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{alert.ShortPatient}}</td>
+			  <td ng-if="showSubject">{{alert.ShortSubject}}</td>
 			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'h:mm a'}}</td>
 			  <td ng-if="showTimestamp">{{alert.Timestamp * 1000 | date:'M/d/yy'}}</td>
 			</tr>
@@ -163,7 +162,8 @@
 				<h3>{{selectedAlert.Subject}}</h3>
 			</div>
 			<div class="modal-body">
-				<div><strong>From:</strong> {{selectedAlert.SenderFacilityName}} </br></div>
+				<div><strong>Patient:</strong> {{selectedAlert.Patient}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedAlert.PatientDOBMonth}}/{{selectedAlert.PatientDOBDay}}/{{selectedAlert.PatientDOBYear}} </br></div>
 				<div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
@@ -220,8 +220,8 @@
 			</tr>
 			<tr ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(notification)">
 			  <td><input type="Checkbox" name="notificationCheckbox" checklist-value="notification" checklist-model="markedNotifications"> </td>
-			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="notification.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.SenderFacilityName}}</td>
-			  <td ng-if="showSubject">{{notification.Subject}}</td>
+			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="notification.IsRead == '0'" ng-show="isTypeSelected('received')" style="margin-right: 5px; color:blue"></i>{{notification.ShortSenderFacilityName}}</td>
+			  <td ng-if="showSubject">{{notification.ShortSubject}}</td>
 			  <td ng-if="showTimestamp">{{notification.Timestamp * 1000 | date:'h:mm a'}}</td>
 			  <td ng-if="showTimestamp">{{notification.Timestamp * 1000 | date:'M/d/yy'}}</td>
 			</tr>
@@ -235,6 +235,8 @@
 			</div>
 			<div class="modal-body">
 				<div><strong>From:</strong> {{selectedNotification.SenderFacilityName}} </br></div>
+				<div><strong>Patient:</strong> {{selectedNotification.Patient}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedNotification.PatientDOBMonth}}/{{selectedNotification.PatientDOBDay}}/{{selectedNotification.PatientDOBYear}} </br></div>
 				<div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
