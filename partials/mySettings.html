@@ -1,20 +1,20 @@
-
-<label style="font-size:32px">My Account Settings</label><br>
-<br>
 <div class = "container">
+    <label style="font-size:2vw; color:#4B92AE">My Account Settings</label><br><br>
     <div class = "row">
 
-        <div class = "col-xs-9 col-sm-9 col-md-9 col-lg-9" >
-            <div style="background-color: #EDF8FF; border-style: solid; border-width: 1px; border-radius:7px; padding: 15px">
-                 
-                <div ng-controller="editUserController">
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" ng-controller="editUserController">
+           <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">User Settings</h3>
+              </div>
+              <div class="panel-body">
                 <label style="font-size:32px">{{userData.records[0].username}}</label><br>
                 <label>Change your basic account settings.</label>
                 <hr>
 
                     <label>Name: </label> {{userData.records[0].first_name}} {{userData.records[0].last_name}} <br>
                     <label>User Level: </label> {{userData.records[0].UserLevelID}} <br>
-                    <label>Facility ID: </label> {{userData.records[0].FacilityID}} <br><hr>
+                    <label>Facility: </label> {{facilityData.records[0].Name}} <br><hr>
 
                     <form ng-submit="editUserPut()">
 
@@ -31,12 +31,10 @@
                         <label>Current Phone Number:</label> {{userData.records[0].phone}}<br>
                         <input type="checkbox" ng-model="phoneCheck">&nbsp &nbsp Edit Phone<br><br>
                         <div ng-show="phoneCheck">
-                            <form ng-submit="editUserPut()">
                                 <label>New Phone Number:</label> 
                                 <input  type="text" style="width: 200px" class="form-control" name="phone" ng-model="editUser.phone" placeholder="Enter New Phone Number"><br>
                                 <input ng-click="phoneChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
                                 <label ng-if="phoneChanged == true">Phone Number Changed!</label>
-                            </form>
                         </div>
                         <br>
                         
@@ -49,24 +47,63 @@
                             <input ng-click="passwordChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
                             <label ng-if="passwordChanged == true">Password Changed!</label>
                         </div>
-                        <!--
 
-                        <label>Current Password:</label> ****** <br>
-                        <input type="checkbox" ng-model="passwordCheck">&nbsp &nbsp Change Password<br><br>
-                        <div ng-show="passwordCheck">
-                            <form ng-submit="editUserPut()">
-                                <label>New Password:</label> 
-                                <input style="width: 200px" type="text" class="form-control" name="password" ng-model="editUser.password" placeholder="Enter New Password">
-                                <br>
-                                <input style="width: 100px" type="submit" id="submit" value="Submit">
-                            </form>
-                        </div>
-                        
-                        -->
-                        
                     </form> 
+              </div>
+            </div>
+        </div>
+    </div>
+ 
+    
+    <div class = "row">
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" ng-controller="editUserController">
+           <div class="panel panel-primary">
+               
+                <div class="panel-heading">
+                    <h3 class="panel-title">Facility Settings</h3>
+                </div>
+               
+                <div class="panel-body">  
+                    <label style="font-size:32px">{{facilityData.records[0].Name}}</label><br>
+                    <label>Change information about your Facility.</label>
+                    <hr>
+                    <form ng-submit="editFacilityPut()">
+
+                        <label>Facility Address:</label> {{facilityData.records[0].Address1}}<br>
+                        <input type="checkbox" ng-model="facilityAddressCheck">&nbsp &nbsp Edit Address<br><br>
+                        <div ng-show="facilityAddressCheck">
+                                <label>New Address:</label> 
+                                <input  type="text" style="width: 200px" class="form-control" name="facilityAddress" ng-model="editFacility.Address1" placeholder="Enter New Address"><br>
+                                <input ng-click="facilityAddressChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
+                                <label ng-if="facilityAddressChange == true">Address Changed!</label>
+                        </div>
+                        <hr>
+
+                        <label>Facility Phone Number:</label> {{facilityData.records[0].Phone}}<br>
+                        <input type="checkbox" ng-model="facilityPhoneCheck">&nbsp &nbsp Edit Phone<br><br>
+                        <div ng-show="facilityPhoneCheck">
+                                <label>New Phone:</label> 
+                                <input  type="text" style="width: 200px" class="form-control" name="facilityPhone" ng-model="editFacility.Phone" placeholder="Enter New Phone"><br>
+                                <input ng-click="facilityPhoneChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
+                                <label ng-if="facilityPhoneChange == true">Phone Changed!</label>
+                        </div>
+                        <hr>
+
+                        <label>Facility Description:</label> {{facilityData.records[0].Description}}<br>
+                        <input type="checkbox" ng-model="facilityDescriptionCheck">&nbsp &nbsp Edit Description<br><br>
+                        <div ng-show="facilityDescriptionCheck">
+                                <label>New Description:</label> 
+                                <input  type="text" style="width: 200px" class="form-control" name="facilityDescription" ng-model="editFacility.Description" placeholder="Enter New Description"><br>
+                                <input ng-click="facilityDescriptionChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
+                                <label ng-if="facilityDescriptionChange == true">Description Changed!</label>
+                        </div>
+                        <hr>
+
+                        <label>Facility Image:</label> {{facilityData.records[0].FacilityImage}}
+                    </form>
+
                 </div>
             </div> 
-        </div>
-    </div>    
+        </div>    
+    </div>
 </div>

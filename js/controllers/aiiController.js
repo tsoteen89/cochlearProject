@@ -128,6 +128,28 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         $scope.facUsers = data;
     });
     
+    $scope.addUser= function(){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'addUser.html',
+          controller: ModalInstanceCtrl,
+          size: 'md'
+          
+         
+        });
+
+    }
+    
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
@@ -163,16 +185,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         
                                                          
     }
-    
-    
-    $scope.onSelect = function($item, $model, $label){
-        console.log($item);
-        console.log($model);
-        console.log($label);
-        $scope.$item = $item;
-        $scope.$model = $model;
-        $scope.$label = $label;
-  }
     
 };
     
@@ -494,8 +506,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal) {   
     $scope.selectedPatient = undefined;
+    
     $scope.goToPatDir = function(last){
         $location.path('/patientDirectory/');
         
@@ -517,20 +530,66 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.selected={};
     $scope.list=[];
     
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
     $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
-    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
-    
     //Grab all Patients using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     });
     
+    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
     //Grab all CareTeams using careTeamURL
     getData.get($scope.careTeamURL).success(function(data) {
         $scope.careData = data;
     });
     
+    //Get all phase info!!
+    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
+        $scope.phases = data.records;
+    });
+    
+    $scope.goToQuestions = function(careTeam, phase, patient){
+        
+        persistData.setCareTeamID(careTeam.CareTeamID);
+        persistData.setPhaseID(phase.PhaseID);
+        persistData.setPhaseName(phase.Name);
+        persistData.setPatientName(patient.First + " " + patient.Last);
+    };
+    
+    $scope.getFacCard = function(fac){
+            
+        var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
+            console.log(fac.FacilityID);
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
+                $scope.facCard = data;
+            });
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+                $scope.facCardUsers = data;
+            });          
+
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'myModalContent.html',
+          controller: ModalInstanceCtrl,
+          size: 'md',
+          resolve: {
+            fac: function () {
+              return fac;
+            }
+          }
+         
+        });
+        
+                                                         
+    }
     
     //Put method for patient.
     $scope.processPut = function() {
@@ -567,34 +626,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         console.log("im in processSoftDelete");
         console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
     }
-    
-    //Return a CareTeam for a specific Patient ID    
-    $scope.getPatientCareTeam = function(patients){
-        $scope.PatientCareTeamsURL = 'http://killzombieswith.us/aii-api/v1/patients/' + patients.PatientID + '/careTeams';
-        
-        getData.get($scope.PatientCareTeamsURL).success(function(data) {
-            $scope.patientCareTeams = data;
-        });
-    }
-    
-    //Return a Facility for a specific CareTeam ID
-    $scope.getCareTeamFacilities = function(careTeams){
-        $scope.CareTeamFacilitiesURL = 'http://killzombieswith.us/aii-api/v1/careTeams/' + careTeams.CareTeamID + '/facilities';
-        
-        getData.get($scope.CareTeamFacilitiesURL).success(function(data) {
-            $scope.facilityData = data;
-        });
-        
-        
-    }    
-    
-    $scope.goToQuestions = function(careTeam, phase, patient){
-        
-        persistData.setCareTeamID(careTeam.CareTeamID);
-        persistData.setPhaseID(phase.PhaseID);
-        persistData.setPhaseName(phase.Name);
-        persistData.setPatientName(patient.First + " " + patient.Last);
-    };
 
 };  
     
@@ -634,6 +665,14 @@ controllers.formController = function($scope, $http, postData,dateFilter) {
     
     $scope.date = new Date();
 
+}
+
+controllers.collapseCtrl = function($scope) {
+    $scope.isPatientCollapsed = true;
+    $scope.isDataCollapsed = true;
+    $scope.toggleDataCollapse = function(){
+        $scope.isDataCollapsed = !$scope.isDataCollapsed;  
+    }
 }
 
 
@@ -678,15 +717,27 @@ controllers.addUserController = function($scope, $http, postData, getData){
 controllers.editUserController = function($scope, $http, getData, putData){
     $scope.editUser = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
     
     //Grab single User by ID
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     });
     
-    //Put changed information into database
+    //Grab information about users Facility
+    getData.get($scope.faciltyURL).success(function(data) {
+        $scope.facilityData = data;
+    });
+    
+    
+    //Put changed User information into database
     $scope.editUserPut = function() {
         putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
+    };
+    
+    //Put changed Facility information into database
+    $scope.editFacilityPut = function() {
+        putData.put('http://killzombieswith.us/aii-api/v1/facilities/' + this.userData.records[0].FacilityID,$scope.editFacility);
     };
     
 }
@@ -729,6 +780,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		{
 			data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 			data.records[i].ReceiverName = "Me";
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderName = data.records[i].SenderName;
+			if(data.records[i].SenderName.length > 25){
+				data.records[i].ShortSenderName = data.records[i].SenderName.substr(0,22) + "...";
+			}
+			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
 		}
 		$scope.inboxMessages = data;
 		$scope.currentMessages = $scope.inboxMessages;
@@ -741,6 +801,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		{
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			data.records[i].SenderName = "Me";
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderName = data.records[i].SenderName;
+			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+			if(data.records[i].ReceiverName.length > 25){
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
+			}
 		}
         $scope.sentMessages = data;
     });
@@ -752,6 +821,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		{
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			data.records[i].SenderName = "Me";
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderName = data.records[i].SenderName;
+			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+			if(data.records[i].ReceiverName.length > 25){
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
+			}
 		}
         $scope.draftMessages = data;
     });
@@ -768,6 +846,18 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			if(data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null){
 				data.records[i].ReceiverName = 'Me';
 				data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
+			}
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderName = data.records[i].SenderName;
+			if(data.records[i].SenderName.length > 25){
+				data.records[i].ShortSenderName = data.records[i].SenderName.substr(0,22) + "...";
+			}
+			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+			if(data.records[i].ReceiverName.length > 25){
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
 			}
 		}
         $scope.deletedMessages = data;
@@ -885,7 +975,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
 		
 		//Format the new reply message with info from the original message
-		$scope.composeMessage.ReceiverID = $scope.selectedMessage.SenderID;
+		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.SenderUsername;
 		$scope.composeMessage.Subject = "RE: " + $scope.selectedMessage.Subject;
 		$scope.composeMessage.Content = "\n\n------------------------------\n"
 									+	"From: " + $scope.selectedMessage.Sender_First + " " + $scope.selectedMessage.Sender_Last + "\n"
@@ -917,7 +1007,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.edit = function(){
 		$scope.composeMessage = {};
 		
-		$scope.composeMessage.ReceiverID = $scope.selectedMessage.ReceiverID;
+		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.ReceiverUsername;
 		$scope.composeMessage.Subject = $scope.selectedMessage.Subject;
 		$scope.composeMessage.Content = $scope.selectedMessage.Content;
 	}	
@@ -937,14 +1027,14 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		message.ReceiverDeleted = 0;
 		
 		//Insure that all elements contain data before posting
-		if(message.ReceiverID && message.Subject && message.Content){
+		if(message.ReceiverUsername && message.Subject && message.Content){
 			postData.post($scope.messageURL,message).success(function(data){
 				$scope.refreshMessages();
 			});
 		}
 		else{
 			var errorMessage = "The message could not be sent due to:"
-			if(!message.ReceiverID){
+			if(!message.ReceiverUsername){
 				errorMessage += "\n     -No receiver defined."
 			}
 			if(!message.Subject){
@@ -1127,6 +1217,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			{
 				data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 				data.records[i].ReceiverName = "Me";
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderName = data.records[i].SenderName;
+				if(data.records[i].SenderName.length > 25){
+					data.records[i].ShortSenderName = data.records[i].SenderName.substr(0,22) + "...";
+				}
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName;
 			}
 			$scope.inboxMessages = data;
 			if($scope.currentMessageType == 'inbox'){
@@ -1141,6 +1240,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			{
 				data.records[i].SenderName = "Me";
 				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderName = data.records[i].SenderName;
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+				if(data.records[i].ReceiverName.length > 25){
+					data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
+				}
 			}
 			$scope.sentMessages = data;
 			if($scope.currentMessageType == 'sent'){
@@ -1155,6 +1263,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			{
 				data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 				data.records[i].SenderName = "Me";
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderName = data.records[i].SenderName;
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+				if(data.records[i].ReceiverName.length > 25){
+					data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
+				}
 			}
 			$scope.draftMessages = data;
 			if($scope.currentMessageType == 'drafts'){
@@ -1175,6 +1292,18 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				if(data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null){
 					data.records[i].ReceiverName = 'Me';
 					data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
+				}
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderName = data.records[i].SenderName;
+				if(data.records[i].SenderName.length > 25){
+					data.records[i].ShortSenderName = data.records[i].SenderName.substr(0,22) + "...";
+				}
+				data.records[i].ShortReceiverName = data.records[i].ReceiverName;
+				if(data.records[i].ReceiverName.length > 25){
+					data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0,22) + "...";
 				}
 			}
 			$scope.deletedMessages = data;
@@ -1279,11 +1408,37 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	
 	getData.get($scope.receivedURL).success(function(data) {
 		$scope.receivedAlerts = data;
+		for(i = 0; i < data.records.length; i++){
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortPatient = data.records[i].Patient;
+			if(data.records[i].Patient.length > 24){
+				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+		}
 		$scope.currentAlerts = $scope.receivedAlerts;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		$scope.deletedAlerts = data;
+		for(i = 0; i < data.records.length; i++){
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortPatient = data.records[i].Patient;
+			if(data.records[i].Patient.length > 24){
+				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+		}
     }); 
 	
 	$scope.setAlertType = function(alertType){
@@ -1360,6 +1515,19 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	$scope.refreshReceived = function(){
 		getData.get($scope.receivedURL).success(function(data) {
 			$scope.receivedAlerts = data;
+			for(i = 0; i < data.records.length; i++){
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortPatient = data.records[i].Patient;
+				if(data.records[i].Patient.length > 24){
+					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+			}
 			if($scope.currentAlertType == 'received'){
 				$scope.currentAlerts = $scope.receivedAlerts;
 			}
@@ -1369,6 +1537,19 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	$scope.refreshDeleted = function(){
 		getData.get($scope.deletedURL).success(function(data) {
 			$scope.deletedAlerts = data;
+			for(i = 0; i < data.records.length; i++){
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortPatient = data.records[i].Patient;
+				if(data.records[i].Patient.length > 24){
+					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+			}
 			if($scope.currentAlertType == 'deleted'){
 				$scope.currentAlerts = $scope.deletedAlerts;
 			}
@@ -1522,6 +1703,17 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
 				}
 			}
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+			if(data.records[i].SenderFacilityName.length > 24){
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
 		$scope.receivedNotifications = data;
 		$scope.currentNotifications = $scope.receivedNotifications;
@@ -1543,6 +1735,17 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
 				}
 			}
+			data.records[i].ShortSubject = data.records[i].Subject;
+			if(data.records[i].Subject.length > 30){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			}
+			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+			if(data.records[i].SenderFacilityName.length > 24){
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+			}
+			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 		}
 		$scope.deletedNotifications = data;
     });
@@ -1635,6 +1838,17 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 						data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
 					}
 				}
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+				if(data.records[i].SenderFacilityName.length > 24){
+					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			$scope.receivedNotifications = data;
 			if($scope.currentNotificationType == 'received'){
@@ -1660,6 +1874,17 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 						data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
 					}
 				}
+				data.records[i].ShortSubject = data.records[i].Subject;
+				if(data.records[i].Subject.length > 30){
+					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+				}
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+				if(data.records[i].SenderFacilityName.length > 24){
+					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+				}
+				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
 			}
 			$scope.deletedNotifications = data;
 			if($scope.currentNotificationType == 'deleted'){
@@ -1929,26 +2154,8 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
     $scope.textBox= $sce.trustAsHtml('<input  type="text" > </input>'); 
 };
 
-controllers.collapseCtrl = function($scope) {
-    $scope.isPatientCollapsed = true;
-    $scope.isDataCollapsed = true;
-    $scope.toggleDataCollapse = function(){
-        $scope.isDataCollapsed = !$scope.isDataCollapsed;  
-    }
-}
 
-controllers.dotProgressCtrl = function($scope, getData){
-    $scope.phases = "";
-    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
-        $scope.phases = data.records;
-    });
-}
-controllers.phaseProgressCtrl = function ($scope){
-    $scope.setProgress = function(careTeam){
-        $scope.progress = parseInt(careTeam.CurrentPhaseID/11 * 100);
-    }
-    
-}
+
 
 myApp.controller(controllers);
 

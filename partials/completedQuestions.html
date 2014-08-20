@@ -1,32 +1,17 @@
-<style>
-    table, th, td {
-           border: 1px solid #164a5e;
-        }
-</style>
 <div data-ng-controller="questionsController">
     
-    <div class="col-md-6">
-        <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
+    <div class="col-md-3">
+        <label style="font-size:2vw; color:#4B92AE; margin-left:19%;">{{phaseName}}</label><br><br>
+    </div>
+    
+    <div class="col-md-5" style="margin-top:5%">
         
-            <table class="table table-condensed">
-              <caption></caption>
-              <thead>
-                <tr>
-                  <th>Question</th>
-                  <th>Answer</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="(question, answer) in patientSummaryAnswers">
-                  <td>{{question}}</td>
-                  <td>{{answer}}</td>
-                </tr>
-              </tbody>
-            </table>
-        
-        
+        <completed-questions></completed-questions>
         <hr>
-        <a href="#/patientDirectory"><button class="btn btn-primary">Patient Directory</button></a>
         
+    </div>
+    
+    <div class="col-md-4">
+        <a href="#/patientDirectory" style="position:fixed"><button class="btn btn-primary">Patient Directory</button></a>
     </div>
 </div>
