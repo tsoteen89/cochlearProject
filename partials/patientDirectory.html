@@ -1,35 +1,45 @@
+<!-- apiPatientsController and collapseCtrl being used--------------------->
 <div ng-controller="apiPatientsController">
     <a id="top"></a>
     <div class="container">
         <div class="row">
-            <div class="col-lg-7">
+            <div class="col-md-7">
                 <label style="font-size:2vw; color:#4B92AE">Patient Directory</label>
             </div>
-            <div class="col-lg-5" >
+            <div class="col-md-5" >
                 <div class="input-group custom-search-form">
                    <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
-                  <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last)">
-                  <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">
-                  <span class="glyphicon glyphicon-search"></span>
-                 </button>
-                 </span>
+                  <input type="text" class="form-control" placeholder="Search Patients" 
+                         typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" 
+                         ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last)">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
                  </div><!-- /input-group -->
             </div>
         </div> <br>
     </div>
-    <div id = "cp_patientDirectory">
-
-        
-        <div ng-repeat="patient in patientsData.records">
-          <div ng-controller="collapseCtrl" ng-mouseleave="isDataCollapsed = true; isPatientCollapsed = true">
-            <div class="container">
+    
+    <div id = "cp_patientDirectory" class="container">
+ <!--screw this button
+         <div class="row"> 
+             <div class="col-md-2 offset10"> 
+                 <button style="margin-left:1%; position:fixed; float:left" ng-click=goToPatDir("top") class="btn btn-info" > Top </button> 
+             </div> 
+        </div>
+        -->
+          <div class="row">
+              <!-- patient usable within this scope-->
+            <div class="container" ng-controller="collapseCtrl" 
+                 ng-mouseleave="isDataCollapsed = true;" class="col-md-10" 
+                 ng-repeat="patient in patientsData.records">
+               <!-- PATIENT BOX ON LEFT--------------------->    
               <div class = "cp_patientInfo">
 
                 <div id = "cp_patientContainer">
-
                   <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
-
                   <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
                   <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
                   <p class = "cp_patientAge">Age</p>
@@ -40,29 +50,15 @@
                   <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
                   <p ng-if="patient.CareTeams.length==2" ng-style="{'height': '190px'}"></p>      
                 </div>
-                  
-                  <!--Collapse Patient Details under basic patient info-->
-                  <!--
-                <button id = "cp_patientDetailsButton" ng-click="isPatientCollapsed = !isPatientCollapsed">
-                    Patient Details
-                </button>
--->
-                  <!--Patient Details Well that collapses on click of "Patient Details" -->
-              <!--
-                <div id = "cp_patientCollapse" collapse="isPatientCollapsed">
-                    <hr>
-                    <span class = "cp_extraPatientInfo">BMI:</span> &nbsp; {{patient.BMI}}<br>
-                    <span class = "cp_extraPatientInfo">Weight:</span> &nbsp; {{patient.Weight}} lbs<br>
-                    <span class = "cp_extraPatientInfo">Height:</span> &nbsp; {{patient.Height/12 | number:0}} ft {{patient.Height%12}} in<br>
-                    
-                </div>
--->
                   <a id="{{patientsData.records[$index+1].Last}}"></a>
               </div>
+                <!-- END PATIENT BOX ON LEFT--------------------->
 
-
+                
+                <!-- Phase Progress BOX ON RIGHT--------------------->
               <div class="cp_patientPhase">
                 <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
+                    <!-- careTeam(event) info-->
                     <div class="row">
                         <div class="col-md-9">
                             Event: {{careTeam.Description}}<br>
@@ -70,10 +66,11 @@
                             {{setProgress(careTeam)}}
                         </div>
                         <div class="col-md-3">
-                            <button style="margin-left:20px" type="button" class="btn btn-info"> Add new event</button>
+                            <button style="margin-left:20px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"> Add new event</button>
                         </div>
                     </div>
                   
+                    <!-- DOTS!!!-->
                     <div class="row bs-wizard">
                           <!--Completed Phases-->
                         <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1">
@@ -146,12 +143,11 @@
                         Sound Processor Type: CP920 (without Accessory Port)
                     </div>
                   </div>
-
               </div>
-                <div> <button style="margin-left:1%; margin-top:1.1%" ng-click=goToPatDir("top") class="btn btn-info" > Top </button></div>
+                <!-- END Phase Progress BOX ON RIGHT--------------------->
+                
             </div>
-          </div>
-        </div>
+            </div>
   </div>
 </div>
 
@@ -179,6 +175,61 @@
                             <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
                         </ul>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                </div>
+            </script>
+
+<!-- Modal for adding event clicked -->
+            <script type="text/ng-template" id="addNewEvent.html">
+                <div class="modal-header">
+                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Add new cochlear event for <b> {{patient.First |uppercase }} {{ patient.Last |uppercase}} </b>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form name="addNewEvent" class="form form-vertical" novalidate>
+                        <div class="row">        
+
+                            <div class="control-group col-md-4 col-md-offset-1" >
+                                <label>First Name</label>
+                                <div class="controls" >
+                                    <input type="text" class="form-control" name="firstName" ng-model="patient.First" disabled>
+                                </div>                       
+                            </div>
+
+                            <div class="control-group col-md-4" >
+                                <label>Last Name</label>
+                                <div class="controls" >
+                                    <input type="text" class="form-control" name="lastName" ng-model="patient.Last" disabled>
+                                </div>                       
+                            </div>
+
+                        </div><br>
+
+                        <div class="row">
+                            <div class="control-group col-md-4 col-md-offset-1" >
+                                <label>Date</label>
+                                <div class="controls" >
+                                    <input type="date" class="form-control" name="date" ng-model="newEvent.CreatedOn" disabled>
+                                </div>
+                            </div>
+                        </div> <br>
+                        <div class="row">
+                            <div class="control-group col-md-8 col-md-offset-1" >
+                                <label>Event Description</label>
+                                <div class="controls" >
+                                    <input type="text" class="form-control" name="description" ng-model="newEvent.Description" ng-required="true"
+                                        placeholder="Enter description of event (i.e. left ear cochlear implant)" alphabet>
+                                </div>
+                            </div>
+                        </div><br>
+
+                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="submitEvent()">Submit</button>
+                        <br>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" ng-click="ok()">OK</button>
