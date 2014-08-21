@@ -580,7 +580,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route) {   
     $scope.selectedPatient = undefined;
     
     $scope.goToPatDir = function(last){
@@ -645,9 +645,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 $modalInstance.close();
             };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         };
         
         var modalInstance = $modal.open({
@@ -660,46 +657,45 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             }
           }
          
-        });
+        });                                              
+    }
+    
+    $scope.addNewEvent = function(patient){
+            
+        var ModalInstanceCtrl = function ($scope, $modalInstance, patient) {
+            
+            $scope.newEvent={"Description":null, "OriginalFacilityID": 100, "CurrentPhaseID":3, "CreatedOn": new Date(), "PatientID": patient.PatientID};
+            $scope.patient = patient;
+            $scope.as= {};
+            $scope.ok = function () {
+                $modalInstance.close();
+                $route.reload();
+            };
+            $scope.demoInfo=null;
+            $scope.submitEvent = function(){
+                postData.post('../aii-api/v1/careTeams',$scope.newEvent);
+                getData.get("../aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID + '/phaseAnswers/1').success(function(data) {
+                    $scope.demoInfo = data.records;
+                    console.log(data.records);
+                });//.then(postData.post('../aii-api/v1/answers',$scope.demoInfo));
+                this.ok();
+            }
+
+        };
         
-                                                         
+        var modalInstance = $modal.open({
+          templateUrl: 'addNewEvent.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg',
+          resolve: {
+            patient: function () {
+              return patient;
+            }
+          }
+         
+        });                                              
     }
     
-    //Put method for patient.
-    $scope.processPut = function() {
-        $http({
-            method  : 'PUT',
-            url     : $scope.url + $scope.patObject.patient_id,
-            data    : $scope.patObject,
-            headers : { 'Content-Type': 'application/json' }
-        })
-        console.log("im in processPut");
-        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
-    }
-    
-    //Delete method for patient
-    $scope.processDelete = function() {
-        $http({
-            method  : 'DELETE',
-            url     : $scope.url + $scope.patObject.patient_id,
-            data    : $scope.patObject, 
-            headers : { 'Content-Type': 'application/json' }
-        })
-        console.log("im in processDelete");
-        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
-    }        
-    
-    //Soft Delete method for patient
-    $scope.processSoftDelete = function() {
-        $http({
-            method  : 'PUT',
-            url     : $scope.url + $scope.patObject.patient_id,
-            data    : $scope.patObject,
-            headers : { 'Content-Type': 'application/json' }
-        })
-        console.log("im in processSoftDelete");
-        console.log("../aii-api/v1/patients/" + $scope.patObject.patient_id);
-    }
 
 };  
     
