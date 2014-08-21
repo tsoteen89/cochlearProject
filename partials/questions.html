@@ -156,12 +156,14 @@
           </ul>
         </div>
         
+        <button type="button" class="btn btn-primary" ng-click="patientSummary(0)">Close Form</button>
+        
         <br>
+        
         <div ng-if="clickedPhase == 1 || clickedPhase == 3 || clickedPhase == 4 || clickedPhase == 5 || clickedPhase == 6">
             <br>
             <completed-questions></completed-questions>
         </div>
-        
         <div ng-if="clickedPhase == 2 || clickedPhase == 7 || clickedPhase == 8 || clickedPhase == 9 || clickedPhase == 10 || clickedPhase == 11"
              ng-repeat="condition in patientSummaryAnswers">
             <br>
