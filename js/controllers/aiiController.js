@@ -494,6 +494,14 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.updateResults();
     }
     
+    $scope.completePhase = function(){
+        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
+        // Post the changed currentPhaseID here
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
+        
+    }
+    
     
 };
     
