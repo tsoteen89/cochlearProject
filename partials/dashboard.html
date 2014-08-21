@@ -46,6 +46,7 @@
                   <b> {{facData.records[0].Name}}</b> <br>   
                   <b> Address: </b> <br>
                   {{facData.records[0].Address1}} <br>
+				  <b> Phone: </b> ({{facData.records[0].Phone.slice(0,3)}}){{facData.records[0].Phone.slice(3,6)}}-{{facData.records[0].Phone.slice(6)}} <br>
                   Facility Admin: <a> ADMIN NAME</a> <br>
                   <button> <a href="#/mySettings/"> Facility Settings </a></button> 
                 </div> 
@@ -119,51 +120,49 @@
               <div class="panel-heading">
                 <h3 class="panel-title">Messaging</h3>
               </div>
-              <div class="panel-body" ng-controller="messagingController">
+              <div class="panel-body">
                   
                   
                   <tabset>
-                    <tab heading="Inbox">
+                    <tab heading="Inbox" ng-controller="messagingController">
                         <br>
                       <table class="table table-hover">
-                        <thead> Inbox</thead>
+                        <thead> Inbox </thead>
                         <tr>
-                          <th>Firstname</th>
-                          <th>Lastname</th> 
+                          <th>From</th>
                           <th>Subject</th>
                         </tr>
                         <tr ng-repeat="message in inboxMessages.records">
-                          <td>{{message.Sender_First}}</td>
-                          <td>{{message.Sender_Last}}</td> 
-                          <td>{{message.Subject}}</td>
+                          <td>{{message.SenderName}}</td>
+                          <td>{{message.ShortSubject}}</td>
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Alerts" >
+                    <tab  heading="Alerts" ng-controller="alertsController">
                         <br>
                       <table class="table table-hover">
-                        <thead> Alerts</thead>
+                        <thead> Alerts </thead>
                         <tr>
-                          <th>Firstname</th>
-                          <th>Lastname</th> 
+                          <th>Patient</th>
                           <th>Subject</th>
                         </tr>
-                        <tr>
-                          <td></td>
+                        <tr ng-repeat="alert in receivedAlerts.records">
+                          <td>{{alert.ShortPatient}}</td>
+						  <td>{{alert.ShortSubject}}</td>
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Notifications" >
+                    <tab  heading="Notifications" ng-controller="notificationsController">
                         <br>
                       <table class="table table-hover">
-                        <thead> Notifications</thead>
+                        <thead> Notifications </thead>
                         <tr>
-                          <th>Firstname</th>
-                          <th>Lastname</th> 
+                          <th>From</th>
                           <th>Subject</th>
                         </tr>
-                        <tr >
-                          <td></td>
+                        <tr ng-repeat="notification in receivedNotifications.records">
+                          <td>{{notification.ShortSenderFacilityName}}</td>
+						  <td>{{notification.ShortSubject}}</td>
                         </tr>
                       </table>
                     </tab>  
@@ -203,34 +202,66 @@
     
                 <!-- Modal for each different facility clicked -->
             <script type="text/ng-template" id="myModalContent.html">
-                <div class="modal-header">
-                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">  
-                        <div class="col-md-4">
-                            <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
-                        </div>
-                        <div class="col-md-8">
-                          <b> {{facCard.records[0].Name}} </b> <br>
-                          <b> Address: </b> <br>
-                          {{facCard.records[0].Address1}} <br>
-                          Facility Admin: <a> ADMIN NAME</a> <br>
-                        </div> 
-                    </div>
-                    <p> Users @ {{facCard.records[0].Name}}</p>    
-                    <div class="scroll">
-                        <ul>
-                            <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button>
-                </div>
+				<div class="facility-info" ng-hide="getDisplayInfo">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+						<h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">  
+							<div class="col-md-4">
+								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
+							</div>
+							<div class="col-md-8">
+							  <b> {{facCard.records[0].Name}} </b> <br>
+							  <b> Address: </b> <br>
+							  {{facCard.records[0].Address1}} <br>
+							  Facility Admin: <a> ADMIN NAME</a> <br>
+							</div> 
+						</div>
+						<p> Users @ {{facCard.records[0].Name}}</p>    
+						<div class="scroll">
+							<ul>
+								<li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+							</ul>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" ng-click="setDisplayInfo(0)">Invite Facility to Care Team</button>
+						<button class="btn btn-primary" ng-click="ok()">OK</button>
+					</div>
+				</div>
+				<div id="care-team-invitation" ng-show="displayInfo">
+					<div class="modal-header">
+						<button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+						<h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">  
+							<div class="col-md-4">
+								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
+							</div>
+							<div class="col-md-8">
+							  <b> {{facCard.records[0].Name}} </b> <br>
+							  <b> Address: </b> <br>
+							  {{facCard.records[0].Address1}} <br>
+							  Facility Admin: <a> ADMIN NAME</a> <br>
+							</div> 
+						</div>
+						<p> Users @ {{facCard.records[0].Name}}</p>    
+						<div class="scroll">
+							<ul>
+								<li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+							</ul>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" ng-click="setDisplayInfo(true)">Back</button>
+						<button class="btn btn-primary" ng-click="">Send Invitation</button>
+						<button class="btn btn-primary" ng-click="ok()">Close</button>
+					</div>
+				</div>
             </script>
-            
         </div>
         <!---------------------------------------------Aii directory CARD------------------------------------------------------------------->
     </div>
@@ -250,9 +281,19 @@
             </div>
         </div>
         
+		<!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
-            
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">Contact Us</h3>
+              </div>
+              <div class="panel-body">
+                <a href="" > Report a problem </a> <br> <br>
+                <a href="" > Suggest a measure </a>
+              </div>
+            </div>
         </div>
+		<!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
         
         <div class="col-xs-6 col-md-4">
             

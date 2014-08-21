@@ -139,6 +139,18 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.addUser= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
 
+			$scope.displayInfo = true;
+			console.log($scope.displayInfo);
+			$scope.setDisplayInfo = function (showInfo) {
+				$scope.displayInfo = showInfo;
+				$scope.apply();
+			};
+			
+			$scope.getDisplayInfo = function(){
+				console.log("Returning: " + $scope.displayInfo)
+				return $scope.displayInfo;
+			};
+		
             $scope.ok = function () {
                 $modalInstance.close();
             };
@@ -843,8 +855,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 			data.records[i].ReceiverName = "Me";
 			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			if(data.records[i].Subject.length > 24){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,21) + "...";
 			}
 			data.records[i].ShortSenderName = data.records[i].SenderName;
 			if(data.records[i].SenderName.length > 25){
@@ -864,8 +876,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			data.records[i].SenderName = "Me";
 			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			if(data.records[i].Subject.length > 24){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,21) + "...";
 			}
 			data.records[i].ShortSenderName = data.records[i].SenderName;
 			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
@@ -884,8 +896,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
 			data.records[i].SenderName = "Me";
 			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			if(data.records[i].Subject.length > 24){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,21) + "...";
 			}
 			data.records[i].ShortSenderName = data.records[i].SenderName;
 			data.records[i].ShortReceiverName = data.records[i].ReceiverName;
@@ -910,8 +922,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
 			}
 			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+			if(data.records[i].Subject.length > 24){
+				data.records[i].ShortSubject = data.records[i].Subject.substr(0,21) + "...";
 			}
 			data.records[i].ShortSenderName = data.records[i].SenderName;
 			if(data.records[i].SenderName.length > 25){
@@ -1754,7 +1766,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		for(i = 0; i < data.records.length; i++){
 			//If the notification was a request to join a care team...
 			if(data.records[i].IsRequest == '1'){
-				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+				data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
 			}
 			//Otherwise the notification is a response to a sent care team invitation
 			else{
@@ -1770,8 +1782,8 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
 			}
 			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-			if(data.records[i].SenderFacilityName.length > 24){
-				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+			if(data.records[i].SenderFacilityName.length > 17){
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
 			}
 			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
 			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
@@ -1786,7 +1798,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 		for(i = 0; i < data.records.length; i++){
 			//If the notification was a request to join a care team...
 			if(data.records[i].IsRequest == '1'){
-				data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+				data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
 			}
 			//Otherwise the notification is a response to a sent care team invitation
 			else{
@@ -1802,8 +1814,8 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
 			}
 			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-			if(data.records[i].SenderFacilityName.length > 24){
-				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+			if(data.records[i].SenderFacilityName.length > 17){
+				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
 			}
 			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
 			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
@@ -1889,7 +1901,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			for(i = 0; i < data.records.length; i++){
 				//If the notification was a request to join a care team...
 				if(data.records[i].IsRequest == '1'){
-					data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+					data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
 				}
 				//Otherwise the notification is a response to a sent care team invitation
 				else{
@@ -1905,8 +1917,8 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
 				}
 				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-				if(data.records[i].SenderFacilityName.length > 24){
-					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+				if(data.records[i].SenderFacilityName.length > 17){
+					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
 				}
 				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
 				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
@@ -1925,7 +1937,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 			for(i = 0; i < data.records.length; i++){
 				//If the notification was a request to join a care team...
 				if(data.records[i].IsRequest == '1'){
-					data.records[i].Subject = 'Invited - ' + data.records[i]['Patient'];
+					data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
 				}
 				//Otherwise the notification is a response to a sent care team invitation
 				else{
@@ -1941,8 +1953,8 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
 				}
 				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-				if(data.records[i].SenderFacilityName.length > 24){
-					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,21) + "...";
+				if(data.records[i].SenderFacilityName.length > 17){
+					data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
 				}
 				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
 				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
