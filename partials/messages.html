@@ -72,7 +72,7 @@
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)" >
+			<tr ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(message)" data-toggle="modal" data-target="#myModal">
 			  <td><input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> </td>
 			  <td ng-if="showFrom"><i class="fa fa-exclamation" ng-if="message.IsRead == '0'" ng-show="isTypeSelected('inbox')" style="margin-right: 5px; color:blue"></i> {{message.ShortSenderName}}</td>
 			  <td ng-if="showTo">{{message.ShortReceiverName}}</td>
@@ -84,29 +84,31 @@
 		</div>
 	   
 		  <hr>
-		  <div class="modal-dialogue" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
-			<div class="modal-header">
-				<h3>{{selectedMessage.Subject}}</h3>
-			</div>
-			<div class="modal-body">
-				<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br></div>
-				<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br></div>
-				<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
-				<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
-				</br>
-				<p>
-					{{selectedMessage.Content}}
-				</p>
-			</div>
-			<div class="modal-footer">
-				<a class="btn btn-primary" ng-if="showReply" ng-click="setMessageType('composeMessage'); reply()">Reply</a>
-				<a class="btn btn-primary" ng-if="showForward" ng-click="setMessageType('composeMessage'); forward()">Forward</a>
-				<a class="btn btn-primary" ng-if="showEdit" ng-click="setMessageType('composeMessage'); edit()">Edit</a>
-				<a class="btn btn-primary" ng-if="showRestore" ng-click="restoreSelectedMessage()">Restore</a>
-				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedMessage()">Delete</a>
-				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="fullyDeleteSelectedMessage()">Delete</a>
-				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
-			</div>
+		  <div class="modal fade"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" id="myModal" ng-show="isPopupVisible" style="background:white; border-style:solid; border-width:1px">
+				<div class="modal-header">
+					<h3>{{selectedMessage.Subject}}</h3>
+				</div>
+				<div class="modal-body">
+					<div ng-if="showFrom"><strong>From:</strong> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br></div>
+					<div ng-if="showTo"><strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br></div>
+					<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+					<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+					</br>
+					<p>
+						{{selectedMessage.Content}}
+					</p>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-primary" ng-if="showReply" ng-click="setMessageType('composeMessage'); reply()">Reply</a>
+					<a class="btn btn-primary" ng-if="showForward" ng-click="setMessageType('composeMessage'); forward()">Forward</a>
+					<a class="btn btn-primary" ng-if="showEdit" ng-click="setMessageType('composeMessage'); edit()">Edit</a>
+					<a class="btn btn-primary" ng-if="showRestore" ng-click="restoreSelectedMessage()">Restore</a>
+					<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedMessage()">Delete</a>
+					<a class="btn btn-primary" ng-if="showFullDelete" ng-click="fullyDeleteSelectedMessage()">Delete</a>
+					<a class="btn btn-primary" ng-click="togglePopup()" data-dismiss="modal">Close</a>
+				</div>
+			  </div>
 		  </div>
 	  </div>
 	</div>
