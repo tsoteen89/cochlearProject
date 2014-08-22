@@ -47,7 +47,7 @@
                   <b> Address: </b> <br>
                   {{facData.records[0].Address1}} <br>
 				  <b> Phone: </b> ({{facData.records[0].Phone.slice(0,3)}}){{facData.records[0].Phone.slice(3,6)}}-{{facData.records[0].Phone.slice(6)}} <br>
-                  Facility Admin: <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
+                  <b>Facility Admin:  </b><a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
                   <button> <a href="#/mySettings/"> Facility Settings </a></button> 
                 </div> 
                 
@@ -175,7 +175,7 @@
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                <h3 class="panel-title">Aii directory</h3>
+                <h3 class="panel-title">AII directory</h3>
               </div>
               <div class="panel-body">
                   <div class="row">
@@ -216,6 +216,7 @@
 							  <b> {{facCard.records[0].Name}} </b> <br> <br>
 							  <b> Address: </b>
 							  {{facCard.records[0].Address1}} <br>
+                              <b> Phone: </b> ({{facCard.records[0].Phone.slice(0,3)}}){{facCard.records[0].Phone.slice(3,6)}}-{{facCard.records[0].Phone.slice(6)}} <br>
 							  <b> Facility Admin: </b> <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
 							</div> 
 						</div>
