@@ -447,6 +447,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
     }
     
+    $scope.completePhase = function(phaseID){
+
+        console.log("Complete Phase Called");
+        console.log($scope.answer.PhaseID);
+        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
+        // Post the changed currentPhaseID here
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
+    
+    }
+    
     
     $scope.getDataSummary = function(patientSummaryAnswers){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
@@ -455,15 +466,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             $scope.ok = function () {
                 $modalInstance.close();
             };
-            /* must resolve all these variables
-            $scope.completePhase = function(){
-                $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
-                $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
-                // Post the changed currentPhaseID here
-                putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
-
-            }
-            */
+            
         };
 
         var modalInstance = $modal.open({
@@ -484,7 +487,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http){
+controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal){
     
     $scope.conditions = {};
     $scope.loggedIn = persistData.getLoggedIn();
@@ -558,6 +561,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.updateResults();
     }
     
+    
     $scope.completePhase = function(){
         $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
         $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
@@ -565,6 +569,32 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
         
     }
+    
+    
+    $scope.getDataSummary = function(patientSummaryAnswers){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            
+            $scope.patientSummaryAnswers = patientSummaryAnswers;    
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+            
+        };
+
+        var modalInstance = $modal.open({
+          templateUrl: 'dataSummary.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg',
+          resolve: {
+            patientSummaryAnswers: function () {
+              return patientSummaryAnswers;
+            }
+          }
+
+
+        });
+    }
+    
     
     $scope.wordswith3=0;
     $scope.phonemes=0;

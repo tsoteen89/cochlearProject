@@ -120,7 +120,7 @@
                         </a>
                         
                     <a href="" ng-click="getDataSummary(patientSummaryAnswers)" >
-                    <button ng-if="finished == true" ng-click="completePhase()" class="btn btn-default"
+                    <button ng-if="finished == true" class="btn btn-default"
                             popover="Click to review data entry for this phase before concluding this visit" popover-trigger="mouseenter" style="float:right">
                         Finished
                     </button></a><br>
@@ -179,16 +179,17 @@
         <div class="modal-body">
             <completed-questions></completed-questions>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" ng-controller="questionsController">
             <button ng-click="ok()" class="btn btn-default"
                      style="float:left">
                 Back
             </button>
-            <button ng-click="completePhase()" class="btn btn-default"
+            <a href="#/patientDirectory"><button ng-click="completePhase(); ok()" class="btn btn-default"
                     popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" style="float:right">
                 Confirm
-            </button>
+            </button></a>
         </div>
     </script>
+    
 </div>
     

@@ -134,9 +134,10 @@
                 <br><br><br>
                 <button ng-blur="submitQuestions()" > Submit Data</button>
                 
-                <button ng-click="completePhase()" class="btn btn-default"
-                        popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" style="float:right">
-                    Finish
+                <a href="" ng-click="getDataSummary(patientSummaryAnswers)" >
+                <button class="btn btn-default"
+                        popover="Click to review data entry for this phase before concluding this visit" popover-trigger="mouseenter" style="float:right">
+                    Finished
                 </button></a><br>
                 
                 </div>
@@ -190,4 +191,25 @@
     <br>
 
 </div>
+
+
+<script type="text/ng-template" id="dataSummary.html">
+    <div class="modal-header">
+        <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add User by email invitation</h4>
+    </div>
+    <div class="modal-body">
+        <completed-questions></completed-questions>
+    </div>
+    <div class="modal-footer" ng-controller="questionsController">
+        <button ng-click="ok()" class="btn btn-default"
+                 style="float:left">
+            Back
+        </button>
+        <a href="#/patientDirectory"><button ng-click="completePhase(); ok()" class="btn btn-default"
+                popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" style="float:right">
+            Confirm
+        </button></a>
+    </div>
+</script>
     
