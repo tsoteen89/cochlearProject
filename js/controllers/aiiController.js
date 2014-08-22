@@ -216,7 +216,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal){
+controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location){
     
     $scope.limit = 5;
     $scope.offSet = 0;
@@ -432,7 +432,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
         $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
         // Post the changed currentPhaseID here
-        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
+            $location.path('/patientDirectory')
+        });
         
     }
     
