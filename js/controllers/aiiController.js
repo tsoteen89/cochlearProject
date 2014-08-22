@@ -286,6 +286,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         });
     });
 
+    
     //Get any previously answered questions
     getData.get($scope.answersURL).success(function(data) {
         $scope.answer.Answers = data.records.Answers;            
@@ -423,7 +424,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     $scope.completePhase = function(){
-        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        if($scope.answer.PhaseID=="1"){
+            $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 2);
+        }else{
+            $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
+        }
+        
         $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
         // Post the changed currentPhaseID here
         putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
@@ -432,6 +438,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.clickedPhase = null;
     
+
     
     $scope.patientSummary = function(phaseNumber){
         this.clickedPhase = phaseNumber;
@@ -447,22 +454,15 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
     }
     
-    $scope.completePhase = function(phaseID){
-
-        console.log("Complete Phase Called");
-        console.log($scope.answer.PhaseID);
-        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
-        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
-        // Post the changed currentPhaseID here
-        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
-    
-    }
     
     
-    $scope.getDataSummary = function(patientSummaryAnswers){
+    $scope.getDataSummary = function(){
+    
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            
-            $scope.patientSummaryAnswers = patientSummaryAnswers;    
+            //jesus, realized the patient summary answers passed before was only instantiated if they checked form on right for any phase.
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+                $scope.patientSummaryAnswers = data.records.DetailedAnswers;
+            });
             $scope.ok = function () {
                 $modalInstance.close();
             };
@@ -472,12 +472,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         var modalInstance = $modal.open({
           templateUrl: 'dataSummary.html',
           controller: ModalInstanceCtrl,
-          size: 'lg',
-          resolve: {
-            patientSummaryAnswers: function () {
-              return patientSummaryAnswers;
-            }
-          }
+          size: 'lg'
 
 
         });
@@ -487,7 +482,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal){
+controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
     $scope.conditions = {};
     $scope.loggedIn = persistData.getLoggedIn();
@@ -573,10 +568,12 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.getDataSummary = function(patientSummaryAnswers){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            
-            $scope.patientSummaryAnswers = patientSummaryAnswers;    
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+                $scope.patientSummaryAnswers = data.records.DetailedAnswers;
+            });
             $scope.ok = function () {
                 $modalInstance.close();
+                
             };
             
         };
@@ -708,7 +705,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.as= {};
             $scope.ok = function () {
                 $modalInstance.close();
-                $route.reload();
+                $timeout(function(){
+                    $route.reload();
+                }, 1000);
             };
             $scope.demoInfo=null;
             $scope.submitEvent = function(){
