@@ -47,14 +47,14 @@
                   <b> Address: </b> <br>
                   {{facData.records[0].Address1}} <br>
 				  <b> Phone: </b> ({{facData.records[0].Phone.slice(0,3)}}){{facData.records[0].Phone.slice(3,6)}}-{{facData.records[0].Phone.slice(6)}} <br>
-                  Facility Admin: <a> ADMIN NAME</a> <br>
+                  Facility Admin: <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
                   <button> <a href="#/mySettings/"> Facility Settings </a></button> 
                 </div> 
                 
                 <p> Users @ {{facData.records[0].Name}}</p>    
                 <div class="scroll">
                     <ul>
-                        <li ng-repeat="user in facUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+                        <li ng-repeat="user in facUsers.records"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
                     </ul>
                 </div>
                   <br>
@@ -106,7 +106,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                    <button class="btn btn-primary" ng-click="ok()">Close</button>
                 </div>
             </script>
                 
@@ -202,7 +202,7 @@
     
                 <!-- Modal for each different facility clicked -->
             <script type="text/ng-template" id="myModalContent.html">
-				<div class="facility-info" ng-hide="getDisplayInfo">
+				<div class="facility-info" ng-show="displayInfo">
 					<div class="modal-header">
 						<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
 						<h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
@@ -213,51 +213,49 @@
 								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
 							</div>
 							<div class="col-md-8">
-							  <b> {{facCard.records[0].Name}} </b> <br>
-							  <b> Address: </b> <br>
+							  <b> {{facCard.records[0].Name}} </b> <br> <br>
+							  <b> Address: </b>
 							  {{facCard.records[0].Address1}} <br>
-							  Facility Admin: <a> ADMIN NAME</a> <br>
+							  <b> Facility Admin: </b> <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
 							</div> 
 						</div>
 						<p> Users @ {{facCard.records[0].Name}}</p>    
 						<div class="scroll">
 							<ul>
-								<li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+								<li ng-repeat="user in facCardUsers.records"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
 							</ul>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-primary" ng-click="setDisplayInfo(0)">Invite Facility to Care Team</button>
-						<button class="btn btn-primary" ng-click="ok()">OK</button>
+						<button class="btn btn-primary" ng-click="setDisplayInfo(0)" ng-hide="hideInviteButton">Invite Facility to Care Team</button>
+						<button class="btn btn-primary" ng-click="ok()">Close</button>
 					</div>
 				</div>
-				<div id="care-team-invitation" ng-show="displayInfo">
+				
+				<!-- Care Team Invitation Modal -->
+				<div id="care-team-invitation" ng-hide="displayInfo">
 					<div class="modal-header">
 						<button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
+						<h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records[0].Name}} to join a care team</h4>
 					</div>
 					<div class="modal-body">
-						<div class="row">  
-							<div class="col-md-4">
-								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
-							</div>
-							<div class="col-md-8">
-							  <b> {{facCard.records[0].Name}} </b> <br>
-							  <b> Address: </b> <br>
-							  {{facCard.records[0].Address1}} <br>
-							  Facility Admin: <a> ADMIN NAME</a> <br>
-							</div> 
-						</div>
-						<p> Users @ {{facCard.records[0].Name}}</p>    
+						<p> Your Facility's Patients </p>    
 						<div class="scroll">
 							<ul>
-								<li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+								<div ng-repeat="patient in facCardUserFacilityPatients.records" for="{{patient}}"> 
+									<input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> {{patient.First}} {{patient.Last}} ({{patient.DOB.slice(4,6)}}/{{patient.DOB.slice(6)}}/{{patient.DOB.slice(0,4)}})
+								</div>
 							</ul>
 						</div>
+						<br>
+						Inviting: <strong> {{facCard.records[0].Name}} </strong> <br>
+						To join the care team for: 
+						<span ng-if="selectedPatient"> <strong> {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
+						<span ng-hide="selectedPatient"> <strong> (No Patient Selected) </strong> </span>
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-primary" ng-click="setDisplayInfo(true)">Back</button>
-						<button class="btn btn-primary" ng-click="">Send Invitation</button>
+						<button class="btn btn-primary" ng-click="setDisplayInfo(1)">Back</button>
+						<button class="btn btn-primary" ng-click="" ng-disabled="hideSendInvitationButton">Send Invitation</button>
 						<button class="btn btn-primary" ng-click="ok()">Close</button>
 					</div>
 				</div>
@@ -288,9 +286,45 @@
                 <h3 class="panel-title">Contact Us</h3>
               </div>
               <div class="panel-body">
-                <a href="" > Report a problem </a> <br> <br>
-                <a href="" > Suggest a measure </a>
+                <a href="" ng-click="getContactCard('report')"> Report a problem </a> <br> <br>
+                <a href="" ng-click="getContactCard('suggest')"> Suggest a measure </a>
               </div>
+			  <!-- Modal used for both Reporting Problems or Suggesting Measures -->
+			  <script type="text/ng-template" id="contactUs.html">
+				<div class="modal-header">
+					<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						<span ng-if="isProblemReport"> Report a Problem </span>
+						<span ng-if="isSuggestion"> Make a Suggestion </span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div id="problem-report-header" ng-if="isProblemReport">
+						<p> 
+							Notify the site administrator about any issues concerning the site's usability.
+							This issue will be sent directly to the administrator and dealt with in a 
+							timely manner.
+						</p>
+						<h4> Problem Description: </h4>
+					</div>
+					<div id="suggestion-header" ng-if="isSuggestion">
+						<p> 
+							Suggest a way to help improve the quality of the site.
+							All suggestions are welcome and sent directly to the site administrator 
+							for timely consideration.
+						</p>
+						<h4> Suggestion: </h4>
+					</div>
+					<form name="messageForm">
+						<textarea rows="10" cols="85" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required></textarea>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<input class="btn btn-primary" ng-disabled="messageForm.messageContent.$error.required" ng-click="sendMessage()" value="Send Message"></input>
+					<button class="btn btn-primary" ng-click="ok()"> Close </button>
+				</div>
+            </script>
+			  
             </div>
         </div>
 		<!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
