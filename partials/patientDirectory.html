@@ -48,9 +48,9 @@
                   <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
                   <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
                   <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
-                  <p ng-if="patient.CareTeams.length==2" ng-style="{'height': '190px'}"></p>      
+                    
                 </div>
-                  <a id="{{patientsData.records[$index+1].Last}}"></a>
+                  
               </div>
                 
                 
@@ -68,9 +68,7 @@
                   <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
                   <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
                   <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
-                  <p ng-if="patient.CareTeams.length==2" ng-style="{'height': '190px'}"></p>      
                 </div>
-                  <a id="{{patientsData.records[$index+1].Last}}"></a>
               </div>
                 
                 
@@ -194,6 +192,7 @@
                   <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
                     See Care Team Details 
                   </button>
+                  <a id="{{patientsData.records[$index+1].Last}}"></a>
 
                   <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
                   <div id = "cp_phaseDetails" collapse="isDataCollapsed">
