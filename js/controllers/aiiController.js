@@ -119,7 +119,8 @@ myApp.factory('persistData', function () {
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal){
     
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/100/";
+	$scope.userFacilityID = 100;
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
@@ -134,23 +135,17 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     //Grab Facilities Users
     getData.get($scope.facilityURL + 'users').success(function(data) {
         $scope.facUsers = data;
+		for(i = 0; i < data.records.length; i++){
+			if(data.records[i].Level == 'Coordinator'){
+				$scope.facilityAdmin = data.records[i];
+				i = data.records.length;
+			}
+		}
     });
     
     $scope.addUser= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
 
-			$scope.displayInfo = true;
-			console.log($scope.displayInfo);
-			$scope.setDisplayInfo = function (showInfo) {
-				$scope.displayInfo = showInfo;
-				$scope.apply();
-			};
-			
-			$scope.getDisplayInfo = function(){
-				console.log("Returning: " + $scope.displayInfo)
-				return $scope.displayInfo;
-			};
-		
             $scope.ok = function () {
                 $modalInstance.close();
             };
@@ -173,14 +168,42 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
+			userFacilityID = 100;
             console.log(fac.FacilityID);
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
                 $scope.facCard = data;
             });
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
                 $scope.facCardUsers = data;
-            });          
+				for(i = 0; i < data.records.length; i++){
+					if(data.records[i].Level == 'Coordinator'){
+						$scope.facilityAdmin = data.records[i];
+						i = data.records.length;
+					}
+				}
+            });      
+			getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ userFacilityID + '/patients').success(function(data) {
+                $scope.facCardUserFacilityPatients = data;
+            }); 
 
+			$scope.displayInfo = true;
+			$scope.selectedPatient = [];
+			$scope.hideSendInvitationButton = true;
+			if(fac.FacilityID == userFacilityID){
+				$scope.hideInviteButton = true;
+			}
+			else{
+				$scope.hideInviteButton = false;
+			}
+			
+			$scope.setDisplayInfo = function (showInfo) {
+				$scope.displayInfo = showInfo;
+			};
+			
+			$scope.selectPatient = function (patient) {
+				$scope.selectedPatient = patient;
+				$scope.hideSendInvitationButton = false;
+			}
 
             $scope.ok = function () {
                 $modalInstance.close();
@@ -201,10 +224,55 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             }
           }
          
-        });
-        
-                                                         
+        });                                               
     }
+	
+	$scope.getContactCard = function (contactType) {
+		
+		var ModalInstanceCtrl = function ($scope, $modalInstance, contactType) {
+			
+			userID = 1;
+			
+			$scope.message = [];
+			$scope.message['userID'] = userID;
+		
+			if(contactType == 'report'){
+				$scope.isProblemReport = true;
+				$scope.isSuggestion = false;
+			}
+			else if(contactType == 'suggest'){
+				$scope.isProblemReport = false;
+				$scope.isSuggestion = true;
+			}
+
+			$scope.sendMessage = function () {
+				
+				//POST a ContactUs message to the API
+				
+				$modalInstance.close();
+			}
+			
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'contactUs.html',
+          controller: ModalInstanceCtrl,
+          size: 'md',
+          resolve: {
+            contactType: function () {
+              return contactType;
+            }
+          }
+         
+        });
+	}
     
 };
     
