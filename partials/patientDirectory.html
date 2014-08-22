@@ -36,7 +36,7 @@
                  ng-mouseleave="isDataCollapsed = true;" class="col-md-10" 
                  ng-repeat="patient in patientsData.records">
                <!-- PATIENT BOX ON LEFT--------------------->    
-              <div class = "cp_patientInfo">
+              <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==2" ng-style="{'height': '527px'}">
 
                 <div id = "cp_patientContainer">
                   <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
@@ -52,6 +52,37 @@
                 </div>
                   <a id="{{patientsData.records[$index+1].Last}}"></a>
               </div>
+                
+                
+                
+                
+                <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==1">
+
+                <div id = "cp_patientContainer">
+                  <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+                  <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
+                  <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+                  <p class = "cp_patientAge">Age</p>
+                  <br>
+                  <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
+                  <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
+                  <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
+                  <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
+                  <p ng-if="patient.CareTeams.length==2" ng-style="{'height': '190px'}"></p>      
+                </div>
+                  <a id="{{patientsData.records[$index+1].Last}}"></a>
+              </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 <!-- END PATIENT BOX ON LEFT--------------------->
 
                 
