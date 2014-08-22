@@ -492,17 +492,28 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     $scope.completePhase = function(){
+        
         if($scope.answer.PhaseID=="1"){
+            console.log("Phase 1");
             $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 2);
-        }else{
+        }
+        else if($scope.answer.PhaseID=='2'){
+            $location.path('patientDirectory');
+            return;
+        }
+        else{
             $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
         }
+        if($scope.answer.PhaseID != '2'){
+            console.log("Other Phases");
+            $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
+            // Post the changed currentPhaseID here
+            putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
+                $location.path('patientDirectory')
+            });
+
+        }
         
-        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
-        // Post the changed currentPhaseID here
-        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
-            $location.path('/patientDirectory')
-        });
         
     }
     
@@ -624,15 +635,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
         $scope.updateResults();
-    }
-    
-    
-    $scope.completePhase = function(){
-        $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
-        $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
-        // Post the changed currentPhaseID here
-        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase);
-        
     }
     
     
