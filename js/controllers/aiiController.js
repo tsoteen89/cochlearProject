@@ -63,6 +63,7 @@ myApp.factory('persistData', function () {
     var PhaseName;
     var PatientName;
     var dirAnchor;
+    var userLevel;
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
@@ -106,6 +107,12 @@ myApp.factory('persistData', function () {
         },
         getDirAnchor: function(data){
             return dirAnchor;
+        },
+        setUserLevel: function(data){
+            userLevel = data;
+        },
+        getUserLevel: function(data){
+            return userLevel;
         }
     };
 });
@@ -122,6 +129,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	$scope.userFacilityID = 100;
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
+    
+    $scope.userLevel = persistData.getUserLevel();
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
@@ -2192,11 +2201,19 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
-controllers.loginControl = function ($scope,$http,$window,persistData){
+controllers.loginControl = function ($scope,$http,$window,persistData,getData){
     
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
+    $scope.userLevel = persistData.getUserLevel();
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    
+    getData.get($scope.userURL).success(function(data) {
+        $scope.userData = data;
+    }).then(function() {
+        persistData.setUserLevel($scope.userData.records[0].UserLevelID);
+    });
     
     $scope.loginStatus = function(){
         $scope.loggedIn = persistData.getLogged();
