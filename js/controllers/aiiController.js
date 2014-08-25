@@ -282,7 +282,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 
 //**************************************QUESTION CONTROLLERS***************************************//
 
-    
+
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location){
     
