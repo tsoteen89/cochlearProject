@@ -87,7 +87,7 @@
                             <p>Patient Directory</p>
                         </a>
                     </li>
-                    <li>
+                    <li ng-if="userLevel < 11">
                         <a href="#/newPatient" data-scroll>
                             <span class = "fa fa-plus-circle fa-3x"></span>
                             <p>New Patient</p>

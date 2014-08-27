@@ -2206,13 +2206,14 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData){
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
-    $scope.userLevel = persistData.getUserLevel();
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/3";
     
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     }).then(function() {
         persistData.setUserLevel($scope.userData.records[0].UserLevelID);
+    }).then(function() {
+        $scope.userLevel = persistData.getUserLevel();
     });
     
     $scope.loginStatus = function(){
@@ -2357,4 +2358,4 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 myApp.controller(controllers);
 
 })();
-
+ 
