@@ -903,10 +903,11 @@ controllers.addUserController = function($scope, $http, postData, getData){
 
 
 //Controller used to handle any EDITS made to a User
-controllers.editUserController = function($scope, $http, getData, putData){
+controllers.editUserController = function($scope, $http, getData, putData, persistData){
     $scope.editUser = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
     $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
+    $scope.userLevel = persistData.getUserLevel();
     
     //Grab single User by ID
     getData.get($scope.userURL).success(function(data) {

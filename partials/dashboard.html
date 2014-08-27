@@ -48,7 +48,7 @@
                   {{facData.records[0].Address1}} <br>
 				  <b> Phone: </b> ({{facData.records[0].Phone.slice(0,3)}}){{facData.records[0].Phone.slice(3,6)}}-{{facData.records[0].Phone.slice(6)}} <br>
                   <b>Facility Admin:  </b><a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
-                  <button> <a href="#/mySettings/"> Facility Settings </a></button> 
+                  <button ng-if="userLevel < 11"> <a href="#/mySettings/"> Facility Settings </a></button> 
                 </div> 
                 
                 <p> Users @ {{facData.records[0].Name}}</p>    
@@ -58,7 +58,7 @@
                     </ul>
                 </div>
                   <br>
-                <div class= "container">
+                <div ng-if="userLevel < 11" class= "container">
                   <div class="row">
                     <button type="button" class="btn btn-default btn-sm" ng-click="addUser()">
                       <span class="glyphicon glyphicon-plus-sign"></span> Add User
