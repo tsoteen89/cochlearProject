@@ -238,7 +238,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	
 	$scope.getContactCard = function (contactType) {
 		
-		var ModalInstanceCtrl = function ($scope, $modalInstance, contactType) {
+		var ModalInstanceCtrl = function ($scope, $modalInstance, contactType, postData) {
 			
 			userID = 1;
 			
@@ -257,6 +257,13 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			$scope.sendMessage = function () {
 				
 				//POST a ContactUs message to the API
+				if($scope.isProblemReport){
+					$scope.message.IsReport = true;
+				}
+				else{
+					$scope.message.IsReport = false;
+				}
+				postData.post("http://killzombieswith.us/aii-api/v1/adminAlerts/", $scope.message);
 				
 				$modalInstance.close();
 			}
@@ -1149,7 +1156,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				//Change the message's Read attribute to true
 				$scope.selectedMessage.IsRead = 1;
 				//PUT the message using the message URL
-				putData.put($scope.messageURL,message).success(function(data){
+				putData.put(messageURL,message).success(function(data){
 					$scope.refreshMessages();
 				});
 			}
