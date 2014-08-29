@@ -53,9 +53,7 @@
                 
                 <p> Users @ {{facData.records[0].Name}}</p>    
                 <div class="scroll">
-                    <ul>
-                        <li ng-repeat="user in facUsers.records"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
-                    </ul>
+                    <li ng-repeat="user in facUsers.records" style="margin-left:5px"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
                 </div>
                   <br>
                 <div ng-if="userLevel < 11" class= "container">
@@ -123,8 +121,8 @@
               <div class="panel-body">
                   
                   
-                  <tabset>
-                    <tab heading="Inbox" ng-controller="messagingController">
+                  <tabset style="cursor:default">
+                    <tab heading="Inbox" ng-controller="messagingController" style="cursor:pointer">
                         <br>
                       <table class="table table-hover">
                         <thead> Inbox </thead>
@@ -138,7 +136,7 @@
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Alerts" ng-controller="alertsController">
+                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer">
                         <br>
                       <table class="table table-hover">
                         <thead> Alerts </thead>
@@ -152,7 +150,7 @@
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Notifications" ng-controller="notificationsController">
+                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer">
                         <br>
                       <table class="table table-hover">
                         <thead> Notifications </thead>
@@ -190,10 +188,8 @@
                          </div><!-- /input-group -->
                     </div>
                    </div>
-                    <div class="scroll" style="height:300px">
-                        <ul>
-                            <li ng-repeat="fac in allFacs.records"> <a href="" ng-click = getFacCard(fac)> {{fac.Name}} </a> </li>
-                        </ul>
+                    <div class="scroll" style="height:300px;margin-top:10px">
+                        <li style="margin-left:5px" ng-repeat="fac in allFacs.records"> <a href="" ng-click = getFacCard(fac)> {{fac.Name}} </a> </li>
                     </div>
                     
                 
@@ -222,9 +218,7 @@
 						</div>
 						<p> Users @ {{facCard.records[0].Name}}</p>    
 						<div class="scroll">
-							<ul>
-								<li ng-repeat="user in facCardUsers.records"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
-							</ul>
+							<li ng-repeat="user in facCardUsers.records" style="margin-left:5px"> <a href=""> {{user.first_name}}  {{user.last_name}}</a> </li>
 						</div>
 					</div>
 					<div class="modal-footer">
