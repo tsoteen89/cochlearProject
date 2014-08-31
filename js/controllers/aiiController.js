@@ -2214,7 +2214,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData){
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/3";
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
     
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
