@@ -955,7 +955,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	//Controls the message display popup
     $scope.isPopupVisible = false;
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = false;
+	$scope.reverse = true;
 	$scope.orderFilter = 'Timestamp';
     //Messages that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedMessages = [];
@@ -1059,6 +1059,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		}
         $scope.deletedMessages = data;
     });
+	
+	this.tab = -1;
+	
+	$scope.selectTab = function(selectedTab){
+		this.tab = selectedTab;
+	}
+	$scope.isSelectedTab = function(checkTab){
+		return this.tab === checkTab;
+	}
 	
 	//Sets the current message type. This updates the current messages and
 	//alters the components of the message display.
@@ -1598,7 +1607,7 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	
 	/* Miscellaneous Variables */
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = false;
+	$scope.reverse = true;
 	$scope.orderFilter = 'Timestamp';
     //Alerts that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedAlerts = [];
@@ -1878,7 +1887,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	
 	/* Miscellaneous Variables */
 	//OrderBy property : true means display contents in reverse order  
-	$scope.reverse = false;
+	$scope.reverse = true;
 	$scope.orderFilter = 'Timestamp';
     //Alerts that have been marked (for deleting, marking as read, or marking as unread)
 	$scope.markedNotifications = [];
