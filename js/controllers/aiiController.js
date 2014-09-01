@@ -705,6 +705,16 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route) {   
+    $scope.Age=null;
+    $scope.calcAge = function(dateString) {
+        var year=Number(dateString.substr(0,4));
+        var month=Number(dateString.substr(4,2))-1;
+        var day=Number(dateString.substr(6,2));
+        var today=new Date();
+        var age=today.getFullYear()-year;
+        if(today.getMonth()<month || (today.getMonth()==month && today.getDate()<day)){age--;}
+        return age;
+    }
     $scope.selectedPatient = undefined;
     
     $scope.goToPatDir = function(last){
