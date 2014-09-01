@@ -1,6 +1,5 @@
 
         <div ng-controller="formController">
-        <div ng-controller="ProgressDemoCtrl">
             
             <label style="font-size:2vw; color:#4B92AE; margin-left:8%;">New Patient</label><br><br>
             
@@ -86,39 +85,12 @@
                         </div>
 
                         <div class="control-group col-md-4 col-md-offset-1" >
-                            <label>BMI</label>
-                            <div class="controls" >
-                                <select class="form-control" name="BMI" ng-model="formData.BMI" ng-required="true" ng-blur="fillBar()">
-                                    <option ng-repeat="BMI in bmis">{{BMI}}</option>
-                                </select>
-                            </div>                        
+                                                   
                         </div>
                         
                         
 
-                    </div><br>
-
-                    <div class="row">      
-                                            
-
-                        <div class="control-group col-md-4 col-md-offset-1" >
-                            <div class="controls" >
-                                <label>Height: (inches)</label><br>
-                                <select class="form-control" name="Height" ng-model="formData.Height" ng-blur="fillBar()">
-                                    <option ng-repeat="Height in heights">{{Height}}</option>
-                                </select>
-                            </div>    
-                        </div>    
-                            <div class="control-group col-md-4 col-md-offset-1" >
-                            <div class="controls" >
-
-                                <label>Weight</label><br>
-                                <select class="form-control" name="Weight" ng-model="formData.Weight" ng-blur="fillBar()">
-                                    <option ng-repeat="Weight in weights">{{Weight}}</option>
-                                </select>
-                                </div>
-                                </div>                        
-                        </div>                         
+                    </div><br>                        
                     </div><br>
                         
                     
@@ -131,12 +103,5 @@
                 </div>
             </div>
 
-
-            <!--<pre>{{ formData }}</pre>-->
-
-<!--        </div>
-        </div>-->
-        </div>
-    </div>
         </div>
         </div>
