@@ -104,3 +104,10 @@ myApp.directive('completedQuestions', function() {
 		templateUrl: 'directives/completed-questions.html'
 	}
 });
+
+myApp.directive('patientInfo', function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/patient-info.html'
+	}
+});

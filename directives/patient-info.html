@@ -1,0 +1,26 @@
+<div id = "cp_patientContainer">
+    <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+    <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
+    <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+    <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
+    <br> <br>
+    <div class="container">    
+        <div class="row" >
+            <a href="#/questions" ng-click="goToQuestions(patient.CareTeams[0], phases[0], patient)">
+                <button type="button" class="btn btn-info btn-sm" >  Edit Demographics</button> </a>
+        </div>
+        <div class="row">
+            <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
+        </div>
+
+        <div class="row" ng-show="show" >
+            <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
+            <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
+            <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
+            <p style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</p>  
+        </div> 
+
+
+    </div>  
+
+</div>
