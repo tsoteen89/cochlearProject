@@ -705,7 +705,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route) {   
-    $scope.Age=null;
+    $scope.show=false;
     $scope.calcAge = function(dateString) {
         var year=Number(dateString.substr(0,4));
         var month=Number(dateString.substr(4,2))-1;
@@ -841,28 +841,6 @@ controllers.formController = function($scope, $http, postData,dateFilter) {
     // create a blank object to hold form information
     $scope.formData = {};
     
-    $scope.open = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.opened = true;
-    };
-    
-    $scope.bmis = [];
-    $scope.heights = [];
-    $scope.weights = [];
-    $scope.i = 0;
-    
-    for($scope.i=0;$scope.i<36;$scope.i++){
- 		$scope.bmis[$scope.i] = $scope.i + 10;
- 	}
- 
- 	for($scope.i=0;$scope.i<68;$scope.i++){
- 		$scope.heights[$scope.i] = $scope.i + 12;
- 	}
- 
- 	for($scope.i=0;$scope.i<221;$scope.i++){
- 		$scope.weights[$scope.i] = $scope.i + 80;
- 	}
 
     // Post function to add a new Patient to the system
     $scope.processForm = function() {
@@ -2302,38 +2280,6 @@ controllers.logoutControl = function($scope,$http,$window){
 
 
 //************************************MISCELLANEOUS CONTROLLERS***************************************//
-
-
-//Controller used to display a dynamically filled Progress Bar
-controllers.ProgressDemoCtrl = function($scope) {
-    $scope.max = 100;
-    $scope.dynamic = 0;
-
-    $scope.fillBar = function() {
-        var value = 7;
-        var type;
-
-        if ($scope.dynamic < 25) {
-            type = 'danger';
-        } 
-        else if ($scope.dynamic < 50) {
-            type = 'warning';
-        }
-        else if ($scope.dynamic < 75) {
-            type = 'info';
-        }
-        else {
-            type = 'success';
-        }
-        
-        $scope.showWarning = (type === 'danger' || type === 'warning');
-        
-        if($scope.dynamic < 100) { 
-            $scope.dynamic = $scope.dynamic + value;
-            $scope.type = type;
-        }
-    };
-}
 
 
 //Controller used to handle creation of new Messages

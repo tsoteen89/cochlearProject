@@ -37,18 +37,32 @@
                  ng-mouseleave="isDataCollapsed = true;" class="col-md-10" 
                  ng-repeat="patient in patientsData.records">
                <!-- PATIENT BOX ON LEFT--------------------->    
-              <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==2" ng-style="{'height': '500px'}">
+              <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==2" ng-style="{'height': '532px'}">
 
                 <div id = "cp_patientContainer">
-                  <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
-                  <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
-                  <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
-                  <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
-                  <br>
-                  <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
-                  <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
-                  <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
-                  <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
+                    <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+                    <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
+                    <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+                    <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
+                    <br> <br>
+                    <div class="container">    
+                        <div class="row" >
+                            <a href="#/questions" ng-click="goToQuestions(patient.CareTeams[0], phases[0], patient)">
+                                <button type="button" class="btn btn-info btn-sm" >  Edit Demographics</button> </a>
+                        </div>
+                        <div class="row">
+                            <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
+                        </div>
+
+                        <div class="row" ng-show="show" >
+                            <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
+                            <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
+                            <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
+                            <p style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</p>  
+                        </div> 
+                        
+
+                    </div>  
                     
                 </div>
                   
@@ -60,28 +74,30 @@
                 <div class = "cp_patientInfo" ng-if="patient.CareTeams.length != 2">
 
                 <div id = "cp_patientContainer">
-                  <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
-                  <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
-                  <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
-                  <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old</p>
-                  <br>
-                  <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
-                  <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
-                  <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
-                  <p style="margin-left:21%">{{patient.State}} {{patient.Zipcode}}</p>  
+                    <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+                    <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
+                    <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+                    <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old</p>
+                    <br>
+                    <div class="container">   
+                        <div class="row" >
+                            <a href="#/questions" ng-click="goToQuestions(patient.CareTeams[0], phases[0], patient)">
+                                <button type="button" class="btn btn-info btn-sm" >  Edit Demographics</button> </a>
+                        </div>
+                        <div class="row">
+                            <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
+                        </div>
+
+                        <div class="row" ng-show=show>
+                            <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
+                            <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
+                            <p> <b> Address:</b>  {{patient.Address1}} {{patient.City}}, <br>
+                            <p style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</p>  
+                        </div>
+                    </div>
+                  
                 </div>
-              </div>
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+              </div>  
                 <!-- END PATIENT BOX ON LEFT--------------------->
 
                 
@@ -91,12 +107,14 @@
                     <!-- careTeam(event) info-->
                     <div class="row">
                         <div class="col-md-9">
-                            Event: {{careTeam.Description}}<br>
-                            Current Phase : {{phases[careTeam.CurrentPhaseID-1].Name}}<br>
+                            <em>Event Description: </em>{{careTeam.Description}}<br>
+                            <em>Current Phase: </em> <span ng-if="careTeam.CurrentPhaseID == 3" > Candidacy Testing / </span>{{phases[careTeam.CurrentPhaseID-1].Name}}<br>
+                            
                             {{setProgress(careTeam)}}
                         </div>
                         <div class="col-md-3">
-                            <button style="margin-left:50px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)" ng-if="careTeam== patient.CareTeams[0]"> Add new event</button>
+                            <button style="margin-left:50px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
+                                    ng-if="careTeam== patient.CareTeams[0]"> Add new event</button>
                         </div>
                     </div>
                   
@@ -112,9 +130,9 @@
                             </div>
                           </div>
                           <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/completedQuestions" 
-                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
+                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/completedAudiology" 
-                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
+                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <div class="bs-wizard-info text-center">
                             {{phase.Name}}
                           </div>
@@ -128,8 +146,9 @@
                             <div class="progress-bar">
                             </div>
                           </div>
-                          <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"></a>
-                          <div class="bs-wizard-info text-center">
+                          <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
+                             title={{phases[0].Name}}></a>
+                          <div class="bs-wizard-info text-center" >
                             {{phases[0].Name}}
                           </div>
                         </div>
@@ -145,9 +164,9 @@
                             </div>
                           </div>
                            <a ng-if="phase.PhaseID < 7 && phase.PhaseID != 2" href="#/questions" 
-                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
+                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <a ng-if="phase.PhaseID < 12 && (phase.PhaseID > 6 || phase.PhaseID ==2)" href="#/audioQuestions" 
-                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot"></a>
+                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <div class="bs-wizard-info text-center">
                             {{phase.Name}}
                           </div>
@@ -163,9 +182,11 @@
                             </div>
                           </div>
                           <a ng-if="careTeam.CurrentPhaseID < 7 && careTeam.CurrentPhaseID != 2" href="#/questions"
-                          ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot"></a>
+                          ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot" 
+                             title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
                           <a ng-if="careTeam.CurrentPhaseID < 12 && (careTeam.CurrentPhaseID > 6 || careTeam.CurrentPhaseID ==2)" href="#/audioQuestions" 
-                             ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot"></a>
+                             ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot"
+                             title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
                           <div class="bs-wizard-info text-center">
                             {{phases[careTeam.CurrentPhaseID-1].Name}}
                           </div>
@@ -180,7 +201,7 @@
                             <div class="progress-bar">
                             </div>
                           </div>
-                          <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot"></a>
+                          <a href="#/questions" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <div class="bs-wizard-info text-center">
                             {{phase.Name}}
                           </div>
@@ -300,6 +321,6 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button>
+                    <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="ok()">Cancel</button> 
                 </div>
             </script>
