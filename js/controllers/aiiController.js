@@ -8,7 +8,30 @@ var controllers = {};
 
 //************************************FACTORIES***************************************//
 
-
+myApp.factory('userInfo', function(){
+    
+    var UserID;
+    var Username;
+    var FacilityID;
+    var Name;
+    var Title;
+    var UserLevelID;
+    return{
+        set:function (info) {
+            UserID= info.UserID;
+            Username= info.Username;
+            FacilityID= info.FacilityID;
+            Name = info.First + " " + info.Last;
+            Title = info.Title;
+            UserLevelID = info.UserLevelID;
+            return;
+        },
+        get: function(){
+            return {UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
+        }
+    }
+});
+              
 //Factory to dynamically GET from api
 myApp.factory('getData', function($http){
     
@@ -124,11 +147,10 @@ myApp.factory('persistData', function () {
 
     
 //Controller used to handle display of Questions for a Patient's CareTeam  
-controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal){
-    
-	$scope.userFacilityID = 100;
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
-    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, userInfo){
+	$scope.userFacilityID = userInfo.get().FacilityID;
+    $scope.facilityURL = "../aii-api/v1/facilities/" + $scope.userFacilityID + "/";
+    $scope.baseFacilityURL = "../aii-api/v1/facilities/";
     
     $scope.userLevel = persistData.getUserLevel();
     //Grab Facility info  using facilityURL
@@ -177,12 +199,12 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
-			userFacilityID = 100;
+			$scope.userFacilityID = userInfo.get().FacilityID;
             console.log(fac.FacilityID);
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
+            getData.get("../aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
                 $scope.facCard = data;
             });
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+            getData.get("../aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
                 $scope.facCardUsers = data;
 				for(i = 0; i < data.records.length; i++){
 					if(data.records[i].Level == 'Coordinator'){
@@ -191,14 +213,14 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 					}
 				}
             });      
-			getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ userFacilityID + '/patients').success(function(data) {
+			getData.get("../aii-api/v1/facilities/"+ $scope.userFacilityID + '/patients').success(function(data) {
                 $scope.facCardUserFacilityPatients = data;
             }); 
 
 			$scope.displayInfo = true;
 			$scope.selectedPatient = [];
 			$scope.hideSendInvitationButton = true;
-			if(fac.FacilityID == userFacilityID){
+			if(fac.FacilityID == $scope.userFacilityID){
 				$scope.hideInviteButton = true;
 			}
 			else{
@@ -240,10 +262,10 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 		
 		var ModalInstanceCtrl = function ($scope, $modalInstance, contactType, postData) {
 			
-			userID = 1;
+			$scope.userID = userInfo.get().userID;
 			
 			$scope.message = [];
-			$scope.message['userID'] = userID;
+			$scope.message['userID'] = $scope.userID;
 		
 			if(contactType == 'report'){
 				$scope.isProblemReport = true;
@@ -263,7 +285,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				else{
 					$scope.message.IsReport = false;
 				}
-				postData.post("http://killzombieswith.us/aii-api/v1/adminAlerts/", $scope.message);
+				postData.post("../aii-api/v1/adminAlerts/", $scope.message);
 				
 				$modalInstance.close();
 			}
@@ -314,12 +336,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answer.CareTeamID = persistData.getCareTeamID();
     $scope.phaseName=persistData.getPhaseName();
     $scope.patientName= persistData.getPatientName();
-    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
+    $scope.questionsURL = "../aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
+    $scope.answersURL = "../aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
     
     $scope.patientSummaryAnswers = {};
-    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.patientSummaryAnswersURL = "../aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
@@ -378,11 +400,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //Post all answers saved 
     $scope.postAnswers = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+        postData.post('../aii-api/v1/answers',$scope.answer);
     };
     
     $scope.postSurgery = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
+        postData.post('../aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
     $scope.dirAnchor = persistData.getDirAnchor();
@@ -524,7 +546,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             console.log("Other Phases");
             $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
             // Post the changed currentPhaseID here
-            putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
+            putData.put('../aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
                 $location.path('patientDirectory')
             });
 
@@ -539,7 +561,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.patientSummary = function(phaseNumber){
         this.clickedPhase = phaseNumber;
-        $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
+        $scope.patientSummaryAnswersURL = "../aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
             $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
@@ -557,7 +579,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             //jesus, realized the patient summary answers passed before was only instantiated if they checked form on right for any phase.
-            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+            getData.get("../aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
                 $scope.patientSummaryAnswers = data.records.DetailedAnswers;
             });
             $scope.ok = function () {
@@ -591,13 +613,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.answer.Results = { "Aided Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}}, "AzBio" :{ "AzBio Test": {}}, "CNC": {"CNC Test": {}}, "BKB-SIN": {"BKB-SIN Test": {}}};
 
     //$scope.results = {};
-    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.questionsURL = "../aii-api/v1/phases/" + 9 + "/questions";
+    $scope.answersURL = "../aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
     /*
     $scope.buildResultsURL = function(){
         console.log("buildResults Called");
-        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.conditions.Left + "/right/" + $scope.conditions.Right;
+        $scope.resultsURL = "../aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.conditions.Left + "/right/" + $scope.conditions.Right;
     }
     */
     
@@ -607,7 +629,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.submitQuestions = function(){
         console.log("Submit Questions Called");
-        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.answer);
+        postData.post('../aii-api/v1/audioTestResults',$scope.answer);
     }
     
     $scope.incAnswerArray = function(){
@@ -626,7 +648,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.getConditionsID = function(){
         console.log("getConditionsID Called");
-        getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
+        getData.get("../aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
             $scope.answer.ConditionsID = data.records.ConditionsID;
         });
     }
@@ -656,7 +678,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     $scope.getDataSummary = function(patientSummaryAnswers){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+            getData.get("../aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
                 $scope.patientSummaryAnswers = data.records.DetailedAnswers;
             });
             $scope.ok = function () {
@@ -704,7 +726,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo) {   
     $scope.show=false;
     $scope.calcAge = function(dateString) {
         var year=Number(dateString.substr(0,4));
@@ -736,21 +758,17 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.patients = {};
     $scope.selected={};
     $scope.list=[];
+    $scope.userFacilityID = userInfo.get().FacilityID;
     
-    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/100/patients";
+    $scope.patientURL = "../aii-api/v1/facilities/" +$scope.userFacilityID + "/patients";
     //Grab all Patients using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     });
     
-    $scope.careTeamURL = "http://killzombieswith.us/aii-api/v1/facilities/100/careTeams";
-    //Grab all CareTeams using careTeamURL
-    getData.get($scope.careTeamURL).success(function(data) {
-        $scope.careData = data;
-    });
-    
+
     //Get all phase info!!
-    getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
+    getData.get("../aii-api/v1/phases").success(function(data) {
         $scope.phases = data.records;
     });
     
@@ -767,10 +785,10 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
             console.log(fac.FacilityID);
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
+            getData.get("../aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
                 $scope.facCard = data;
             });
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+            getData.get("../aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
                 $scope.facCardUsers = data;
             });          
 
@@ -809,11 +827,11 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             };
             $scope.demoInfo=null;
             $scope.submitEvent = function(){
-                postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent);
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID + '/phaseAnswers/1').success(function(data) {
+                postData.post('../aii-api/v1/careTeams',$scope.newEvent);
+                getData.get("../aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID + '/phaseAnswers/1').success(function(data) {
                     $scope.demoInfo = data.records;
                     console.log(data.records);
-                });//.then(postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.demoInfo));
+                });//.then(postData.post('../aii-api/v1/answers',$scope.demoInfo));
                 this.ok();
             }
 
@@ -844,7 +862,7 @@ controllers.formController = function($scope, $http, postData,dateFilter) {
 
     // Post function to add a new Patient to the system
     $scope.processForm = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
+        postData.post('../aii-api/v1/patients',$scope.formData);
     };
     
     $scope.date = new Date();
@@ -875,19 +893,19 @@ controllers.addUserController = function($scope, $http, postData, getData){
 
     // Post function to add a new User to the system
     $scope.processForm = function() {
-        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
-        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        //postData.post('../aii-api/v1/users',$scope.formData);
+        postData.post('../aii-api/v1/users',$scope.formData);
     };
         
     //getting the userlevels from the api and posting it to the form
-    $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
+    $scope.UserLevelsURL = '../aii-api/v1/userLevels';
         
     getData.get($scope.UserLevelsURL).success(function(data) {
         $scope.formData.UserLevels = data;
         //console.log($scope.formData.UserLevels);
     });
     
-    $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
+    $scope.UserTitlesURL = '../aii-api/v1/userTitles';
     
     getData.get($scope.UserTitlesURL).success(function(data) {
         $scope.formData.UserTitles = data;
@@ -900,8 +918,8 @@ controllers.addUserController = function($scope, $http, postData, getData){
 //Controller used to handle any EDITS made to a User
 controllers.editUserController = function($scope, $http, getData, putData, persistData){
     $scope.editUser = {};
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
-    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
+    $scope.userURL = "../aii-api/v1/users/1";
+    $scope.faciltyURL = "../aii-api/v1/facilities/100";
     $scope.userLevel = persistData.getUserLevel();
     
     //Grab single User by ID
@@ -917,12 +935,12 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
     
     //Put changed User information into database
     $scope.editUserPut = function() {
-        putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
+        putData.put('../aii-api/v1/users/' + this.userData.records[0].UserID,$scope.editUser);
     };
     
     //Put changed Facility information into database
     $scope.editFacilityPut = function() {
-        putData.put('http://killzombieswith.us/aii-api/v1/facilities/' + this.userData.records[0].FacilityID,$scope.editFacility);
+        putData.put('../aii-api/v1/facilities/' + this.userData.records[0].FacilityID,$scope.editFacility);
     };
     
 }
@@ -936,10 +954,10 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
 
 
 //Controller used on messages to process API methods for Users' Messages
-controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData) {   
+controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo) {   
     
 	//User's ID (will be retrieved using session data)
-	$scope.userID = 30;
+	$scope.userID = userInfo.get().UserID;
 	//Controls the message display popup
     $scope.isPopupVisible = false;
 	//OrderBy property : true means display contents in reverse order  
@@ -952,11 +970,11 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.currentMessageType;
 	$scope.currentMessages;
 	
-    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/inbox";
-	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/sent";
-	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/drafts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/deleted";
-	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
+    $scope.inboxURL = "../aii-api/v1/users/" + $scope.userID + "/inbox";
+	$scope.sentURL = "../aii-api/v1/users/" + $scope.userID + "/sent";
+	$scope.draftsURL = "../aii-api/v1/users/" + $scope.userID + "/drafts";
+	$scope.deletedURL = "../aii-api/v1/users/" + $scope.userID + "/deleted";
+	$scope.messageURL = "../aii-api/v1/messages/";
     
     //Grab all inbox messages using patientURL 
     getData.get($scope.inboxURL).success(function(data) {
@@ -1150,7 +1168,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			//If the message is a user received message and has not already been marked as read, mark it
 			if($scope.selectedMessage.ReceiverName == 'Me' && $scope.selectedMessage.IsRead == 0)
 			{
-				messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+				messageURL = "../aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
 				//Change the message's Read attribute to true
 				$scope.selectedMessage.IsRead = 1;
 				//PUT the message using the message URL
@@ -1525,7 +1543,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	}
 	
 	$scope.deleteSelectedMessage = function(){
-		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+		messageURL = "../aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
 		//Change the message's Deleted attribute to true
 		if($scope.selectedMessage.ReceiverName == "Me"){
 			$scope.selectedMessage.ReceiverDeleted = 1;
@@ -1542,7 +1560,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	
 	//Marks the message as deleted, however the message will no longer appear in the Deleted messages.
 	$scope.fullyDeleteSelectedMessage = function(){
-		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+		messageURL = "../aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
 		//Change the message's Deleted attribute to true
 		if($scope.selectedMessage.ReceiverName == "Me"){
 			$scope.selectedMessage.ReceiverDeleted = 2;
@@ -1557,7 +1575,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	}
 	
 	$scope.restoreSelectedMessage = function(){
-		messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+		messageURL = "../aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
 		//Change the message's Deleted attribute to true
 		if($scope.selectedMessage.ReceiverName == "Me"){
 			$scope.selectedMessage.ReceiverDeleted = 0;
@@ -1581,15 +1599,15 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 //***************************************ALERT CONTROLLERS********************************************// 
  
  
-controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
-	$scope.facilityID = 105;
-	$scope.userLevelID = 1;
+	$scope.facilityID = userInfo.get().FacilityID;
+	$scope.userLevelID = userInfo.get().UserLevelID;;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/alerts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedAlerts";
+	$scope.receivedURL = "../aii-api/v1/facilities/" + $scope.facilityID + "/alerts";
+	$scope.deletedURL = "../aii-api/v1/facilities/" + $scope.facilityID + "/deletedAlerts";
 
-	$scope.alertURL = "http://killzombieswith.us/aii-api/v1/alerts/";	
+	$scope.alertURL = "../aii-api/v1/alerts/";	
 		
 	$scope.currentAlerts;
 	
@@ -1691,7 +1709,7 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	}
 	
 	$scope.deleteSelectedAlert = function(deletedState){
-		putAlertURL = "http://killzombieswith.us/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
+		putAlertURL = "../aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
 		//Change the alert's Deleted attribute to true
 		$scope.selectedAlert.IsArchived = deletedState;
 		//PUT the alert using the URL and then refresh the alerts
@@ -1866,10 +1884,10 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	$scope.careTeamID = 1010;
 	$scope.userLevelID = 1;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
+	$scope.receivedURL = "../aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
+	$scope.deletedURL = "../aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
 
-	$scope.notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+	$scope.notificationURL = "../aii-api/v1/notifications/";
 	
 	$scope.currentNotificationType = 'received';
 	
@@ -2000,7 +2018,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	}
 	
 	$scope.deleteSelectedNotification = function(deletedState){
-		notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
+		notificationURL = "../aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
 		//Change the notification's Deleted attribute to true
 		$scope.selectedNotification.IsArchived = deletedState;
 		//PUT the notification using the URL and then refresh the notifications
@@ -2206,12 +2224,12 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
-controllers.loginControl = function ($scope,$http,$window,persistData,getData){
+controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo ){
     
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    $scope.userURL = "../aii-api/v1/users/1";
     
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
@@ -2230,22 +2248,29 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData){
     $scope.devLogin = function(){
         $scope.loggedIn = true;
     };
+    
+    $scope.setUsername = function(){
+        $scope.name = userInfo.get().Name;
+        $scope.title = userInfo.get().Title;
+    }
 
     $scope.submit = function(){
 
         $http({
             method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+            url     : '../aii-api/v1/sessionLogs',
             data    : $scope.userlogin,
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(data){
-         
-            if(data.data.records == true){
-           
+            if(data.data.records.SessionID){
+                $scope.sessionID=data.data.records.SessionID;
                 persistData.setLoggedIn(true);
+                userInfo.set(data.data.records);
+                
                 $scope.loggedIn = true;
                 $window.location.href = "#/dashboard";
+                
             }
             else {
               
@@ -2254,24 +2279,25 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData){
             }
         });
     }
+    
+    $scope.logout = function() {
+        console.log("in logout function");
+        $http({
+            method  : "DELETE",
+            url     : "../aii-api/v1/sessionLogs/" + $scope.sessionID,
+            headers : { 'Content-Type': 'application/json' }
+        })
+        .then(function(response){
+            $scope.loggedIn = false;
+        });
+    }
 }
 
 controllers.logoutControl = function($scope,$http,$window){
 
     $scope.x = 0;
 
-    $scope.logout = function() {
-
-        $http({
-            method  : "DELETE",
-            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs",
-            headers : { 'Content-Type': 'application/json' }
-        })
-        .then(function(response){
-            console.log(response)
-            $scope.x+=1;
-        });
-    }
+    
 }
 
     
@@ -2290,7 +2316,7 @@ controllers.composeMessage = function($scope, $http){
     $scope.messageForm = function() {
         $http({
             method  : 'POST',
-            url     : 'http://killzombieswith.us/aii-api/v1/messages',
+            url     : '../aii-api/v1/messages',
             data    : $scope.composeObject,  // do not put param
             headers : { 'Content-Type': 'application/json' }
         })
