@@ -49,14 +49,14 @@
                     <a class="navbar-brand cp_navbar-brand" href="#/dashboard"><img src="images/hermesCI.png" style="margin-top:-4%"></a>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#/dashboard"><i class="glyphicon glyphicon-user"></i> Dr. Jed Grisel</a>
+                            <a href="#/dashboard"><i class="glyphicon glyphicon-user"></i> {{setUsername}} {{title}} {{name}}</a>
                         </li>
                         <li>
                             <a class="dropdown-toggle" role="button" data-toggle="dropdown">
                                 <span class="caret"></span></a>
                             <ul id="g-account-menu" class="dropdown-menu" role="menu">
                                 <li><a href="#/mySettings">My Settings</a></li>
-                                <li><a href="http://killzombieswith.us/cochlearProject" ng-click="loggedIn = false"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+                                <li><a href="#/" ng-click="logout()"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
                             </ul>
                         </li>
                     </ul>
