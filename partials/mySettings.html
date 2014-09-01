@@ -1,7 +1,8 @@
 <div class = "container" ng-controller="editUserController">
     <label style="font-size:2vw; color:#4B92AE">My Account Settings</label><br><br>
+    
+    <!-- Edit User Settings -->
     <div class = "row">
-
         <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
            <div class="panel panel-primary">
               <div class="panel-heading">
@@ -18,9 +19,10 @@
 
                     <form ng-submit="editUserPut()">
 
-                        <label>Current E-Mail:</label> {{userData.records[0].email}}<br>
-                        <input type="checkbox" ng-model="emailCheck">&nbsp &nbsp Edit E-mail<br><br>
+                        <label>Current E-Mail:</label> {{userData.records[0].email}} &nbsp
+                        <a href="" ng-click="emailCheck = true"><i class="fa fa-pencil-square-o"></i></a><br>
                         <div ng-show="emailCheck">
+                            <br>
                             <label>New E-Mail:</label> 
                             <input style="width: 200px" type="text" class="form-control" name="email" ng-model="editUser.email" placeholder="Enter New E-Mail">
                             <br>
@@ -28,13 +30,14 @@
                             <label ng-if="emailChanged == true">E-Mail Changed!</label>
                         </div><br>
 
-                        <label>Current Phone Number:</label> {{userData.records[0].phone}}<br>
-                        <input type="checkbox" ng-model="phoneCheck">&nbsp &nbsp Edit Phone<br><br>
+                        <label>Current Phone Number:</label> {{userData.records[0].phone}} &nbsp
+                        <a href="" ng-click="phoneCheck = true"><i class="fa fa-pencil-square-o"></i></a><br>
                         <div ng-show="phoneCheck">
-                                <label>New Phone Number:</label> 
-                                <input  type="text" style="width: 200px" class="form-control" name="phone" ng-model="editUser.phone" placeholder="Enter New Phone Number"><br>
-                                <input ng-click="phoneChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                                <label ng-if="phoneChanged == true">Phone Number Changed!</label>
+                            <br>
+                            <label>New Phone Number:</label> 
+                            <input  type="text" style="width: 200px" class="form-control" name="phone" ng-model="editUser.phone" placeholder="Enter New Phone Number"><br>
+                            <input ng-click="phoneChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
+                            <label ng-if="phoneChanged == true">Phone Number Changed!</label>
                         </div>
                         <br>
                         
@@ -54,7 +57,7 @@
         </div>
     </div>
  
-    
+    <!-- Edit Facility Settings -->
     <div ng-if="userLevel < 11" class = "row">
         <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
            <div class="panel panel-primary">
