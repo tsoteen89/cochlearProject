@@ -1,7 +1,7 @@
 //Travis Osteen
 (function(){
 var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
-                                     'aiiController','myApp.directives']);
+                                     'aiiController','myApp.directives','ngClickSelect']);
 
 
 myApp.config(function ($routeProvider) {
