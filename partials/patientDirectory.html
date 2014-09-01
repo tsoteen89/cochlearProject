@@ -22,6 +22,7 @@
         </div> <br>
     </div>
     
+    
     <div id = "cp_patientDirectory" class="container">
  <!--screw this button
          <div class="row"> 
@@ -36,13 +37,13 @@
                  ng-mouseleave="isDataCollapsed = true;" class="col-md-10" 
                  ng-repeat="patient in patientsData.records">
                <!-- PATIENT BOX ON LEFT--------------------->    
-              <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==2" ng-style="{'height': '527px'}">
+              <div class = "cp_patientInfo" ng-if="patient.CareTeams.length==2" ng-style="{'height': '500px'}">
 
                 <div id = "cp_patientContainer">
                   <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
                   <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
                   <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
-                  <p class = "cp_patientAge">Age</p>
+                  <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
                   <br>
                   <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
                   <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
@@ -62,7 +63,7 @@
                   <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
                   <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
                   <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
-                  <p class = "cp_patientAge">Age</p>
+                  <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old</p>
                   <br>
                   <p> <b> Phone: </b>({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}<br>
                   <p> <b> Email: </b><a id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a><br>
@@ -95,7 +96,7 @@
                             {{setProgress(careTeam)}}
                         </div>
                         <div class="col-md-3">
-                            <button style="margin-left:20px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)" ng-if="careTeam== patient.CareTeams[0]"> Add new event</button>
+                            <button style="margin-left:50px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)" ng-if="careTeam== patient.CareTeams[0]"> Add new event</button>
                         </div>
                     </div>
                   
@@ -235,7 +236,11 @@
                     <p> Users @ {{facCard.records[0].Name}}</p>    
                     <div class="scroll">
                         <ul class="list-unstyled">
-                            <li ng-repeat="user in facCardUsers.records"> <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a> </li>
+                            <li ng-repeat="user in facCardUsers.records"> 
+                                <div ng-class-odd="'odd'" ng-class-even="'even'">
+                                    <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
