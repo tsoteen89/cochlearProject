@@ -19,27 +19,24 @@
 
                     <form ng-submit="editUserPut()">
 
-                        <label>Current E-Mail:</label> <text ng-if="emailCheck != true">{{userData.records[0].email}}</text>
+                        <label>Current E-Mail:</label> <text ng-if="emailCheck != true">{{editUser.email}}</text>
                         <input ng-click-select type="text" ng-if="emailCheck == true" ng-model="editUser.email">&nbsp
                         <a href="" ng-click="emailCheck = true"><i class="fa fa-pencil-square-o"></i></a>&nbsp &nbsp
-                        <input ng-show="emailCheck" ng-click="emailChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                        <label ng-if="emailChanged == true">E-Mail Changed!</label><br><br>
+                        <input ng-show="emailCheck" ng-click="emailCheck = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br><br>
 
                         <hr>
 
-                        <label>Current Phone Number:</label> {{userData.records[0].phone}} &nbsp
+                        <label>Current Phone Number:</label> <text ng-if="phoneCheck != true"> {{editUser.phone}} </text> &nbsp
                         <input ng-click-select type="text" ng-if="phoneCheck == true" ng-model="editUser.phone">&nbsp
                         <a href="" ng-click="phoneCheck = true"><i class="fa fa-pencil-square-o"></i></a>&nbsp &nbsp
-                        <input ng-show="phoneCheck" ng-click="phoneChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                        <label ng-if="phoneChanged == true">Phone Number Changed!</label><br><br>
-
-                        
+                        <input ng-show="phoneCheck" ng-click="phoneCheck = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp <br><br>
+    
                         <button ng-click="changePassword = true">Change Password</button><br>
                         
                         <div ng-if="changePassword == true"><br>
                             <label>Please Enter Current Password:</label> 
-                            <input  type="text" style="width: 200px" class="form-control" name="currentPassword" ng-model="editUser.currentPassword" placeholder="Enter Current Password"><br>
-                            <input ng-if="editUser.currentPassword == userData.records[0].password"  type="text" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
+                            <input  type="password" style="width: 200px" class="form-control" name="currentPassword" ng-model="editUser.currentPassword" placeholder="Enter Current Password"><br>
+                            <input ng-if="editUser.currentPassword == userData.records[0].password"  type="password" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
                             <input ng-click="passwordChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
                             <label ng-if="passwordChanged == true">Password Changed!</label>
                         </div>
@@ -65,27 +62,24 @@
                     <hr>
                     <form ng-submit="editFacilityPut()">
 
-                        <label>Facility Address:</label> <text ng-if="facilityAddressCheck != true"> {{facilityData.records[0].Address1}} </text>
+                        <label>Facility Address:</label> <text ng-if="facilityAddressCheck != true"> {{editFacility.Address1}} </text>
                         <input ng-click-select type="text" ng-if="facilityAddressCheck == true" ng-model="editFacility.Address1">&nbsp
                         <a href="" ng-click="facilityAddressCheck = true"><i class="fa fa-pencil-square-o"></i></a>&nbsp &nbsp
-                        <input ng-show="facilityAddressCheck" ng-click="facilityAddressChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                        <label ng-if="facilityAddressChange == true">Address Changed!</label><br><br>
+                        <input ng-show="facilityAddressCheck" ng-click="facilityAddressCheck = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br><br>
 
                         <hr>
 
-                        <label>Facility Phone Number:</label> <text ng-if="facilityPhoneCheck != true"> {{facilityData.records[0].Phone}} </text>
+                        <label>Facility Phone Number:</label> <text ng-if="facilityPhoneCheck != true"> {{editFacility.Phone}} </text>
                         <input ng-click-select type="text" ng-if="facilityPhoneCheck == true" ng-model="editFacility.Phone">&nbsp
                         <a href="" ng-click="facilityPhoneCheck = true"><i class="fa fa-pencil-square-o"></i></a>&nbsp &nbsp
-                        <input ng-show="facilityPhoneCheck" ng-click="facilityPhoneChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                        <label ng-if="facilityPhoneChange == true">Phone Number Changed!</label><br><br>
+                        <input ng-show="facilityPhoneCheck" ng-click="facilityPhoneCheck = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br><br>
                         
                         <hr>
 
-                        <label>Facility Description:</label> <text ng-if="facilityDescriptionCheck != true"> {{facilityData.records[0].Description}} </text>
+                        <label>Facility Description:</label> <text ng-if="facilityDescriptionCheck != true"> {{editFacility.Description}} </text>
                         <input ng-click-select type="text" ng-if="facilityDescriptionCheck == true" ng-model="editFacility.Description">&nbsp
                         <a href="" ng-click="facilityDescriptionCheck = true"><i class="fa fa-pencil-square-o"></i></a>&nbsp &nbsp
-                        <input ng-show="facilityDescriptionCheck" ng-click="facilityDescriptionChange = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
-                        <label ng-if="facilityDescriptionChange == true">Description Changed!</label><br><br>
+                        <input ng-show="facilityDescriptionCheck" ng-click="facilityDescriptionCheck = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br><br>
                         
                         <hr>
 
