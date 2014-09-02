@@ -25,7 +25,7 @@
 	
 	<br>
 	
-	<div class="col-xs-10 button-wrapper" id="PageButtons" style="margin-bottom: 15px">
+	<div class="col-xs-10 button-wrapper" id="PageButtons" style="margin-bottom: 15px" ng-show="userLevelID <= 10">
 		<a class="btn btn-primary" ng-class="{ active:isSelectedTab('messages') }" ng-click="selectTab('messages')">Messages</a>
 		<a class="btn btn-primary" ng-class="{ active:isSelectedTab('alerts') }" ng-click="selectTab('alerts')">Alerts</a>
 		<a class="btn btn-primary" ng-class="{ active:isSelectedTab('notifications') }" ng-click="selectTab('notifications')">Notifications</a>

@@ -143,7 +143,7 @@
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer">
+                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11">
                         <br>
                       <table class="table table-hover">
                         <thead> Alerts </thead>
@@ -157,7 +157,7 @@
                         </tr>
                       </table>
                     </tab>
-                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer">
+                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11">
                         <br>
                       <table class="table table-hover">
                         <thead> Notifications </thead>
