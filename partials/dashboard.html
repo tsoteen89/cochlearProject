@@ -4,7 +4,9 @@
         
         margin-top:5px;
     }
-    
+    .bold{
+		font-weight: bold;
+	}
 </style>
 
 <div class="container" ng-controller="apiPatientsController">
@@ -130,45 +132,51 @@
                   
                   <tabset style="cursor:default">
                     <tab heading="Inbox" ng-controller="messagingController" style="cursor:pointer">
-                        <br>
                       <table class="table table-hover">
-                        <thead> Inbox </thead>
-                        <tr>
+                        <tr ng-if="inboxMessages._meta.count != 0">
                           <th>From</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="message in inboxMessages.records">
+                        <tr ng-repeat="message in inboxMessages.records" ng-class="{'bold':message.IsRead == '0'}">
                           <td>{{message.SenderName}}</td>
                           <td>{{message.ShortSubject}}</td>
                         </tr>
+						<tr ng-if="inboxMessages._meta.count == 0">
+						  <br>
+						  <td class="bold">No New Messages</td>
+						</tr>
                       </table>
                     </tab>
-                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer">
-                        <br>
+                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11">
                       <table class="table table-hover">
-                        <thead> Alerts </thead>
-                        <tr>
+                        <tr ng-if="receivedAlerts._meta.count != 0">
                           <th>Patient</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="alert in receivedAlerts.records">
+                        <tr ng-repeat="alert in receivedAlerts.records" ng-class="{'bold':alert.IsRead == '0'}">
                           <td>{{alert.ShortPatient}}</td>
 						  <td>{{alert.ShortSubject}}</td>
                         </tr>
+						<tr ng-if="receivedAlerts._meta.count == 0">
+						  <br>
+						  <td class="bold">No New Alerts</td>
+						</tr>
                       </table>
                     </tab>
-                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer">
-                        <br>
+                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11">
                       <table class="table table-hover">
-                        <thead> Notifications </thead>
-                        <tr>
+                        <tr ng-if="receivedNotifications._meta.count != 0">
                           <th>From</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="notification in receivedNotifications.records">
+                        <tr ng-repeat="notification in receivedNotifications.records" ng-class="{'bold':notification.IsRead == '0'}">
                           <td>{{notification.ShortSenderFacilityName}}</td>
 						  <td>{{notification.ShortSubject}}</td>
                         </tr>
+						<tr ng-if="receivedNotifications._meta.count == 0">
+						  <br>
+						  <td class="bold">No New Notifications</td>
+						</tr>
                       </table>
                     </tab>  
                   </tabset>
