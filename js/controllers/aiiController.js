@@ -417,6 +417,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     }
     //Display the next set of questions for a phase
     $scope.nextPage = function() {
+        for (question in this.finalQuestions) {
+            console.log(question);
+            if(this.answer.Answers[this.finalQuestions[question].QuestionID] == null){
+                this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
+            }
+        }
+        
+        $scope.postAnswers();
         $scope.limitArray.push($scope.limit);
         $scope.offSet += $scope.limit;
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=5";
