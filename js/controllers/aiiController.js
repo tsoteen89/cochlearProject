@@ -918,6 +918,7 @@ controllers.addUserController = function($scope, $http, postData, getData){
 //Controller used to handle any EDITS made to a User
 controllers.editUserController = function($scope, $http, getData, putData, persistData){
     $scope.editUser = {};
+    $scope.editFacility = {};
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
     $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
     $scope.userLevel = persistData.getUserLevel();
@@ -925,11 +926,18 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
     //Grab single User by ID
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
+    }).then(function(){
+        $scope.editUser.email = $scope.userData.records[0].email;
+        $scope.editUser.phone = $scope.userData.records[0].phone;
     });
     
     //Grab information about users Facility
     getData.get($scope.faciltyURL).success(function(data) {
         $scope.facilityData = data;
+    }).then(function(){
+        $scope.editFacility.Address1 = $scope.facilityData.records[0].Address1;
+        $scope.editFacility.Phone = $scope.facilityData.records[0].Phone;
+        $scope.editFacility.Description = $scope.facilityData.records[0].Description;
     });
     
     
