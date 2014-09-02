@@ -152,7 +152,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     
-    $scope.userLevel = persistData.getUserLevel();
+    $scope.userLevel = userInfo.get().UserLevelID;
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
@@ -958,6 +958,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
     
 	//User's ID (will be retrieved using session data)
 	$scope.userID = userInfo.get().UserID;
+	$scope.userLevelID = userInfo.get().UserLevelID;
 	//Controls the message display popup
     $scope.isPopupVisible = false;
 	//OrderBy property : true means display contents in reverse order  
@@ -1877,12 +1878,11 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 //***********************************NOTIFICATION CONTROLLERS*****************************************// 
  
  
-controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData){
+controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
 	/* User Data */
-	$scope.facilityID = 105
-	$scope.careTeamID = 1010;
-	$scope.userLevelID = 1;
+	$scope.facilityID = userInfo.get().FacilityID;
+	$scope.userLevelID = userInfo.get().UserLevelID;
 
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
