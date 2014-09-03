@@ -33,34 +33,22 @@
         -->
           <div class="row">
               <!-- patient usable within this scope-->
-            <div class="container" ng-controller="collapseCtrl" 
-                 ng-mouseleave="isDataCollapsed = true;" class="col-md-10" 
+            <div class="container cp_patientPhase col-md-10 col-md-offset-1" ng-controller="collapseCtrl" 
+                 ng-mouseleave="isDataCollapsed = true;" 
                  ng-repeat="patient in patientsData.records">
                 
                 
                 <!-- PATIENT BOX ON LEFT--------------------->
 
-                <div class = "cp_patientInfo" ng-if="patient.CareTeams.length == 1">
+                <div>
                     <patient-info></patient-info>
                 </div>  
-                                
-                <div class = "cp_patientInfo" ng-if="patient.CareTeams.length == 2" ng-style="{'height': '532px'}">
-                    <patient-info></patient-info>
-                </div>
-                
-                <div class = "cp_patientInfo" ng-if="patient.CareTeams.length == 3" ng-style="{'height': '769px'}">
-                    <patient-info></patient-info>
-                </div>
-                
-                <div class = "cp_patientInfo" ng-if="patient.CareTeams.length == 4" ng-style="{'height': '1006px'}">
-                    <patient-info></patient-info>
-                </div>
-                
+                    
                 <!-- END PATIENT BOX ON LEFT--------------------->
 
                 
                 <!-- Phase Progress BOX ON RIGHT--------------------->
-              <div class="cp_patientPhase">
+              
                 <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
                     <!-- careTeam(event) info-->
                     <div class="row">
@@ -181,7 +169,7 @@
                         Sound Processor Type: CP920 (without Accessory Port)
                     </div>
                   </div>
-              </div>
+              
                 <!-- END Phase Progress BOX ON RIGHT--------------------->
                 
             </div>
