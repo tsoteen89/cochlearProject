@@ -75,9 +75,12 @@
                                     <button ng-click="clearSurgeryHistory()">Add another surgery</button>
                                 </div>
                             </span>
-                            <p class="guidelines">
-                                <small>{{question.QuestionHelp}}</small>
+                                                        
+                            <p class="fa fa-question-circle" ng-mouseenter="help=true" ng-mouseleave="help=false">
+                                <small ng-show="help">{{question.QuestionHelp}}</small>
                             </p>
+                            
+                            
                         </div>
 
                         <!-- Divs with logic used to display or hide children questions -->
@@ -101,6 +104,8 @@
                                 {{hideChild(question.Children)}}               
                             </div>
                         </div>
+                        
+                        
 
 
                     </li>
