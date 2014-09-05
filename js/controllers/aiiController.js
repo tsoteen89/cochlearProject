@@ -338,13 +338,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
-    
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
+    //Grab all previously answered questions
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records;            
+    }).then(function(){
+        for(var answerID in $scope.patientSummaryAnswers.Answers) {
+            $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+        };
     });
     
     //Get Number of Questions contained in a phase
@@ -392,11 +397,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         });
     });
 
-    
-    //Get any previously answered questions
-    getData.get($scope.answersURL).success(function(data) {
-        $scope.answer.Answers = data.records.Answers;            
-    });
     
     //Post all answers saved 
     $scope.postAnswers = function() {

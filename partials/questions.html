@@ -19,24 +19,24 @@
 
                                 <!-- Else Display only the single Input field -->
                                 <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                        ng-model="answer.Answers[question.QuestionID].Answers" ng-blur="postAnswers()">
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID].Answers" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID].Answers" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID].Answers" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} checklist-value="values" 
-                                           checklist-model="answer.Answers[question.QuestionID].Answers" ng-blur="postAnswers()">
+                                           checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 
@@ -87,21 +87,21 @@
                         <!-- Divs with logic used to display or hide children questions -->
 
                         <div ng-if="question.Input.Type != 'Checkbox'">
-                            <div ng-if="question.Trigger == answer.Answers[question.QuestionID].Answers && question.Trigger != null">
+                            <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
                                 {{showChild(question.Children)}}
                             </div>
 
-                            <div ng-if="question.Trigger != answer.Answers[question.QuestionID].Answers || question.Trigger == null">
+                            <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
                                 {{hideChild(question.Children)}}
                             </div>
                         </div>
 
                         <div ng-if="question.Input.Type == 'Checkbox'">
-                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID].Answers)">
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
                                 {{showChild(question.Children)}}
                             </div>
 
-                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID].Answers) == false">
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
                                 {{hideChild(question.Children)}}               
                             </div>
                         </div>
