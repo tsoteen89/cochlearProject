@@ -329,7 +329,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.limitArray = new Array();
     $scope.n = 0;
     $scope.finished = false;
-    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()}
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
@@ -344,7 +344,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-        $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+        $scope.patientSummaryAnswers = data.records;            
     });
     
     //Get Number of Questions contained in a phase
@@ -564,7 +564,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-            $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+            $scope.patientSummaryAnswers = data.records;          
         });
         
         if(phaseNumber == 0)
@@ -580,7 +580,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             //jesus, realized the patient summary answers passed before was only instantiated if they checked form on right for any phase.
             getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
-                $scope.patientSummaryAnswers = data.records.DetailedAnswers;
+                $scope.patientSummaryAnswers = data.records;
             });
             $scope.ok = function () {
                 $modalInstance.close();

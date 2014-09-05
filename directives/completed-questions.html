@@ -4,7 +4,6 @@
         }
 </style>
 
-
 <table class="table table-condensed">
     <caption></caption>
     <thead>
@@ -14,9 +13,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="(question, answer) in patientSummaryAnswers">
-      <td><b>{{question}}</b></td>
-      <td>{{answer}}</td>
+    <tr ng-repeat="answer in patientSummaryAnswers.Answers">
+      <td><b>{{answer.Question}}</b></td>
+      <td>{{answer.Answers}}</td>
     </tr>
     </tbody>
 </table>
