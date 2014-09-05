@@ -329,7 +329,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.limitArray = new Array();
     $scope.n = 0;
     $scope.finished = false;
-    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()}
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
@@ -338,13 +338,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID; 
-    
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
+    //Grab all previously answered questions
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-        $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+        $scope.patientSummaryAnswers = data.records;            
+    }).then(function(){
+        for(var answerID in $scope.patientSummaryAnswers.Answers) {
+            $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+        };
     });
     
     //Get Number of Questions contained in a phase
@@ -392,11 +397,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         });
     });
 
-    
-    //Get any previously answered questions
-    getData.get($scope.answersURL).success(function(data) {
-        $scope.answer.Answers = data.records.Answers;            
-    });
     
     //Post all answers saved 
     $scope.postAnswers = function() {
@@ -572,7 +572,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
 
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-            $scope.patientSummaryAnswers = data.records.DetailedAnswers;            
+            $scope.patientSummaryAnswers = data.records;          
         });
         
         if(phaseNumber == 0)
@@ -588,7 +588,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             //jesus, realized the patient summary answers passed before was only instantiated if they checked form on right for any phase.
             getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
-                $scope.patientSummaryAnswers = data.records.DetailedAnswers;
+                $scope.patientSummaryAnswers = data.records;
             });
             $scope.ok = function () {
                 $modalInstance.close();
