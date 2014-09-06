@@ -1,6 +1,6 @@
 (function(){
 
-var myApp = angular.module('aiiController', []);
+var myApp = angular.module('aiiController', ['ui.bootstrap']);
 
 var controllers = {};
     
@@ -2400,7 +2400,11 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 
-
+controllers.PatientPhaseCollapseCtrl = function($scope) {
+  $scope.isCollapsed = false;
+}
+    
+    
 
 myApp.controller(controllers);
 
