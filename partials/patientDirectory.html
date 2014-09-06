@@ -32,7 +32,7 @@
                  ng-mouseleave="isDataCollapsed = true;" 
                  ng-repeat="patient in patientsData.records">
                 
-                
+            <div ng-controller="PatientPhaseCollapseCtrl">    
                 <!-- PATIENT BOX ON LEFT--------------------->
 
                 <div>
@@ -44,7 +44,7 @@
                 
                 <!-- Phase Progress BOX ON RIGHT--------------------->
               
-                <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams" ng-controller="PatientPhaseCollapseCtrl">
+                <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
                     <!-- careTeam(event) info-->
                     <div class="row">
                         <div class="col-md-9">
@@ -150,9 +150,12 @@
                         
                       </div>
                     
-                    <button class="btn btn-default fa fa-2x" ng-click="isCollapsed = !isCollapsed" ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}"></button>
+
                     
                 </div> <!-- End phaseProgress repeat for careTeams -->
+                
+                <!--Phase info collapse button-->
+                <button class="btn btn-info fa" ng-click="isCollapsed = !isCollapsed" ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}"></button>
 
                   <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
                   <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
@@ -175,6 +178,7 @@
               
                 <!-- END Phase Progress BOX ON RIGHT--------------------->
                 
+            </div>
             </div>
             </div>
   </div>
