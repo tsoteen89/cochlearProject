@@ -1,5 +1,6 @@
 <!-- apiPatientsController and collapseCtrl being used--------------------->
 <div ng-controller="apiPatientsController">
+        
     <a id="top"></a>
     <div class="container">
         <div class="row">
@@ -31,7 +32,7 @@
                  ng-mouseleave="isDataCollapsed = true;" 
                  ng-repeat="patient in patientsData.records">
                 
-                
+            <div ng-controller="PatientPhaseCollapseCtrl">    
                 <!-- PATIENT BOX ON LEFT--------------------->
 
                 <div>
@@ -59,7 +60,7 @@
                     </div>
                   
                     <!-- DOTS!!!-->
-                    <div class="row bs-wizard">
+                    <div class="row bs-wizard" >
                           <!--Completed Phases-->
                         <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1" ng-if="careTeam.CurrentPhaseID != 3">
                           <div class="text-center bs-wizard-stepnum">
@@ -72,7 +73,7 @@
                           
                           <a href="{{phase.CompletedPhaseHREF}}" ng-click="goToQuestions(careTeam, phase, patient)" 
                              class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center">
+                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phase.Name}}
                           </div>
                         </div>
@@ -87,7 +88,7 @@
                           </div>
                           <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
                              title={{phases[0].Name}}></a>
-                          <div class="bs-wizard-info text-center" >
+                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phases[0].Name}}
                           </div>
                         </div>
@@ -107,7 +108,7 @@
                            
                           <a href="{{phase.ActivePhaseHREF}}" 
                              ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center">
+                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phase.Name}}
                           </div>
                         </div>
@@ -126,7 +127,7 @@
                           <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}"
                           ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot" 
                              title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
-                          <div class="bs-wizard-info text-center">
+                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phases[careTeam.CurrentPhaseID-1].Name}}
                           </div>
                         </div>
@@ -141,13 +142,20 @@
                             </div>
                           </div>
                           <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center">
+                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phase.Name}}
                           </div>
                         </div>
-
+                        
+                        
                       </div>
+                    
+
+                    
                 </div> <!-- End phaseProgress repeat for careTeams -->
+                
+                <!--Phase info collapse button-->
+                <button class="btn btn-info fa" ng-click="isCollapsed = !isCollapsed" ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}"></button>
 
                   <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
                   <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
@@ -170,6 +178,7 @@
               
                 <!-- END Phase Progress BOX ON RIGHT--------------------->
                 
+            </div>
             </div>
             </div>
   </div>
