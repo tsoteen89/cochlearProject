@@ -338,7 +338,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
 
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
@@ -399,8 +398,15 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     
     //Post all answers saved 
-    $scope.postAnswers = function() {
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+    $scope.postAnswers = function(questionID) {
+        
+        $scope.singleAnswer = {};
+        $scope.singleAnswer.Answers = {};
+        $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
+        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+
     };
     
     $scope.postSurgery = function() {
@@ -415,8 +421,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         this.surgery["Type of Surgery?"] = null;
         this.surgery["Side?"] = null;
     }
+    
+    
     //Display the next set of questions for a phase
     $scope.nextPage = function() {
+        
+        
+        for (question in this.finalQuestions) {
+            console.log(question);
+            if(this.answer.Answers[this.finalQuestions[question].QuestionID] == null){
+                this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
+                $scope.postAnswers(this.finalQuestions[question].QuestionID);
+            }
+        };
+        
+        
         $scope.limitArray.push($scope.limit);
         $scope.offSet += $scope.limit;
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=5";
@@ -463,11 +482,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
-                /*
-                if($scope.finished == false){
-                    $scope.limitArray.push($scope.limit);
-                }
-                */
             });
         });
     }
@@ -528,7 +542,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
     }
     
-    
+    //Progresses the CareTeam phase to the Next Phase
     $scope.completePhase = function(){
         
         if($scope.answer.PhaseID=="1"){
@@ -554,6 +568,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
         
     }
+    
+
+    $scope.saveUnanswered = function(){
+        for (question in this.finalQuestions) {
+            console.log(question);
+            if(this.answer.Answers[this.finalQuestions[question].QuestionID] == null){
+                this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
+                $scope.postAnswers(this.finalQuestions[question].QuestionID);
+            }
+        };
+    };
     
     $scope.clickedPhase = null;
     
@@ -616,12 +641,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
-    /*
-    $scope.buildResultsURL = function(){
-        console.log("buildResults Called");
-        $scope.resultsURL = "http://killzombieswith.us/aii-api/v1/careTeams/1025/phaseAnswers/7/left/" + $scope.conditions.Left + "/right/" + $scope.conditions.Right;
-    }
-    */
     
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;

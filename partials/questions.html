@@ -31,7 +31,7 @@
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
@@ -119,14 +119,14 @@
                         
                     <a href="#/patientDirectory" >
                     <button ng-if="finished == true" class="questionsButton btn btn-primary" style="float:right" 
-                            popover="Click to save data but remain in this phase" popover-trigger="mouseenter" popover-placement="right">
+                            popover="Click to save data but remain in this phase" popover-trigger="mouseenter" popover-placement="right" ng-click="saveUnanswered()">
                         
                         Save
                         </button> &nbsp;
                         </a>
                         
                     <button ng-click="getDataSummary()" ng-if="finished == true" class="btn btn-default"
-                            popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" popover-trigger="mouseenter" style="float:right">
+                            popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
                         Finished
                     </button>
                     <br>
