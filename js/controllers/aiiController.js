@@ -342,6 +342,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     
+    
+    getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+                $scope.audioSummaryAnswers = data.records.DetailedAnswers;
+                console.log("first" + $scope.audioSummaryAnswers);
+        });
+    
+    
     //Grab all previously answered questions
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records;            
@@ -586,16 +593,30 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.patientSummary = function(phaseNumber){
         this.clickedPhase = phaseNumber;
-        $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + phaseNumber; 
+        
+        if(phaseNumber == 2 || phaseNumber > 6){
+        
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+                    $scope.patientSummaryAnswers = data.records.DetailedAnswers;
+                    console.log("first" + $scope.audioSummaryAnswers);
+            });
+        }
+        
+        if(phaseNumber == 1 || phaseNumber > 2 && phaseNumber < 7){
+            $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" + phaseNumber; 
 
-        getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-            $scope.patientSummaryAnswers = data.records;          
-        });
+            getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+                $scope.patientSummaryAnswers = data.records;          
+            });
+        }
         
         if(phaseNumber == 0)
         {
             $scope.patientSummaryAnswers = "";
         }
+        
+        
+        
     }
     
     
