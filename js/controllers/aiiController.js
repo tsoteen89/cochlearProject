@@ -864,16 +864,26 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 $timeout(function(){
                     $route.reload();
                 }, 1000);
+                $location.hash(patient.Last);
+                console.log($location.hash());
+                $timeout(function(){
+                    $anchorScroll();
+                }, 4500);
             };
+            
+            
             $scope.demoInfo=null;
             $scope.submitEvent = function(){
                 postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent);
                 getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID + '/phaseAnswers/1').success(function(data) {
                     $scope.demoInfo = data.records;
-                    console.log(data.records);
                 });//.then(postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.demoInfo));
                 this.ok();
             }
+            
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
 
         };
         
