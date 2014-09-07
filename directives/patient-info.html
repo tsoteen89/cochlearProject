@@ -1,25 +1,24 @@
-<div id = "cp_patientContainer">
+<div id = "cp_patientContainer"class="col-md-3">
+    <br>
     <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
     <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
     <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
     <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
-    <br> <br>
-    <div class="container">    
-        <div class="row">
-            <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
-        </div>
-
-        <div class="row" ng-show="show" >
-            <p>
-                <b> Phone: </b><text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
-                <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
-            <b> Email: </b><a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
-                <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
-                <b> Address:</b> <text ng-if="editPatient != true"> {{patient.Address1}} {{patient.City}}, </text>
-                <input ng-click-select type="text" ng-if="editPatient == true" ng-model=""><br>
-                <text style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</text></p>
-            <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
-        </div> 
+    <br> <br> 
+    
+    <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
+    <br>
+    <div ng-show="show" >
+        <p>
+            <b> Phone: </b><text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
+            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
+        <b> Email: </b><a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
+            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
+            <b> Address:</b> <text ng-if="editPatient != true"> {{patient.Address1}} {{patient.City}}, </text>
+            <input ng-click-select type="text" ng-if="editPatient == true" ng-model=""><br>
+            <text style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</text></p>
+        <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
+    </div> 
         
 
 
