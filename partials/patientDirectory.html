@@ -222,7 +222,7 @@
 <!-- Modal for adding event clicked -->
             <script type="text/ng-template" id="addNewEvent.html">
                 <div class="modal-header">
-                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                    <button type="button" class="close"><span ng-click="cancel()">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">
                         Add new cochlear event for <b> {{patient.First |uppercase }} {{ patient.Last |uppercase}} </b>
                     </h4>
@@ -270,6 +270,6 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="ok()">Cancel</button> 
+                    <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="cancel()">Cancel</button> 
                 </div>
             </script>
