@@ -905,22 +905,20 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     
 
 //Controller used to handle addition of new Patients to the system
-controllers.formController = function($scope, $http, postData,dateFilter) {
+controllers.patientFormController = function($scope, $http, postData,dateFilter) {
     // create a blank object to hold form information
     $scope.formData = {};
     
 
     // Post function to add a new Patient to the system
-    $scope.processForm = function() {
+    $scope.addPatient = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
     };
     
-    $scope.date = new Date();
 
 }
 
 controllers.collapseCtrl = function($scope) {
-    $scope.isPatientCollapsed = true;
     $scope.isDataCollapsed = true;
     $scope.toggleDataCollapse = function(){
         $scope.isDataCollapsed = !$scope.isDataCollapsed;  
