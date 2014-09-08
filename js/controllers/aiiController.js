@@ -10,6 +10,7 @@ var controllers = {};
 
 myApp.factory('userInfo', function(){
     
+	var SessionID;
     var UserID;
     var Username;
     var FacilityID;
@@ -18,6 +19,7 @@ myApp.factory('userInfo', function(){
     var UserLevelID;
     return{
         set:function (info) {
+			SessionID = info.SessionID;
             UserID= info.UserID;
             Username= info.Username;
             FacilityID= info.FacilityID;
@@ -27,7 +29,7 @@ myApp.factory('userInfo', function(){
             return;
         },
         get: function(){
-            return {UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
+            return {SessionID: SessionID, UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
         }
     }
 });
@@ -1016,6 +1018,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	//User's ID (will be retrieved using session data)
 	$scope.userID = userInfo.get().UserID;
 	$scope.userLevelID = userInfo.get().UserLevelID;
+	$scope.token = userInfo.get().SessionID;
 	//Controls the message display popup
     $scope.isPopupVisible = false;
 	//OrderBy property : true means display contents in reverse order  
@@ -1028,10 +1031,10 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.currentMessageType;
 	$scope.currentMessages;
 	
-    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/inbox";
-	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/sent";
-	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/drafts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.userID + "/deleted";
+    $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/inbox/" + $scope.token;
+	$scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/sent/" + $scope.token;
+	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/drafts/" + $scope.token;
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/deleted/" + $scope.token;
 	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
     
     //Grab all inbox messages using patientURL 
