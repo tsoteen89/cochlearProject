@@ -14,9 +14,10 @@
             <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
         <b> Email: </b><a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
             <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
-            <b> Address:</b> <text ng-if="editPatient != true"> {{patient.Address1}} {{patient.City}}, </text>
-            <input ng-click-select type="text" ng-if="editPatient == true" ng-model=""><br>
-            <text style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</text></p>
+            <b> Address:</b> <text ng-if="editPatient != true"> {{patient.Address1}}  {{patient.City}}, </text>
+            <text ng-if="editPatient != true" style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</text></p>
+            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Address1"> &nbsp <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.City"> &nbsp <br> 
+            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.State"> &nbsp <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Zipcode">
         <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
     </div> 
         
