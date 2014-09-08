@@ -417,6 +417,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     };
     
     $scope.postSurgery = function() {
+        $scope.answer.Answers[85] = " ";
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
     
