@@ -19,15 +19,15 @@
 
                                 <!-- Else Display only the single Input field -->
                                 <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
@@ -36,7 +36,7 @@
                                 </div>
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} checklist-value="values" 
-                                           checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers()">
+                                           checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                     <label class="choice" >{{values}}</label>
                                 </div>
                                 
@@ -73,7 +73,9 @@
                                         </div>
 
                                     </div>
-                                    <button ng-click="clearSurgeryHistory()">Add another surgery</button>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="clearSurgeryHistory()">
+                                      <span class="glyphicon glyphicon-plus-sign"></span> Add another surgery
+                                    </button>
                                 </div>
                                 <p class="fa fa-question-circle" ng-mouseenter="help=true" ng-mouseleave="help=false">
                                 <small ng-show="help">{{question.QuestionHelp}}</small>

@@ -1,20 +1,9 @@
 
-        <div ng-controller="formController">
+        <div ng-controller="patientFormController">
             
             <label style="font-size:2vw; color:#4B92AE; margin-left:8%;">New Patient</label><br><br>
             
-      <!--  <div class="col-md-9" style="width:40%">
-        <div class="panel panel-default">-->
-            
-            <!-- New Patient Header --> 
-        <!--    <div class="panel panel-default">    
-                <div class="panel-heading">
-                  <div class="panel-title">
-                    <h4>New Patient Information</h4>
-                  </div>
-                </div>
-            </div> 
-        -->
+   
 <div class="container">     
             <!-- New Patient Header --> 
             <div id="cp_newPatientForm" >
@@ -96,7 +85,7 @@
                     
 
                         <!--<input style="width: 200px" type="submit" id="submit" value="Submit" />-->
-                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">Submit</button>
+                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="addPatient()">Submit</button>
 
                       </form>
                     </div>
