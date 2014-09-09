@@ -1706,14 +1706,14 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
  
 controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
-	$scope.facilityID = userInfo.get().FacilityID;
-	$scope.userLevelID = userInfo.get().UserLevelID;;
-
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/alerts";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedAlerts";
+	$scope.userLevelID = userInfo.get().UserLevelID;
+	$scope.token = userInfo.get().SessionID;
+	
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/alerts/" + $scope.token;
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/deletedAlerts/" + $scope.token;
 
 	$scope.alertURL = "http://killzombieswith.us/aii-api/v1/alerts/";	
-		
+	
 	$scope.currentAlerts;
 	
 	/* Miscellaneous Variables */
@@ -1985,11 +1985,11 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
 	/* User Data */
-	$scope.facilityID = userInfo.get().FacilityID;
 	$scope.userLevelID = userInfo.get().UserLevelID;
+	$scope.token = userInfo.get().SessionID;
 
-	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/notifications";
-	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + "/deletedNotifications";
+	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/notifications/" + $scope.token;
+	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/deletedNotifications/" + $scope.token;
 
 	$scope.notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
 	
