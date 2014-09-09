@@ -178,7 +178,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     
     $scope.addUser= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-
+            
             $scope.ok = function () {
                 $modalInstance.close();
             };
@@ -190,6 +190,28 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         
         var modalInstance = $modal.open({
           templateUrl: 'addUser.html',
+          controller: ModalInstanceCtrl,
+          size: 'md'
+          
+         
+        });
+
+    }
+    
+    $scope.inviteNewFacility= function(){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'inviteNewFacility.html',
           controller: ModalInstanceCtrl,
           size: 'md'
           
@@ -908,15 +930,15 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             
         var ModalInstanceCtrl = function ( $modalInstance, $scope) {
             $scope.patient = patient;
-            
+            $scope.selectedFac = "(No facility selected)";
             //Grab AII Facilities 
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/").success(function(data) {
                 $scope.allFacs = data;
             });
 
             $scope.selectFac = function (fac) {
-				$scope.selectedFac = fac;
-                $scope.patientProvider = {"PatientID": patient.PatientID, "FacilityID": this.selectedFac.FacilityID};
+				$scope.selectedFac = fac.Name;
+                $scope.patientProvider = {"PatientID": patient.PatientID, "FacilityID": fac.FacilityID};
 			}
             
             
