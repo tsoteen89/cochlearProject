@@ -923,6 +923,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.addPatientProvider= function(){
                 postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
                     $modalInstance.close();
+                    $timeout(function(){
+                        $route.reload();
+                    }, 1000);
                 });  
             }
             $scope.ok = function () {
