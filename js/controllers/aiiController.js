@@ -926,6 +926,11 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                     $timeout(function(){
                         $route.reload();
                     }, 1000);
+                    $location.hash(patient.Last);
+                    console.log($location.hash());
+                    $timeout(function(){
+                        $anchorScroll();
+                    }, 2000);
                 });  
             }
             $scope.ok = function () {
