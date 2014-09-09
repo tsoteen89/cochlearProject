@@ -86,14 +86,16 @@
                             <div class="control-group col-md-4 col-md-offset-1" >
                               <label>First Name</label>
                               <div class="controls" >
-                                <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" placeholder="Enter First Name" alphabet>
+                                <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" 
+                                placeholder="Enter First Name" alphabet>
                             </div>                       
                             </div>
 
                             <div class="control-group col-md-4" >
                               <label>Last Name</label>
                               <div class="controls" >
-                                <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" placeholder="Enter Last Name" alphabet>
+                                <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" 
+                                placeholder="Enter Last Name" alphabet>
                             </div>                       
                         </div>
 
@@ -103,7 +105,8 @@
                             <div class="control-group col-md-8 col-md-offset-1" >
                               <label>Email</label>
                               <div class="controls" >
-                                <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" placeholder="Enter email of user to be invited">
+                                <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" 
+                                placeholder="Enter email of user to be invited">
                               </div>
                             </div>
                         </div><br>
@@ -213,9 +216,65 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-default btn-sm">
+                            <button type="button" class="btn btn-default btn-sm" ng-click="inviteNewFacility()">
                                 <span class="glyphicon glyphicon-plus-sign"></span> Invite New Facility
                             </button>
+                             <!-- Modal for add user -->
+                            <script type="text/ng-template" id="inviteNewFacility.html">
+                                <div class="modal-header">
+                                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Invitation new facility to the Auditory Implant Initiative </h4>
+                                </div>
+                                <div class="modal-body">
+                                    (just adding modal setup... and throwing items in there.. design unsure)
+                                    <form name="addFacForm" ng-submit="" class="form form-vertical" novalidate>
+                                        
+                                        <div class="row">
+                                            <div class="input-group custom-search-form col-md-8 col-md-offset-1">
+                                              <input type="text" class="form-control" placeholder="Search Nearby Facilities... not functional yet" typeahead="" ng-model ="selectedNewFacility">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default" type="button">
+                                                        <span class="glyphicon glyphicon-search"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div><br>
+                                             
+                                             
+                                        <div class="row">        
+                                            
+                                            <div class="control-group col-md-8 col-md-offset-1" >
+                                                <h4> OR.... Enter information... </h4>
+                                              <label>Facility Name </label>
+                                              <div class="controls" >
+                                                <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
+                                                placeholder="Enter Facility Name" alphabet>
+                                              </div>                       
+                                            </div>
+                     
+                                        </div>
+
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="control-group col-md-8 col-md-offset-1" >
+                                              <label>Email</label>
+                                              <div class="controls" >
+                                                <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
+                                                placeholder="Enter email of administrator at this facility">
+                                              </div>
+                                            </div>
+                                        </div><br>
+                                
+
+                                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">Submit</button>
+                                        <br>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" ng-click="ok()">Close</button>
+                                </div>
+                            </script>
                         </div>
                     </div>    
               </div>
