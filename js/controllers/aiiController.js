@@ -871,14 +871,15 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 console.log($location.hash());
                 $timeout(function(){
                     $anchorScroll();
-                }, 4500);
+                }, 4000);
             };
             
             
             $scope.demoInfo=null;
             $scope.submitEvent = function(){
                 postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent);
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID + '/phaseAnswers/1').success(function(data) {
+                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID
+                            + '/phaseAnswers/1').success(function(data) {
                     $scope.demoInfo = data.records;
                 });//.then(postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.demoInfo));
                 this.ok();
@@ -899,6 +900,41 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
               return patient;
             }
           }
+         
+        });                                              
+    }
+    
+    $scope.inviteToCareTeam = function(patient){
+            
+        var ModalInstanceCtrl = function ( $modalInstance, $scope) {
+            $scope.patient = patient;
+            
+            //Grab AII Facilities 
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/").success(function(data) {
+                $scope.allFacs = data;
+            });
+
+            $scope.selectFac = function (fac) {
+				$scope.selectedFac = fac;
+                $scope.patientProvider = {"PatientID": patient.PatientID, "FacilityID": this.selectedFac.FacilityID};
+			}
+            
+            
+            $scope.addPatientProvider= function(){
+                postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
+                    $modalInstance.close();
+                });  
+            }
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+        };
+        
+        var modalInstance = $modal.open({
+          templateUrl: 'inviteToCareTeam.html',
+          controller: ModalInstanceCtrl,
+          size: 'md'
          
         });                                              
     }

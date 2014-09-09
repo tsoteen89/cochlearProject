@@ -164,22 +164,55 @@
 
                   <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
                   
-
-                  <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
-                  <div id = "cp_phaseDetails" collapse="isDataCollapsed" style="border-top:solid 1px #A0BFFF">
-                      <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
-                      <a href="" ng-repeat="facility in patient.Providers" ng-click="getFacCard(facility)"> <!--patient.Providers = all facilities ever involved with patient-->
-                        <span>{{facility.Name}}</span><br>
-                      </a><br>
-                      <div style="float:left">
-                        Implant type: Cochlear Nucleus CI422 with Slim Straight Electrode<br>
-                        Sound Processor Type: CP920 (without Accessory Port)
-                    </div>
-                  </div>
-              
-                <!-- END Phase Progress BOX ON RIGHT--------------------->
                 
-            </div>
+                  <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
+                    <div class="container" collapse="isDataCollapsed" >
+                        <br> <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                              <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
+                              <a href="" ng-repeat="facility in patient.Providers" ng-click="getFacCard(facility)"> 
+                                  <!--patient.Providers = all facilities ever involved with patient-->
+                                <span>{{facility.Name}}</span><br>
+                              </a>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default btn-sm"  ng-click="inviteToCareTeam(patient)">
+                                    <span class="glyphicon glyphicon-plus-sign"></span> 
+                                    Invite Provider to CareTeam
+                                </button>
+                            </div>
+                        </div>
+                <!-- END Phase Progress BOX ON RIGHT--------------------->
+                         <script type="text/ng-template" id="inviteToCareTeam.html">
+				
+                        <div class="modal-header">
+                            <button type="button" class="close" ng-click="ok()">
+                            <span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Invite Facility to {{patient.First}} {{patient.Last}}'s CareTeam</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <p> Aii Providers </p> 
+                            <div class="scroll">
+                                <ul>
+                                    <div ng-repeat="fac in allFacs.records"> 
+                                        <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
+                                    </div>
+                                </ul>
+                            </div>
+
+                            <br>
+                            Inviting: <strong> {{selectedFac.Name}} </strong> <br>
+                            To join the care team for: {{patient.First}} {{patient.Last}}
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="addPatientProvider()">Invite Facility to Care Team</button>
+                            <button class="btn btn-primary" ng-click="ok()">Close</button>
+                        </div>
+
+                        </script>
+                    </div>
             </div>
             </div>
   </div>
@@ -273,3 +306,5 @@
                     <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="cancel()">Cancel</button> 
                 </div>
             </script>
+    
+    
