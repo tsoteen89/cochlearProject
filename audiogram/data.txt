@@ -17,7 +17,7 @@ Array
                             [t750] => false
                             [t1k] => 30
                             [t1500] => 60
-                            [t2k] => 75
+                            [t2k] => 80
                             [t3k] => 80
                             [t4k] => 85
                             [t6k] => 90-m
@@ -100,7 +100,7 @@ Array
                             [t2k] => false
                             [t3k] => false
                             [t4k] => false
-                            [t6k] => false
+                            [t6k] => 65
                             [t8k] => false
                             [t12k] => false
                         )
