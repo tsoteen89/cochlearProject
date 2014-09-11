@@ -2,10 +2,10 @@
 
 <div data-ng-controller="questionsController">    
     
-    <div class="col-md-6">
+    <div class="row">
         <label style="font-size:2vw; color:#4B92AE">{{phaseName}}</label>
         <hr>
-        <form class="form form-verticle" id="form_850359" class="appnitro">
+        <form class="form form-verticle col-md-5 col-md-offset-1" id="form_850359" class="appnitro">
             <div class="control-group" >
 
                 <!-- Display All Questions -->
@@ -141,10 +141,8 @@
 
             </div>
         </form>
-
-    </div>
-
-    <div id="cp_questionsReportForm">
+        
+        <div id="cp_questionsReportForm" class="col-md-4 col-md-offset-1">
         <h3>Patient Summary for {{patientName}}</h3><br>
         
         <div class="btn-group" dropdown is-open="status.isopen">
@@ -181,6 +179,10 @@
            <completed-audiology></completed-audiology>
         </div>
     </div>
+
+    </div><!--COL 6 div-->
+
+    
     
     <script type="text/ng-template" id="dataSummary.html">
         <div class="modal-header">
