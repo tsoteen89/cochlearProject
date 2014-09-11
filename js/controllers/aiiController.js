@@ -238,7 +238,10 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				}
             });      
 			getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ $scope.userFacilityID + '/patients').success(function(data) {
-                $scope.facCardUserFacilityPatients = data;
+                for(var i = 0; i < data.records.length; i++){
+					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
+				}
+				$scope.facCardUserFacilityPatients = data;
             }); 
 
 			$scope.displayInfo = true;
