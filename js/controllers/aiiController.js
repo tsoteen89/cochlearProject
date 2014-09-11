@@ -2492,8 +2492,9 @@ controllers.BadgeCtrl = function($scope) {
     $scope.add = function() {
         $scope.icon.count++;
     }
-    $scope.clear = function(icon) {
-        icon.count = 0;
+    $scope.clear = function() {
+        console.log("clearing badge");
+        $scope.icon.count = 0;
     }
 };
 
