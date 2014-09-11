@@ -223,7 +223,7 @@
                             <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
                                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Invitation new facility to the Auditory Implant Initiative </h4>
+                                    <h4 class="modal-title" id="myModalLabel">Invite a new facility to the Auditory Implant Initiative </h4>
                                 </div>
                                 <div class="modal-body">
                                     (just adding modal setup... and throwing items in there.. design unsure)
@@ -325,9 +325,10 @@
 						<h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records[0].Name}} to join a care team</h4>
 					</div>
 					<div class="modal-body">
-						<p> 
-							Your Facility's Patients 
-							<input class="search-patients" type="search" placeholder="Search Patients..." ng-model="searchPatients.Name">
+						<p class="form-inline"> 
+							Your Facility's Patients &nbsp;
+							<input class="form-control" style="width:40%" type="search" placeholder="Search Patients..." ng-model="searchPatients.Name"
+                                alphabet>
 						</p>    
 						<div class="scroll">
 							<ul>
@@ -406,7 +407,7 @@
 						<h4> Suggestion: </h4>
 					</div>
 					<form name="messageForm">
-						<textarea rows="10" cols="85" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required></textarea>
+						<textarea rows="10" cols="75" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required></textarea>
 					</form>
 				</div>
 				<div class="modal-footer">

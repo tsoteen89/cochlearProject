@@ -2485,7 +2485,17 @@ controllers.PatientPhaseCollapseCtrl = function($scope) {
   $scope.isCollapsed = false;
 }
     
+controllers.BadgeCtrl = function($scope) {
     
+    $scope.icon= {"count": 5};
+    
+    $scope.add = function() {
+        $scope.icon.count++;
+    }
+    $scope.clear = function(icon) {
+        icon.count = 0;
+    }
+};
 
 myApp.controller(controllers);
 

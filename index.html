@@ -19,6 +19,27 @@
         .ng-valid.ng-dirty{
             border-color: #78FA89
         }
+        /* think this needs to be compiled in less for badge to work - need less help
+        .notification-badge {
+            position: relative;
+            &[data-badge-count]:after {
+                background: #0050b1;
+                border-radius: 7px;
+                color: #fff;
+                content: attr(data-badge-count);
+                font-size: 10px;
+                font-weight: 600;
+                height: 14px;
+                line-height: 13px;
+                right: -10px;
+                padding: 0 6px;
+                position: absolute;
+                width: 12px;
+                text-align: center;
+                top: -6px;
+            }
+        }
+        */
     </style>
 <body ng-controller="loginControl" id = "cp_background-gradient"> 
     
@@ -53,8 +74,11 @@
                         <li>
                             <a href="#/dashboard"><i class="glyphicon glyphicon-user"></i> {{setUsername()}} {{title}} {{name}}</a>
                         </li>
+                        <li ng-controller="BadgeCtrl">
+                            <a href=""><i class="fa fa-comment-o 3x" notification-badge="{{icon.count}}" ng-click="clear(icon)"></i></a>
+                        </li>
                         <li>
-                            <a class="fa fa-cog" role="button" data-toggle="dropdown"></a>
+                            <a href=""class="fa fa-cog" role="button" data-toggle="dropdown"></a>
                             <ul id="g-account-menu" class="dropdown-menu" role="menu">
                                 <li><a href="#/mySettings"><i class="fa fa-wrench"></i> My Settings</a></li>
                                 <li><a href="#/" ng-click="logout()"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
