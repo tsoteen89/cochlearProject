@@ -111,3 +111,4 @@ myApp.directive('patientInfo', function() {
 		templateUrl: 'directives/patient-info.html'
 	}
 });
+
