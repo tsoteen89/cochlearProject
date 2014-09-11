@@ -15,7 +15,7 @@
                         <div ng-hide="question.IsChild">
 
                             <span id="cp_questionForm">
-                            <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
+                            <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} <hovercard hover-tmpl-url="js/hoverCardDetail.html" style="text-align:right"><p class="fa fa-question-circle fa-2x"></p></hovercard></label>
 
                                 <!-- Else Display only the single Input field -->
                                 <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
@@ -77,9 +77,10 @@
                                       <span class="glyphicon glyphicon-plus-sign"></span> Add another surgery
                                     </button>
                                 </div>
-                                <p class="fa fa-question-circle" ng-mouseenter="help=true" ng-mouseleave="help=false">
+                                <!--<p class="fa fa-question-circle" ng-mouseenter="help=true" ng-mouseleave="help=false">
                                 <small ng-show="help">{{question.QuestionHelp}}</small>
-                            </p>
+                            </p>-->
+                                
                                 
                             </span>
                                                         
