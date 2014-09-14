@@ -727,6 +727,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     
     $scope.setNewCondition = function(){
+        $scope.conditions = {};
         $scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
         $scope.answer.Results["Aided Audiogram"]["Speech Reception Threshold"] = {};
         $scope.answer.Results["Aided Audiogram"]["Speech Discrimination Score"] = {};
