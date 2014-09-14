@@ -27,6 +27,30 @@
 // Include the main TCPDF library (search for installation path).
 require_once('/var/www/tcpdf/tcpdf.php');
 
+require_once ('/usr/share/jpgraph/jpgraph.php');
+require_once ('/usr/share/jpgraph/jpgraph_pie.php');
+// Some data
+$data = array(40,21,17,14,23);
+
+// Create the Pie Graph. 
+$graph = new PieGraph(350,250);
+
+$theme_class="DefaultTheme";
+//$graph->SetTheme(new $theme_class());
+
+// Set A title for the plot
+$graph->title->Set("A Simple Pie Plot");
+$graph->SetBox(true);
+
+// Create
+$p1 = new PiePlot($data);
+$graph->Add($p1);
+
+$p1->ShowBorder();
+$p1->SetColor('black');
+$p1->SetSliceColors(array('#1E90FF','#2E8B57','#ADFF2F','#DC143C','#BA55D3'));
+$graph->Stroke("pie.png");
+
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -91,6 +115,8 @@ $html = <<<EOD
 <p>Please check the source code documentation and other examples for further information.</p>
 <p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
 EOD;
+
+$pdf->Image($graph->Stroke(), 15, 140, 75, 113, 'JPG', 'http://www.tcpdf.org', '', true, 150, '', false, false, 1, false, false, false);
 
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
