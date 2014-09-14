@@ -6,7 +6,8 @@ div.scroll{background-color:#EDF2FF;height:100px;overflow:auto}#cp_background-gr
     padding-left:2px;
 }
 #menu-toggle-tab{
-    margin-top: 15px;
+    position:fixed;
+    margin-top: -15px;
     margin-left:-20px;
     padding-top: 20px;
     width:30px;
