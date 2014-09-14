@@ -677,10 +677,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 //Controller used to handle display of Questions for a Patient's CareTeam  
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
+    $scope.rightIsEnabled= "disabled";
     $scope.conditions = {};
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
-    $scope.answerArrayIndex = 1;
+    //$scope.answerArrayIndex = 1;
     $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
@@ -699,19 +700,22 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         console.log("Submit Questions Called");
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.answer);
     }
-    
+    /*
     $scope.incAnswerArray = function(){
         $scope.answerArrayIndex += 1;
         $scope.answer[$scope.answerArrayIndex] = {};
     }
+    */
     
     $scope.updateResults = function(){
         console.log("updateResults Called");
         //$scope.buildResultsURL();
         $scope.getConditionsID();
+        /*
         getData.get($scope.resultsURL).success(function(data) {
             $scope.results = data.records;
         });
+        */
     }
     
     $scope.getConditionsID = function(){
@@ -721,6 +725,18 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         });
     }
     
+    
+    $scope.setNewCondition = function(){
+        $scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
+        $scope.answer.Results["Aided Audiogram"]["Speech Reception Threshold"] = {};
+        $scope.answer.Results["Aided Audiogram"]["Speech Discrimination Score"] = {};
+        $scope.answer.Results["AzBio"]["AzBio Test"] = {};
+        $scope.answer.Results["CNC"]["CNC Test"] = {};
+        $scope.wordswith3=0;
+        $scope.phonemes=0;
+        $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
+        $scope.answer.tests =null;
+    }
     $scope.clearCurrentTest = function(data){
         console.log("clearCurrentTest Called");
         console.log(data);
@@ -740,7 +756,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         else if(data == 'BKB-SIN'){
             $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
-        $scope.updateResults();
     }
     
     
