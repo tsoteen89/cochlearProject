@@ -1,10 +1,54 @@
 (function(){
 
-var myApp = angular.module('aiiController', ['ui.bootstrap']);
+var myApp = angular.module('aiiController', ['ui.bootstrap','ngCookies']);
 
 var controllers = {};
-    
 
+//Added by Terry for testing purposes. Can be edited or moved. If you want
+//to delete it, tell me first. Look how I actually commentedmy function! 
+//Amazing isnt it.
+/**
+ * @function cookie - 
+ *  Helper function to set, get, and delete cookies. Not sure why I copied Travis'
+ *  factory pattern. Seems like I duplicated functionality, but I'm no angular person.
+ *
+ * @param: {object} $cookies - reference to ng-cookies
+ * @returns {object} - 
+ *      @function set - set a cookie key value pair (or an array of key value pairs)
+ *      @function get - returns a value based on a key
+ *      @function remove - deletes a cookie given a cookie name
+ */
+myApp.factory('cookie', function($cookies){
+        return{
+            set:function(name,value){
+                if (typeof name === 'object'){  //If it's an object, loop through and set em all
+                    for (var key in name) {
+                        console.log(key);
+                        if (name.hasOwnProperty(key)) {
+                            $cookies[key] = name[key];
+                        }
+                    }
+                }else{
+                    $cookies[name] = value;     //Single key value, set the one.
+                }
+                return;
+            },
+            get: function(name){
+                if(!(name in $cookies))         //If it doesn't exist, return null
+                    return null;                
+                else
+                    return $cookies[name];
+            },
+            remove: function(name){             //If it doesn't exits, don't try
+                if(!(name in $cookies))         //to delete it.
+                    return null;
+                else{
+                    delete $cookies[name];
+                    return true;
+                }
+            }   
+    }
+});
 
 //************************************FACTORIES***************************************//
 
@@ -2369,12 +2413,18 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
-controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo ){
+controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo,cookie ){
     
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
     $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+    
+    //Used by Terry for testing. Will delete before production
+    var c = {};
+    c['one'] = 1;
+    cookie.set(c);
+    //end added by Terry
     
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
