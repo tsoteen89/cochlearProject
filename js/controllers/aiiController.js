@@ -2556,9 +2556,16 @@ controllers.PatientPhaseCollapseCtrl = function($scope) {
   $scope.isCollapsed = false;
 }
     
-controllers.BadgeCtrl = function($scope) {
+controllers.BadgeCtrl = function($scope, persistData, getData, userInfo) {
     
-    $scope.icon= {"count": 5};
+	$scope.token = userInfo.get().SessionID;
+	$scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.token;
+	getData.get($scope.unreadMessageURL).success(function(data) {
+		$scope.messageCount = data.records;
+		$scope.icon = {"count" : $scope.messageCount};
+	});
+	
+    $scope.icon= {"count": '~'};
     
     $scope.add = function() {
         $scope.icon.count++;
