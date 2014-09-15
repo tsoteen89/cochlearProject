@@ -268,7 +268,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
 			$scope.userFacilityID = userInfo.get().FacilityID;
-            console.log(fac.FacilityID);
+			
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
                 $scope.facCard = data;
             });
@@ -305,8 +305,24 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			$scope.selectPatient = function (patient) {
 				$scope.selectedPatient = patient;
 				$scope.hideSendInvitationButton = false;
-			}
+			};
 
+			$scope.sendInvite = function () {
+				$scope.hideSendInvitationButton = true;
+				//If a patient has been selected...
+				//if($scope.selectedPatient){				
+					//Post a Notification inviting the facility to the care team
+					$scope.postNotification = {};
+					$scope.postNotification.PatientID = $scope.selectedPatient.PatientID;
+					$scope.postNotification.SenderFacilityID = $scope.userFacilityID;
+					$scope.postNotification.ReceiverFacilityID = fac.FacilityID;
+					
+					$scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+					postData.post($scope.postNotificationURL, $scope.postNotification);
+					
+				//}
+			};
+			
             $scope.ok = function () {
                 $modalInstance.close();
             };
