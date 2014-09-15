@@ -739,7 +739,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
-    
+    $scope.residualFreqs = [125,250,500,750,1000,1500,2000];
     $scope.submitQuestions = function(category){
         console.log("Submit Questions Called");
         $scope.singleAnswer = {};
