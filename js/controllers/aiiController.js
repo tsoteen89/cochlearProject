@@ -858,7 +858,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
 //Controller used on myHome to process API methods for Patients
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
     $scope.sortPredicate ="+Name";
     $scope.show=false;
     $scope.calcAge = function(dateString) {
@@ -897,6 +897,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     //Grab all Patients using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
+    }).then(function(){
+        $scope.editPatientData = $scope.patientsData;
     });
     
 
@@ -1036,6 +1038,10 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
          
         });                                              
     }
+    
+    $scope.submitPatientInfo = function(patient){
+        putData.put('http://killzombieswih.us/aii-api/v1/patients/' + patient.PatientID,patient);
+    };
     
 
 };  

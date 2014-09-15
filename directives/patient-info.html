@@ -4,26 +4,93 @@
     <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
     <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
     <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
-    <br> <br> 
+    <br> 
+    <br> 
     
     <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" style="margin-top:3%;" > Patient Details</button>
     
-    <div ng-show="show" >
-        <br>
-        <p>
-            <b> Phone: </b><text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
-            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
-        <b> Email: </b><a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
-            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
-            <b> Address:</b> <text ng-if="editPatient != true"> {{patient.Address1}}  {{patient.City}}, </text> <br>
-            <text ng-if="editPatient != true" style="margin-left:5%">{{patient.State}} {{patient.Zipcode}}</text></p>
-            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Address1"> &nbsp <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.City"> &nbsp <br> 
-            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.State"> &nbsp <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Zipcode">
-        <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
-    </div> 
-        
+    <div ng-show="show"><br>
+        <form ng-submit="submitPatientInfo(patient)">
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Phone:</label>
+                </div>
+                <div class="col-md-8">
+                    <text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
+                    <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Email:</label> 
+                </div>
+                <div class="col-md-8">
+                    <a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
+                    <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
+                </div>
+            </div>
 
-    </div>  
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Address:</label>
+                </div>
+                <div class="col-md-9">
+                    <text ng-if="editPatient != true"> {{patient.Address1}} {{patient.City}}, </text> <br>
+                </div>
+            </div>
 
-</div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-3">
+                    <text ng-if="editPatient != true" style="margin-left:5%"> {{patient.State}} {{patient.Zipcode}} </text>
+                </div>
+            </div>
+
+            <div ng-if="editPatient == true">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Street:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Address1"> &nbsp <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>City:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.City"> &nbsp <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>State:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.State"> &nbsp <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Zip:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Zipcode">
+                    </div>
+                </div>
+                
+            </div>
+            
+            <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
+            <br>
+            <input ng-show="editPatient == true" ng-click="editPatient = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br>
+            
+        </form>
+    </div>
+</div> 
+
