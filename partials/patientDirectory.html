@@ -196,7 +196,7 @@
                             <p> Aii Providers </p> 
                             <div class="scroll">
                                 <ul>
-                                    <div ng-repeat="fac in allFacs.records"> 
+                                    <div ng-repeat="fac in allFacs.records | orderBy: sortPredicate">
                                         <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
                                     </div>
                                 </ul>
