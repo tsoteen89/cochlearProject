@@ -783,6 +783,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         $scope.answer.tests =null;
     }
+    $scope.clearType= function(category, test, field){
+        $scope.answer.Results[category][test][field] = null;
+    }
     $scope.clearCurrentTest = function(data){
         console.log("clearCurrentTest Called");
         console.log(data);
