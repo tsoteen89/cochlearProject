@@ -102,10 +102,7 @@
                           <div class="progress" >
                             <div class="progress-bar">
                             </div>
-                             <div class="progress-bar">
-                            </div>
                           </div>
-                           
                           <a href="{{phase.ActivePhaseHREF}}" 
                              ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <div class="bs-wizard-info text-center" collapse="!isCollapsed">
@@ -121,11 +118,9 @@
                           <div class="progress">
                             <div class="progress-bar">
                             </div>
-                             <div class="progress-bar">
-                            </div>
                           </div>
                           <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}"
-                          ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1])" class="bs-wizard-dot" 
+                          ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot" 
                              title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
                           <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phases[careTeam.CurrentPhaseID-1].Name}}
@@ -158,6 +153,7 @@
                   
                   <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
                     See Care Team Details 
+                      <!--anchor to identify patient-->
                       <a id="{{patientsData.records[$index+1].Last}}"></a>
                   </button>
                   
@@ -186,6 +182,8 @@
                             </div>
                         </div>
                 <!-- END Phase Progress BOX ON RIGHT--------------------->
+                        
+                    <!-- Modal to Invite facility to specific patient's care team -->
                          <script type="text/ng-template" id="inviteToCareTeam.html">
 				
                         <div class="modal-header">
@@ -214,6 +212,8 @@
                         </div>
 
                         </script>
+                        
+                     <!-- End Modal to Invite facility to specific patient's care team -->
                     </div>
             </div>
             </div>

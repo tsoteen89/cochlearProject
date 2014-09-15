@@ -740,9 +740,16 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.audioQuestions = data.records;
     });
     
-    $scope.submitQuestions = function(){
+    $scope.submitQuestions = function(category){
         console.log("Submit Questions Called");
-        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.answer);
+        $scope.singleAnswer = {};
+        $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
+        $scope.singleAnswer.CareTeamID = $scope.answer.CareTeamID
+        $scope.singleAnswer.Results = {};
+        $scope.singleAnswer.Results[category]= $scope.answer.Results[category];
+        $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
+        
+        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer);
     }
     /*
     $scope.incAnswerArray = function(){

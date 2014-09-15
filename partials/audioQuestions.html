@@ -77,7 +77,7 @@
 
                                             <input type="number" min={{type.MinValue}} max={{type.MaxValue}}
                                                    ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]"
-                                                   ng-blur="submitQuestions()" id="{{type.Label}}">
+                                                   ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
                                             <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
 
                                         </div>
@@ -115,16 +115,16 @@
 
                                     <!--SELECT TYPE TESTS-->
                                         <!-- submit results if this field is last in test-->
-                                        <div class="form-group" ng-if="type.InputType == 'Select' && tests.LastFieldNum == type.FieldNumber" 
+                                        <div class="form-group" ng-if="type.InputType == 'Select' && $last" 
                                              style="margin-bottom:20px;">
                                             <select  ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" 
-                                                    ng-blur="submitQuestions()" id="{{type.Label}}">
+                                                    ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
                                             </select>
                                             <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
                                         </div>
                                         <!-- if field ISNT last in test, dont call submitQuestions()-->
-                                         <div class="form-group" ng-if="type.InputType == 'Select' && tests.LastFieldNum != type.FieldNumber"
+                                         <div class="form-group" ng-if="type.InputType == 'Select' && !$last"
                                               style="margin-bottom:20px;">
                                             <select ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" id="{{type.Label}}">
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
