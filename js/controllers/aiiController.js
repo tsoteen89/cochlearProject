@@ -739,7 +739,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
-    
+    $scope.residualFreqs = [125,250,500,750,1000,1500,2000];
     $scope.submitQuestions = function(category){
         console.log("Submit Questions Called");
         $scope.singleAnswer = {};
@@ -751,12 +751,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer);
     }
-    /*
-    $scope.incAnswerArray = function(){
-        $scope.answerArrayIndex += 1;
-        $scope.answer[$scope.answerArrayIndex] = {};
-    }
-    */
     
     $scope.updateResults = function(){
         console.log("updateResults Called");
@@ -788,6 +782,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.phonemes=0;
         $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         $scope.answer.tests =null;
+    }
+    $scope.clearType= function(category, test, field){
+        $scope.answer.Results[category][test][field] = null;
     }
     $scope.clearCurrentTest = function(data){
         console.log("clearCurrentTest Called");
@@ -862,6 +859,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //Controller used on myHome to process API methods for Patients
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo) {   
+    $scope.sortPredicate ="+Name";
     $scope.show=false;
     $scope.calcAge = function(dateString) {
         var year=Number(dateString.substr(0,4));
@@ -1002,7 +1000,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.patient = patient;
             $scope.selectedFac = "(No facility selected)";
             //Grab AII Facilities 
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/").success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/new/" + patient.PatientID).success(function(data) {
                 $scope.allFacs = data;
             });
 

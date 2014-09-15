@@ -1,4 +1,9 @@
 <!--Audio Questions-->
+<style>
+    td {
+        min-max:30px;
+    }
+</style>
 <div data-ng-controller="audioQuestionsController" >
     <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-5">{{phaseName}}</label>
     <hr>
@@ -7,7 +12,34 @@
     <div class="row-fluid">
         
     <div class="col-md-5 col-md-offset-1 col-xs-6" style="margin-left: 5%; float:left;">
-            
+        <div class="select-audio-tests" style="margin-bottom:5px">
+            <label class="description">Residual Hearing</label>
+            <label style="font-size: 1.0vw; color:#4B92AE">Measure Residual Hearing Thresholds</label>
+            <div class="row">    
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-11">
+                    <span ng-repeat="freq in residualFreqs" style="margin-right:3%; margin-left:3.5%"> {{freq}} </span> 
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-md-1">
+                    <span> L</span>
+                </div>
+                <div class="col-md-11">
+                    <input ng-repeat="freq in residualFreqs" type="number" style="width:14%;">
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-md-1">
+                    <span> R</span>
+                </div>
+                <div class="col-md-11">
+                    <input ng-repeat="freq in residualFreqs" type="number" style="width:14%;">
+                </div>
+            </div>
+        </div>
+        
         <div class="select-audio-tests" style="margin-bottom:5px">
             <label >
                 1. Set up Ear Conditions
@@ -121,7 +153,7 @@
                                                     ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
                                             </select>
-                                            <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
+                                            <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
                                         </div>
                                         <!-- if field ISNT last in test, dont call submitQuestions()-->
                                          <div class="form-group" ng-if="type.InputType == 'Select' && !$last"
@@ -129,7 +161,9 @@
                                             <select ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" id="{{type.Label}}">
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
                                             </select>
-                                            <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
+                                            <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
+                                             <i class="fa fa-times" style="cursor:pointer"
+                                               ng-click="clearType(categories.AudioCategory,tests.AudioTestName,type.Name)"title="erase"></i>
                                         </div>
 
 

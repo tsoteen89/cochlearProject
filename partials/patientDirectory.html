@@ -192,22 +192,62 @@
                             <h4 class="modal-title" id="myModalLabel">Invite Facility to {{patient.First}} {{patient.Last}}'s CareTeam</h4>
                         </div>
                         <div class="modal-body">
-                            
-                            <p> Aii Providers </p> 
-                            <div class="scroll">
+                            <!--Non aii person-->
+                            <div style="background-color:#EDF2FF">
+                                <label> Email non-Aii member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
+                                <div class="row">        
+                                    <div class="control-group col-md-4 col-md-offset-1" >
+                                      <label>First Name</label>
+                                      <div class="controls" >
+                                        <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" 
+                                        placeholder="Enter First Name" alphabet>
+                                    </div>                       
+                                    </div>
+
+                                    <div class="control-group col-md-4" >
+                                      <label>Last Name</label>
+                                      <div class="controls" >
+                                        <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" 
+                                        placeholder="Enter Last Name" alphabet>
+                                    </div>                       
+                                </div>
+
+                                </div><br>
+
+                                <div class="row">
+                                    <div class="control-group col-md-8 col-md-offset-1" >
+                                      <label>Email</label>
+                                      <div class="controls" >
+                                        <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" 
+                                        placeholder="Enter email of person to be invited">
+                                      </div>
+                                    </div>
+                                </div><br>
+                            </div>
+                            <br> 
+                            <button class="btn btn-primary" ng-click="">Send Email</button>
+                        <!--End Non aii person-->
+                        <h4> Or </h4>
+                        <div style="background-color:#EDF2FF">
+                            <label> Notify Aii member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
+                            <ul > Aii Providers </ul> 
+                        
+                            <div class="scroll" style="border:1px solid #CDD1DB">
                                 <ul>
-                                    <div ng-repeat="fac in allFacs.records"> 
+                                    <div ng-repeat="fac in allFacs.records | orderBy: sortPredicate">
                                         <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
                                     </div>
                                 </ul>
                             </div>
-
+                        </div>
                             <br>
                             Inviting: <strong> {{selectedFac}} </strong> <br>
                             To join the care team for: <strong> {{patient.First}} {{patient.Last}} </strong>
+                            <br><br>
+                            <button class="btn btn-primary" ng-click="addPatientProvider()">Invite Facility</button>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" ng-click="addPatientProvider()">Invite Facility to Care Team</button>
+                            
                             <button class="btn btn-primary" ng-click="ok()">Close</button>
                         </div>
 
