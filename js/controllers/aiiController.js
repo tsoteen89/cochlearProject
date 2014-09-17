@@ -6,7 +6,7 @@ var controllers = {};
 
 //Added by Terry for testing purposes. Can be edited or moved. If you want
 //to delete it, tell me first. Look how I actually commentedmy function! 
-//Amazing isnt it.
+//Amazing isnt it. Not really....
 /**
  * @function cookie - 
  *  Helper function to set, get, and delete cookies. Not sure why I copied Travis'
@@ -52,6 +52,19 @@ myApp.factory('cookie', function($cookies){
 
 //************************************FACTORIES***************************************//
 
+//Added by Anne. 
+/**
+ * @function userInfo - 
+ *  Helper function that allows userInfo to persist throughout different
+ *  partials. 
+ *
+ * @param: NULL
+ * @returns function - post 
+ *      @function post - 
+ *      @param: string - URL API Call 
+ *      @param: {object} object - object to be posted to database
+        @returns {object} object - object that was posted to the database
+ */
 myApp.factory('userInfo', function(){
     
 	var SessionID;
@@ -78,7 +91,17 @@ myApp.factory('userInfo', function(){
     }
 });
               
-//Factory to dynamically GET from api
+
+//Added by Travis. 
+/**
+ * @function getData - 
+ *  Helper function that accepts a URL API call and GET's an appropriate
+ *  JSON response for that URL.
+ *
+ * @param: string $http - reference to URL API call
+ * @returns {object} - 
+ *      @function get - returns a value based on a key
+ */
 myApp.factory('getData', function($http){
     
     return {
@@ -87,8 +110,20 @@ myApp.factory('getData', function($http){
  
 });
     
-    
-//Factory to dynamically POST to api  
+
+//Added by Travis. 
+/**
+ * @function postData - 
+ *  Helper function that accepts a URL API call and POST's appropriate data
+ *  to a database corralating with the URL accepted.
+ *
+ * @param: string $http - reference to URL API call
+ * @returns function - post 
+ *      @function post - 
+ *      @param: string - URL API Call 
+ *      @param: {object} object - object to be POSTed to database
+        @returns {object} object - object that was POSTed to the database
+ */
 myApp.factory('postData', function($http){
     
     return {
@@ -105,8 +140,20 @@ myApp.factory('postData', function($http){
     }
 });
     
-
-//Factory to dynamically PUT to api  
+ 
+//Added by Travis. 
+/**
+ * @function postData - 
+ *  Helper function that accepts a URL API call and PUT's appropriate data
+ *  to a database corralating with the URL accepted.
+ *
+ * @param: string $http - reference to URL API call
+ * @returns function - put 
+ *      @function put - 
+ *      @param: string - URL API Call 
+ *      @param: {object} object - object to be PUT to database
+        @returns {object} object - object that was PUT to the database
+ */
 myApp.factory('putData', function($http){
     
     return {
@@ -124,7 +171,29 @@ myApp.factory('putData', function($http){
 });
 
 
-//Factory that uses getter and setter to keep data persistant throughout partials
+//Added by Travis. 
+/**
+ * @function persistData - 
+ *  Factory that allows data to be Set and Retrieved for persistance throughout
+ *  partials
+ *
+ * @param: NULL
+ * @returns function - 
+ *      @function setCareTeamID - set the CareTeam ID passed in.
+ *      @function setPhaseID - set the Phase ID passed in.
+ *      @function setPhaseName - set the Phase Name passed in.
+ *      @function setPatientName - set the Patiet Name passed in.
+ *      @function setLoggedIn - set the current Login Status.
+ *      @function setDirAnchor - set the Patient Directory Anchor.
+ *      @function setUserLevel - set the current User Level.
+ *      @function getPatientName - return the current Patient Name.
+ *      @function getCareTeamID - return the current CareTeam ID.
+ *      @function getPhaseID - return the current PhaseID.
+ *      @function getPhaseName - return the current Phase Name.
+ *      @function getLoggedIn - return the current Login Status.
+ *      @function getDirAnchor - return the current Patient Directory Anchor.
+ *      @function getUserLevel - return the current User Level.
+ */
 myApp.factory('persistData', function () {
     var CareTeamID;
     var PhaseID;
@@ -191,8 +260,24 @@ myApp.factory('persistData', function () {
 
 //**************************************Dashboard CONTROLLERS***************************************//
 
-    
-//Controller used to handle display of Questions for a Patient's CareTeam  
+      
+//Added by Anne. 
+/**
+ * @controller dashboardController - 
+ *      Controller used to handle display of Questions for a Patient's CareTeam 
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, persistData, getData, postData, putData, $http, $modal, userInfo
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, userInfo){
 	$scope.userFacilityID = userInfo.get().FacilityID;
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
@@ -734,7 +819,23 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     
-//Controller used to handle display of Questions for a Patient's CareTeam  
+//Added by Anne. 
+/**
+ * @controller audioQuestionsController - 
+ *      Controller used to handle display of Questions for a Patient's CareTeam 
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
     $scope.rightIsEnabled= "disabled";
@@ -872,8 +973,25 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 //**************************************PATIENT CONTROLLERS******************************************//
 
-
-//Controller used on myHome to process API methods for Patients
+    
+//Added by Anne. 
+/**
+ * @controller apiPatientsController - 
+ *      Controller used on myHome to process API methods for Patients
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo,
+ *      putData
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
     $scope.sortPredicate ="+Name";
     $scope.show=false;
@@ -1063,7 +1181,24 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
 };  
     
 
-//Controller used to handle addition of new Patients to the system
+    
+//Added by ???. 
+/**
+ * @controller patientFormController - 
+ *      Controller used to handle addition of new Patients to the system
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http, postData,dateFilter
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.patientFormController = function($scope, $http, postData,dateFilter) {
     // create a blank object to hold form information
     $scope.formData = {};
@@ -1077,6 +1212,25 @@ controllers.patientFormController = function($scope, $http, postData,dateFilter)
 
 }
 
+
+
+//Added by ???. 
+/**
+ * @controller collapseCtrl - 
+ *      DESCRIPTION OF CONTROLLER GOES HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.collapseCtrl = function($scope) {
     $scope.isDataCollapsed = true;
     $scope.toggleDataCollapse = function(){
@@ -1092,27 +1246,43 @@ controllers.collapseCtrl = function($scope) {
 //*****************************************USER CONTROLLERS**********************************************//
 
 
-//Controller used to handle addition of NEW Users to the system
+//Added by Travis. 
+/**
+ * @controller addUserController - 
+ *  Controller used to handle addition of NEW Users to the system
+ *
+ * @variables -
+ *      @formData - blank object to hold form information
+ *      @UserLevelsURL - URL to get user levels from the API
+ *      @UserTitlesURL - URL to get user titles from the API
+ *
+ * @injections - 
+ *      $scope, $http, postData, getData
+ *
+ * @functions - 
+ *      @function processForm - POSTs data contained inside form to database
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.addUserController = function($scope, $http, postData, getData){
     
     // create a blank object to hold form information
     $scope.formData = {};
+    //getting the userlevels from the api and posting it to the form
+    $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
+    $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
 
     // Post function to add a new User to the system
     $scope.processForm = function() {
         //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
         postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
     };
-        
-    //getting the userlevels from the api and posting it to the form
-    $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
-        
+    
     getData.get($scope.UserLevelsURL).success(function(data) {
         $scope.formData.UserLevels = data;
         //console.log($scope.formData.UserLevels);
     });
-    
-    $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
     
     getData.get($scope.UserTitlesURL).success(function(data) {
         $scope.formData.UserTitles = data;
@@ -1122,7 +1292,33 @@ controllers.addUserController = function($scope, $http, postData, getData){
 }
 
 
-//Controller used to handle any EDITS made to a User
+//Added by Travis. 
+/**
+ * @controller editUserController - 
+ *      Controller used to handle any EDITS made to a User
+ *
+ * @variables -
+ *      @editUser - empty object to hold any edits made to User
+ *      @editFacility - empty object to hold any edits made to Facility
+ *      @userURL - URL to get JSON object with a specific users information
+ *      @faciltyURL - URL to get JSON object with a specific facilities information
+ *      @userLevel - data member that holds Users level.
+ *
+ * @injections - 
+ *      $scope, $http, getData, putData, persistData
+ *
+ * @functions - 
+ *      @function editUserPut - PUT's data containing edits to a Users information to database
+            using the putData Factory
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function editFacilityPut - PUT's data containing edits to a Facilities information to database
+            using the putData Factory
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.editUserController = function($scope, $http, getData, putData, persistData){
     $scope.editUser = {};
     $scope.editFacility = {};
@@ -1168,7 +1364,23 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
 //*************************************MESSAGING CONTROLLERS******************************************//
 
 
-//Controller used on messages to process API methods for Users' Messages
+//Added by James. 
+/**
+ * @controller collapseCtrl - 
+ *      Controller used on messages to process API methods for Users' Messages
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo) {   
     
 	//User's ID (will be retrieved using session data)
@@ -1816,6 +2028,23 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 //***************************************ALERT CONTROLLERS********************************************// 
  
  
+//Added by James. 
+/**
+ * @controller alertsController - 
+ *      DESCRIPTION OF CONTROLLER GOES HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.alertsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
 	$scope.userLevelID = userInfo.get().UserLevelID;
