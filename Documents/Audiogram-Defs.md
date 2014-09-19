@@ -37,7 +37,8 @@ PTA = Pure Tone Average
 
 Note:
 
-- 0dB's (zero) CAN be heard and there are even instances where an individual can hear -(dB's). 
+- `0 dB's` (zero) CAN be heard and there are even instances where an individual can hear `-(dB's)`. 
 - This is why the normal scale for measurement = `-10dB <= X <= 120dB`
+- I'm assuming that there my be extreme outliers, but extremely rare since the eardrum ruptures `~150dB's`
 
 
