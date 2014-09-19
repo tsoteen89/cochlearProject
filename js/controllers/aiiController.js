@@ -6,7 +6,7 @@ var controllers = {};
 
 //Added by Terry for testing purposes. Can be edited or moved. If you want
 //to delete it, tell me first. Look how I actually commented my function! 
-//Amazing isnt it. Not really....
+//Amazing isnt it.
 /**
  * @function cookie - 
  *  Helper function to set, get, and delete cookies. Not sure why I copied Travis'
@@ -507,7 +507,76 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 //**************************************QUESTION CONTROLLERS***************************************//
 
 
-//Controller used to handle display of Questions for a Patient's CareTeam  
+//Added by Travis. 
+/**
+ * @controller dashboardController - 
+ *      Controller used to handle display of Questions for a Patient's CareTeam 
+ *
+ * @variables -
+ *      @int limit - limit of questions to be viewed for the current page
+ *      @int offset - offset of the questions to be viewed for the current page
+ *      @array limitArray - array that hold the previous limits, so that a user can visit previous question pages
+ *      @int n - variable used to loop through various for loops, no significance
+ *      @bool finished - bool to determine if all questions have been grabbed for offset of the current page
+ *      @object surgery - object that holds surgery question
+ *      @object answer - object that holds all answers for the current phase
+ *      @string phaseName - Name of current phase
+ *      @string patientName - Name of current patient
+ *      @string questionsURL - URL to grab all questions for the current phase
+ *      @string initialQuestionsURL - URL to grab only the numbe of questions needed for the first page
+ *      @string patientSummaryAnswers - object used to hold the answers previously answered for a patient
+ *      @string dirAnchor - hold the proper position of the patient in the patient directory page
+ *      @int clickedPhase - holds the current phase that has been clicked
+ *
+ * @injections - 
+ *      $scope, persistData, getData, postData, putData, $http, $modal, userInfo
+ *
+ * @functions - 
+ *      @function postAnswers - POST answers given from user to the database
+ *      @param questionID - ID of the question currently being answered
+ *      @returns - NULL
+ *
+ *      @function postSurgery - POST answer to surgery question
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function clearSurgeryHistory - Clears the surgery history object
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function nextPage - Function used to grab the next set of questions to be displayed
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function previousPage - Function used to grab previous questions displayed on previous page
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function checkboxTrigger - Function used to trigger when a checkbox is selected
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function showChild - Shows the children of a question when the trigger of that question is selected
+ *      @param data - variable that holds the current question being answered
+ *      @return - NULL
+ *
+ *      @function hideChild - Hides the children of a question if the trigger is no longer selected
+ *      @param data - variable that holds the current question being answered
+ *      @returns - NULL
+ *
+ *      @function completePhase - Progresses the CareTeam phase to the next phase
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function saveUnanswered - Saves the unanswered questions to the database as unanswered
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ *      @function patientSummary - GET's all answered questions for a patient and displays them to the screen
+ *      @param phaseNumber - The current phase clicked for viewing of answers
+ *      @returns - NULL
+ *
+ */
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location){
     
     $scope.limit = 5;
@@ -524,15 +593,16 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientName= persistData.getPatientName();
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.dirAnchor = persistData.getDirAnchor();
+    $scope.clickedPhase = null;
     
     
     getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
-                $scope.audioSummaryAnswers = data.records.DetailedAnswers;
-                console.log("first" + $scope.audioSummaryAnswers);
-        });
+            $scope.audioSummaryAnswers = data.records.DetailedAnswers;
+            console.log("first" + $scope.audioSummaryAnswers);
+    });
     
     
     //Grab all previously answered questions
@@ -544,10 +614,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         };
     });
     
+    
     //Get Number of Questions contained in a phase
     getData.get($scope.questionsURL).success(function(data) {
         $scope.numberOfQuestions = data.records.length;
     });
+    
     
     //Get all questions for a particular Phase
     getData.get($scope.initialQuestionsURL).success(function(data) {
@@ -606,8 +678,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.answer.Answers[85] = " ";
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
-    
-    $scope.dirAnchor = persistData.getDirAnchor();
+
     
     $scope.clearSurgeryHistory = function(){
         this.surgery["Date"] = null;
@@ -618,8 +689,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     //Display the next set of questions for a phase
-    $scope.nextPage = function() {
-        
+    $scope.nextPage = function(){
         
         for (question in this.finalQuestions) {
             console.log(question);
@@ -696,8 +766,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     $scope.checkboxTrigger = function(data){
-
         var other = false;
+        
         for(var i=0;i<data.length;i++){
             if(data[i] == 'Other'){
                 other = true;
@@ -773,9 +843,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             }
         };
     };
-    
-    $scope.clickedPhase = null;
-    
 
     
     $scope.patientSummary = function(phaseNumber){
@@ -801,8 +868,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         {
             $scope.patientSummaryAnswers = "";
         }
-        
-        
         
     }
     
@@ -1273,9 +1338,9 @@ controllers.collapseCtrl = function($scope) {
  *  Controller used to handle addition of NEW Users to the system
  *
  * @variables -
- *      @formData - blank object to hold form information
- *      @UserLevelsURL - URL to get user levels from the API
- *      @UserTitlesURL - URL to get user titles from the API
+ *      @object formData - blank object to hold form information
+ *      @string UserLevelsURL - URL to get user levels from the API
+ *      @string UserTitlesURL - URL to get user titles from the API
  *
  * @injections - 
  *      $scope, $http, postData, getData
@@ -1293,12 +1358,6 @@ controllers.addUserController = function($scope, $http, postData, getData){
     //getting the userlevels from the api and posting it to the form
     $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
     $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
-
-    // Post function to add a new User to the system
-    $scope.processForm = function() {
-        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
-        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
-    };
     
     getData.get($scope.UserLevelsURL).success(function(data) {
         $scope.formData.UserLevels = data;
@@ -1310,6 +1369,13 @@ controllers.addUserController = function($scope, $http, postData, getData){
         //console.log(data);
         console.log($scope.formData.UserTitles);
     });
+
+    // Post function to add a new User to the system
+    $scope.processForm = function() {
+        //postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+        postData.post('http://killzombieswith.us/aii-api/v1/users',$scope.formData);
+    };
+    
 }
 
 
@@ -1319,11 +1385,11 @@ controllers.addUserController = function($scope, $http, postData, getData){
  *      Controller used to handle any EDITS made to a User
  *
  * @variables -
- *      @editUser - empty object to hold any edits made to User
- *      @editFacility - empty object to hold any edits made to Facility
- *      @userURL - URL to get JSON object with a specific users information
- *      @faciltyURL - URL to get JSON object with a specific facilities information
- *      @userLevel - data member that holds Users level.
+ *      @object editUser - empty object to hold any edits made to User
+ *      @object editFacility - empty object to hold any edits made to Facility
+ *      @string userURL - URL to get JSON object with a specific users information
+ *      @string faciltyURL - URL to get JSON object with a specific facilities information
+ *      @int userLevel - data member that holds Users level.
  *
  * @injections - 
  *      $scope, $http, getData, putData, persistData
@@ -2344,17 +2410,31 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 //***********************************NOTIFICATION CONTROLLERS*****************************************// 
  
  
+//Added by James. 
+/**
+ * @controller notificationsController - 
+ *      DESCRIPTION OF CONTROLLER GOES HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.notificationsController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo){
 
 	/* User Data */
 	$scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.token = userInfo.get().SessionID;
-
 	$scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/notifications/" + $scope.token;
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/deletedNotifications/" + $scope.token;
-
 	$scope.notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
-	
 	$scope.currentNotificationType = 'received';
 	
 	/* Miscellaneous Variables */
@@ -2690,6 +2770,23 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
+//Added by ???. 
+/**
+ * @controller loginControl - 
+ *      DESCRIPTION OF CONTROLLER GOES HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope,$http,$window,persistData,getData, $location, userInfo,cookie
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo,cookie ){
     
     $scope.userlogin = {};
@@ -2765,13 +2862,6 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     }
 }
 
-controllers.logoutControl = function($scope,$http,$window){
-
-    $scope.x = 0;
-
-    
-}
-
     
 //**********************************END LOGIN/LOGOUT CONTROLLERS**************************************//
 
@@ -2780,7 +2870,23 @@ controllers.logoutControl = function($scope,$http,$window){
 //************************************MISCELLANEOUS CONTROLLERS***************************************//
 
 
-//Controller used to handle creation of new Messages
+//Added by James 
+/**
+ * @controller composeMessage - 
+ *      Controller used to handle creation of new Messages
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $http
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.composeMessage = function($scope, $http){
 
     $scope.composeObject = {};
@@ -2803,7 +2909,23 @@ controllers.composeMessage = function($scope, $http){
 }
 
 
-//Controller used to handle "Tabs"
+//Added by ??? 
+/**
+ * @controller TabController - 
+ *      Controller used to handle creation of new Messages
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      NULL
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.TabController = function(){
 	this.tab=-1;
 
@@ -2815,7 +2937,24 @@ controllers.TabController = function(){
 	};
 } 
 
-//EXAMPLE FOR BINDING HTML CONTROLLER
+
+//Added by Travis 
+/**
+ * @controller ngBindHtmlCtrl - 
+ *      EXAMPLE FOR BINDING HTML CONTROLLER
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, $sce
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.ngBindHtmlCtrl = function ($scope, $sce) {
   $scope.myHTML =
      'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
@@ -2824,20 +2963,55 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 
+//Added by ??? 
+/**
+ * @controller PatientPhaseCollapseCtrl - 
+ *      DESCRIPTION OF CONTROLLER HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.PatientPhaseCollapseCtrl = function($scope) {
   $scope.isCollapsed = false;
 }
     
+
+//Added by ??? 
+/**
+ * @controller BadgeCtrl - 
+ *      DESCRIPTION OF CONTROLLER HERE
+ *
+ * @variables -
+ *      @*****
+ *
+ * @injections - 
+ *      $scope, persistData, getData, userInfo
+ *
+ * @functions - 
+ *      @function **** -
+ *      @param - NULL
+ *      @returns - NULL
+ *
+ */
 controllers.BadgeCtrl = function($scope, persistData, getData, userInfo) {
     
 	$scope.token = userInfo.get().SessionID;
 	$scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.token;
-	getData.get($scope.unreadMessageURL).success(function(data) {
+    $scope.icon= {"count": '~'};
+    
+    getData.get($scope.unreadMessageURL).success(function(data) {
 		$scope.messageCount = data.records;
 		$scope.icon = {"count" : $scope.messageCount};
 	});
-	
-    $scope.icon= {"count": '~'};
     
     $scope.add = function() {
         $scope.icon.count++;
@@ -2848,6 +3022,8 @@ controllers.BadgeCtrl = function($scope, persistData, getData, userInfo) {
     }
 };
 
+
+//App used to hold all controller contained within aiiController
 myApp.controller(controllers);
 
 })();
