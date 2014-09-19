@@ -32,7 +32,7 @@ PTA = Pure Tone Average
 
 ### Bone Conduction
 
-> Bone Conduction is a measurement of hearing using vibrations through the mastoid (portion of the temporal bones). This type of hearing should not be better than Air Conduction. If it is, something is definitely wrong. 
+> Bone Conduction is a measurement of hearing using vibrations through the mastoid (portion of the temporal bones). This type of hearing should not be better than Air Conduction. If it is, something is definitely wrong.
 
 ### Normal Hearing
 
