@@ -1195,7 +1195,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     }
     
     $scope.submitPatientInfo = function(patient){
-        putData.put('http://killzombieswih.us/aii-api/v1/patients/' + patient.PatientID,patient);
+        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
     };
     
 
