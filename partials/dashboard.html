@@ -140,7 +140,7 @@
                           <th>From</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="message in inboxMessages.records" ng-class="{'bold':message.IsRead == '0'}">
+                        <tr ng-repeat="message in inboxMessages.records" style="cursor:pointer" ng-class="{'bold':message.IsRead == '0'}" ng-click="redirectToMessages()">
                           <td>{{message.SenderName}}</td>
                           <td>{{message.ShortSubject}}</td>
                         </tr>
@@ -156,7 +156,7 @@
                           <th>Patient</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="alert in receivedAlerts.records" ng-class="{'bold':alert.IsRead == '0'}">
+                        <tr ng-repeat="alert in receivedAlerts.records" style="cursor:pointer" ng-class="{'bold':alert.IsRead == '0'}" ng-click="redirectToMessages()">
                           <td>{{alert.ShortPatient}}</td>
 						  <td>{{alert.ShortSubject}}</td>
                         </tr>
@@ -172,8 +172,8 @@
                           <th>From</th>
                           <th>Subject</th>
                         </tr>
-                        <tr ng-repeat="notification in receivedNotifications.records" ng-class="{'bold':notification.IsRead == '0'}">
-                          <td>{{notification.ShortSenderFacilityName}}</td>
+                        <tr ng-repeat="notification in receivedNotifications.records" style="cursor:pointer" ng-class="{'bold':notification.IsRead == '0'}" ng-click="redirectToMessages()">
+						  <td>{{notification.ShortSenderFacilityName}}</td>
 						  <td>{{notification.ShortSubject}}</td>
                         </tr>
 						<tr ng-if="receivedNotifications._meta.count == 0">

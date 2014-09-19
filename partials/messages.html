@@ -183,7 +183,7 @@
 			</div>
 			<div class="modal-body">
 				<div><strong>Patient:</strong> {{selectedAlert.Patient}} </br></div>
-				<div><strong>Patient DOB:</strong> {{selectedAlert.PatientDOBMonth}}/{{selectedAlert.PatientDOBDay}}/{{selectedAlert.PatientDOBYear}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedAlert.PatientDOB}} </br></div>
 				<div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
@@ -253,7 +253,7 @@
 			<div class="modal-body">
 				<div><strong>From:</strong> {{selectedNotification.SenderFacilityName}} </br></div>
 				<div><strong>Patient:</strong> {{selectedNotification.Patient}} </br></div>
-				<div><strong>Patient DOB:</strong> {{selectedNotification.PatientDOBMonth}}/{{selectedNotification.PatientDOBDay}}/{{selectedNotification.PatientDOBYear}} </br></div>
+				<div><strong>Patient DOB:</strong> {{selectedNotification.PatientDOB}} </br></div>
 				<div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
 				<div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
 				</br>
