@@ -10,15 +10,20 @@
 Measure           | Right Symbol | Abbr | Left Symbol | Measured
 :----------------:|:------------:|:----:|:-----------:|:--------:
 Air Conduction    | O            |  AC  |      X      |   dB
-Bone Conduction<sup>1</sup>   | <            |  BC  |      >      |   dB
-Bone Conduction<sup>2</sup>   | [            |  BC  |      ]      |   dB
+Bone Conduction   | <            |  BC  |      >      |   dB
+Bone Conduction   | [            |  BC  |      ]      |   dB
 Most Comfortable  | M            |  MCL |      M      |   dB
 Uncomfortable     | m            |  UCL |      m      |   dB
 Sound Field       | S            |  SF  |      S      |   dB
 Sound Field Aided | A            | SF-A |      S      |   dB
 
-- 1 = Normal
-- 2 = Masked
+### Masked Symbols
+- Air Conduction 
+    -  ![1] => ![2]
+    -  X => ![3]
+- Bone Conduction
+    -  < => ] OR > => [
+-  
 
 ### Example Audiogram via Noah
 
@@ -32,7 +37,7 @@ PTA = Pure Tone Average
 
 ### Bone Conduction
 
-> Bone Conduction is a measurement of hearing using vibrations through the mastoid (portion of the temporal bones). This type of hearing should not be better than Air Conduction. If it is, something is definitely wrong. 
+> Bone Conduction is a measurement of hearing using vibrations through the mastoid (portion of the temporal bones). This type of hearing should not be better than Air Conduction. If it is, something is definitely wrong.
 
 ### Normal Hearing
 
@@ -45,4 +50,6 @@ Note:
 - This is why the normal scale for measurement = `-10dB <= X <= 120dB`
 - I'm assuming that there my be extreme outliers, but extremely rare since the eardrum ruptures `~150dB's`
 
-
+[1]: http://f.cl.ly/items/2e1y220R3c3k1H1K2146/triangle.png "Triangle"
+[2]: http://f.cl.ly/items/451w3J2s2c1r0Q0D441V/changes.9.1.14.png "Circle"
+[3]: http://f.cl.ly/items/2f0Y2g1Y411Q3y3Y0r1L/square.gif "Square"
