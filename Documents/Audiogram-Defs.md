@@ -9,3 +9,5 @@ Most Comfortable  | M            |  MCL |      M      |   dB
 Uncomfortable     | m            |  UCL |      m      |   dB
 Sound Field       | S            |  SF  |      S      |   dB
 Sound Field Aided | A            | SF-A |      S      |   dB
+
+![](http://f.cl.ly/items/0J1D0Z223j2I2D0c1d3q/audiogram.png)
