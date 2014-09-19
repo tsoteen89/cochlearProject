@@ -329,7 +329,21 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     
     $scope.inviteNewFacility= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-
+            $scope.userFacilityID = userInfo.get().FacilityID;
+            $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/" +$scope.userFacilityID + "/patients";
+            //Grab all Patients using patientURL 
+            getData.get($scope.patientURL).success(function(data) {
+                for(var i = 0; i < data.records.length; i++){
+					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
+				}
+                $scope.patientsData = data;
+            })
+            
+            $scope.selectPatient = function (patient) {
+				$scope.selectedPatient = patient;
+				$scope.hideSendInvitationButton = false;
+			};
+            
             $scope.ok = function () {
                 $modalInstance.close();
             };
@@ -1031,9 +1045,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     //Grab all Patients using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
-    }).then(function(){
-        $scope.editPatientData = $scope.patientsData;
-    });
+    })
     
 
     //Get all phase info!!
@@ -1146,8 +1158,16 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
 			}
             
             
-            $scope.addPatientProvider= function(){
-                postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
+            $scope.sendCareTeamRequest= function(){
+                //Copied james sendInvite function
+                $scope.postNotification = {};
+                $scope.postNotification.PatientID = $scope.selectedPatient.PatientID;
+                $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
+                $scope.postNotification.ReceiverFacilityID = fac.FacilityID;
+
+                $scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+                postData.post($scope.postNotificationURL, $scope.postNotification);
+                /*postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
                     $modalInstance.close();
                     $timeout(function(){
                         $route.reload();
@@ -1158,6 +1178,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                         $anchorScroll();
                     }, 2000);
                 });  
+                */
             }
             $scope.ok = function () {
                 $modalInstance.close();

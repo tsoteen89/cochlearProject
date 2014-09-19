@@ -223,53 +223,81 @@
                             <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
                                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Invite a new facility to the Auditory Implant Initiative </h4>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        Invite a Non-AII member to join AII and/or a patient's Care Team
+                                    </h4>
                                 </div>
                                 <div class="modal-body">
-                                    (just adding modal setup... and throwing items in there.. design unsure)
-                                    <form name="addFacForm" ng-submit="" class="form form-vertical" novalidate>
-                                        
-                                        <div class="row">
-                                            <div class="input-group custom-search-form col-md-8 col-md-offset-1">
-                                              <input type="text" class="form-control" placeholder="Search Nearby Facilities... not functional yet" typeahead="" ng-model ="selectedNewFacility">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="button">
-                                                        <span class="glyphicon glyphicon-search"></span>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div><br>
-                                             
-                                             
+                                    <div style="background-color:#EDF2FF">
+                                        <label>Please fill out the following information to email and invite a new facility to AII </label>
+                                        <!--Facility Name form field-->
                                         <div class="row">        
-                                            
-                                            <div class="control-group col-md-8 col-md-offset-1" >
-                                                <h4> OR.... Enter information... </h4>
+
+                                            <div class="control-group col-md-7 col-md-offset-1" >
                                               <label>Facility Name </label>
                                               <div class="controls" >
                                                 <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
                                                 placeholder="Enter Facility Name" alphabet>
                                               </div>                       
                                             </div>
-                     
+
                                         </div>
 
-                                        <br>
+                                        <!--Name of invitee form field-->
+                                        <div class="row">        
 
+                                            <div class="control-group col-md-7 col-md-offset-1" >
+                                              <label>Name of Invitee </label>
+                                              <div class="controls" >
+                                                <input type="text" class="form-control" name="invitee" ng-model="addFac.Invitee" ng-required="true" 
+                                                placeholder="Enter name of a contact person at this facility" alphabet>
+                                              </div>                       
+                                            </div>
+
+                                        </div> 
+
+                                        <!--Email of contact person form field-->
                                         <div class="row">
-                                            <div class="control-group col-md-8 col-md-offset-1" >
+                                            <div class="control-group col-md-7 col-md-offset-1" >
                                               <label>Email</label>
                                               <div class="controls" >
                                                 <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
-                                                placeholder="Enter email of administrator at this facility">
+                                                placeholder="Enter email of invitee at this facility">
                                               </div>
                                             </div>
                                         </div><br>
-                                
-
-                                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">Submit</button>
+                                    
+                                    </div> <br>
+                                    <div style="background-color:#EDF2FF">
+                                        <label>
+                                            If you would like to invite this facility to join a patient's CareTeam, please select the appropriate patient.
+                                        </label>
+                                        <div class="row">
+                                            <div class="control-group col-md-10 col-md-offset-1 form-inline" >
+                                                Your Facility's Patients &nbsp;
+                                                <input class="form-control" style="width:40%" type="search" placeholder="Search Patients..." 
+                                                    ng-model="searchPatients.Name" alphabet>
+                                            </div>
+                                        </div><br>
+                                        
+                                        <div class="scroll" style="border:1px solid #CDD1DB">
+                                            <ul>
+                                                <div ng-repeat="patient in patientsData.records 
+                                                | filter:searchPatients" for="{{patient}}"> 
+                                                    <input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> 
+                                                    {{patient.Name}} ({{patient.DOB}})
+                                                </div>
+                                            </ul>
+                                        </div>
+                                        
+						                <span ng-if="selectedPatient"> <strong> You selected {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
                                         <br>
-                                    </form>
+                                    </div> 
+                                    <br>
+                                    <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">
+                                        <i class="fa fa-envelope-o"></i> Send Email
+                                    </button>
+                                    <br>
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-primary" ng-click="ok()">Close</button>
