@@ -28,7 +28,11 @@ Sound Field Aided | A            | SF-A |      S      |   dB
 
 PTA = Pure Tone Average
 
->This is the average dB calculated using the dB's presented at the 500hz, 1Khz, and 2Khz frequencies.
+> This is the average dB calculated using the dB's presented at the 500hz, 1Khz, and 2Khz frequencies.
+
+### Bone Conduction
+
+> Bone Conduction is a measurement of hearing using vibrations through the mastoid (portion of the temporal bones). This type of hearing should not be better than Air Conduction. If it is, something is definitely wrong. 
 
 ### Normal Hearing
 
