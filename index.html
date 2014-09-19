@@ -99,6 +99,9 @@
                             <p>New Patient</p>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" data-scroll><span id="last-updated" style="margin-left:auto;margin-right:auto"></span></a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -149,7 +152,8 @@
 <script>
 $(function() {
     $.post( "scripts/last_commit.php", function( data ) {
-        $( "#last-updated" ).html("Last Pull: " + data );
+        data = data.split('@');
+        $( "#last-updated" ).html("<center>Last Pull: <br>" + data[0] + "<br>" + data[1] +"</center>" );
     });
 });
 </script>
