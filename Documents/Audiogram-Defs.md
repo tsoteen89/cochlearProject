@@ -26,4 +26,16 @@ Sound Field Aided | A            | SF-A |      S      |   dB
 
 PTA = Pure Tone Average
 
->This average is calculated using the 
+>This is the average dB calculated using the dB's presented at the 500hz, 1Khz, and 2Khz frequencies.
+
+### Normal Hearing
+
+- Assume  ___X___ is an individuals hearing.
+- Normal = `0dB <= X <= 20dB`
+
+Note:
+
+- 0dB's (zero) CAN be heard and there are even instances where an individual can hear -(dB's). 
+- This is why the normal scale for measurement = `-10dB <= X <= 120dB`
+
+
