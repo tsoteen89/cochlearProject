@@ -30,7 +30,7 @@
               <!-- patient usable within this scope-->
             <div class="container cp_patientPhase col-md-12" ng-controller="collapseCtrl" 
                  ng-mouseleave="isDataCollapsed = true;" 
-                 ng-repeat="patient in editPatientData.records">
+                 ng-repeat="patient in patientsData.records">
                 
             <div ng-controller="PatientPhaseCollapseCtrl" class="row">    
                 <!-- PATIENT BOX ON LEFT--------------------->
@@ -196,40 +196,47 @@
                             <div style="background-color:#EDF2FF">
                                 <label> Email non-Aii member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
                                 <div class="row">        
-                                    <div class="control-group col-md-4 col-md-offset-1" >
-                                      <label>First Name</label>
+
+                                    <div class="control-group col-md-7 col-md-offset-1" >
+                                      <label>Facility Name </label>
                                       <div class="controls" >
-                                        <input type="text" class="form-control" name="firstName" ng-model="addUser.first" ng-required="true" 
-                                        placeholder="Enter First Name" alphabet>
-                                    </div>                       
+                                        <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
+                                        placeholder="Enter Facility Name" alphabet>
+                                      </div>                       
                                     </div>
 
-                                    <div class="control-group col-md-4" >
-                                      <label>Last Name</label>
-                                      <div class="controls" >
-                                        <input type="text" class="form-control" name="lastName" ng-model="addUser.last" ng-required="true" 
-                                        placeholder="Enter Last Name" alphabet>
-                                    </div>                       
                                 </div>
 
-                                </div><br>
+                                <!--Name of invitee form field-->
+                                <div class="row">        
 
+                                    <div class="control-group col-md-7 col-md-offset-1" >
+                                      <label>Name of Invitee </label>
+                                      <div class="controls" >
+                                        <input type="text" class="form-control" name="invitee" ng-model="addFac.Invitee" ng-required="true" 
+                                        placeholder="Enter name of a contact person at this facility" alphabet>
+                                      </div>                       
+                                    </div>
+
+                                </div> 
+
+                                <!--Email of contact person form field-->
                                 <div class="row">
-                                    <div class="control-group col-md-8 col-md-offset-1" >
+                                    <div class="control-group col-md-7 col-md-offset-1" >
                                       <label>Email</label>
                                       <div class="controls" >
-                                        <input type="text" class="form-control" name="email" ng-model="addUser.email" ng-required="true" 
-                                        placeholder="Enter email of person to be invited">
+                                        <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
+                                        placeholder="Enter email of invitee at this facility">
                                       </div>
                                     </div>
                                 </div><br>
                             </div>
                             <br> 
-                            <button class="btn btn-primary" ng-click="">Send Email</button>
+                            <button class="btn btn-primary" ng-click=""> <i class="fa fa-envelope-o"></i>Send Email</button>
                         <!--End Non aii person-->
-                        <h4> Or </h4>
+                        <h4 style="text-align:center"> -- Or -- </h4>
                         <div style="background-color:#EDF2FF">
-                            <label> Notify Aii member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
+                            <label> Send request to an Aii member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
                             <ul > Aii Providers </ul> 
                         
                             <div class="scroll" style="border:1px solid #CDD1DB">
@@ -244,7 +251,7 @@
                             Inviting: <strong> {{selectedFac}} </strong> <br>
                             To join the care team for: <strong> {{patient.First}} {{patient.Last}} </strong>
                             <br><br>
-                            <button class="btn btn-primary" ng-click="addPatientProvider()">Invite Facility</button>
+                            <button class="btn btn-primary" ng-click="sendCareTeamRequest()">Invite Facility</button>
                         </div>
                         <div class="modal-footer">
                             
