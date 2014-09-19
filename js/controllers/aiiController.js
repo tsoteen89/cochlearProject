@@ -5,7 +5,7 @@ var myApp = angular.module('aiiController', ['ui.bootstrap','ngCookies']);
 var controllers = {};
 
 //Added by Terry for testing purposes. Can be edited or moved. If you want
-//to delete it, tell me first. Look how I actually commentedmy function! 
+//to delete it, tell me first. Look how I actually commented my function! 
 //Amazing isnt it. Not really....
 /**
  * @function cookie - 
