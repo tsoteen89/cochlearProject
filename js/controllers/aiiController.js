@@ -1418,11 +1418,15 @@ controllers.addUserController = function($scope, $http, postData, getData){
  *      @returns - NULL
  *
  */
-controllers.editUserController = function($scope, $http, getData, putData, persistData){
+controllers.editUserController = function($scope, $http, getData, putData, persistData, userInfo){
     $scope.editUser = {};
     $scope.editFacility = {};
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
-    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/100";
+	
+	$scope.sessionID = userInfo.get().SessionID;
+	$scope.facilityID = userInfo.get().FacilityID;
+	
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.sessionID;
+    $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID;
     $scope.userLevel = persistData.getUserLevel();
     
     //Grab single User by ID
@@ -2806,7 +2810,8 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/1";
+	
+	
     
     //Used by Terry for testing. Will delete before production
     var c = {};
@@ -2814,6 +2819,11 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     cookie.set(c);
     //end added by Terry
     
+	//REMOVE THIS BLOCK OF CODE
+	/*
+	$scope.sessionID = userInfo.get().SessionID;
+    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.sessionID;
+	
     getData.get($scope.userURL).success(function(data) {
         $scope.userData = data;
     }).then(function() {
@@ -2821,17 +2831,36 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     }).then(function() {
         $scope.userLevel = persistData.getUserLevel();
     });
+	*/
     
 	//Check if the user has a SessionID stored on their machine
 	var cookieSessionID = $cookieStore.get('SessionID');
 	//If SessionID is stored...
 	if(cookieSessionID){
 		//Check if this token is valid
-		var validTokenURL = "http://killzombieswith.us/aii-api/v1/users/inbox/" + cookieSessionID;
-		getData.get(validTokenURL).success(function(data) {
-			//If SessionID is valid, redirect to dashboard
+		var userTokenURL = "http://killzombieswith.us/aii-api/v1/users/" + cookieSessionID;
+		getData.get(userTokenURL).success(function(data) {
+			//If SessionID is valid:
+			//		-store user information
+			//		-redirect to dashboard
 			if(data.records != false){
 				$scope.loggedIn = true;
+				
+				//Store the user information
+				var info = {};
+				info.SessionID = cookieSessionID;
+				info.UserID = data.records.UserID;
+				info.Username = data.records.username;
+				info.FacilityID = data.records.FacilityID;
+				info.Name = data.records.UserID;
+				info.Title = data.records.Title;
+				info.UserLevelID = data.records.UserLevelID;
+				userInfo.set(info);
+				
+				//Store the user level in the persistData factory
+				persistData.setUserLevel(info.UserLevelID);
+				
+				//Redirect the user to the dashboard
 				$window.location.href = "#/dashboard";
 			}
 			//If SessionID is invalid, redirect to login page
