@@ -65,15 +65,16 @@ myApp.factory('cookie', function($cookies){
  *      @param: {object} object - object to be posted to database
         @returns {object} object - object that was posted to the database
  */
-myApp.factory('userInfo', function($cookieStore){
-    
-	var SessionID;
+myApp.factory('userInfo', function($cookieStore, $window){
+    //User Info
+	var SessionID = $cookieStore.get('SessionID');
     var UserID;
     var Username;
     var FacilityID;
     var Name;
     var Title;
     var UserLevelID;
+	
     return{
         set:function (info) {
 			//Set the persistent user info
@@ -91,7 +92,7 @@ myApp.factory('userInfo', function($cookieStore){
             return;
         },
         get: function(){
-            return {SessionID: SessionID, UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
+			return {SessionID: SessionID, UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
         }
     }
 });
@@ -2819,20 +2820,6 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     cookie.set(c);
     //end added by Terry
     
-	//REMOVE THIS BLOCK OF CODE
-	/*
-	$scope.sessionID = userInfo.get().SessionID;
-    $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/" + $scope.sessionID;
-	
-    getData.get($scope.userURL).success(function(data) {
-        $scope.userData = data;
-    }).then(function() {
-        persistData.setUserLevel($scope.userData.records[0].UserLevelID);
-    }).then(function() {
-        $scope.userLevel = persistData.getUserLevel();
-    });
-	*/
-    
 	//Check if the user has a SessionID stored on their machine
 	var cookieSessionID = $cookieStore.get('SessionID');
 	//If SessionID is stored...
@@ -2852,7 +2839,8 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				info.UserID = data.records.UserID;
 				info.Username = data.records.username;
 				info.FacilityID = data.records.FacilityID;
-				info.Name = data.records.UserID;
+				info.First = data.records.first_name;
+				info.Last = data.records.last_name;
 				info.Title = data.records.Title;
 				info.UserLevelID = data.records.UserLevelID;
 				userInfo.set(info);
@@ -2860,8 +2848,10 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				//Store the user level in the persistData factory
 				persistData.setUserLevel(info.UserLevelID);
 				
-				//Redirect the user to the dashboard
-				$window.location.href = "#/dashboard";
+				//Redirect the user to the dashboard if they were going to the login page
+				if($window.location.pathname == "#"){
+					$window.location.href = "#/dashboard";
+				}
 			}
 			//If SessionID is invalid, redirect to login page
 			else{
