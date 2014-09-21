@@ -54,16 +54,16 @@ myApp.factory('cookie', function($cookies){
 
 //Added by Anne. 
 /**
- * @function userInfo - 
- *  Helper function that allows userInfo to persist throughout different
+ * @factory userInfo - 
+ *  factory that allows userInfo to persist throughout different
  *  partials. 
  *
- * @param: NULL
- * @returns function - post 
- *      @function post - 
- *      @param: string - URL API Call 
- *      @param: {object} object - object to be posted to database
-        @returns {object} object - object that was posted to the database
+ *      @ function userInfo.set 
+ *          @param: object: currently must contain SessionID, UserID, Username, FacilityID, 
+ *                              First (firstName), Last (lastName), Title, UserLevelID
+ *          @returns: N/A
+ *      @ function userInfo.get 
+ *          @returns: object with all the info set in userInfo.set
  */
 myApp.factory('userInfo', function($cookieStore, $window){
     //User Info
@@ -267,35 +267,71 @@ myApp.factory('persistData', function () {
 //**************************************Dashboard CONTROLLERS***************************************//
 
       
-//Added by Anne. 
+//Added by Anne/James 
 /**
  * @controller dashboardController - 
  *      Controller used to handle display of Questions for a Patient's CareTeam 
  *
  * @variables -
- *      @*****
+ *      userLevel - UserLevelID that is grabbed from userInfo which is set when user logs in 
+ *      userFacilityID - userFacilityID that is grabbed from userInfo which is set when user logs in 
+ *      facilityURL - URL to get the User's facility info
+ *      baseFacilityURL - URL to get ALL FACILITY INFO
  *
  * @injections - 
  *      $scope, persistData, getData, postData, putData, $http, $modal, userInfo
  *
  * @functions - 
- *      @function **** -
- *      @param - NULL
- *      @returns - NULL
+ *       * @function addUser - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses addUser.html script in dashboard
+         *  -takes First name, Last Name and Email of a user to be invited by email (not implemented yet)
+         *      data is saved in addUser object
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl
+         *      @function ok - closes the modalInstance
+         *
+         * @function inviteNewFacility - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses inviteNewFacility.html script in dashboard
+         *  -takes Facility name, Name and Email of a new contacted to be invited by email to AII (not implemented yet)
+         *      data is saved in addFac object
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl
+         *      @function ok - closes the modalInstance
+         *      @function selectPatient - set selectedPatient variable to passed in patient
+         *          @param object: a patient object
+         * @function getFacCard - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses myModalContent.html script in dashboard
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl (@param object: fac- the facility object that was clicked
+         *      @function ok - closes the modalInstance
+         *      @function selectPatient - set selectedPatient variable to passed in patient
+         *          @param object: a patient object
+         * @function getContactCard - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses contactUs.html script in dashboard
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl (@param string: name of type of contact)
+         *      @function ok - closes the modalInstance
+         *      @function 
  *
  */
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo){
-	$scope.userFacilityID = userInfo.get().FacilityID;
+	$scope.userLevel = userInfo.get().UserLevelID;
+    $scope.userFacilityID = userInfo.get().FacilityID;
+    
+    //**********API URL's***********************/
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/";
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     
-    $scope.userLevel = userInfo.get().UserLevelID;
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
     });
     
-    //Grab AII Facilities 
+    //Grab All AII Facilities 
     getData.get($scope.baseFacilityURL).success(function(data) {
         $scope.allFacs = data;
     });
@@ -311,58 +347,82 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 		}
     });
     
-	//Redirects the user to the messages page
+	//Function that redirects the user to the messages page
 	$scope.redirectToMessages = function() {
 		$window.location.href = "#/messages";
 	}
 	
+    //Added by Anne. 
+    //***********************ADD USER MODAL IN MY FACILITY CARD****************//
+    /**
+     * @function addUser - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses addUser.html script in dashboard
+     *  -takes First name, Last Name and Email of a user to be invited by email (not implemented yet)
+     *      data is saved in addUser object
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance
+     */
     $scope.addUser= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             
+            $scope.addUser = {};
+            //****** place  future email api call here******/ 
             $scope.ok = function () {
                 $modalInstance.close();
             };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         };
         
         var modalInstance = $modal.open({
           templateUrl: 'addUser.html',
           controller: ModalInstanceCtrl,
           size: 'md'
-          
-         
         });
 
     }
+    //***********************END ADD USER MODAL IN MY FACILITY CARD****************//
     
+    //Added by Anne
+    //***********************Invite New Facility MODAL IN Aii Directory CARD****************//
+    /**
+     * @function inviteNewFacility - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses inviteNewFacility.html script in dashboard
+     *  -takes Facility name, Name and Email of a new contacted to be invited by email to AII (not implemented yet)
+     *      data is saved in addFac object
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance
+     *      @function selectPatient - set selectedPatient variable to passed in patient
+     *          @param object: a patient object
+     */
     $scope.inviteNewFacility= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             $scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
+            
             $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
             //Grab all Patients using patientURL 
             getData.get($scope.patientURL).success(function(data) {
+                //set name to concatenate first and last name so we can filter search on entire name
                 for(var i = 0; i < data.records.length; i++){
 					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
 				}
                 $scope.patientsData = data;
             })
             
+            //Set selectedPatient to the selected patient
+            //Used to show name on card right now- ****Need to implement add facility to patients provider list if the accept email request.***
             $scope.selectPatient = function (patient) {
 				$scope.selectedPatient = patient;
-				$scope.hideSendInvitationButton = false;
 			};
             
             $scope.ok = function () {
                 $modalInstance.close();
             };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         };
         
         var modalInstance = $modal.open({
@@ -374,15 +434,32 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         });
 
     }
+    //***********************END Invite New Facility MODAL IN Aii Directory CARD****************//
     
+    //Added by James/Anne
+    //***********************Get Facility Card MODAL IN Aii Directory CARD When a existing facility is clicked****************//
+    /**
+     * @function getFacCard - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses myModalContent.html script in dashboard
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl (@param object: fac- the facility object that was clicked
+     *      @function ok - closes the modalInstance
+     *      @function selectPatient - set selectedPatient variable to passed in patient
+     *          @param object: a patient object
+     */
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
 			$scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
+            
+            //get the specific facility's information
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID).success(function(data){
                 $scope.facCard = data;
             });
+            
+            //get the specific facility's users
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
                 $scope.facCardUsers = data;
 				for(i = 0; i < data.records.length; i++){
@@ -391,7 +468,9 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 						i = data.records.length;
 					}
 				}
-            });      
+            });     
+            
+            //get the all the patients for YOUR (user who's logged in) facility
 			getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID).success(function(data) {
                 for(var i = 0; i < data.records.length; i++){
 					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
@@ -409,10 +488,12 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				$scope.hideInviteButton = false;
 			}
 			
+            //Choose to show either facility card or invite facility to patient's care team
 			$scope.setDisplayInfo = function (showInfo) {
 				$scope.displayInfo = showInfo;
 			};
 			
+            //Set selectedPatient to the selected patient, and allow send invitiation button to be enabled
 			$scope.selectPatient = function (patient) {
 				$scope.selectedPatient = patient;
 				$scope.hideSendInvitationButton = false;
@@ -438,9 +519,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
                 $modalInstance.close();
             };
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         };
         
         var modalInstance = $modal.open({
@@ -455,7 +533,19 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
          
         });                                               
     }
-	
+	//***********************END Get Facility Card MODAL IN Aii Directory CARD When a existing facility is clicked****************//
+    
+    //Added by James
+    //***********************Get Contact Card MODAL IN  Contact us CARD****************//
+    /**
+     * @function getContactCard - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses contactUs.html script in dashboard
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl (@param string: name of type of contact)
+     *      @function ok - closes the modalInstance
+     *      @function 
+     */
 	$scope.getContactCard = function (contactType) {
 		
 		var ModalInstanceCtrl = function ($scope, $modalInstance, contactType, postData) {
@@ -491,10 +581,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             $scope.ok = function () {
                 $modalInstance.close();
             };
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         };
         
         var modalInstance = $modal.open({
@@ -511,6 +597,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	}
     
 };
+    
+//***********************END Get Contact Card MODAL IN  Contact us CARD****************//
     
 
     
@@ -587,6 +675,13 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
  *      @function patientSummary - GET's all answered questions for a patient and displays them to the screen
  *      @param phaseNumber - The current phase clicked for viewing of answers
  *      @returns - NULL
+         * @function getDataSummary - 
+             *  -creates a modalInstance, and opens it. 
+             *  -uses dataSummary.html script in questions.html
+             *  -shows all the answers entered for that phase
+             *
+             *  -the modalInstance uses data in ModalInstanceCtrl
+             *      @function ok - closes the modalInstance
  *
  */
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location){
@@ -596,7 +691,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.limitArray = new Array();
     $scope.n = 0;
     $scope.finished = false;
-    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
+    
     $scope.answer = {};
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
@@ -674,7 +769,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     });
 
     
-    //Post all answers saved 
+    //Post one answer and save it
+    //@param: int: questionID
     $scope.postAnswers = function(questionID) {
         
         $scope.singleAnswer = {};
@@ -686,12 +782,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     };
     
+    //Post a surgery History. 
     $scope.postSurgery = function() {
-        $scope.answer.Answers[85] = " ";
+        $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
+                                        //so upon "Next page", "Not answered" isn't saved and break the api
+        //initialize surgery object
+        //user will fill in date, other(if necessary), side, and type via ng-model
+        $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
+        
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };
 
-    
+    //Clear surgeryHistory object so user can add another history
     $scope.clearSurgeryHistory = function(){
         this.surgery["Date"] = null;
         this.surgery["Other"] = null;
@@ -699,10 +801,10 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         this.surgery["Side?"] = null;
     }
     
-    
     //Display the next set of questions for a phase
     $scope.nextPage = function(){
         
+        //If questions on the previous page lack an answer, save an answer for that question with "Not Answered" as the text
         for (question in this.finalQuestions) {
             console.log(question);
             if(this.answer.Answers[this.finalQuestions[question].QuestionID] == null){
@@ -802,8 +904,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             }
         }
     }
-    
-    
+
     //Hide a child if the Trigger has been reset
     $scope.hideChild = function(data){
         var index;
@@ -821,10 +922,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     //Progresses the CareTeam phase to the Next Phase
     $scope.completePhase = function(){
         
+        //if on phase 1, skip phase number to 3(phase2 and 3 are active at same time, handled in the phase dots in patient directory)
         if($scope.answer.PhaseID=="1"){
-            console.log("Phase 1");
             $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 2);
         }
+        //might not be used (nobody should have a current phase of 2 technically
         else if($scope.answer.PhaseID=='2'){
             $location.path('patientDirectory');
             return;
@@ -832,8 +934,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         else{
             $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
         }
+        
+        //Update Current phase number in database
         if($scope.answer.PhaseID != '2'){
-            console.log("Other Phases");
             $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
             // Post the changed currentPhaseID here
             putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
@@ -844,18 +947,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
         
     }
-    
-
-    $scope.saveUnanswered = function(){
-        for (question in this.finalQuestions) {
-            console.log(question);
-            if(this.answer.Answers[this.finalQuestions[question].QuestionID] == null){
-                this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
-                $scope.postAnswers(this.finalQuestions[question].QuestionID);
-            }
-        };
-    };
-
     
     $scope.patientSummary = function(phaseNumber){
         this.clickedPhase = phaseNumber;
@@ -884,11 +975,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     }
     
     
-    
+    //Added by ???
+    //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
+    /**
+     * @function getDataSummary - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses dataSummary.html script in questions.html
+     *  -shows all the answers entered for that phase
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance
+     */
     $scope.getDataSummary = function(){
     
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            //jesus, realized the patient summary answers passed before was only instantiated if they checked form on right for any phase.
+            
             getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
                 $scope.patientSummaryAnswers = data.records;
             });
@@ -913,41 +1014,72 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 //Added by Anne. 
 /**
  * @controller audioQuestionsController - 
- *      Controller used to handle display of Questions for a Patient's CareTeam 
+ *      Controller used to handle display of AudioQuestions for a Patient's CareTeam 
  *
  * @variables -
- *      @*****
- *
+ *      @questionsURL - url to get the category, test, and fields for audiology phases
+ *      @loggedIn - get logged in status
+ *      @phaseName - get the name of the current phase being looked looked at
+ *      @conditons - object to hold left and right ear conditions selected
+ *      @answer - object to hold all the info inputted and necessary to save results(PhaseID and CareTeamID)
+ *      @answersURL - url to get saved audiology results
+ *      @wordsWith3 - the number of words with 3 phonemes correct (used to display/50 and then calculate %
+ *      @phonemes - the number of phonemes correct (used to display/150 and then calculate %
+ *      @
  * @injections - 
  *      $scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll
  *
  * @functions - 
- *      @function **** -
- *      @param - NULL
+ *      @function submitQuestions -saves a test result 
+ *      @param - category name of the test to be saved (aided audiogram, cnc, bkb-sin, etc)
  *      @returns - NULL
+ *      @function getConditionsID -uses $scope.conditions object info to find ID of the two conditions set for the ears
+ *      @param - null 
+ *      @returns -null
+ *      @function setNewCondition - clears conditions set and any tests and results in the form so a new set up can be entereed
+ *      @param - null 
+ *      @returns -null
+ *      @function clearCurrentTest -clears ONE test (in case of aided audiogram, 3 tests), so more results can be entered under the same ear conditions
+ *      @param - category name of the tests to be cleared (aided audiogram, cnc, bkb-sin, etc)
+ *      @returns -null
+         * @function getDataSummary - 
+             *  -creates a modalInstance, and opens it. 
+             *  -uses dataSummary.html script in audioQuestions.html
+             *  -shows all the answers entered for that phase
+             *
+             *  -the modalInstance uses data in ModalInstanceCtrl
+             *      @function ok - closes the modalInstance
  *
  */
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
-    $scope.rightIsEnabled= "disabled";
-    $scope.conditions = {};
-    $scope.loggedIn = persistData.getLoggedIn();
-    $scope.phaseName= persistData.getPhaseName();
-    //$scope.answerArrayIndex = 1;
-    $scope.answer = {};
-    $scope.answer.PhaseID = persistData.getPhaseID();
-    $scope.answer.CareTeamID = persistData.getCareTeamID();
-    $scope.answer.Results = { "Aided Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}}, "AzBio" :{ "AzBio Test": {}}, "CNC": {"CNC Test": {}}, "BKB-SIN": {"BKB-SIN Test": {}}};
-
-    //$scope.results = {};
+    //Get Audiology Phase fields and test 
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
-    
-    
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
     });
-    $scope.residualFreqs = [125,250,500,750,1000,1500,2000];
+    
+    $scope.loggedIn = persistData.getLoggedIn();
+    $scope.phaseName= persistData.getPhaseName();
+    
+    //Conditions object, will hold left and right ear conditions that are set
+    $scope.conditions = {};
+    
+    $scope.answer = {};
+    $scope.answer.PhaseID = persistData.getPhaseID();
+    $scope.answer.CareTeamID = persistData.getCareTeamID();
+    
+    //Must initialize, so ng-model recognizes objects to store the fields of each test
+    $scope.answer.Results = { 
+        "Aided Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}},
+        "AzBio" :{ "AzBio Test": {}}, 
+        "CNC": {"CNC Test": {}}, 
+        "BKB-SIN": {"BKB-SIN Test": {}}};
+
+    
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    
+    //Submit a complete audio test result.
     $scope.submitQuestions = function(category){
         console.log("Submit Questions Called");
         $scope.singleAnswer = {};
@@ -960,6 +1092,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer);
     }
     
+    //was used to get previous answers at one point....
     $scope.updateResults = function(){
         console.log("updateResults Called");
         //$scope.buildResultsURL();
@@ -971,6 +1104,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         */
     }
     
+    //uses $scope.conditions object info to find ID of the two conditions set for the ears
     $scope.getConditionsID = function(){
         console.log("getConditionsID Called");
         getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
@@ -978,7 +1112,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         });
     }
     
-    
+    //clears conditions set and any tests and results in the form so a new set up can be entereed
     $scope.setNewCondition = function(){
         $scope.conditions = {};
         $scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
@@ -991,9 +1125,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         $scope.answer.tests =null;
     }
+    
+    //clears SNR field - will be removed when blank option is added for SNR
     $scope.clearType= function(category, test, field){
         $scope.answer.Results[category][test][field] = null;
     }
+    
+    //clears ONE test (or in case of aided audiogram (3 tests), so more results can be entered under the same ear conditions
     $scope.clearCurrentTest = function(data){
         console.log("clearCurrentTest Called");
         console.log(data);
@@ -1015,7 +1153,17 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         }
     }
     
-    
+    //Added by ???
+    //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
+    /**
+     * @function getDataSummary - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses dataSummary.html script in audioQuestions.html
+     *  -shows all the answers entered for that phase
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance
+     */
     $scope.getDataSummary = function(patientSummaryAnswers){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
@@ -1042,11 +1190,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         });
     }
     
-    
+    //initialize these fields
     $scope.wordswith3=0;
     $scope.phonemes=0;
     $scope.answer.Results["CNC"]["CNC Test"]["Words with 3 Phonemes Correct"] =0;
     $scope.answer.Results["CNC"]["CNC Test"]["Phonemes Correct"] =0;
+    
+    //update percentage numbers
     $scope.updateWordsWith3 = function(){
         $scope.wordswith3= parseInt(($scope.answer.Results["CNC"]["CNC Test"]["Words with 3 Phonemes Correct"]/50)*100);
     }
@@ -1071,21 +1221,61 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
  *      Controller used on myHome to process API methods for Patients
  *
  * @variables -
- *      @*****
+ *      @userFacilityID - userFacilityID grabbed from userInfo which was set at login
+ *      @sessionID - sessionID grabbed from userInfo which was set at login
+ *      @
  *
  * @injections - 
  *      $scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo,
  *      putData
  *
  * @functions - 
- *      @function **** -
- *      @param - NULL
- *      @returns - NULL
+ *      @function submitPatientInfo - edit patients address, contact info 
+ *      @param - patient object thats being editited
+ *      @returns - null
+ *      @function calAge - calculate age form a date of birth
+ *      @param - dateString
+ *      @returns - age number
+ *      @function goToPatDir - reroute to patientDirectory partial and scroll to the patient that was selected (used in dashboard search)
+ *      @param - string of patients last name
+ *      @returns - null
+ *      @function scrollTo - scroll to patient in patientDirectory partial
+ *      @param - string of patients last name
+ *      @returns - null
+     * @function getFacCard - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses myModalContent.html script in patient directory 
+         *  -shows fac card for the clicked provider
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl
+         *      @function ok - closes the modalInstance
+     * @function addNewEvent - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses addNewEvent.html script in patient directory 
+         *  -takes description info, patient info, and date to create a new event
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl
+         *      @function ok - closes the modalInstance and reroutes/scrolls back to patient in patient directory 
+         *      @submitEvent - uses newEvent object to create a new event("aka a careTeam in the db")
+        * @function inviteToCareTeam - 
+         *  -creates a modalInstance, and opens it. 
+         *  -uses inviteToCareTeam.html script in patient directory 
+         *  -shows all the facilities not involved with specifc patient and then allows an invite to be sent to selected facility.
+         *  -***** will need to implement email non aii member****
+         *
+         *  -the modalInstance uses data in ModalInstanceCtrl
+         *      @function ok - closes the modalInstance and reroutes/scrolls back to patient in patient directory 
+         *      @sendCareTeamRequest - send an invite to selected facility to join patients careteam
  *
  */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
-    $scope.sortPredicate ="+Name";
-    $scope.show=false;
+    $scope.userFacilityID = userInfo.get().FacilityID;
+	$scope.sessionID = userInfo.get().SessionID;
+    
+    $scope.submitPatientInfo = function(patient){
+        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
+    };
+    
     $scope.calcAge = function(dateString) {
         var year=Number(dateString.substr(0,4));
         var month=Number(dateString.substr(4,2))-1;
@@ -1095,7 +1285,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         if(today.getMonth()<month || (today.getMonth()==month && today.getDate()<day)){age--;}
         return age;
     }
-    $scope.selectedPatient = undefined;
     
     $scope.goToPatDir = function(last){
         $location.path('/patientDirectory/');
@@ -1113,24 +1302,20 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     };
     
     
-    $scope.patients = {};
-    $scope.selected={};
-    $scope.list=[];
-    $scope.userFacilityID = userInfo.get().FacilityID;
-	$scope.sessionID = userInfo.get().SessionID;
     
     $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
-    //Grab all Patients using patientURL 
+    //Grab all Patients for users facility using patientURL 
     getData.get($scope.patientURL).success(function(data) {
         $scope.patientsData = data;
     })
     
 
-    //Get all phase info!!
+    //Get all the phases info!!
     getData.get("http://killzombieswith.us/aii-api/v1/phases").success(function(data) {
         $scope.phases = data.records;
     });
     
+    //Set persistData so CareTeamID, PhaseID, phasename, patient name and anchor location in patient Directory are known in different partials.
     $scope.goToQuestions = function(careTeam, phase, patient){
         
         persistData.setCareTeamID(careTeam.CareTeamID);
@@ -1140,6 +1325,17 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setDirAnchor(patient.Last);
     };
     
+    //Added by Anne
+    //***********************Get Fac card MODAL IN  Patient directory in see care team details when you click on a patients provider****************//
+    /**
+     * @function getFacCard - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses myModalContent.html script in patient directory 
+     *  -shows fac card for the clicked provider
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance
+     */
     $scope.getFacCard = function(fac){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, fac) {
@@ -1171,6 +1367,18 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         });                                              
     }
     
+    //Added by Anne
+    //***********************Add new event MODAL IN  Patient directory when you click on a add new event****************//
+    /**
+     * @function addNewEvent - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses addNewEvent.html script in patient directory 
+     *  -takes description info, patient info, and date to create a new event
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance and reroutes/scrolls back to patient in patient directory 
+     *      @submitEvent - uses newEvent object to create a new event("aka a careTeam in the db")
+     */
     $scope.addNewEvent = function(patient){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, patient) {
@@ -1220,9 +1428,24 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         });                                              
     }
     
+    //**** invite hasn't been tested*****
+    //Added by Anne
+    //***********************Invite new facility to care team MODAL IN  Patient directory when you click on see care team details****************//
+    /**
+     * @function inviteToCareTeam - 
+     *  -creates a modalInstance, and opens it. 
+     *  -uses inviteToCareTeam.html script in patient directory 
+     *  -shows all the facilities not involved with specifc patient and then allows an invite to be sent to selected facility.
+     *  -***** will need to implement email non aii member****
+     *
+     *  -the modalInstance uses data in ModalInstanceCtrl
+     *      @function ok - closes the modalInstance and reroutes/scrolls back to patient in patient directory 
+     *      @sendCareTeamRequest - send an invite to selected facility to join patients careteam
+     */
     $scope.inviteToCareTeam = function(patient){
             
         var ModalInstanceCtrl = function ( $modalInstance, $scope) {
+            $scope.userFacilityID = userInfo.get().FacilityID;
             $scope.patient = patient;
             $scope.selectedFac = "(No facility selected)";
             //Grab AII Facilities 
@@ -1239,9 +1462,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.sendCareTeamRequest= function(){
                 //Copied james sendInvite function
                 $scope.postNotification = {};
-                $scope.postNotification.PatientID = $scope.selectedPatient.PatientID;
+                $scope.postNotification.PatientID = patient.PatientID;
                 $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
-                $scope.postNotification.ReceiverFacilityID = fac.FacilityID;
+                $scope.postNotification.ReceiverFacilityID = $scope.selectedFac.FacilityID;
 
                 $scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
                 postData.post($scope.postNotificationURL, $scope.postNotification);
@@ -1272,15 +1495,13 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         });                                              
     }
     
-    $scope.submitPatientInfo = function(patient){
-        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
-    };
+    
     
 
 };  
     
 
-    
+//Probably hella old.... needs work
 //Added by ???. 
 /**
  * @controller patientFormController - 
@@ -1313,10 +1534,11 @@ controllers.patientFormController = function($scope, $http, postData,dateFilter)
 
 
 
-//Added by ???. 
+//Added by Anne 
+//I think needed to be in own controller cuz wouldnt work any other way for some reason. not sure now...
 /**
  * @controller collapseCtrl - 
- *      DESCRIPTION OF CONTROLLER GOES HERE
+ *      Controls open and closing of see care team details well in patient directory
  *
  * @variables -
  *      @*****
@@ -2789,7 +3011,7 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
     
 
-//Added by ???. 
+//Added by James/Mando/Anne 
 /**
  * @controller loginControl - 
  *      DESCRIPTION OF CONTROLLER GOES HERE
@@ -2970,37 +3192,6 @@ controllers.composeMessage = function($scope, $http){
     }
 }
 
-
-//Added by ??? 
-/**
- * @controller TabController - 
- *      Controller used to handle creation of new Messages
- *
- * @variables -
- *      @*****
- *
- * @injections - 
- *      NULL
- *
- * @functions - 
- *      @function **** -
- *      @param - NULL
- *      @returns - NULL
- *
- */
-controllers.TabController = function(){
-	this.tab=-1;
-
-	this.selectTab=function(tabNum){
-		this.tab=tabNum;
-	};
-	this.isSelected=function(checkTab){
-		return this.tab===checkTab;
-	};
-} 
-
-
-//Added by Travis 
 /**
  * @controller ngBindHtmlCtrl - 
  *      EXAMPLE FOR BINDING HTML CONTROLLER
@@ -3025,10 +3216,10 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
 };
 
 
-//Added by ??? 
+//Added by Sanan
 /**
  * @controller PatientPhaseCollapseCtrl - 
- *      DESCRIPTION OF CONTROLLER HERE
+ *      i think this controls the phase name collapses - anne
  *
  * @variables -
  *      @*****
@@ -3047,10 +3238,10 @@ controllers.PatientPhaseCollapseCtrl = function($scope) {
 }
     
 
-//Added by ??? 
+//Added by Anne 
 /**
  * @controller BadgeCtrl - 
- *      DESCRIPTION OF CONTROLLER HERE
+ *      Allows the unread message number to be shown in nav bar
  *
  * @variables -
  *      @*****

@@ -241,7 +241,7 @@
                         
                             <div class="scroll" style="border:1px solid #CDD1DB">
                                 <ul>
-                                    <div ng-repeat="fac in allFacs.records | orderBy: sortPredicate">
+                                    <div ng-repeat="fac in allFacs.records">
                                         <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
                                     </div>
                                 </ul>

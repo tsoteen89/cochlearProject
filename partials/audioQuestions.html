@@ -12,33 +12,6 @@
     <div class="row-fluid">
         
     <div class="col-md-5 col-md-offset-1 col-xs-6" style="margin-left: 5%; float:left;">
-        <div class="select-audio-tests" style="margin-bottom:5px">
-            <label class="description">Residual Hearing</label>
-            <label style="font-size: 1.0vw; color:#4B92AE">Measure Residual Hearing Thresholds</label>
-            <div class="row">    
-                <div class="col-md-1">
-                </div>
-                <div class="col-md-11">
-                    <span ng-repeat="freq in residualFreqs" style="margin-right:3%; margin-left:3.5%"> {{freq}} </span> 
-                </div>
-            </div>
-            <div class="row"> 
-                <div class="col-md-1">
-                    <span> L</span>
-                </div>
-                <div class="col-md-11">
-                    <input ng-repeat="freq in residualFreqs" type="number" style="width:14%;">
-                </div>
-            </div>
-            <div class="row"> 
-                <div class="col-md-1">
-                    <span> R</span>
-                </div>
-                <div class="col-md-11">
-                    <input ng-repeat="freq in residualFreqs" type="number" style="width:14%;">
-                </div>
-            </div>
-        </div>
         
         <div class="select-audio-tests" style="margin-bottom:5px">
             <label >
@@ -51,7 +24,7 @@
                 <label class="description">Left Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="conditions.Left" ng-blur="rightIsEnabled = enabled" class="large">
+                <select ng-model="conditions.Left" class="large">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
                 
@@ -63,7 +36,7 @@
                 <label class="description">Right Ear </label>
                 <br>
                 <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                <select ng-model="conditions.Right" ng-blur="updateResults();" class="large" {{rightIsEnabled}}>
+                <select ng-model="conditions.Right" ng-blur="updateResults();" class="large">
                     <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                 </select>
                 <br> 
