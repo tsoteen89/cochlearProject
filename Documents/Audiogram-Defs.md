@@ -19,7 +19,7 @@ Sound Field Aided | A            | SF-A |      S      |   dB
 
 ### Masked Symbols
 - Air Conduction 
-    -  ![1] => ![2]
+    -  ![1] => ![2] ❑
     -  X => ![3]
 - Bone Conduction
     -  ![4] => ] OR ![5] => [
