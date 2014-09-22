@@ -559,10 +559,17 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			if(contactType == 'report'){
 				$scope.isProblemReport = true;
 				$scope.isSuggestion = false;
+				$scope.isContactAdmin = false;
 			}
 			else if(contactType == 'suggest'){
 				$scope.isProblemReport = false;
 				$scope.isSuggestion = true;
+				$scope.isContactAdmin = false;
+			}
+			else if(contactType == 'contactAdmin'){
+				$scope.isProblemReport = false;
+				$scope.isSuggestion = false;
+				$scope.isContactAdmin = true;
 			}
 
 			$scope.sendMessage = function () {

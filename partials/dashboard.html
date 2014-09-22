@@ -407,15 +407,16 @@
               <div class="panel-body">
                 <a href="" ng-click="getContactCard('report')"> Report a problem </a> <br> <br>
                 <a href="" ng-click="getContactCard('suggest')"> Suggest a measure </a> <br> <br>
-				<a href="" ng-click="getContactCard('report')"> Contact Administrator </a>
+				<a href="" ng-click="getContactCard('contactAdmin')"> Contact Administrator </a>
               </div>
-			  <!-- Modal used for both Reporting Problems or Suggesting Measures -->
+			  <!-- Modal used for writing a message to the Administrator -->
 			  <script type="text/ng-template" id="contactUs.html">
 				<div class="modal-header">
 					<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
 					<h4 class="modal-title" id="myModalLabel">
 						<span ng-if="isProblemReport"> Report a Problem </span>
 						<span ng-if="isSuggestion"> Make a Suggestion </span>
+						<span ng-if="isContactAdmin"> Contact the Administrator </span>
 					</h4>
 				</div>
 				<div class="modal-body">
@@ -434,6 +435,14 @@
 							for timely consideration.
 						</p>
 						<h4> Suggestion: </h4>
+					</div>
+					<div id="suggestion-header" ng-if="isContactAdmin">
+						<p> 
+							Contact the administrator directly with any issues or inquiries
+							you may have. Your message will be sent immediately to the Administrator 
+							for timely consideration.
+						</p>
+						<h4> Message: </h4>
 					</div>
 					<form name="messageForm">
 						<textarea rows="10" cols="75" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required></textarea>
