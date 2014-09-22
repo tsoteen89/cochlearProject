@@ -37,7 +37,7 @@ PTA = Pure Tone Average
 ### Normal Hearing
 
 - Assume  ___X___ is an individuals hearing.
-- Normal = `0dB &#8804; X &#8804; 20dB`
+- Normal = `0dB` &#8804; `X` &#8804; `20dB`
 
 Note:
 
