@@ -9,7 +9,7 @@
 
 Measure           | Right Symbol | Abbr | Left Symbol | Measured
 :----------------:|:------------:|:----:|:-----------:|:--------:
-Air Conduction    | O            |  AC  |      X      |   dB
+Air Conduction    | &#8413;      |  AC  |      X      |   dB
 Bone Conduction   | <            |  BC  |      >      |   dB
 Bone Conduction   | [            |  BC  |      ]      |   dB
 Most Comfortable  | M            |  MCL |      M      |   dB
