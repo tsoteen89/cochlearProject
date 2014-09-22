@@ -318,9 +318,16 @@ myApp.factory('persistData', function () {
          *      @function 
  *
  */
-controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo){
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout){
+    
+    $timeout(function(){
+    
 	$scope.userLevel = userInfo.get().UserLevelID;
-    $scope.userFacilityID = userInfo.get().FacilityID;
+    
+   
+        $scope.userFacilityID = userInfo.get().FacilityID;
+       
+    
     $scope.sessionID = userInfo.get().SessionID;
     
     //**********API URL's***********************/
@@ -331,6 +338,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
     });
+    
     
     //Grab All AII Facilities 
     getData.get($scope.baseFacilityURL).success(function(data) {
@@ -352,7 +360,9 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	$scope.redirectToMessages = function() {
 		$window.location.href = "#/messages";
 	}
-	
+
+    
+    
     //Added by Anne. 
     //***********************ADD USER MODAL IN MY FACILITY CARD****************//
     /**
@@ -603,6 +613,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
          
         });
 	}
+    
+    }, 100); 
     
 };
     
@@ -1161,7 +1173,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         }
     }
     
-    //Added by ???
+    //Added by Travis/Anne
     //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
     /**
      * @function getDataSummary - 
@@ -3056,7 +3068,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 	//If SessionID is stored...
 	if(cookieSessionID){
 		//Check if this token is valid
-		var userTokenURL = "../aii-api/v1/users/one/" + cookieSessionID;
+		var userTokenURL = "http://killzombieswith.us/aii-api/v1/users/one/" + cookieSessionID;
 		getData.get(userTokenURL).success(function(data) {
 			//If SessionID is valid:
 			//		-store user information
@@ -3074,6 +3086,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				info.Last = data.records.last_name;
 				info.Title = data.records.Title;
 				info.UserLevelID = data.records.UserLevelID;
+                $scope.userLevel = data.records.UserLevelID;
 				userInfo.set(info);
 				
 				//Store the user level in the persistData factory
@@ -3126,7 +3139,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
                 $scope.sessionID=data.data.records.SessionID;
                 persistData.setLoggedIn(true);
                 userInfo.set(data.data.records);
-                
+                $scope.userLevel = data.data.records.UserLevelID;
                 $scope.loggedIn = true;
                 $window.location.href = "#/dashboard";
                 
