@@ -7,16 +7,16 @@
 
 ### Symbols
  
-Measure           | Right Symbol         | Abbr | Left Symbol              | Measured 
-:----------------:|:--------------------:|:----:|:------------------------:|:--------:
-Air Conduction    | &#9711;              |  AC  |      X                   |   dB     
-Air Conduction    | &#9651; <sup>*</sup> |  AC  |   &#8414; <sup>*</sup>   |   dB     
-Bone Conduction   | <                    |  BC  |      >                   |   dB     
-Bone Conduction   | [ <sup>*</sup>       |  BC  |      ] <sup>*</sup>      |   dB    
-Most Comfortable  | M                    |  MCL |      M                   |   dB     
-Uncomfortable     | m                    |  UCL |      m                   |   dB     
-Sound Field       | S                    |  SF  |      S                   |   dB     
-Sound Field Aided | A                    | SF-A |      A                   |   dB     
+Measure           | Masked | Right Symbol         | Abbr | Left Symbol  | Measured 
+:----------------:|:------:|:--------------------:|:----:|:------------:|:--------:
+Air Conduction    |        | &#9711;              |  AC  |      X       |   dB     
+Air Conduction    |&#10003;| &#9651;              |  AC  |   &#8414;    |   dB     
+Bone Conduction   |        | <                    |  BC  |      >       |   dB     
+Bone Conduction   |&#10003;| [                    |  BC  |      ]       |   dB    
+Most Comfortable  |        | M                    |  MCL |      M       |   dB     
+Uncomfortable     |        | m                    |  UCL |      m       |   dB     
+Sound Field       |        | S                    |  SF  |      S       |   dB     
+Sound Field Aided |        | A                    | SF-A |      A       |   dB     
 
 <sup>*</sup> = Masked
 
