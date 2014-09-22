@@ -23,6 +23,8 @@ Sound Field Aided | A            | SF-A |      S      |   dB
     -  X => ![3]
 - Bone Conduction
     -  ![4] => ] OR ![5] => [
+
+&#9633;
 -  
 
 ### Example Audiogram via Noah
