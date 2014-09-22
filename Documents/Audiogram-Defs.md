@@ -10,7 +10,7 @@
 Measure           | Right Symbol | Abbr | Left Symbol | Measured | Masked 
 :----------------:|:------------:|:----:|:-----------:|:--------:|
 Air Conduction    | &#9711;      |  AC  |      X      |   dB     |
-Air Conduction    | &#9711;         AC  |   &#9651;   |   dB     | True 
+Air Conduction    | &#9711;      |  AC  |   &#9651;   |   dB     | True 
 Bone Conduction   | <            |  BC  |      >      |   dB     |
 Bone Conduction   | [            |  BC  |      ]      |   dB     | True
 Most Comfortable  | M            |  MCL |      M      |   dB     |
