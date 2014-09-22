@@ -124,6 +124,7 @@
                                              style="margin-bottom:20px;">
                                             <select  ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" 
                                                     ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
+                                                <option> </option>
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
                                             </select>
                                             <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
@@ -132,6 +133,7 @@
                                          <div class="form-group" ng-if="type.InputType == 'Select' && !$last"
                                               style="margin-bottom:20px;">
                                             <select ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" id="{{type.Label}}">
+                                                <option> </option>
                                                 <option ng-repeat="values in type.Values">{{values}}</option>
                                             </select>
                                             <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
