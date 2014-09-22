@@ -321,6 +321,7 @@ myApp.factory('persistData', function () {
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo){
 	$scope.userLevel = userInfo.get().UserLevelID;
     $scope.userFacilityID = userInfo.get().FacilityID;
+    $scope.sessionID = userInfo.get().SessionID;
     
     //**********API URL's***********************/
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/" + $scope.sessionID;
@@ -3048,7 +3049,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 	//If SessionID is stored...
 	if(cookieSessionID){
 		//Check if this token is valid
-		var userTokenURL = "http://killzombieswith.us/aii-api/v1/users/one/" + cookieSessionID;
+		var userTokenURL = "../aii-api/v1/users/one/" + cookieSessionID;
 		getData.get(userTokenURL).success(function(data) {
 			//If SessionID is valid:
 			//		-store user information
