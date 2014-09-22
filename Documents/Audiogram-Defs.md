@@ -20,11 +20,12 @@ Sound Field Aided | A            | SF-A |      S      |   dB
 ### Masked Symbols
 - Air Conduction 
     -  &#9651; => &#8414;
-    -  X => ![3]
+    -  
+    -  X => &#8414;
 - Bone Conduction
     -  ![4] => ] OR ![5] => [
 
-&#9633;
+
 -  
 
 ### Example Audiogram via Noah
