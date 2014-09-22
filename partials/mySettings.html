@@ -9,13 +9,13 @@
                 <h3 class="panel-title">User Settings</h3>
               </div>
               <div class="panel-body">
-                <label style="font-size:32px">{{userData.records[0].username}}</label><br>
+                <label style="font-size:32px">{{userData.records.username}}</label><br>
                 <label>Change your basic account settings.</label>
                 <hr>
 
-                    <label>Name: </label> {{userData.records[0].first_name}} {{userData.records[0].last_name}} <br>
-                    <label>User Level: </label> {{userData.records[0].UserLevelID}} <br>
-                    <label>Facility: </label> {{facilityData.records[0].Name}} <br><hr>
+                    <label>Name: </label> {{userData.records.first_name}} {{userData.records.last_name}} <br>
+                    <label>User Level: </label> {{userData.records.UserLevelID}} <br>
+                    <label>Facility: </label> {{facilityData.records.Name}} <br><hr>
 
                     <form ng-submit="editUserPut()">
 
@@ -36,7 +36,7 @@
                         <div ng-if="changePassword == true"><br>
                             <label>Please Enter Current Password:</label> 
                             <input  type="password" style="width: 200px" class="form-control" name="currentPassword" ng-model="editUser.currentPassword" placeholder="Enter Current Password"><br>
-                            <input ng-if="editUser.currentPassword == userData.records[0].password"  type="password" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
+                            <input ng-if="editUser.currentPassword == userData.records.password"  type="password" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
                             <input ng-click="passwordChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
                             <label ng-if="passwordChanged == true">Password Changed!</label>
                         </div>
@@ -57,7 +57,7 @@
                 </div>
                
                 <div class="panel-body">  
-                    <label style="font-size:32px">{{facilityData.records[0].Name}}</label><br>
+                    <label style="font-size:32px">{{facilityData.records.Name}}</label><br>
                     <label>Change information about your Facility.</label>
                     <hr>
                     <form ng-submit="editFacilityPut()">
@@ -83,7 +83,7 @@
                         
                         <hr>
 
-                        <label>Facility Image:</label> {{facilityData.records[0].FacilityImage}}
+                        <label>Facility Image:</label> {{facilityData.records.FacilityImage}}
                     </form>
 
                 </div>

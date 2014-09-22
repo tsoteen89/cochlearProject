@@ -45,15 +45,15 @@
                     <img src="images/facilityLogo.png" style="width:140%;"/> 
                 </div>
                 <div class="col-md-8">
-                  <b> {{facData.records[0].Name}}</b> <br>   
+                  <b> {{facData.records.Name}}</b> <br>   
                   <b> Address: </b> <br>
-                  {{facData.records[0].Address1}} <br>
-				  <b> Phone: </b> ({{facData.records[0].Phone.slice(0,3)}}){{facData.records[0].Phone.slice(3,6)}}-{{facData.records[0].Phone.slice(6)}} <br>
+                  {{facData.records.Address1}} <br>
+				  <b> Phone: </b> ({{facData.records.Phone.slice(0,3)}}){{facData.records.Phone.slice(3,6)}}-{{facData.records.Phone.slice(6)}} <br>
                   <b>Facility Admin:  </b><a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
                   <button type="button" class="btn btn-default btn-sm" ng-if="userLevel < 11"> <a style="color:black; text-decoration:none;" href="#/mySettings/"><span class="fa fa-building"></span> Facility Settings </a></button> 
                 </div> 
                 
-                <p> Users @ {{facData.records[0].Name}}</p>    
+                <p> Users @ {{facData.records.Name}}</p>    
                 <div class="scroll">
                     <ul class="list-unstyled">
                         <li ng-repeat="user in facUsers.records" style="margin-left:5px"> 
@@ -313,7 +313,7 @@
 				<div class="facility-info" ng-show="displayInfo">
 					<div class="modal-header">
 						<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">{{facCard.records[0].Name}}</h4>
+						<h4 class="modal-title" id="myModalLabel">{{facCard.records.Name}}</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">  
@@ -321,14 +321,14 @@
 								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
 							</div>
 							<div class="col-md-8">
-							  <b> {{facCard.records[0].Name}} </b> <br> <br>
+							  <b> {{facCard.records.Name}} </b> <br> <br>
 							  <b> Address: </b>
-							  {{facCard.records[0].Address1}} <br>
-                              <b> Phone: </b> ({{facCard.records[0].Phone.slice(0,3)}}){{facCard.records[0].Phone.slice(3,6)}}-{{facCard.records[0].Phone.slice(6)}} <br>
+							  {{facCard.records.Address1}} <br>
+                              <b> Phone: </b> ({{facCard.records.Phone.slice(0,3)}}){{facCard.records.Phone.slice(3,6)}}-{{facCard.records.Phone.slice(6)}} <br>
 							  <b> Facility Admin: </b> <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
 							</div> 
 						</div>
-						<p> Users @ {{facCard.records[0].Name}}</p>    
+						<p> Users @ {{facCard.records.Name}}</p>    
 						<div class="scroll">
                             <ul class="list-unstyled">
                             
@@ -350,7 +350,7 @@
 				<div id="care-team-invitation" ng-hide="displayInfo">
 					<div class="modal-header">
 						<button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records[0].Name}} to join a care team</h4>
+						<h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records.Name}} to join a care team</h4>
 					</div>
 					<div class="modal-body">
 						<p class="form-inline"> 
@@ -366,7 +366,7 @@
 							</ul>
 						</div>
 						<br>
-						Inviting: <strong> {{facCard.records[0].Name}} </strong> <br>
+						Inviting: <strong> {{facCard.records.Name}} </strong> <br>
 						To join the care team for: 
 						<span ng-if="selectedPatient"> <strong> {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
 						<span ng-hide="selectedPatient"> <strong> (No Patient Selected) </strong> </span>
