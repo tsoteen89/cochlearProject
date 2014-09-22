@@ -22,7 +22,7 @@ Sound Field Aided | A            | SF-A |      S      |   dB
     -  ![1] => ![2]
     -  X => ![3]
 - Bone Conduction
-    -  < => ] OR > => [
+    -  ![4] => ] OR ![5] => [
 -  
 
 ### Example Audiogram via Noah
@@ -53,3 +53,5 @@ Note:
 [1]: http://f.cl.ly/items/2e1y220R3c3k1H1K2146/triangle.png "Triangle"
 [2]: http://f.cl.ly/items/451w3J2s2c1r0Q0D441V/changes.9.1.14.png "Circle"
 [3]: http://f.cl.ly/items/2f0Y2g1Y411Q3y3Y0r1L/square.gif "Square"
+[4]: http://f.cl.ly/items/0d1S3T2M2y213n0X0R24/left_angle.jpg "Left Angle"
+[5]: http://f.cl.ly/items/0f1U0c1z3h2P1b2X2z0y/right_angle.png "Right Angle"
