@@ -18,7 +18,6 @@ Uncomfortable     |        | m                    |  UCL |      m       |   dB
 Sound Field       |        | S                    |  SF  |      S       |   dB     
 Sound Field Aided |        | A                    | SF-A |      A       |   dB     
 
-<sup>*</sup> = Masked
 
 ### Example Audiogram via Noah
 
