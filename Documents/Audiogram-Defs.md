@@ -16,7 +16,7 @@ Bone Conduction   | [ <sup>*</sup>       |  BC  |      ] <sup>*</sup>      |   d
 Most Comfortable  | M                    |  MCL |      M                   |   dB     
 Uncomfortable     | m                    |  UCL |      m                   |   dB     
 Sound Field       | S                    |  SF  |      S                   |   dB     
-Sound Field Aided | A                    | SF-A |      S                   |   dB     
+Sound Field Aided | A                    | SF-A |      A                   |   dB     
 
 <sup>*</sup> = Masked
 
