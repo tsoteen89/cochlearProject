@@ -1074,10 +1074,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
     //Get Audiology Phase fields and test 
-    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + persistData.getPhaseID() + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
+        $scope.audioQs = data.records.Questions;
     });
+    
+    
     
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
@@ -1088,6 +1091,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.answer = {};
     $scope.answer.PhaseID = persistData.getPhaseID();
     $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.answer.Answers = {};
     
     //Must initialize, so ng-model recognizes objects to store the fields of each test
     $scope.answer.Results = { 
@@ -1098,6 +1102,58 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
     
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+            //**********************Copied from questionsControllerr****/
+
+            //Grab all previously answered questions
+            getData.get($scope.answersURL).success(function(data) {
+                $scope.summaryAnswers = data.records;            
+            }).then(function(){
+                for(var answerID in $scope.summaryAnswers.Answers) {
+                    $scope.answer.Answers[answerID] = $scope.summaryAnswers.Answers[answerID].Answers;
+                };
+            });
+            //Show a child if Trigger has been set
+            $scope.showChild = function(data){
+                var index;
+                var indexB;
+
+                for(index=0; index < data.length; index++) {
+                    for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
+                        if($scope.audioQs[indexB].QuestionID == data[index]) {
+                            $scope.audioQs[indexB].IsChild = 0;
+                        }
+                    }
+                }
+            }
+
+            //Hide a child if the Trigger has been reset
+            $scope.hideChild = function(data){
+                var index;
+                var indexB;
+
+                for(index=0; index < data.length; index++) {
+                    for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
+                        if($scope.audioQs[indexB].QuestionID == data[index]) {
+                            $scope.audioQs[indexB].IsChild = 1;
+                        }
+                    }
+                }
+            }
+
+            //Post one answer and save it
+            //@param: int: questionID
+            $scope.postAnswers = function(questionID) {
+
+                $scope.singleAnswer = {};
+                $scope.singleAnswer.Answers = {};
+                $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
+                $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+                $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+                postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+
+            };
+            //**********************Copied from questionsControllerr****/
+    
     
     //Submit a complete audio test result.
     $scope.submitQuestions = function(category){
@@ -1144,11 +1200,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.phonemes=0;
         $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         $scope.answer.tests =null;
-    }
-    
-    //clears SNR field - will be removed when blank option is added for SNR
-    $scope.clearType= function(category, test, field){
-        $scope.answer.Results[category][test][field] = null;
     }
     
     //clears ONE test (or in case of aided audiogram (3 tests), so more results can be entered under the same ear conditions
