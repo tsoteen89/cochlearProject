@@ -331,7 +331,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.sessionID = userInfo.get().SessionID;
     
     //**********API URL's***********************/
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/" + $scope.sessionID;
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.sessionID;
     $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     
     //Grab Facility info  using facilityURL
