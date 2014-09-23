@@ -13,6 +13,28 @@
         <a href="" style="position:fixed" ng-click="goToPatDir(dirAnchor)"><button class="btn btn-primary">Patient Directory</button></a>
     </div>
 
-    
+</div>
 
+<div ng-controller="audioQuestionsController">
+     <style>
+        table, th, td {
+               border: 1px solid #164a5e;
+            }
+    </style>
+
+    <table class="table table-condensed">
+        <caption></caption>
+        <thead>
+        <tr align="Center">
+          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Question</b></h3></td>
+          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Answer</b></h3></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="answer in summaryAnswers.Answers">
+          <td><b>{{answer.Question}}</b></td>
+          <td>{{answer.Answers}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
