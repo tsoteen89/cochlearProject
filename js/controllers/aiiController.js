@@ -332,7 +332,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     
     //**********API URL's***********************/
     $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/" + $scope.sessionID;
-    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.sessionID;
+    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
@@ -341,12 +341,12 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     
     
     //Grab All AII Facilities 
-    getData.get($scope.baseFacilityURL).success(function(data) {
+    getData.get($scope.baseFacilityURL + "/getAll/" + $scope.sessionID).success(function(data) {
         $scope.allFacs = data;
     });
     
     //Grab Facilities Users
-    getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + $scope.userFacilityID + "/" + 'users').success(function(data) {
+    getData.get("http://killzombieswith.us/aii-api/v1/facilities/users/" + $scope.sessionID).success(function(data) {
         $scope.facUsers = data;
 		for(i = 0; i < data.records.length; i++){
 			if(data.records[i].Level == 'Coordinator'){
@@ -471,7 +471,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             });
             
             //get the specific facility's users
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                 $scope.facCardUsers = data;
 				for(i = 0; i < data.records.length; i++){
 					if(data.records[i].Level == 'Coordinator'){
@@ -1415,7 +1415,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + "/"+ $scope.sessionID).success(function(data){
                 $scope.facCard = data;
             });
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users').success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                 $scope.facCardUsers = data;
             });          
 
@@ -1520,7 +1520,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.userFacilityID = userInfo.get().FacilityID;
             $scope.patient = patient;
             $scope.selectedFac = "(No facility selected)";
-            //Grab AII Facilities 
+            //Grab AII Facilities that are NOT already associated with the patient
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/new/" + patient.PatientID).success(function(data) {
                 $scope.allFacs = data;
             });
