@@ -9,6 +9,16 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	</head>
 	<body>
+	    <span style="font-size:32px;color:red;">&lbrack;</span><br>
+	    <span style="font-size:32px;color:red;">&rbrack;</span><br>
+	    <span style="font-size:32px;color:red;">&#9634;</span><br>
+	    <span style="font-size:32px;color:red;">&bigcirc;</span><br>
+	    <span style="font-size:32px;color:red;">&bigtriangleup;</span><br>
+	    <span style="font-size:32px;color:red;">&#10005;</span><br>
+	    <span style="font-size:32px;color:red;">&lt;</span><br>
+	    <span style="font-size:32px;color:red;">&lang;</span><br>
+	    <span style="font-size:32px;color:red;">&rang;</span><br>
+	    <span style="font-size:32px;color:red;">&#10092;</span><br>
 		<div id="container">
 			<h1>Audiogram Page</h1>
 			<form action="test.php" method="POST">
