@@ -1074,7 +1074,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
     
     //Get Audiology Phase fields and test 
-    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 9 + "/questions";
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + persistData.getPhaseID() + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
         $scope.audioQs = data.records.Questions;
