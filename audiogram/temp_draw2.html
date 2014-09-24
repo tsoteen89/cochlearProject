@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script src="audiogram_module.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            padding: 10px;
+        }
+        .aud-measure{
+            font-size:24px;
+
+        }
+        .btn:focus {
+            border: 1px solid blue;
+        }
+    </style>
+  </head>
+  <body>
+	<div class="container-fluid">
+	  <div class="row">
+		<div class="col-md-4">
+			<canvas id="myCanvas" width="400" height="400"></canvas>
+		</div>
+		<div class="col-md-2">
+		  <div class="btn-group-vertical">
+		     <button type="button" class="btn btn-default aud-measure" >&bigcirc;&nbsp;&nbsp;&nbsp;AC&nbsp;&nbsp;&nbsp;&#10005;</button>
+		     <button type="button" class="btn btn-default aud-measure" >&lt;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&gt;</button>
+		     <button type="button" class="btn btn-default aud-measure" >M&nbsp;&nbsp;&nbsp;MCL&nbsp;&nbsp;&nbsp;M</button>
+		     <button type="button" class="btn btn-default aud-measure" >m&nbsp;&nbsp;&nbsp;UCL&nbsp;&nbsp;&nbsp;m</button>
+		     <button type="button" class="btn btn-default aud-measure" >S&nbsp;&nbsp;&nbsp;SF&nbsp;&nbsp;&nbsp;S</button>
+		     <button type="button" class="btn btn-default aud-measure" >A&nbsp;&nbsp;&nbsp;SF-A&nbsp;&nbsp;&nbsp;A</button>
+		  </div>
+		</div>
+		<div class="col-md-4">
+			<canvas id="myCanvas2" width="400" height="400"></canvas>
+		</div>
+	  </div> <!-- End Row -->
+	</div> <!-- End Container -->
+    <script>
+        var board1 = new audiogramModule("myCanvas");
+        var board2 = new audiogramModule("myCanvas2");
+   </script>
+      
+  </body>
+</html>
