@@ -487,6 +487,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			$scope.displayInfo = true;
 			$scope.selectedPatient = [];
 			$scope.hideSendInvitationButton = true;
+			$scope.sendButtonText = "Send Invitation";
 			if(fac.FacilityID == $scope.userFacilityID){
 				$scope.hideInviteButton = true;
 			}
@@ -503,6 +504,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			$scope.selectPatient = function (patient) {
 				$scope.selectedPatient = patient;
 				$scope.hideSendInvitationButton = false;
+				$scope.sendButtonText = "Send Invitation";
 			};
 
 			$scope.sendInvite = function () {
@@ -516,7 +518,10 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 					$scope.postNotification.ReceiverFacilityID = fac.FacilityID;
 					
 					$scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
-					postData.post($scope.postNotificationURL, $scope.postNotification);
+					postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
+						$scope.sendButtonText = "Invitation Sent!";
+					});
+					$scope.sendButtonText = "Sending...";
 					
 				//}
 			};
