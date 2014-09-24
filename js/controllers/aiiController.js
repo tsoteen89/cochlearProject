@@ -1584,17 +1584,20 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
  *      @returns - NULL
  *
  */
-controllers.patientFormController = function($scope, $http, postData,dateFilter) {
+controllers.patientFormController = function($scope, $http, postData,dateFilter,userInfo) {
     // create a blank object to hold form information
     $scope.formData = {};
     
-
+    $scope.FacilityID = userInfo.get().FacilityID;
+    
+    $scope.formData.OriginalFacilityID = $scope.FacilityID;
+    
     // Post function to add a new Patient to the system
     $scope.addPatient = function() {
         postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
+        console.log($scope.formData)
     };
     
-
 }
 
 
