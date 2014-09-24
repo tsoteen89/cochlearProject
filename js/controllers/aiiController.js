@@ -68,12 +68,12 @@ myApp.factory('cookie', function($cookies){
 myApp.factory('userInfo', function($cookieStore, $window){
     //User Info
 	var SessionID = $cookieStore.get('SessionID');
+	var UserLevelID = $cookieStore.get('UserLevel');
     var UserID;
     var Username;
     var FacilityID;
     var Name;
     var Title;
-    var UserLevelID;
 	
     return{
         set:function (info) {
@@ -86,13 +86,14 @@ myApp.factory('userInfo', function($cookieStore, $window){
             Title = info.Title;
             UserLevelID = info.UserLevelID;
 			
-			//Set the SessionID to persist in the cookie
+			//Set the SessionID and UserLevel to persist in the cookie
 			$cookieStore.put('SessionID', SessionID);
+			$cookieStore.put('UserLevel', UserLevelID);
 			
             return;
         },
         get: function(){
-			return {SessionID: SessionID, UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title, UserLevelID: UserLevelID};
+			return {SessionID: SessionID, UserLevelID: UserLevelID, UserID: UserID, Username: Username, FacilityID: FacilityID, Name: Name, Title: Title};
         }
     }
 });
@@ -320,14 +321,8 @@ myApp.factory('persistData', function () {
  */
 controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout){
     
-    $timeout(function(){
-    
 	$scope.userLevel = userInfo.get().UserLevelID;
-    
-   
-        $scope.userFacilityID = userInfo.get().FacilityID;
-       
-    
+    $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.sessionID = userInfo.get().SessionID;
     
     //**********API URL's***********************/
@@ -613,8 +608,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
          
         });
 	}
-    
-    }, 100); 
     
 };
     
@@ -3105,8 +3098,6 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
-	
-	
     
     //Used by Terry for testing. Will delete before production
     var c = {};
@@ -3144,7 +3135,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				persistData.setUserLevel(info.UserLevelID);
 				
 				//Redirect the user to the dashboard if they were going to the login page
-				if($window.location.pathname == "#"){
+				if($window.location.pathname == "#" || $window.location.pathname == ""){
 					$window.location.href = "#/dashboard";
 				}
 			}
@@ -3214,8 +3205,9 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
             $scope.loggedIn = false;
         });
 		
-		//Remove the Session ID from the cookie
+		//Remove the Session ID and User Level from the cookie
 		$cookieStore.remove('SessionID');
+		$cookieStore.remove('UserLevel');
     }
 }
 
