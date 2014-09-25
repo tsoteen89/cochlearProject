@@ -18,6 +18,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         margin_left   : 10,
         margin_right  : 0,
         margin_bottom : 20,
+        masked        : false,          //Boolean turns on masked measurements
         x_labels      : [],             //Values displayed on top of audiogram
         y_labels      : [],             //These are the values on the left of the audiogram
         x_values      : [],             //When audiogram is clicked, these are the values that
@@ -128,20 +129,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
             this.measure_values.push({'measure':'AC','x':216,'y':114,'freq':1000,'dB':20,'symbol':'X'});
             this.measure_values.push({'measure':'AC','x':278,'y':129,'freq':3000,'dB':25,'symbol':'X'});
         },
-        printMeasures: function(){
-            console.log(this.measure_values);
-            var font_size=20;
-            private['ctx'].font = font_size+'pt helvetica';
-            if(side=='right'){
-                private['ctx'].fillStyle = 'red';
-            }else{
-                private['ctx'].fillStyle = 'blue';               
-            }
-            for(var i=0;i<this.measure_values.length;i++){
-                this.ctx.fillText(this.measure_values[i]['symbol'],this.measure_values[i]['x']-font_size/2,this.measure_values[i]['y']-font_size/2);
-            }
-        },
-        addMeasure: function(x,y){
+        addMeasure2: function(x,y){
             var font_size = 18;
             this.ctx.font = font_size+'pt helvetica';
             this.ctx.fillStyle = 'red';
@@ -159,6 +147,13 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 this.ctx.fillText(this.current_char,x-10,y+10);
             }
             console.log(String.fromCharCode(parseInt(0x25ef), 16));
+        },
+        addMeasure: function(x,y){
+            console.log(this.current_char);
+            var imageObj = new Image();
+            imageObj.src = this.current_char;
+            this.ctx.drawImage(imageObj, x, y);
+            
         },
         setCharacter: function(measure){
 //            characterSet = {
@@ -183,22 +178,79 @@ var AudioGram = function(element_id, audiogram_id,side) {
             this.current_char = characterSet[measure][side];
         },
         setCharacterImg: function(measure){
-//            characterSetImg = {
-//                'AC': {'right':'./images/AC_Right.png','left':'./images/AC_Left.png'}, 
-//                'BC': {'right':'./images/BC_Right.png','left':'./images/BC_Left.png'},
-//                'MCL': {'right':'M','left':'M'},
-//                'UCL': {'right':'m','left':'m'},
-//                'SF': {'right':'S','left':'S'},
-//                'SF-A': {'right':'A','left':'A'}
-//            };
-//            var imageObj = new Image();
-//
-//
-//        context.drawImage(imageObj, 69, 50);
-//
-//        imageObj.src
+            var masked;
+            if(this.masked)
+                masked = 'masked';
+            else
+                masked = 'unmasked';
+            
+            characterSetImg = {
+                "AC": {
+                    "unmasked": {
+                        "right": "./images/AC_Right.png",
+                        "left": "./images/AC_Left.png"
+                    },
+                    "masked": {
+                        "right": "./images/AC_Right_Masked.png",
+                        "left": "./images/AC_Left_Masked.png"
+                    }
+                },
+                "BC": {
+                    "unmasked": {
+                        "right": "./images/BC_Right.png",
+                        "left": "./images/BC_Left.png"
+                    },
+                    "masked": {
+                        "right": "./images/BC_Right_Masked.png",
+                        "left": "./images/BC_Left_Masked.png"
+                    }
+                },
+                "MCL": {
+                    "unmasked": {
+                        "right": "./images/MCL.png",
+                        "left": "./images/MCL.png"
+                    },
+                    "masked": {
+                        "right": "./images/MCL.png",
+                        "left": "./images/MCL.png"
+                    }
+                },
+                "UCL": {
+                    "unmasked": {
+                        "right": "./images/UCL.png",
+                        "left": "./images/UCL.png"
+                    },
+                    "masked": {
+                        "right": "./images/UCL.png",
+                        "left": "./images/UCL.png"
+                    }
+                },
+                "SF": {
+                    "unmasked": {
+                        "right": "./images/SF.png",
+                        "left": "./images/SF.png"
+                    },
+                    "masked": {
+                        "right": "./images/SF.png",
+                        "left": "./images/SF.png"
+                    }
+                },
+                "SF-A": {
+                    "unmasked": {
+                        "right": "./images/SF-A.png",
+                        "left": "./images/SF-A.png"
+                    },
+                    "masked": {
+                        "right": "./images/SF-A.png",
+                        "left": "./images/SF-A.png"
+                    }
+                }
+            };
+            
+
+            
+            this.current_char = characterSetImg[measure][masked][this.side];
         }
-  
     }
 
     private['canvas'] = document.getElementById(private['element_id']);
@@ -233,8 +285,11 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 return private[ prop ];
             }
         },
+        isMasked: function(masked){
+            private['masked'] = masked;
+        },
         setCharacter: function(char){
-            private['setCharacter'](char);
+            private['setCharacterImg'](char);
         }
     }
 };

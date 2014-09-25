@@ -122,7 +122,15 @@
         }
 
         #measure-buttons{
-            padding-bottom:50px;
+            padding-bottom:10px;
+        }
+        
+        #mask-buttons{
+            padding-bottom:20px;
+        }
+        
+        .fa{
+            padding-top:3px;
         }
     </style>
   </head>
@@ -162,7 +170,7 @@
             </div>
               <div class="item">
                   <div class="content" id="mask-buttons">
-                    <a class="btn btn-med btn-success" href="#">
+                    <a class="btn btn-med btn-primary" href="#" id="mask_button">
                     <i class="fa fa-ban pull-left"></i> Masked</a>
                 </div>
             </div>
@@ -214,6 +222,23 @@
                 }
             });
         }
+        
+        /*
+        * When clicking the mask button, toggle mask on and off.
+        */
+        $( "#mask_button" ).on( "click", function() {
+            //Using the .length makes this a boolean operation
+            //otherwise, it always returns true
+            if($(this).find($(".fa-ban")).length){
+                board1.isMasked(true);
+                board2.isMasked(true);
+                $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+            }else{
+                board1.isMasked(false);
+                board2.isMasked(false);
+                $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
+            }
+        });
     </script>      
   </body>
 </html>
