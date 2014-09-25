@@ -13,8 +13,8 @@ body {
 }
 /*form styles*/
 #msform {
-	width: 400px;
-	margin: 50px auto;
+	width: 900px;
+	margin: 10px auto;
 	text-align: center;
 	position: relative;
 }
@@ -37,7 +37,7 @@ body {
 	display: none;
 }
 /*inputs*/
-#msform input, #msform textarea {
+#msform input[type=text],#msform input[type=file], #msform input[type=password], #msform textarea, #states,#box {
 	padding: 15px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
@@ -63,6 +63,42 @@ body {
 #msform .action-button:hover, #msform .action-button:focus {
 	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
 }
+
+.upload:before {
+    content: 'Select Facility Logo';
+    display: inline-block;
+    background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#F9F9F9), to(#E3E3E3));
+    background: -webkit-linear-gradient(top, #F9F9F9, #E3E3E3);
+    background: -moz-linear-gradient(top, #F9F9F9, #E3E3E3);
+    background: -ms-linear-gradient(top, #F9F9F9, #E3E3E3);
+    background: -o-linear-gradient(top, #F9F9F9, #E3E3E3);
+    background: linear-gradient(top, #F9F9F9, #E3E3E3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 0px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+.upload::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.upload:hover:before {
+  border-color: black;
+}
+.upload:active:before {
+  background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#E3E3E3), to(#F9F9F9));
+  background: -webkit-linear-gradient(top, #E3E3E3, #F9F9F9);
+  background: -moz-linear-gradient(top, #E3E3E3, #F9F9F9);
+  background: -ms-linear-gradient(top, #E3E3E3, #F9F9F9);
+  background: -o-linear-gradient(top, #E3E3E3, #F9F9F9);
+  background: linear-gradient(top, #E3E3E3, #F9F9F9);
+}
+
 /*headings*/
 .fs-title {
 	font-size: 15px;
@@ -89,7 +125,7 @@ body {
 	text-transform: uppercase;
 	font-size: 9px;
 	width: 33.33%;
-    margin-left: 7%;
+    margin-left: 10%;
 	float: left;
 	position: relative;
 }
