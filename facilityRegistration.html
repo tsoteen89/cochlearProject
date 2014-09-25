@@ -51,30 +51,30 @@
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
                             <label for="type"> Would you describe your facility as (select all that apply)</label>
-                            <input type="checkbox" name="type" value="Academic" ng-model="facilityData.type"> Academic<br>
-                            <input type="checkbox" name="type" value="Tertiary" ng-model="facilityData.type"> Tertiary<br>
-                            <input type="checkbox" name="type" value="Community-based" ng-model="facilityData.type"> Community-based<br>
-                            <input type="checkbox" name="type" value="Private" ng-model="facilityData.type"> Private practice<br>
+                            <div ng-repeat="description in facilityDescription">
+                                <input type="checkbox" checklist-value="description.name" checklist-model="facilityData.type"> {{description.name}}<br>
+                            </div>
                         </div>
                     </div>
                 </div>
+             
+                
                 <div class="row">
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
                             <label for="services"> Services provided at your facility (select all that apply)</label>
-                            <input type="checkbox" name="services" checklist-value="Audiology" checklist-model="facilityData.services"> Audiology<br>
-                            <input type="checkbox" name="services" checklist-value="Surgery" checklist-model="facilityData.services"> Surgery<br>
-                            <input type="checkbox" name="services" checklist-value="Speech" checklist-model="facilityData.services"> Speech Therapy<br>
-                            <input type="checkbox" name="services" checklist-value="other" checklist-model="facilityData.services"> Other<br>
+                            <div ng-repeat="service in facilityServices">
+                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.services"> {{service.name}}<br>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
                             <label for="training"> If surgery is picked - Please list the level of Cochlear training completed by the surgeons</label>
-                            <input type="checkbox" name="training" checklist-value="General_Otolaryngologist" 
-                                   checklist-model="facilityData.training"> General Otolaryngologist<br>
-                            <input type="checkbox" name="training" checklist-value="Fellowship_Trained_Otologist" 
-                                   checklist-model="facilityData.training"> Fellowship Trained Otologist<br>
+                            <div ng-repeat="training in facilityCochlearTraining">
+                            <input type="checkbox" checklist-value="training.name" 
+                                   checklist-model="facilityData.training"> {{training.name}}<br>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
   
 <script src="js/angular.js"></script>
 <script src="js/angular-route.js"></script>
-    <script src="js/checklist-model.js"></script>
+<script src="js/checklist-model.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
@@ -126,6 +126,23 @@
        
        $scope.administratorData = {};
        $scope.facilityData = {};
+       $scope.facilityDescription = [
+           { name: "Academic"},
+           { name: "Tertiary"},
+           { name: "Community-based"},
+           { name: "Private"}
+       ];
+       $scope.facilityServices = [
+           { name: "Audiology"},
+           { name: "Surgery"},
+           { name: "Speech"},
+           { name: "Other"}
+       ];
+       $scope.facilityCochlearTraining = [
+           { name: "General_Otolaryngologist"},
+           { name: "Fellowship_Trained_Otologist"}
+       ];
+        
        //$scope.facilitaData.
        $scope.populations= ["5,000-10,000", "10,000-50,000","50,000-100,000","100,000-500,000","500,000-1,000,000","1,000,000+"]
        $scope.usStates = [
