@@ -109,17 +109,19 @@ myApp.factory('userInfo', function($cookieStore, $window){
  * @returns {object} - 
  *      @function get - returns a value based on a key
  */
-myApp.factory('getData', function($http, $window, $cookieStore){
+myApp.factory('getData', function($http, $window, $location, $cookieStore){
     
     return {
         get: function(url) { 
-			var data = $http.get(url);
-			if(data.records == false){
-				$window.location.href = "#";
-				$cookieStore.remove('SessionID');
-				$cookieStore.remove('UserLevel');
-			}
-			return data; 
+			var data = $http.get(url).success(function(data) {
+				if(data.records == false){
+					$cookieStore.remove('SessionID');
+					$cookieStore.remove('UserLevel');
+					$window.location.href = "#";
+					location.reload();
+				}
+			});
+			return data;
 		},
     }
  
@@ -344,7 +346,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     
     
     //Grab All AII Facilities 
-    getData.get($scope.baseFacilityURL + "/getAll/" + $scope.sessionID).success(function(data) {
+    getData.get($scope.baseFacilityURL + "getAll/" + $scope.sessionID).success(function(data) {
         $scope.allFacs = data;
     });
     
