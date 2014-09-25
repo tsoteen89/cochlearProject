@@ -14,14 +14,18 @@ var audiogramModule = (function (jQ) {
     var row_height = 0;			//height of a row function based on height of canvas
  
     var canvas_buffer = 0;		//padding in pixels?
-    var top_margin = 20;
-    var left_margin = 10;
-    var right_margin = 0;
-    var bottom_margin = 0;
+    var margin_top = 20;
+    var margin_left = 10;
+    var margin_right = 0;
+    var margin_bottom = 20;
 
     var x_labels = [];          //Arrays to hold labels
     var y_labels = [];
 
+    var side = "";
+    var audiogram_id = 0;
+    
+    
     //Load X labels (frequencies)
     for(var i=125;i<=8000;i*=2){
         var Label = "";
@@ -40,17 +44,19 @@ var audiogramModule = (function (jQ) {
     }     
 
     
-    function audiogrammodule(target_id) {
+    function audiogrammodule(target_id,audio_id) {
         canvas = document.getElementById(target_id);
         ctx = canvas.getContext('2d');
         canvas_width = $('#'+target_id).width();
         canvas_height = $('#'+target_id).height();
         console.log(canvas_width+ " " + canvas_height);
         ctx.font = '10pt helvetica';
+        audiogram_id = audio_id;
         canvas.addEventListener('click', function(evt) {
             var mousePos = _getMousePos(canvas, evt);
             var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
             console.log(message);
+            console.log(audiogram_id);
             _getFrequency(mousePos.x,mousePos.y);
         }, false);
         _calcRowColSize();
@@ -64,8 +70,8 @@ var audiogramModule = (function (jQ) {
     //		any margins that might effect them
     //Added one to x.labels.length for spacing
     function _calcRowColSize() {
-        column_width = (canvas_width - (right_margin + left_margin)) / (x_labels.length + 1);
-        row_height = (canvas_height - (right_margin + left_margin)) / (y_labels.length + 1);
+        column_width = (canvas_width - (margin_left + margin_right)) / (x_labels.length + 1);
+        row_height = (canvas_height - (margin_top + margin_bottom)) / (y_labels.length + 1);
     }
 
 
@@ -79,23 +85,23 @@ var audiogramModule = (function (jQ) {
     
     //Draw x (top) Labels
     function _addFrequencyLabels(){
-        for(i=0,x=left_margin+column_width;i<x_labels.length;i++,x+=column_width){
-            ctx.fillText(x_labels[i], x, top_margin);
+        for(i=0,x=margin_left+column_width;i<x_labels.length;i++,x+=column_width){
+            ctx.fillText(x_labels[i], x-10, margin_top*2);
             ctx.beginPath();
-            ctx.moveTo(x, top_margin);
-            ctx.lineTo(x, canvas_height);
+            ctx.moveTo(x, margin_top+row_height);
+            ctx.lineTo(x, canvas_height-row_height-margin_bottom);
             ctx.stroke();
         }
     }
-
+    
     //Draw y (left) Labels
     function _addDBLabels(){
-        for(i=0,y=top_margin+row_height;i<y_labels.length;i++,y+=row_height){
-            ctx.fillText(y_labels[i], left_margin, y);
-            ctx.beginPath();
-            ctx.moveTo(left_margin,y);
-            ctx.lineTo(canvas_width,y);
-            ctx.stroke();
+	    for(i=0,y=margin_top+row_height;i<y_labels.length;i++,y+=row_height){
+      	    ctx.fillText(y_labels[i], margin_left, y+5);
+		    ctx.beginPath();
+		    ctx.moveTo(margin_left+column_width,y);
+		    ctx.lineTo(canvas_width-column_width,y);
+		    ctx.stroke();
         }
     }
     
@@ -121,8 +127,8 @@ var audiogramModule = (function (jQ) {
 
     
     audiogrammodule.prototype = {
-        initCanvas: function(element_id) {
-            this.audiogrammodule(element_id);
+        initCanvas: function(element_id,id) {
+            this.audiogrammodule(element_id,audio_id);
         } 
     }
     

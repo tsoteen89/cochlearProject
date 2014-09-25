@@ -11,7 +11,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-    <script src="audiogram_module.js"></script>
+    <script src="audiogram_module2.js"></script>
     <style>
         body {
             margin: 10px;
@@ -34,12 +34,12 @@
 		</div>
 		<div class="col-md-2">
 		  <div class="btn-group-vertical">
-		     <button type="button" class="btn btn-default aud-measure" >&bigcirc;&nbsp;&nbsp;&nbsp;AC&nbsp;&nbsp;&nbsp;&#10005;</button>
-		     <button type="button" class="btn btn-default aud-measure" >&lt;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&gt;</button>
-		     <button type="button" class="btn btn-default aud-measure" >M&nbsp;&nbsp;&nbsp;MCL&nbsp;&nbsp;&nbsp;M</button>
-		     <button type="button" class="btn btn-default aud-measure" >m&nbsp;&nbsp;&nbsp;UCL&nbsp;&nbsp;&nbsp;m</button>
-		     <button type="button" class="btn btn-default aud-measure" >S&nbsp;&nbsp;&nbsp;SF&nbsp;&nbsp;&nbsp;S</button>
-		     <button type="button" class="btn btn-default aud-measure" >A&nbsp;&nbsp;&nbsp;SF-A&nbsp;&nbsp;&nbsp;A</button>
+		     <button type="button" class="btn btn-default aud-measure">&bigcirc;&nbsp;&nbsp;&nbsp;AC&nbsp;&nbsp;&nbsp;&#10005;</button>
+		     <button type="button" class="btn btn-default aud-measure">&lt;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&gt;</button>
+		     <button type="button" class="btn btn-default aud-measure">M&nbsp;&nbsp;&nbsp;MCL&nbsp;&nbsp;&nbsp;M</button>
+		     <button type="button" class="btn btn-default aud-measure">m&nbsp;&nbsp;&nbsp;UCL&nbsp;&nbsp;&nbsp;m</button>
+		     <button type="button" class="btn btn-default aud-measure">S&nbsp;&nbsp;&nbsp;SF&nbsp;&nbsp;&nbsp;S</button>
+		     <button type="button" class="btn btn-default aud-measure">A&nbsp;&nbsp;&nbsp;SF-A&nbsp;&nbsp;&nbsp;A</button>
 		  </div>
 		</div>
 		<div class="col-md-4">
@@ -48,8 +48,10 @@
 	  </div> <!-- End Row -->
 	</div> <!-- End Container -->
     <script>
-        var board1 = new audiogramModule("myCanvas",100);
-        var board2 = new audiogramModule("myCanvas2",200);
+        var board1 = new AudioGram("myCanvas",100,'right');
+        var board2 = new AudioGram("myCanvas2",200,'left');
+        console.log(board1.get('x_labels'));
+        console.log(board1.get('y_labels'));
    </script>
       
   </body>
