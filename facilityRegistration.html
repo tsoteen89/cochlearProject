@@ -10,7 +10,17 @@
       <!-- Header -->
       <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:8%">
          <a class="navbar-brand" style="color: black" href="#">Auditory Implant Initiative</a>
-      </div>
+        </div>
+            <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
+            <div class = "container-fluid">
+                <div class = "navbar-header">
+                    <a class="navbar-brand cp_navbar-brand" href="#">Auditory Implant Initiative</a>
+                </div>
+                <div class = "nav-items collapse navbar-collapse pull-right" id = "nav-responsive-collapse">
+                <a href = "./" class="navbar-btn pull-right"><button type="button" class="btn btn-default">Sign in</button></a>
+              </div>
+            </div>
+            </nav>
       <br>
         
         <!--Stolen form -->
@@ -31,7 +41,7 @@
                 <div class="row">
                     <div class="col-md-6"><input type="text" name="city" placeholder="City" ng-model="facilityData.City"/></div>
                     <div class="col-md-4">
-                        <select id="states" name="State" ng-options="states.name for states in usStates" ng-model="facilityData.State">                                       </select>
+                        <select id="states" name="State" ng-options="states.name as states.name for states in usStates" ng-model="facilityData.State">                                       </select>
                     </div>
                     <div class="col-md-2"><input type="text" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" /></div>
                 </div>
@@ -45,14 +55,14 @@
                             <label for="population"> Please list the approximate population of the city in which you practice</label>
                             <select id="population" name="population" 
                                     ng-options="population for population in populations"
-                                    ng-model="facilityData.population"> </select>
+                                    ng-model="facilityData.Population"> </select>
                         </div>
                     </div>
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
                             <label for="type"> Would you describe your facility as (select all that apply)</label>
                             <div ng-repeat="description in facilityDescription">
-                                <input type="checkbox" checklist-value="description.name" checklist-model="facilityData.type"> {{description.name}}<br>
+                                <input type="checkbox" checklist-value="description.name" checklist-model="facilityData.Type"> {{description.name}}<br>
                             </div>
                         </div>
                     </div>
@@ -64,7 +74,7 @@
                         <div id="box" style="text-align:left">
                             <label for="services"> Services provided at your facility (select all that apply)</label>
                             <div ng-repeat="service in facilityServices">
-                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.services"> {{service.name}}<br>
+                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.Services"> {{service.name}}<br>
                             </div>
                         </div>
                     </div>
@@ -73,7 +83,7 @@
                             <label for="training"> If surgery is picked - Please list the level of Cochlear training completed by the surgeons</label>
                             <div ng-repeat="training in facilityCochlearTraining">
                             <input type="checkbox" checklist-value="training.name" 
-                                   checklist-model="facilityData.training"> {{training.name}}<br>
+                                   checklist-model="facilityData.Training"> {{training.name}}<br>
                             </div>
                         </div>
                     </div>
@@ -81,7 +91,6 @@
                 
                 <input type="button" name="next" class="next action-button" value="Next" />
                 
-                {{facilityData}}
             </fieldset>
             <fieldset>
                 <h3 class="fs-title">Step 2</h3>
@@ -98,8 +107,7 @@
                 <input type="text" name="phone" placeholder="Phone Number" ng-model="administratorData.phone"/>
                 
                 <input type="button" name="previous" class="previous action-button" value="Previous" />
-                <input type="submit" name="submit" class="submit action-button" value="Submit" />
-                {{administratorData}}
+                <input type="submit" name="submit" class="submit action-button" value="Submit" ng-click="registerFacility()"/>
             </fieldset>
         </form>
             </div>
@@ -126,6 +134,8 @@
        
        $scope.administratorData = {};
        $scope.facilityData = {};
+       
+       
        $scope.facilityDescription = [
            { name: "Academic"},
            { name: "Tertiary"},
@@ -205,35 +215,28 @@
         ];
        
        $scope.registerFacility = function() {
+           $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData}
            console.log("facility registration");
            $http({
                method  : 'POST',
                //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
                url     : '../aii-api/v1/facilities',
-               data    : $scope.facilityData,  // pass in data as strings
+               data    : $scope.registration,  // pass in data as strings
                headers : { 'Content-Type': 'application/json' } 
            })
            .success(function(data) {
                console.log(data);
            });
+           
+           console.log("admin registration");
+           
        }
        
-       $scope.registerAdministrator = function() {
-           console.log("admin registration");
-           $http({
-               method  : 'POST',
-               // url     : 'http://killzombieswith.us/aii-api/v1/users',
-               url     : '../aii-api/v1/users',
-               data    : $scope.administratorData,  // pass in data as strings
-               headers : { 'Content-Type': 'application/json' }   
-           })
-           .success(function(data) {
-               console.log(data);
-                 
-           });
-       }
+       
        
    }
+   
+   
    
    regApp.controller(controllers);
    
