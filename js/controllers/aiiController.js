@@ -109,10 +109,18 @@ myApp.factory('userInfo', function($cookieStore, $window){
  * @returns {object} - 
  *      @function get - returns a value based on a key
  */
-myApp.factory('getData', function($http){
+myApp.factory('getData', function($http, $window, $cookieStore){
     
     return {
-        get: function(url) { return $http.get(url); },
+        get: function(url) { 
+			var data = $http.get(url);
+			if(data.records == false){
+				$window.location.href = "#";
+				$cookieStore.remove('SessionID');
+				$cookieStore.remove('UserLevel');
+			}
+			return data; 
+		},
     }
  
 });
@@ -150,7 +158,7 @@ myApp.factory('postData', function($http){
  
 //Added by Travis. 
 /**
- * @function postData - 
+ * @function putData - 
  *  Helper function that accepts a URL API call and PUT's appropriate data
  *  to a database corralating with the URL accepted.
  *
