@@ -1,15 +1,21 @@
 <div ng-controller="questionsController">
 
-    <div class="col-md-3">
-        <label style="font-size:2vw; color:#4B92AE; margin-left:19%;">{{phaseName}}</label><br><br>
-    </div>
-    <div class="col-md-5">
-        <div ng-repeat="condition in audioSummaryAnswers" style="margin-top:12%">
-            <completed-audiology></completed-audiology>
-      
+    <div class="row">
+        <div class="col-md-offset-4">
+            <label style="font-size:2vw; color:#4B92AE" >{{phaseName}}</label>
+            <hr>
         </div>
+        
     </div>
-    <div class="col-md-4" ng-controller="apiPatientsController">
+    
+    <div class="row">
+        <div class="col-md-7 col-md-offset-2">
+            <div ng-repeat="condition in audioSummaryAnswers">
+                <completed-audiology></completed-audiology>
+
+            </div>
+        </div>
+    <div class="col-md-2" ng-controller="apiPatientsController">
         <a href="" style="position:fixed" ng-click="goToPatDir(dirAnchor)"><button class="btn btn-primary">Patient Directory</button></a>
     </div>
 
