@@ -184,14 +184,20 @@
 	</div> <!-- End Container -->
     <script>
         
+        //Initialize left and right audiogram boards
         var board1 = new AudioGram("myCanvas",100,'right');
         var board2 = new AudioGram("myCanvas2",200,'left');
+        
+        //Log some data
         console.log(board1.get('x_labels'));
         console.log(board1.get('y_labels'));
+        
+        //Find the active "measure" button, and send that to the 
+        //audiogram class.
         $( ".aud-btn" ).each(function( index ) {
             if($( this ).hasClass( "active" )){
-                board1.setCharacter($( this ).find('input').attr('id'));
-                board2.setCharacter($( this ).find('input').attr('id'));
+                board1.setMeasure($( this ).find('input').attr('id'));
+                board2.setMeasure($( this ).find('input').attr('id'));
             }
         });
 
@@ -202,7 +208,7 @@
         * 'active'. Without the timeout, it was always one click behind.
         */
         $( ".aud-btn" ).on( "mouseup", function() {
-            setTimeout( DisplayActiveMeasure, 0 );
+            setTimeout( HighlightActiveMeasure, 0 );
         });
         
         /*
@@ -210,13 +216,13 @@
         * setting the proper character for each board according to the 
         * measure.
         */
-        function DisplayActiveMeasure(){
+        function HighlightActiveMeasure(){
             $( ".aud-btn" ).each(function( index ) {
                 if($( this ).hasClass( "active" )){
                     $( this ).addClass('btn-info');
                     console.log($( this ).find('input').attr('id'));
-                    board1.setCharacter($( this ).find('input').attr('id'));
-                    board2.setCharacter($( this ).find('input').attr('id'));
+                    board1.setMeasure($( this ).find('input').attr('id'));
+                    board2.setMeasure($( this ).find('input').attr('id'));
                 }else{
                     $( this ).removeClass('btn-info');
                 }
@@ -238,6 +244,7 @@
                 board2.isMasked(false);
                 $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
             }
+            setTimeout( HighlightActiveMeasure, 0 );
         });
     </script>      
   </body>

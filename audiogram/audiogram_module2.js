@@ -129,7 +129,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
             this.measure_values.push({'measure':'AC','x':216,'y':114,'freq':1000,'dB':20,'symbol':'X'});
             this.measure_values.push({'measure':'AC','x':278,'y':129,'freq':3000,'dB':25,'symbol':'X'});
         },
-        addMeasure2: function(x,y){
+        addTxtMeasure: function(x,y){
             var font_size = 18;
             this.ctx.font = font_size+'pt helvetica';
             this.ctx.fillStyle = 'red';
@@ -148,14 +148,13 @@ var AudioGram = function(element_id, audiogram_id,side) {
             }
             console.log(String.fromCharCode(parseInt(0x25ef), 16));
         },
-        addMeasure: function(x,y){
-            console.log(this.current_char);
+        addImgMeasure: function(x,y){
             var imageObj = new Image();
             imageObj.src = this.current_char;
-            this.ctx.drawImage(imageObj, x, y);
-            
+            this.ctx.drawImage(imageObj, x-12, y-12);
+            console.log("adj x,y ="+(x-12)+" "+(y-12));
         },
-        setCharacter: function(measure){
+        setTxtCharacter: function(measure){
 //            characterSet = {
 //                'AC': {'right':0x25EF,'left':0x2716}, //
 //                'BC': {'right':0x276E,'left':0x276F},
@@ -177,7 +176,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
             //this.current_char = String.fromCharCode(parseInt(characterSet[measure][side]),16);
             this.current_char = characterSet[measure][side];
         },
-        setCharacterImg: function(measure){
+        setImgCharacter: function(measure){
             var masked;
             if(this.masked)
                 masked = 'masked';
@@ -250,6 +249,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
 
             
             this.current_char = characterSetImg[measure][masked][this.side];
+            console.log(this.current_char);
         }
     }
 
@@ -266,7 +266,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         console.log("Audiogram ID: "+audiogram_id);
         private['getFrequency'](mousePos.x);
         private['getDecibels'](mousePos.y);
-        private['addMeasure'](mousePos.x,mousePos.y);      
+        private['addImgMeasure'](mousePos.x,mousePos.y);      
         
     }, false);
     private['initArrays']();
@@ -288,8 +288,8 @@ var AudioGram = function(element_id, audiogram_id,side) {
         isMasked: function(masked){
             private['masked'] = masked;
         },
-        setCharacter: function(char){
-            private['setCharacterImg'](char);
+        setMeasure: function(char){
+            private['setImgCharacter'](char);
         }
     }
 };
