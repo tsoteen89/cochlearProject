@@ -114,11 +114,13 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
     return {
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
+				/*
 				if(data.records == false){
 					$cookieStore.remove('SessionID');
 					$cookieStore.remove('UserLevel');
 					$window.location.href = "#";
 					location.reload();
+				*/
 				}
 			});
 			return data;
