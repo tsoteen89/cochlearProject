@@ -23,7 +23,7 @@
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postDateAnswers(question.QuestionID)">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 

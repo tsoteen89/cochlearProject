@@ -733,7 +733,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.dirAnchor = persistData.getDirAnchor();
     $scope.clickedPhase = null;
     
+    $scope.isArray = function(check){
+        return angular.isArray(check);
+    }
     
+    $scope.isObject = function(check){
+        return angular.isObject(check);
+    }
+
     getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             console.log("first" + $scope.audioSummaryAnswers);
@@ -806,6 +813,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+
+    };
+    
+    $scope.postDateAnswers = function(questionID) {
+        
+        $scope.singleAnswer = {};
+        $scope.singleAnswer.Answers = {};
+        $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
+        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID].toISOString().slice(0,10);
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
     };
