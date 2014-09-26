@@ -3335,7 +3335,8 @@ controllers.ngBindHtmlCtrl = function ($scope, $sce) {
  *
  */
 controllers.PatientPhaseCollapseCtrl = function($scope) {
-  $scope.isCollapsed = false;
+    $scope.isCollapsed = false;
+    $scope.editPatient = false;
 }
     
 
