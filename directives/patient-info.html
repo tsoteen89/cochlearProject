@@ -89,9 +89,9 @@
                 
             </div>
             
-            <a href="" ng-click="editPatient = true"><i class="fa fa-pencil-square-o"></i></a>
-            <br>
-            <input ng-show="editPatient == true" ng-click="editPatient = false" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp<br>
+            <a href=""><span class="fa " ng-click="editPatient = !editPatient; submitPatientInfo(patient)" 
+                        ng-class="{'fa-pencil-square-o':!editPatient, 'fa-floppy-o':editPatient}" ></span></a>
+
             
         </form>
     </div>
