@@ -828,13 +828,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     };
     
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
     //Post a surgery History. 
     $scope.postSurgery = function() {
         $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
                                         //so upon "Next page", "Not answered" isn't saved and break the api
         //initialize surgery object
         //user will fill in date, other(if necessary), side, and type via ng-model
-        $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
         
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
     };

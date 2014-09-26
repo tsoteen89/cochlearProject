@@ -63,10 +63,9 @@
                                                        ng-model="surgery[subfield.Name]" 
                                                        ng-if="surgery['Type of Surgery?']!='Other'&& surgery['Type of Surgery?']!=null"
                                                        ng-blur="postSurgery()">
-                                                <input type="Radio" value={{values}} name={{question.QuestionID}} 
+                                                <input type="Radio" value={{values}} name={{subfield.Name}} 
                                                        ng-model="surgery[subfield.Name]" 
-                                                       ng-if="(surgery['Type of Surgery?']=='Other' || surgery['Type of Surgery?']==null) && surgery['Side?'] != null ||
-                                                       surgery['Side?'] == null">
+                                                       ng-if="(surgery['Type of Surgery?']=='Other' || surgery['Type of Surgery?']==null) && surgery['Side?'] != null || surgery['Side?'] == null">
                                                 <label class="choice" >{{values}}</label>
                                             </div>
                                             
