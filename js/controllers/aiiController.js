@@ -120,8 +120,8 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
 					$cookieStore.remove('UserLevel');
 					$window.location.href = "#";
 					location.reload();
-				*/
 				}
+				*/
 			});
 			return data;
 		},
