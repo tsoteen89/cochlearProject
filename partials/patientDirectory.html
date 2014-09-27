@@ -95,6 +95,7 @@
                         
                           <!--Current Phase-->
                         <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+                        
                         <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID ==3" ng-repeat="phase in phases.slice(1,3)" >
                           <div class="text-center bs-wizard-stepnum">
                             &nbsp;
@@ -132,22 +133,28 @@
                           <div class="text-center bs-wizard-stepnum">
                             &nbsp;
                           </div>
-                          <div class="progress" >
+                            <div class="progress" >
                             <div class="progress-bar">
                             </div>
-                          </div>
+                            </div>
                           <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
                           <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                             {{phase.Name}}
                           </div>
                         </div>
-                        
-                        
+                        <div class="col-xs-1 bs-wizard-step disabled">
+                          <div class="progress" style="background-color:#CAE5F0">
+                            <div class="progress-bar">
+                            </div>
+                          </div>
+                            <a><span class="fa pull-left" ng-click="isCollapsed = !isCollapsed" ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}" style="margin-top:-25px"></span></a>
+  
+                        </div>                        
+                      
                       </div>
                     
                     <!--Phase info collapse button-->
-                <a><span class="fa " ng-click="isCollapsed = !isCollapsed" 
-                        ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}"></span></a>
+                
                     
                 </div> <!-- End phaseProgress repeat for careTeams -->
                   
