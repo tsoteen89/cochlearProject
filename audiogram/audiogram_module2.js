@@ -254,12 +254,21 @@ var AudioGram = function(element_id, audiogram_id,side) {
         },
         printMeasures: function(){
             var i;
+            this.clearMeasures();
             this.ctx.beginPath();
             for(i=0;i<this.audiogram_vals.length-1;i++){
                 this.ctx.moveTo(this.audiogram_vals[i]['x'],this.audiogram_vals[i]['y']);
                 this.ctx.lineTo(this.audiogram_vals[i+1]['x'],this.audiogram_vals[i+1]['y']);               
             }
             this.ctx.stroke(); 
+        },
+        clearMeasures : function(delete_vals){
+            //default param to NOT delete measures if params not there
+            delete_vals = typeof delete_vals !== 'undefined' ? delete_vals : false;
+            this.ctx.clearRect(this.graph_bounds["min"]["x"],this.graph_bounds["min"]["y"],this.graph_size['width'],this.graph_size['height']);
+            this.drawGraph();
+            if(delete_vals)
+                this.audiogram_vals = [];
         },
         setTxtCharacter: function(measure){
             this.crnt_measure = measure;
@@ -320,6 +329,9 @@ var AudioGram = function(element_id, audiogram_id,side) {
         },
         setMeasure: function(char){
             private['setMeasure'](char);
+        },
+        clearBoard: function(){
+            private['clearMeasures'](true);
         }
     }
 };

@@ -141,6 +141,12 @@
               <div class="item">
                   <div class="content"><canvas id="myCanvas" width="400" height="400"></canvas></div>
               </div>
+              <div class="item">
+                <div class="content clear-button" id="clear-cnvs1">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear-cnvs1">
+                    <i class="fa fa-refresh pull-left"></i> Clear</a>
+                </div>
+              </div>
           </div>
         <div class="col-xs-2 col-centered">
               <div class="item">
@@ -178,6 +184,12 @@
           <div class="col-xs-5 col-centered">
               <div class="item">
                   <div class="content"><canvas id="myCanvas2" width="400" height="400"></canvas></div>
+              </div>
+              <div class="item">
+                <div class="content clear-button" id="clear-cnvs2">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear-cnvs2">
+                    <i class="fa fa-refres pull-left"></i> Clear</a>
+                </div>
               </div>
           </div>
 	  </div> <!-- End Row -->
@@ -245,6 +257,15 @@
                 $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
             }
             setTimeout( HighlightActiveMeasure, 0 );
+        });
+        
+        $( ".clear-button" ).on( "click", function() {
+            if($( this ).find('a').attr('id') == 'clear-cnvs1'){
+                board1.clearBoard();
+            }else{
+                board2.clearBoard();
+            }
+            console.log($( this ).find('a').attr('id'));
         });
     </script>      
   </body>
