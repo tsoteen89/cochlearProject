@@ -236,12 +236,12 @@
             //Using the .length makes this a boolean operation
             //otherwise, it always returns true
             if($(this).find($(".fa-ban")).length){
-                board1.isMasked(true);
-                board2.isMasked(true);
+                board1.isMasked('masked');
+                board2.isMasked('masked');
                 $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
             }else{
-                board1.isMasked(false);
-                board2.isMasked(false);
+                board1.isMasked('unmasked');
+                board2.isMasked('unmasked');
                 $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
             }
             setTimeout( HighlightActiveMeasure, 0 );
