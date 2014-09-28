@@ -11,9 +11,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-      <link href="bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
-      <script src="bootstrap-switch-master/dist/js/bootstrap-switch.js"></script>
-      <script src="audiogram_module2.js"></script>
+      <script src="audiogram.js"></script>
     <style>
         body {
             margin: 10px;
@@ -142,8 +140,8 @@
                   <div class="content"><canvas id="myCanvas" width="400" height="400"></canvas></div>
               </div>
               <div class="item">
-                <div class="content clear-button" id="clear-cnvs1">
-                    <a class="btn btn-xs btn-primary" href="#" id="clear-cnvs1">
+                <div class="content clear-button" id="menu1">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear1">
                     <i class="fa fa-refresh pull-left"></i> Clear</a>
                 </div>
               </div>
@@ -186,8 +184,8 @@
                   <div class="content"><canvas id="myCanvas2" width="400" height="400"></canvas></div>
               </div>
               <div class="item">
-                <div class="content clear-button" id="clear-cnvs2">
-                    <a class="btn btn-xs btn-primary" href="#" id="clear-cnvs2">
+                <div class="content clear-button" id="menu2">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear2">
                     <i class="fa fa-refresh pull-left"></i> Clear</a>
                 </div>
               </div>
@@ -232,7 +230,7 @@
             $( ".aud-btn" ).each(function( index ) {
                 if($( this ).hasClass( "active" )){
                     $( this ).addClass('btn-info');
-                    console.log($( this ).find('input').attr('id'));
+                    //console.log($( this ).find('input').attr('id'));
                     board1.setMeasure($( this ).find('input').attr('id'));
                     board2.setMeasure($( this ).find('input').attr('id'));
                 }else{
@@ -248,24 +246,23 @@
             //Using the .length makes this a boolean operation
             //otherwise, it always returns true
             if($(this).find($(".fa-ban")).length){
-                board1.isMasked('masked');
-                board2.isMasked('masked');
+                board1.setMasked(1);
+                board2.setMasked(1);
                 $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
             }else{
-                board1.isMasked('unmasked');
-                board2.isMasked('unmasked');
+                board1.setMasked(0);
+                board2.setMasked(0);
                 $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
             }
             setTimeout( HighlightActiveMeasure, 0 );
         });
         
         $( ".clear-button" ).on( "click", function() {
-            if($( this ).find('a').attr('id') == 'clear-cnvs1'){
+            if($( this ).find('a').attr('id') == 'clear1'){
                 board1.clearBoard();
             }else{
                 board2.clearBoard();
             }
-            console.log($( this ).find('a').attr('id'));
         });
     </script>      
   </body>
