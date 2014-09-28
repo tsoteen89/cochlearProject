@@ -3,6 +3,7 @@
 - First assuming you already have cochlearProject on your local machine.
 - Next you need ssh access to the server (aii-hermes.org) and I will check that everyone is a user with the right permissions to access the folder `/var/www/aii-hermes-dev` which is where we will be pushing to.
 - Anywhere you see `griffin` replace it with your username.
+- Also in my snippets, commands start with `$` output from commands doesn't
 
 - You need to copy a local ssh key to the server so you can connect WITHOUT typing your password. You should already have one generated, so switch to your `.ssh` directory and copy the public key into the new machine's `authorized_keys` file with the `ssh-copy-id` command. 
 
@@ -61,9 +62,11 @@ $ cd /home/griffin
 $ mkdir aii-hermes.git
 $ cd aii-hermes.git
 $ git init --bare
+
+Initialized empty Git repository in /home/griffin/aii-hermis.git/
 ```
 
-Up to now we have:
+__Up to now we have:__
 
 - Initialized an empty Git repository in `/home/griffin/aii-hermes.git` and
 - You can log into aii-hermes.org without getting prompted for a password.
@@ -74,7 +77,7 @@ Now we define (and enable) a post-receive hook that checks out the latest tree i
 
 - Assuming `/var/www/aii-hermes-dev` exists and
 - Assuming your empty git repository is: `/home/griffin/aii-hermes.git`
-
+- The following command _creates_ the file `post-receive`. It's not in the hooks folder yet.
 ```
 $ nano /home/griffin/aii-hermes.git/hooks/post-receive
 ```
@@ -95,13 +98,13 @@ $ chmod +x /home/griffin/aii-hermes.git/hooks/post-receive
 
 ### To repeat yet again:)
 
-- You can log into aii-hermes.org without getting prompted for a password
-- You have a folder called `/home/griffin/aii-hermis.git` that has an empty git repository + a file called `post-receive` in the hooks folder with bash stuff in it.
-- The post-receive file is executable.
+- You can log into aii-hermes.org without getting prompted for a password.
+- You have a folder called `/home/griffin/aii-hermis.git` that has an empty git repository & a file called `post-receive` in the hooks folder with bash stuff in it.
+- The `post-receive` file is executable.
 
 ### Now back on your laptop
 
-- We need to define a name for the remote mirror, and then mirror to it, creating a new "master" branch there.
+- We need to define a name for the remote mirror, and then ... mirror to it, creating a new "master" branch there.
 - Basically instead of `git push origin master` you say `git push origin dev` (dev is my name choice).
 
 ```
