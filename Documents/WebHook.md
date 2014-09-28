@@ -136,6 +136,8 @@ anne ALL = (root) NOPASSWD: /usr/bin/git
 
 - This means that you should not get prompted for a password to run git commands.
 
+### Extras
+
 - Also, the work tree does not need to correspond exactly to your DocumentRoot. Your repository may represent only a subdirectory of it, or even contain it as a subdirectory. (Not for us, but nice to know).
 - In the work tree, you will need to set the environment variable GIT_DIR to the path to website.git before you can run any git commands (e.g. "git status").
 - Setting receive.denycurrentbranch to "ignore" on the server eliminates a warning issued by recent versions of git when you push an update to a checked-out branch on the server. (Thanks to Miklos Vajna for pointing this out.)
