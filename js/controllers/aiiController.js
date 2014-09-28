@@ -1524,21 +1524,20 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 if($scope.newEvent.Description == null){
                     $scope.newEvent.Description = "Edit Event Description";
                 }
+                $scope.answer = {};
+                $scope.answer.Answers = {};
+                $scope.answer.PhaseID = 1;
+                $scope.answer.Answers[10] = patient.DOB;
+                $scope.answer.Answers[20] = patient.Sex;
+                $scope.answer.Answers[30] = patient.Race;
+                
                 postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent).success(function(data) {
                     $scope.answer.CareTeamID = data.records;
                 }).then(function(){
-                    //Grab demographic answers
-                    getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ $scope.patient.CareTeams[0].CareTeamID
-                                            + '/phaseAnswers/1').success(function(data) {
-                        $scope.patientDemoAnswers = data.records;            
-                    }).then(function(){
-                        for(var answerID in $scope.patientDemoAnswers["Answers"]) {
-                            $scope.answer.Answers[answerID] = $scope.patientDemoAnswers.Answers[answerID].Answers;
-                        };
-                    }).then(function(){
-                        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
-                        $scope.ok();
-                    });
+                    
+                    postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+                    $scope.ok();
+                    
                 });
             }
             $scope.cancel = function () {
