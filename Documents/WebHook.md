@@ -1,18 +1,20 @@
+### Part one - Getting ssh set up:
+
 - First assuming you already have cochlearProject on your local machine.
+- Next you need ssh access to the server (aii-hermes.org) and I will check that everyone is a user with the right permissions to access the folder `/var/www/aii-hermes-dev` which is where we will be pushing to.
+- Anywhere you see `griffin` replace it with your username.
 
-- Next you need ssh access to the server (aii-hermes.org) and I will check that everyone is a user with the right permissions.
-
-- You need to copy a local ssh key to the server so you can connect WITHOUT typing your password. You should already have one generated, so switch to your `.ssh` directory and do the following.
-- You can copy the public key into the new machine's authorized_keys file with the `ssh-copy-id` command. Make sure to replace the example username and IP address below.
+- You need to copy a local ssh key to the server so you can connect WITHOUT typing your password. You should already have one generated, so switch to your `.ssh` directory and copy the public key into the new machine's authorized_keys file with the `ssh-copy-id` command. Make sure to replace `you` with your username.
 
 ```bash
-ssh-copy-id you@aii-hermes.org
+$ cd ~/.ssh
+$ ssh-copy-id griffin@aii-hermes.org
 ```
 
 If that doesn't work, try the following:
 
 ```bash
-cat ~/.ssh/id_rsa.pub | ssh you@aii-hermes.org "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
+cat ~/.ssh/id_rsa.pub | ssh griffin@aii-hermes.org "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
 ```
 
 No matter which method you use, you should see something like what I saw:
@@ -48,17 +50,42 @@ to make sure we haven't added extra keys that you weren't expecting.
 
 __Either way, you should be able to log into aii-hermes.org and not get prompted for a password.__
 
-I assume that the web site will live on a server to which you have ssh access, and that things are set up so that you can ssh to it without having to type a password (i.e., that your public key is in ~/.ssh/authorized_keys and you are running ssh-agent locally).
-On the server, we create a new repository to mirror the local one.
-$ mkdir website.git && cd website.git
+### Part two, create a "mirror" in your own folder:
+
+- On the server, we create a new repository to mirror the local one.
+- Goto your home directory on aii-hermes. I created a folder in `/home/griffin/` called `aii-hermis.git`
+- So create the folder (name is actually irrelevant) and open it, then create an empty git repo:
+
+```bash
+$ cd /home/griffin
+$ mkdir aii-hermes.git
+$ cd aii-hermes.git
 $ git init --bare
-Initialized empty Git repository in /home/ams/website.git/
-Then we define (and enable) a post-receive hook that checks out the latest tree into the web server's DocumentRoot (this directory must exist; Git will not create it for you):
-$ mkdir /var/www/www.example.org
-$ cat > hooks/post-receive
-#!/bin/sh
+```
+
+- Assuming you initialized an empty Git repository in `/home/griffin/aii-hermes.git` and
+- Assuming that you can log into aii-hermes.org with getting prompted for a password we continue.
+
+### Part 3 - Post receive hook
+
+Now we define (and enable) a post-receive hook that checks out the latest tree into the `/var/www/aii-hermes-dev` folder.
+
+- Assuming `/var/www/aii-hermes-dev` exists and
+- Assuming your empty git repository is: `/home/griffin/aii-hermes.git`
+
+```
+$ nano /home/griffin/aii-hermes.git/hooks/post-receive
+```
+Paste the following into this post-receive file:
+
+>#!/bin/sh
 GIT_WORK_TREE=/var/www/www.example.org git checkout -f
+
+
+```
 $ chmod +x hooks/post-receive
+```
+
 Note: earlier versions of this howto depended on setting the git config variables core.worktree to the target directory, core.bare to false, and receive.denycurrentbranch to ignore. But these changes are not needed if you use GIT_WORK_TREE (which didn't work when I first wrote the howto), and the remote repository can remain bare.
 Back on the workstation, we define a name for the remote mirror, and then mirror to it, creating a new "master" branch there.
 $ git remote add web ssh://server.example.org/home/ams/website.git
