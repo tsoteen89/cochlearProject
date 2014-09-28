@@ -47,7 +47,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6"><input type="text" name="phone" placeholder="Phone" ng-model="facilityData.Phone"/> </div>
-                    <div class="col-md-6" ><input type="file"> </div>
+                    <div class="col-md-6" ><input type="file" fileread="facilityData.image"> </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6" >
@@ -74,8 +74,10 @@
                         <div id="box" style="text-align:left">
                             <label for="services"> Services provided at your facility (select all that apply)</label>
                             <div ng-repeat="service in facilityServices">
-                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.Services"> {{service.name}}<br>
+                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.Services.Predefined"> {{service.name}}<br>
                             </div>
+                            Other
+                            <input type="text" ng-model="facilityData.Services.Other">
                         </div>
                     </div>
                     <div class="col-md-6" >
@@ -88,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                
+                {{facilityData}}
                 <input type="button" name="next" class="next action-button" value="Next" />
                 
             </fieldset>
@@ -134,8 +136,7 @@
        
        $scope.administratorData = {};
        $scope.facilityData = {};
-       
-       
+       $scope.facilityData.Services = {};
        $scope.facilityDescription = [
            { name: "Academic"},
            { name: "Tertiary"},
@@ -145,12 +146,11 @@
        $scope.facilityServices = [
            { name: "Audiology"},
            { name: "Surgery"},
-           { name: "Speech"},
-           { name: "Other"}
+           { name: "Speech"}
        ];
        $scope.facilityCochlearTraining = [
-           { name: "General_Otolaryngologist"},
-           { name: "Fellowship_Trained_Otologist"}
+           { name: "General Otolaryngologist"},
+           { name: "Fellowship Trained Otologist"}
        ];
         
        //$scope.facilitaData.
@@ -226,9 +226,9 @@
            })
            .success(function(data) {
                console.log(data);
+               //alert("Your facility and administrator have been registered with AII!");
            });
            
-           console.log("admin registration");
            
        }
        
@@ -236,7 +236,24 @@
        
    }
    
-   
+    regApp.directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    }
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }]);
    
    regApp.controller(controllers);
    

@@ -1,4 +1,15 @@
 div.scroll{background-color:#EDF2FF;height:100px;overflow:auto}#cp_background-gradient{background-color:#ddeaeb}#cp_topNavigation .navbar{background-color:#fff;box-shadow:0 0 20px 0 #787878;height:50px}#cp_topNavigation .cp_navbar-brand{font-size:19px;color:#787878}@media (max-width:310px){#cp_topNavigation .cp_navbar-brand{top:20px;font-size:10px;font-weight:bold}}@media (max-width:816px){#cp_topNavigation .nav-items button{margin-left:5px}}@media (min-width:817px){#cp_topNavigation .nav-items button{margin-left:23px}}#wrapper{padding-left:150px;transition:all 0.4s ease 0s}#sidebar-wrapper{margin-left:-150px;left:150px;width:150px;background:#5CB8E6;position:fixed;height:100%;overflow-y:auto;z-index:1000;transition:all 0.4s ease 0s}#wrapper.active{padding-left:0;position:relative;left:0}#wrapper.active #sidebar-wrapper{left:0}#page-content-wrapper{width:100%}.sidebar-nav{position:absolute;top:0px;width:150px;list-style:none;margin:0;padding:0}.sidebar-nav li{line-height:33px;text-indent:0px;min-height:100px;border-bottom:1px solid #325bbd;box-shadow:0 6px 6px -6px #000}.sidebar-nav li a{font-weight:bold;color:#325bbd;display:block;text-decoration:none;padding-left:60px}.sidebar-nav li a p{position:relative;left:0px;top:10px;text-align:center;color:#2a6496}.sidebar-nav li a .plus-user{position:relative;top:13px;left:69px}.sidebar-nav li #add-user{position:relative;left:-7px}.sidebar-nav li a span:before{position:absolute;left:54px;color:#325bbd;line-height:10px}.sidebar-nav li a:hover,.sidebar-nav li.active{color:#fff;background:rgba(255,255,255,0.2);text-decoration:none}.sidebar-nav li a:active,.sidebar-nav li a:focus{text-decoration:none}.content-header{height:65px;line-height:65px}.content-header h1{margin:0;margin-left:20px;line-height:65px;display:inline-block}
+.form3D{
+    background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+}
 #menu-toggle{
     text-decoration:none;
     font-size: .65em;
