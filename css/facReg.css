@@ -37,7 +37,7 @@ body {
 	display: none;
 }
 /*inputs*/
-#msform input[type=text],#msform input[type=file], #msform input[type=password], #msform textarea, #states,#box {
+#msform input[type=text],#msform input[type=file], #msform input[type=password], #msform textarea, #states,#box, #titles {
 	padding: 15px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
