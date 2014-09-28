@@ -4,7 +4,7 @@
 - Next you need ssh access to the server (aii-hermes.org) and I will check that everyone is a user with the right permissions to access the folder `/var/www/aii-hermes-dev` which is where we will be pushing to.
 - Anywhere you see `griffin` replace it with your username.
 
-- You need to copy a local ssh key to the server so you can connect WITHOUT typing your password. You should already have one generated, so switch to your `.ssh` directory and copy the public key into the new machine's authorized_keys file with the `ssh-copy-id` command. Make sure to replace `you` with your username.
+- You need to copy a local ssh key to the server so you can connect WITHOUT typing your password. You should already have one generated, so switch to your `.ssh` directory and copy the public key into the new machine's `authorized_keys` file with the `ssh-copy-id` command. 
 
 ```bash
 $ cd ~/.ssh
@@ -54,7 +54,7 @@ __Either way, you should be able to log into aii-hermes.org and not get prompted
 
 - On the server, we create a new repository to mirror the local one.
 - Goto your home directory on aii-hermes. I created a folder in `/home/griffin/` called `aii-hermis.git`
-- So create the folder (name is actually irrelevant) and open it, then create an empty git repo:
+- So create that folder and open it, then create an empty git repo:
 
 ```bash
 $ cd /home/griffin
@@ -63,8 +63,10 @@ $ cd aii-hermes.git
 $ git init --bare
 ```
 
-- Assuming you initialized an empty Git repository in `/home/griffin/aii-hermes.git` and
-- Assuming that you can log into aii-hermes.org with getting prompted for a password we continue.
+Up to now we have:
+
+- Initialized an empty Git repository in `/home/griffin/aii-hermes.git` and
+- You can log into aii-hermes.org without getting prompted for a password.
 
 ### Part 3 - Post receive hook
 
@@ -76,25 +78,51 @@ Now we define (and enable) a post-receive hook that checks out the latest tree i
 ```
 $ nano /home/griffin/aii-hermes.git/hooks/post-receive
 ```
-Paste the following into this post-receive file:
 
->#!/bin/sh
-GIT_WORK_TREE=/var/www/www.example.org git checkout -f
-
+- Paste the following into this post-receive file:
 
 ```
-$ chmod +x hooks/post-receive
+#!/bin/sh
+GIT_WORK_TREE=/var/www/aii-hermes-dev git checkout -f
 ```
 
-Note: earlier versions of this howto depended on setting the git config variables core.worktree to the target directory, core.bare to false, and receive.denycurrentbranch to ignore. But these changes are not needed if you use GIT_WORK_TREE (which didn't work when I first wrote the howto), and the remote repository can remain bare.
-Back on the workstation, we define a name for the remote mirror, and then mirror to it, creating a new "master" branch there.
-$ git remote add web ssh://server.example.org/home/ams/website.git
-$ git push web +master:refs/heads/master
-On the server, /var/www/www.example.org should now contain a copy of your files, independent of any .git metadata.
-The update process
+- Save the file
+- Now change the permissions to make it executable:
 
-Nothing could be simpler. In the local repository, just run
-$ git push web
+```
+$ chmod +x /home/griffin/aii-hermes.git/hooks/post-receive
+```
+
+### To repeat yet again:)
+
+- You can log into aii-hermes.org without getting prompted for a password
+- You have a folder called `/home/griffin/aii-hermis.git` that has an empty git repository + a file called `post-receive` in the hooks folder with bash stuff in it.
+- The post-receive file is executable.
+
+### Now back on your laptop
+
+- We need to define a name for the remote mirror, and then mirror to it, creating a new "master" branch there.
+- Basically instead of `git push origin master` you say `git push origin dev` (dev is my name choice).
+
+```
+$ git remote add dev ssh://aii-hermes.org/home/griffin/aii-hermes.git
+$ git push dev +master:refs/heads/master
+```
+
+On the server, `/var/www/aii-hermes-dev` should now contain a copy of your files, independent of any .git metadata.
+
+### The update process
+
+Nothing could be simpler. In the local repository, just run your normal commits + the new push:
+
+```
+$ git add -A 
+$ git commit -m "my commit message"
+$ git push origin master
+$ git push dev
+```
+
+
 This will transfer any new commits to the remote repository, where the post-receive hook will immediately update the DocumentRoot for you.
 (This is more convenient than defining your workstation as a remote on the server, and running "git pull" by hand or from a cron job, and it doesn't require your workstation to be accessible by ssh.)
 Notes
