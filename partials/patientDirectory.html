@@ -47,7 +47,11 @@
                     <!-- careTeam(event) info-->
                     <div class="row">
                         <div class="col-md-9">
-                            <em>Event Description: </em>{{careTeam.Description}}<br>
+                            <em>Event Description: </em><span ng-if="!editDescrip"> {{careTeam.Description}}</span>
+                            <input ng-click-select type="text" ng-if="editDescrip" ng-model="careTeam.Description">
+                            <a href=""><span class="fa " ng-click="editDescrip = !editDescrip; submitDescriptionInfo(careTeam)" ng-class="{'fa-pencil-square-o':!editDescrip, 'fa-floppy-o':editDescrip}" ></span></a> <br>
+                                                
+
                             <em>Current Phase: </em> <span ng-if="careTeam.CurrentPhaseID == 3" > Candidacy Testing / </span>           
                                                     {{phases[careTeam.CurrentPhaseID-1].Name}}<br> 
                             <em>Implant Type: </em> {{careTeam.LeftImplantType}} <br>
@@ -346,10 +350,10 @@
                         </div> <br>
                         <div class="row">
                             <div class="control-group col-md-8 col-md-offset-1" >
-                                <label>Event Description</label>
+                                <label>Provide description of event if known</label>
                                 <div class="controls" >
-                                    <input type="text" class="form-control" name="description" ng-model="newEvent.Description" ng-required="true"
-                                        placeholder="Enter description of event (i.e. left ear cochlear implant)" alphabet>
+                                    <input type="text" class="form-control" name="description" ng-model="newEvent.Description"
+                                        placeholder="Enter description of event if known (i.e. left ear cochlear implant)" >
                                 </div>
                             </div>
                         </div><br>

@@ -1374,7 +1374,10 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.submitPatientInfo = function(patient){
         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
     };
-    
+    $scope.editDescrip =false;
+    $scope.submitDescriptionInfo = function(careTeam){
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + careTeam.CareTeamID,careTeam);
+    };
     $scope.calcAge = function(dateString) {
         var year=Number(dateString.substr(0,4));
         var month=Number(dateString.substr(4,2))-1;
@@ -1485,7 +1488,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             
             $scope.newEvent={"Description":null, "OriginalFacilityID": 100, "CurrentPhaseID":3, "CreatedOn": new Date(), "PatientID": patient.PatientID};
             $scope.patient = patient;
-            $scope.as= {};
+            
             $scope.ok = function () {
                 $modalInstance.close();
                 $timeout(function(){
@@ -1495,20 +1498,34 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 console.log($location.hash());
                 $timeout(function(){
                     $anchorScroll();
-                }, 4000);
+                }, 3000);
             };
             
+                $scope.answer = {};
+                $scope.answer.Answers = {};
+                $scope.answer.PhaseID = 1;
             
-            $scope.demoInfo=null;
             $scope.submitEvent = function(){
-                postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent);
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ this.patient.CareTeams[0].CareTeamID
-                            + '/phaseAnswers/1').success(function(data) {
-                    $scope.demoInfo = data.records;
-                });//.then(postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.demoInfo));
-                this.ok();
+                if($scope.newEvent.Description == null){
+                    $scope.newEvent.Description = "Edit Event Description";
+                }
+                postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent).success(function(data) {
+                    $scope.answer.CareTeamID = data.records;
+                }).then(function(){
+                    //Grab demographic answers
+                    getData.get("http://killzombieswith.us/aii-api/v1/careTeams/"+ $scope.patient.CareTeams[0].CareTeamID
+                                            + '/phaseAnswers/1').success(function(data) {
+                        $scope.patientDemoAnswers = data.records;            
+                    }).then(function(){
+                        for(var answerID in $scope.patientDemoAnswers["Answers"]) {
+                            $scope.answer.Answers[answerID] = $scope.patientDemoAnswers.Answers[answerID].Answers;
+                        };
+                    }).then(function(){
+                        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+                        $scope.ok();
+                    });
+                });
             }
-            
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
             };
