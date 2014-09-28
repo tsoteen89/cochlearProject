@@ -126,16 +126,22 @@ $ git push dev
 ```
 
 
-This will transfer any new commits to the remote repository, where the post-receive hook will immediately update the DocumentRoot for you.
-(This is more convenient than defining your workstation as a remote on the server, and running "git pull" by hand or from a cron job, and it doesn't require your workstation to be accessible by ssh.)
-Notes
+- This will transfer any new commits to the remote repository, where the post-receive hook will immediately update the DocumentRoot for you.
 
-A few more things bear mentioning.
-First, the work tree (/var/www/www.example.org above) must be writable by the user who runs the hook (or the user needs sudo access to run git checkout -f, or something similar).
-Also, the work tree does not need to correspond exactly to your DocumentRoot. Your repository may represent only a subdirectory of it, or even contain it as a subdirectory.
-In the work tree, you will need to set the environment variable GIT_DIR to the path to website.git before you can run any git commands (e.g. "git status").
-Setting receive.denycurrentbranch to "ignore" on the server eliminates a warning issued by recent versions of git when you push an update to a checked-out branch on the server. (Thanks to Miklos Vajna for pointing this out.)
-You can push to more than one remote repository by adding more URLs under the [remote "web"] section in your .git/config.
-[remote "web"]
+- First, the work tree (/var/www/aii-hermes-dev) must be writable by the user who runs the hook (or the user needs sudo access to run git checkout -f, or something similar). Note: I added everyone to sudoers, and added the following for everyone:
+
+```
+anne ALL = (root) NOPASSWD: /usr/bin/git
+```
+
+- This means that you should not get prompted for a password to run git commands.
+
+- Also, the work tree does not need to correspond exactly to your DocumentRoot. Your repository may represent only a subdirectory of it, or even contain it as a subdirectory. (Not for us, but nice to know).
+- In the work tree, you will need to set the environment variable GIT_DIR to the path to website.git before you can run any git commands (e.g. "git status").
+- Setting receive.denycurrentbranch to "ignore" on the server eliminates a warning issued by recent versions of git when you push an update to a checked-out branch on the server. (Thanks to Miklos Vajna for pointing this out.)
+- You can push to more than one remote repository by adding more URLs under the [remote "dev"] section in your .git/config.
+```
+[remote "dev"]
     url = ssh://server.example.org/home/ams/website.git
     url = ssh://other.example.org/home/foo/website.git
+```
