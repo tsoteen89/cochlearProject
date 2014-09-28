@@ -54,7 +54,7 @@
 
                             <em>Current Phase: </em> <span ng-if="careTeam.CurrentPhaseID == 3" > Candidacy Testing / </span>           
                                                     {{phases[careTeam.CurrentPhaseID-1].Name}}<br> 
-                            <em>Implant Type: </em> {{careTeam.LeftImplantType}} <br>
+                            <em>Implant Type: </em> {{careTeam.ImplantType}} <br>
                         </div>
                         <div class="col-md-3">
                             <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
