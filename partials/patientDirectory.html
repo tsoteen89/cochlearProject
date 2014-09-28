@@ -1,5 +1,5 @@
 <!-- apiPatientsController and collapseCtrl being used--------------------->
-<div ng-controller="apiPatientsController" class="container">
+<div ng-controller="apiPatientsController" style="margin-left:25px">
         
     <a id="top"></a>
     <div class="container">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="col-md-3">
                             <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
-                                    ng-if="careTeam== patient.CareTeams[0]"> Add new event</button>
+                                    ng-if="careTeam== patient.CareTeams[0] && userLevelID < 11"> Add new event</button>
                         </div>
                     </div>
                   

@@ -273,7 +273,21 @@ myApp.factory('persistData', function () {
         }
     };
 });
-
+//Factory to allow messaging controller to talk to badge controller and update unread count
+myApp.factory('messageCount', function($rootScope){
+    var count = {};
+    
+    count.prepForBroadcast = function(cnt){
+        count.number = cnt;
+        this.broadcastCount();
+    };
+    
+    count.broadcastCount = function(){
+        $rootScope.$broadcast("handleBroadcast");
+    };
+    
+    return count;
+});
     
 //*****************************************END FACTORIES*******************************************//
 
@@ -1369,6 +1383,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
  */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
     $scope.userFacilityID = userInfo.get().FacilityID;
+    $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
     
     $scope.submitPatientInfo = function(patient){
@@ -1827,7 +1842,7 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
  *      @returns - NULL
  *
  */
-controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo) {   
+controllers.messagingController = function ($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount) {   
     
 	//User's ID (will be retrieved using session data)
 	$scope.userID = userInfo.get().UserID;
@@ -1850,6 +1865,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/drafts/" + $scope.sessionID;
 	$scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/deleted/" + $scope.sessionID;
 	$scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
+    
+    
     
     //Grab all inbox messages using patientURL 
     getData.get($scope.inboxURL).success(function(data) {
@@ -2038,6 +2055,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.selectedMessage = null;
 		}
 		else{
+            
 			$scope.isPopupVisible = true;
 			$scope.selectedMessage = message;
 			//If the message is a user received message and has not already been marked as read, mark it
@@ -2049,7 +2067,14 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				//PUT the message using the message URL
 				putData.put(messageURL,message).success(function(data){
 					$scope.refreshMessages();
-				});
+				}).then(function(){
+                    $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
+                    getData.get($scope.unreadMessageURL).success(function(data) {
+                        $scope.messageCount = data.records;
+                    }).then(function (){
+                        messageCount.prepForBroadcast($scope.messageCount);
+                   });
+                });
 			}
 		}
 	};
@@ -3376,19 +3401,21 @@ controllers.PatientPhaseCollapseCtrl = function($scope) {
  *      @returns - NULL
  *
  */
-controllers.BadgeCtrl = function($scope, persistData, getData, userInfo) {
+controllers.BadgeCtrl = function($scope, persistData, getData, userInfo, messageCount) {
     
 	$scope.sessionID = userInfo.get().SessionID;
 	$scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
 	
-	getData.get($scope.unreadMessageURL).success(function(data) {
-		$scope.messageCount = data.records;
-		$scope.icon = {"count" : $scope.messageCount};
-	});
     
-    $scope.add = function() {
-        $scope.icon.count++;
-    }
+getData.get($scope.unreadMessageURL).success(function(data) {
+            $scope.messageCount = data.records;
+            $scope.icon = {"count" : $scope.messageCount};
+        });
+    
+    $scope.$on('handleBroadcast', function(){
+        $scope.icon.count = messageCount.number;
+    });
+    
     $scope.clear = function() {
         console.log("clearing badge");
         $scope.icon.count = 0;
