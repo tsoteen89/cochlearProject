@@ -99,7 +99,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @constructor
         */
         _init : function(){
-            console.log('constructor');
+            console.log('constructor '+this.side);
             
             //Initialize the canvas by locking it to it's element and 
             //attaching some event listeners to it.
@@ -107,7 +107,8 @@ var AudioGram = function(element_id, audiogram_id,side) {
             this.ctx = this.canvas.getContext('2d');
             this.canvas_width = $('#'+this.element_id).width();
             this.canvas_height = $('#'+this.element_id).height();
-            this.ctx.font = '10pt helvetica';
+            //font-family: 'Coda Caption', sans-serif;
+            this.ctx.font = '10pt Courier';
             //Load X labels (frequencies) into array
             for(var i=125;i<=8000;i*=2){
                 var Label = "";
@@ -123,7 +124,14 @@ var AudioGram = function(element_id, audiogram_id,side) {
             //Load Y labels (dB presentation level) into array
             
             for(var i=-10;i<=120;i+=10){
-                this.y_labels.push(i);
+                if(i<0)
+                    this.y_labels.push(i);
+                else if(i<10)
+                    this.y_labels.push('  '+i);
+                else if(i<100)
+                    this.y_labels.push(' '+i);
+                else
+                    this.y_labels.push(i);
             }
             
             //Load Y possible values because we want more possibilities than just the labels
@@ -168,6 +176,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */
         addMeasure: function(x,y){
+            console.log('addMeasure '+this.side);
             
             if(x<this.graph_bounds.min.x ||
                x>this.graph_bounds.max.x ||
@@ -177,7 +186,6 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 return;
             }
             
-            console.log('addMeasure');
             var snap = this.snapClick(x,y);
             var vals = {'measure':this.crnt_measure,
                         'x':snap.x,'y':snap.y,
@@ -195,27 +203,36 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @param {boolean} delete_vals Optional parameter to delete all values as opposed to just clearing them.
         * @return {null} 
         */
-        clearMeasures : function(delete_vals){
-            console.log('clearMeasures');
+        clearBoard : function(delete_vals){
+            console.log('clearBoard '+this.side);
+
             //default param defaults to 'false' (don't delete objects on canvas)
             delete_vals = typeof delete_vals !== 'undefined' ? delete_vals : false;
             
-            //Clear everything within this rectangle
+            this.ctx.save();
+
+            // Use the identity matrix while clearing the canvas
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+ 
+            this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);    
             
-            this.ctx.clearRect(this.graph_bounds.min.x,this.graph_bounds.min.y,this.graph_size.width,this.graph_size.height);
-            
-            this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-            this.drawLabels();
-            this.drawOuterBorder();
+            // Restore the transform
+            this.ctx.restore();  
             
             //Clear out everything currently 'saved'
             if(delete_vals){
-                console.log("buh bye");
+                console.log("buh bye "+this.side);
                 this.audiogram_vals = [];
             }
             
-            //Redraw the graph (not the measures, just the lines)
-            this.drawGraph();
+        },
+        /**
+        * Clear the lines from the graph. Not really necessary but I can't figure out my ghost line problem.
+        * @param {null}
+        * @return {null} 
+        */        
+        clearGraph : function(){
+            this.ctx.clearRect(this.graph_bounds.min.x,this.graph_bounds.min.y,this.graph_bounds.max.x,this.graph_bounds.max.y);
         },
         /**
         * Actuall draws the "lines" giving the canvas it's graph appearance.
@@ -223,7 +240,8 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */
         drawGraph: function(){
-            console.log('drawGraph');
+            console.log('drawGraph '+this.side);
+            
             var x;
             var y;
             var i;
@@ -232,7 +250,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
             this.ctx.rect(this.graph_bounds.min.x,this.graph_bounds.min.x,this.graph_size.width,this.graph_size.height);      
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = this.colors.graph_lines;
-            this.ctx.stroke();  
+            this.ctx.stroke();
             
             //Draw vertical lines
             for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length-1;i++,x+=this.column_width){
@@ -249,6 +267,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 this.ctx.lineTo(this.graph_bounds.max.x,y);
                 this.ctx.stroke();
             }
+            this.ctx.closePath();
         },
         /**
         * Draws the decible and frequency labels on the graph
@@ -256,7 +275,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */
         drawLabels: function(){
-            console.log('drawLabels');
+            console.log('drawLabels '+this.side);
             var i;
             var x;
             var y;
@@ -270,47 +289,49 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 this.ctx.fillText(this.y_labels[i],this.graph_bounds.min.x-30,y+5);
                 this.ctx.stroke();
             }
+            this.ctx.closePath();
         },
         /**
-        * Prints the measures currently saved in an array. Prints the "measure symbol" [X,O,M...] for each measure
-        *    as well as a line connecting each one.
+        * Prints the lines that connect measures on the graph.
+        * @param {null} 
+        * @return {null} 
+        */ 
+        drawLines: function(){
+            console.log('drawLines '+this.side);
+                        
+            var i;
+            this.clearGraph();
+            this.drawGraph();
+            this.ctx.beginPath();
+             
+            this.ctx.strokeStyle = this.colors.draw_line;
+            this.ctx.lineWidth = 2;
+            if(this.audiogram_vals.length>1){
+                for(i=0;i<this.audiogram_vals.length-1;i++){
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
+                    this.ctx.lineTo(this.audiogram_vals[i+1].x,this.audiogram_vals[i+1].y);
+                    console.log(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
+                    this.ctx.stroke();
+                    this.ctx.closePath();
+                }
+            }
+
+
+            
+        },        
+        /**
+        * Prints the measures currently saved in an array. Prints the "measure symbol" [X,O,M...] for each measure.
         * @param {null} 
         * @return {null} 
         */ 
         drawMeasures: function(){
-            console.log('drawMeasures');
-            
-            this.clearMeasures();
-            
+            console.log('drawMeasures '+this.side);
+                        
             var i;
             for(i=0;i<this.audiogram_vals.length;i++){
                 this.ctx.drawImage(this.audiogram_vals[i].imgObj,this.audiogram_vals[i].x-12,this.audiogram_vals[i].y-12);
             }
-            
-
-            if(this.audiogram_vals.length>1){
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.audiogram_vals[0].x,this.audiogram_vals[0].y);
-                for(i=1;i<this.audiogram_vals.length;i++){
-                    this.ctx.lineTo(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
-                    console.log(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
-                }
-                this.ctx.strokeStyle = this.colors.draw_line;
-                this.ctx.stroke();
-            }
-
-//            this.ctx.beginPath();
-//            if(this.audiogram_vals.length == 1){
-//                this.ctx.drawImage(this.audiogram_vals[0].imgObj,this.audiogram_vals[0].x-12,this.audiogram_vals[0].y-12);                
-//            }else{
-//                for(i=0;i<this.audiogram_vals.length-1;i++){
-//                    this.ctx.moveTo(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
-//                    this.ctx.drawImage(this.audiogram_vals[i].imgObj,this.audiogram_vals[i].x-12,this.audiogram_vals[i].y-12);
-//                    this.ctx.lineTo(this.audiogram_vals[i+1].x,this.audiogram_vals[i+1].y);               
-//                }
-//            }
-//            this.ctx.strokeStyle = this.colors.draw_line;
-            //this.ctx.stroke();
         },
         /**
         * Draws the very outer border of the canvas. Could probably be combined with another method.
@@ -318,17 +339,12 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */
         drawOuterBorder: function() {
-            console.log('drawOuterBorder');
+            console.log('drawOuterBorder '+this.side);
             this.ctx.rect(0, 0, this.canvas_width, this.canvas_height);
-//            this.ctx.fillStyle = 'white';
-//            this.ctx.shadowColor = '#999';
-//            this.ctx.shadowBlur = 20;
-//            this.ctx.shadowOffsetX = 15;
-//            this.ctx.shadowOffsetY = 15;
-//            this.ctx.fill();
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = this.colors.border;
             this.ctx.stroke();
+            this.ctx.closePath();
         },
         /**
         * Finds the closest decibel value (in increments of 5) to the mouse click
@@ -336,7 +352,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */        
         getDecibels: function(y){
-            console.log('getDecibels');
+            console.log('getDecibels '+this.side);
             var d;
             var r;
             y = y - this.graph_bounds.min.y;              //adjust y because of margins    
@@ -353,7 +369,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {null} 
         */ 
         getFrequency: function(x){
-            console.log('getFrequency');
+            console.log('getFrequency '+this.side);
             var d;
             var r;
             x = x - this.graph_bounds.min.x;                    //adjust x because of margins   
@@ -394,7 +410,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {Object} {x,y} The x and y coordinates of the mouse click pulled out of the evt object.
         */
         getMousePos: function(canvas, evt) {
-            console.log('getMousePos');
+            console.log('getMousePos '+this.side);
             var rect = canvas.getBoundingClientRect();
             return {
                 x: evt.clientX - rect.left,
@@ -410,6 +426,19 @@ var AudioGram = function(element_id, audiogram_id,side) {
             console.log(error_num);
         },
         /**
+        * redrawCanvas
+        * @param {null} 
+        * @return {null}
+        */ 
+        redrawCanvas: function(){
+            this.clearBoard();
+            this.drawLabels();
+            this.drawGraph();
+            this.drawLines();
+            this.drawOuterBorder();
+            this.drawMeasures();
+        },       
+        /**
         * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
         *    audiogram value set. So, it snaps it to the closest dB value in increments of 5 and an acceptable 
         *    frequency (dictated by an array of frequencies).
@@ -418,7 +447,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {object} {x,y}
         */ 
         snapClick: function(x,y){
-            console.log('snapClick');
+            console.log('snapClick '+this.side);
             var d;      //Number of times divided into
             var r;      //Remainder after division
             var snap_x; //snapped to x value
@@ -450,7 +479,8 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {object} {x,y}
         */ 
         setMasked: function(mask){
-            console.log('setMasked');
+            console.log('setMasked '+this.side);
+            
             if(mask)
                 this.masked = 'masked';
             else
@@ -464,7 +494,8 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @return {object} {x,y}
         */ 
         setMeasure: function(measure){
-            console.log('setMeasure');
+            console.log('setMeasure '+this.side);
+            
             this.crnt_measure = measure;
             console.log(this.crnt_measure);
         },
@@ -496,6 +527,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
         */ 
         sortMeasures : function()
         {
+            console.log('sortMeasures '+this.side);
             var swapped;
             do {
                 swapped = false;
@@ -509,24 +541,36 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 }
             } while (swapped);
         },
+        temp : function(){
+            for (var i=0; i < this.audiogram_vals.length; i++) {
+                var x = this.audiogram_vals[i]['x']-12;
+                var y = this.audiogram_vals[i]['y']-12;
+                var width = 24;
+                var height = 24;
+                var imgData = this.ctx.getImageData(x, y, width, height);
+                //this.ctx.rect(x, y, 24, 24);
+                console.log(imgData.data);
+            }
+        }
     }
     private._init();
     private.canvas.addEventListener('click', function(evt) {
-        var mousePos = private.getMousePos(private.canvas, evt);
-        mousePos.x = Math.floor(mousePos.x);
-        mousePos.y = Math.floor(mousePos.y);
-        
         setTimeout(function () {
-            private.addMeasure(mousePos.x,mousePos.y);
+            var mousePos = private.getMousePos(private.canvas, evt);
+            mousePos.x = Math.floor(mousePos.x);
+            mousePos.y = Math.floor(mousePos.y);
+            
             setTimeout(function () {
-                private.clearMeasures();
+                private.addMeasure(mousePos.x,mousePos.y);
                 setTimeout(function () {
-                    private.drawMeasures();
-                }, 0)
+                    private.clearBoard();
+                    setTimeout(function () {
+                        private.redrawCanvas();
+                        console.log(private.audiogram_vals);
+                    }, 0);
+                }, 0);
             }, 0);
-        }, 0);
-        
-        console.log(private.audiogram_vals);
+        },0);
     }, false);
 
     // Expose public API
@@ -537,17 +581,37 @@ var AudioGram = function(element_id, audiogram_id,side) {
             }
         },
         setMasked: function(val){
-            private.setMasked(val);
+            setTimeout(function () {
+                private.setMasked(val);
+                setTimeout(function () {
+                    private.clearBoard();
+                    setTimeout(function () {
+                        private.redrawCanvas();
+                    }, 0);
+                }, 0);
+            }, 0);
         },
         setMeasure: function(char){
-            private.setMeasure(char);
+            setTimeout(function () {
+                private.setMeasure(char);
+                setTimeout(function () {
+                    private.clearBoard();
+                    setTimeout(function () {
+                        private.redrawCanvas();
+                    }, 0);
+                }, 0);
+            }, 0);
         },
         clearBoard: function(){
             setTimeout(function () {
-                private.clearMeasures(true);
+                private.clearBoard(true);
                 setTimeout(function () {
-                    private.clearMeasures(true);
-                }, 0)
+                    private.clearBoard();
+                    setTimeout(function () {
+                        private.redrawCanvas();
+                    }, 0);
+                }, 0);
+
             }, 0);
             
         }
