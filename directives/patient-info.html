@@ -1,8 +1,7 @@
 <div id = "cp_patientContainer"class="col-md-3">
     <br>
     <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
-    <p class = "cp_patientSex" ng-if=patient.Sex=='m'>Male</p>
-    <p class = "cp_patientSex" ng-if=patient.Sex=='f'>Female</p>
+    <p class = "cp_patientSex" >{{patient.Sex}}</p>
     <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
     <br> 
     <br> 

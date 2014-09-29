@@ -1660,8 +1660,9 @@ controllers.patientFormController = function($scope, $http, postData,dateFilter,
     
     // Post function to add a new Patient to the system
     $scope.addPatient = function() {
+        $scope.formData.DOB = $scope.formData.DOB.toISOString().slice(0,10);
         postData.post('http://killzombieswith.us/aii-api/v1/patients',$scope.formData);
-        console.log($scope.formData)
+        //console.log($scope.formData)
     };
     
 }
