@@ -208,8 +208,8 @@
         //audiogram class.
         $( ".aud-btn" ).each(function( index ) {
             if($( this ).hasClass( "active" )){
-                board1.setMeasure($( this ).find('input').attr('id'));
-                board2.setMeasure($( this ).find('input').attr('id'));
+                //board1.setMeasure($( this ).find('input').attr('id'));
+                //board2.setMeasure($( this ).find('input').attr('id'));
             }
         });
 
@@ -233,8 +233,8 @@
                 if($( this ).hasClass( "active" )){
                     $( this ).addClass('btn-info');
                     //console.log($( this ).find('input').attr('id'));
-                    board1.setMeasure($( this ).find('input').attr('id'));
-                    board2.setMeasure($( this ).find('input').attr('id'));
+                    //board1.setMeasure($( this ).find('input').attr('id'));
+                    //board2.setMeasure($( this ).find('input').attr('id'));
                 }else{
                     $( this ).removeClass('btn-info');
                 }

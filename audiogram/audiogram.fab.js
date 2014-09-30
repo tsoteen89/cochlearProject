@@ -1,4 +1,4 @@
-var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
+var AudioGram = function(canvas,audiogram_id,side) {
     // Private data
     var private = {
         font_size       : 12,
@@ -7,16 +7,19 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
         canvas          : canvas,
         column_width    : 0,		        //width of a column function based on width of canvas
         row_height      : 0,                //height of a row function based on height of canvas
-        margins         : {"top":40,"bottom":40,"left":40,"right":40},
+        margins         : {"top":30,"bottom":30,"left":40,"right":40},
         graph_bounds    : {"min":{"x":0,"y":0},"max":{"x":0,"y":0}},
         graph_size      : {"width":0,"height":0},
-        crnt_measure    : null,
+        current_measure : null,
         masked          : 'unmasked',       //Masked = masked Unmasked = unmasked :)
         x_labels        : [],               //Values displayed on top of audiogram
         y_labels        : [],               //These are the values on the left of the audiogram
         x_labls_grp     : null,
         y_labls_grp     : null, 
-        graph_lines_grp : null,
+        horiz_lines_grp : null,
+        vert_lines_grp  : null,
+        rectgles_grp    : null,
+        background_group: null,             //fabric group that represents all background drawings.
         x_values        : [],               //When audiogram is clicked, these are the values that
         y_values        : [],               //-are "snapped" to.
         audiogram_vals  : [],
@@ -97,6 +100,8 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
         * @constructor
         */
         _init : function(){
+            this.canvas.calcOffset();
+
             console.log('constructor '+this.side);
             
             //Initialize the canvas by locking it to it's element and 
@@ -156,30 +161,23 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
                 this.colors.draw_line = "#0000FF";
             
             //Now we draw the outerborder, addsome labels, and draw all the graph lines.
-            //this.drawOuterBorder();
-            this.drawLabels();
-            this.drawGraph();
             this.drawBackground();
 
         },
-        drawBackground : function(){
+        addMeasure : function(){
+            console.log('addMeasure '+this.side);
             
         },
-        /**
-        * Draw labels 
-        * @param {null} 
-        * @return {null} 
-        */
-        drawLabels : function(){
+        drawBackground : function(){
             console.log('drawLabels '+this.side);
             
             var i;
             var x;
             var y;
             var text = [];
+            var lines = [];
             
-            
-            var rect = new fabric.Rect({
+            var rect1 = new fabric.Rect({
                 left: 0,
                 top: 0,
                 stroke : 'black',
@@ -187,32 +185,44 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
                 fill : 'white',
                 width: this.canvas.width-4,
                 height: this.canvas.height-4,
-                shadow: 'rgba(0,0,0,0.3) 3px 3px 3px'
+                shadow: 'rgba(0,0,0,0.3) 3px 3px 3px',
+                selectable: false
             });            
-            this.canvas.add(rect);
-
-            var rect = new fabric.Rect({
+            
+            var rect2 = new fabric.Rect({
                 left: this.graph_bounds.min.x,
                 top: this.graph_bounds.min.y,
                 stroke : 'black',
                 strokeWidth : 1,
                 fill : 'white',
                 width: this.graph_size.width,
-                height: this.graph_size.width,
-                shadow: 'rgba(0,0,0,0.3) 3px 3px 3px'
+                height: this.graph_size.height,
+                shadow: 'rgba(0,0,0,0.3) 3px 3px 3px',
+                selectable: false
             });            
-            this.canvas.add(rect);
             
+            this.rectgles_grp = new fabric.Group([rect1,rect2],{
+                left:0,
+                top:0,
+                selectable: false
+            });
+            this.canvas.add(this.rectgles_grp);            
+            
+            
+            //Add x labels acress top
+            text = [];
             y = this.graph_bounds.min.y;
             for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length;i++,x+=this.column_width){
                 text[i] = new fabric.Text(this.x_labels[i].toString(), { left: x, top: y,fontSize: 14,shadow: 'rgba(0,0,0,0.3) 2px 2px 2px'});
             }
             this.x_labls_grp = new fabric.Group(text,{
                 left:60,
-                top:10 
+                top:10,
+                selectable: false
             });
             this.canvas.add(this.x_labls_grp);
             
+            //Add y labels down side
             text = [];
             x=this.graph_bounds.min.x;
             for(i=0,y=this.graph_bounds.min.y;i<this.y_labels.length;i++,y+=this.row_height){
@@ -220,94 +230,163 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
             }
             this.y_labls_grp = new fabric.Group(text,{
                 left:5,
-                top:40 
+                top:40,
+                selectable: false
             });
             this.canvas.add(this.y_labls_grp);
+
+            //Add horizontal lines
+            lines = [];
+            for(i=0,y=this.graph_bounds.min.y-10;i<this.y_labels.length;i++,y+=this.row_height){
+                lines[i] = new fabric.Line([this.graph_bounds.min.x,y,this.graph_bounds.max.x,y], {
+                            stroke: 'rgba(0, 0, 0, 0.2)',
+                            strokeWidth: 2
+                        });
+            }
+            
+            this.horiz_lines_grp = new fabric.Group(lines,{
+                left:this.graph_bounds.min.x,
+                top:this.graph_bounds.min.y+20,
+                selectable: false
+            });
+            this.canvas.add(this.horiz_lines_grp);
+            
+            //Add vertical lines
+            lines = [];
+            for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length;i++,x+=this.column_width){
+                console.log(x,this.graph_bounds.min.y,x,this.graph_bounds.max.y);
+                lines[i] = new fabric.Line([x,this.graph_bounds.min.y,x,this.graph_bounds.max.y], {
+                            stroke: 'rgba(0, 0, 0, 0.2)',
+                            selectable: false,
+                            strokeWidth: 2
+                        });
+            }
+            
+            this.vert_lines_grp = new fabric.Group(lines,{
+                left:this.graph_bounds.min.x+30,
+                top:this.graph_bounds.min.y,
+                selectable: false
+            });
+            this.canvas.add(this.vert_lines_grp);
+            
+            
+        },
+        
+        clearCanvas : function(){
+            console.log('clearCanvas '+this.side);
+//            var objects = canvas.getObjects();
+//
+//                
+//            var Group = new fabric.Group();
+//            
+//            for(var i=0;i<objects.length;i++){
+//                Group.add(objects[i].clone());
+//            }
+//                
+//            canvas.clear().renderAll();
+            canvas.remove();
         },
         /**
-        * Actuall draws the "lines" giving the canvas it's graph appearance.
-        * @param {null}
+        * Finds the closest frequency value (within an array of acceptable values) to the mouse click
+        * @param {number} x The 'x' coordinate of the mouse click.
         * @return {null} 
-        */
-        drawGraph: function(){
-            console.log('drawGraph '+this.side);
+        */ 
+        getFrequency: function(x){
+            console.log('getFrequency '+this.side);
+            var d;
+            var r;
+            var c = this.column_width;
+            var c2 = this.column_width / 2;
             
-            var x;
-            var y;
-            var i;
-            var lines = [];
+            x = Math.round(x - this.graph_bounds.min.x - this.canvas._offset.left);    //adjust x because of margins 
             
-//        var rect = new fabric.Rect({
-//          left: 100,
-//          top: 100,
-//          fill: 'red',
-//          width: 20,
-//          height: 20
-//        });
-//        canvas.add(new fabric.Line([0, 0, 200, 200], {
-//            left: 0,
-//            top: 0,
-//            stroke: 'red'
-//        }));
- 
             
-            for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length;i++,x+=this.column_width){
-                lines[i] = new fabric.Line([x,this.graph_bounds.min.y,x,this.graph_bounds.max.y], {
-                            stroke: 'black',
-                            strokeWidth: 2,
-                            shadow: 'rgba(0,0,0,0.3) 3px 3px 3px'
-                        });
+            console.log("x:"+x);
+            d = Math.floor(x / (this.column_width / 2));                   //How many 1/2 columns divide into x
+            console.log("d:"+d);            
+            r = x % (this.column_width / 2);
+            console.log("r:"+r);
+            
+            if(r/(this.column_width / 2) > .5){
+                d = d + 1;
             }
-            
-            this.graph_lines_grp = new fabric.Group(lines,{
-                left:70,
-                top:40 
-            });
-            this.canvas.add(this.graph_lines_grp);
-            
-            lines = [];
+                        
+            //This hot mess is because:
+            //Labels =              125,250,500,1000,2000,4000,8000
+            //Possible Returns =    125,250,375,500,1000,1500,2000,3000,6000,8000
+            //So there's a values between every label except <500. Snapping to the
+            //nearest frequency changes for values below 500.
+            if(d>=4){                                         
+                return this.x_values[d];
+            }else{
+                r = x % this.column_width;
+                r /= this.column_width
 
-            for(i=0,y=this.graph_bounds.min.y;i<this.y_labels.length-1;i++,y+=this.row_height){
-                lines[i] = new fabric.Line([this.graph_bounds.min.x,y,this.graph_bounds.max.x,y], {
-                            stroke: 'black',
-                            strokeWidth: 2,
-                            shadow: 'rgba(0,0,0,0.3) 3px 3px 3px'
-                        });
+                if(d == 3 && r >.50)
+                    return this.x_values[4]                    //Hacky
+                else if(d == 0)
+                    return this.x_values[0];
+                else if(d == 1 && r < .50)
+                    return this.x_values[0]
+                else
+                    return this.x_values[2]                    
+            
             }
+        },
+        setCurrentMeasure : function(measure){
+            console.log('setCurrentMeasure '+this.side);
+            this.current_measure = measure;           
+        },
+        setMasked : function(masked){
+            console.log('setMasked '+this.side);
+            this.masked = masked;
+            console.log(this.masked);
+        },
+        /**
+        * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
+        *    audiogram value set. So, it snaps it to the closest dB value in increments of 5 and an acceptable 
+        *    frequency (dictated by an array of frequencies).
+        * @param {number} x 
+        * @param {number} y
+        * @return {object} {x,y}
+        */ 
+        snapClick: function(x,y){
+            console.log('snapClick '+this.side);
+            var d;      //Number of times divided into
+            var r;      //Remainder after division
+            var snap_x; //snapped to x value
+            var snap_y; //snapped to y value
+            var frequency;
+
+            x = x - this.graph_bounds.min.x;                    //adjust x because of margins   
+            d = x / (this.column_width / 2);        //How many 1/2 columns divide into x
+            r = x % (this.column_width / 2);                    //Remainder (how close is it to the next value).
             
-            this.graph_lines_grp = new fabric.Group(lines,{
-                left:40,
-                top:50 
-            });
-            this.canvas.add(this.graph_lines_grp);
+            if(r/(this.column_width / 2) > .5)
+                d = d + 1;
             
-//            //Draw an inner rectangle just inside the labels
-//            this.ctx.rect(this.graph_bounds.min.x,this.graph_bounds.min.x,this.graph_size.width,this.graph_size.height);      
-//            this.ctx.lineWidth = 2;
-//            this.ctx.strokeStyle = this.colors.graph_lines;
-//            this.ctx.stroke();
-//            
-//            //Draw vertical lines
-//            for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length-1;i++,x+=this.column_width){
-//                this.ctx.beginPath();
-//                this.ctx.moveTo(x,this.graph_bounds.min.y);
-//                this.ctx.lineTo(x,this.graph_bounds.max.y);
-//                this.ctx.stroke();
-//            }
-//            
-//            //Draw horizontal lines
-//            for(i=0,y=this.graph_bounds.min.y;i<this.y_labels.length-1;i++,y+=this.row_height){
-//                this.ctx.beginPath();
-//                this.ctx.moveTo(this.graph_bounds.min.x,y);
-//                this.ctx.lineTo(this.graph_bounds.max.x,y);
-//                this.ctx.stroke();
-//            }
-//            this.ctx.closePath();
+            snap_x = Math.floor(d * (this.column_width / 2) + this.graph_bounds.min.x);//Multiply d by 1/2 column size to snap to an edge
+            
+            y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
+            d = y / (this.row_height / 2);          //How many 1/2 rows divide into y
+            r = y % (this.row_height / 2);                      //Remainder (how close is it to the next value).
+            
+            if(r/(this.row_height / 2) > .5)
+                d = d + 1;
+            
+            snap_y = Math.floor(d * (this.row_height / 2) + this.graph_bounds.min.y);//Multiply d by 1/2 column size to snap to an edge
+            frequency = this.getFrequency(snap_x);
+            console.log(frequency);
+            return {"x":snap_x,"y":snap_y};
         }
 
     }
     private._init();
-
+    private.canvas.on('mouse:down', function(options) {
+        console.log(options.e.clientX, options.e.clientY);
+        var click = private.snapClick(options.e.clientX, options.e.clientY);
+        console.log(click);
+    });
 
     // Expose public API
     return {
@@ -319,11 +398,11 @@ var AudioGram = function(canvas,audiogram_id,side,canvas_width,canvas_height) {
         setMasked: function(val){
             private.setMasked(val);
         },
-        setMeasure: function(char){
-            private.setMeasure(char);
+        setCurrentMeasure: function(char){
+            private.setCurrentMeasure(char);
         },
-        clearBoard: function(){
-
+        clearCanvas: function(){
+            private.clearCanvas();
             
         }
     }

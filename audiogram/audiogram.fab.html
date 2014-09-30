@@ -136,7 +136,7 @@
   <body>
 	<div class="container">
 	  <div class="row row-centered">
-          <div class="col-xs-5 col-centered">
+          <div class="col-xs-5 col-centered"  id="left_column">
               <div class="item">
                   <div class="content"><canvas id="myCanvas" width="500" height="500"></canvas></div>
               </div>
@@ -180,7 +180,7 @@
                 </div>
             </div>
           </div><!-- End Button Column-->
-          <div class="col-xs-5 col-centered">
+          <div class="col-xs-5 col-centered" id="right_column">
               <div class="item">
                   <div class="content"><canvas id="myCanvas2" width="500" height="500"></canvas></div>
               </div>
@@ -195,32 +195,71 @@
 	</div> <!-- End Container -->
     <script>
     $(function() {
+        //combine stuff later
         var canvas1 = new fabric.Canvas('myCanvas');
         var canvas2 = new fabric.Canvas('myCanvas2');
-        var board1 = new AudioGram(canvas1,100,'right',500,500);
-        var board2 = new AudioGram(canvas2,200,'left',500,500);
+  
+        canvas1.on("after:render", function(){canvas1.calcOffset();});
+        canvas2.on("after:render", function(){canvas2.calcOffset();});
         
-        // create a wrapper around native canvas element (with id="c")
-//        var canvas = new fabric.Canvas('myCanvas');
-//
-//        // create a rectangle object
-//        var rect = new fabric.Rect({
-//          left: 100,
-//          top: 100,
-//          fill: 'red',
-//          width: 20,
-//          height: 20
-//        });
-//
-//        // "add" rectangle onto canvas
-//        canvas.add(rect);    
-//        
-//        canvas.add(new fabric.Line([0, 0, 200, 200], {
-//            left: 0,
-//            top: 0,
-//            stroke: 'red'
-//        }));
+        console.log(canvas1._offset.left,canvas1._offset.top);
+        console.log(canvas2._offset.left,canvas2._offset.top);
+        
+        var board1 = new AudioGram(canvas1,100,'right');
+        var board2 = new AudioGram(canvas2,200,'left');
+        
 
+        
+        /*
+        * This function highlights the active measure button as well as
+        * setting the proper character for each board according to the 
+        * measure.
+        */
+        $( ".aud-btn" ).on( "click", function() {
+            setTimeout( function (){
+                $( ".aud-btn" ).each(function( index ) {
+                    if($( this ).hasClass( "active" )){
+                        $( this ).addClass('btn-info');
+                    }else{
+                        $( this ).removeClass('btn-info');
+                    }
+                })
+                setTimeout( function (){
+                    $( ".aud-btn" ).each(function( index ) {
+                        if($( this ).hasClass( "active" )){
+                            board1.setCurrentMeasure($( this ).find('input').attr('id'));
+                            board2.setCurrentMeasure($( this ).find('input').attr('id'));
+                        }
+                    });
+                }, 0 );
+            }, 0 );
+        });
+        
+
+        /*
+        * When clicking the mask button, toggle mask on and off.
+        */
+        $( "#mask_button" ).on( "click", function() {
+            //Using the .length makes this a boolean operation
+            //otherwise, it always returns true
+            if($(this).find($(".fa-ban")).length){
+                board1.setMasked(1);
+                board2.setMasked(1);
+                $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+            }else{
+                board1.setMasked(0);
+                board2.setMasked(0);
+                $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
+            }
+        });
+        
+        $( ".clear-button" ).on( "click", function() {
+            if($( this ).find('a').attr('id') == 'clear1'){
+                board1.clearCanvas();
+            }else{
+                board2.clearCanvas();
+            }
+        });
         
     });
     </script>      
