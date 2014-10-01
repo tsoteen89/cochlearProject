@@ -833,7 +833,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         if(angular.isArray($scope.singleAnswer.Answers[questionID])){
             for (var key in $scope.singleAnswer.Answers[questionID]) {
                 if ($scope.singleAnswer.Answers[questionID][key] == 'Not Answered') {
-                    myArray.splice(key, 1);
+                    $scope.singleAnswer.Answers[questionID].splice(key, 1);
                 }
             }
         }
