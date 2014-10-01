@@ -114,14 +114,12 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
     return {
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
-				/*
 				if(data.records == false){
 					$cookieStore.remove('SessionID');
 					$cookieStore.remove('UserLevel');
 					$window.location.href = "#";
 					location.reload();
 				}
-				*/
 			});
 			return data;
 		},
@@ -3408,7 +3406,7 @@ controllers.BadgeCtrl = function($scope, persistData, getData, userInfo, message
 	
     
 getData.get($scope.unreadMessageURL).success(function(data) {
-            $scope.messageCount = data.records;
+            $scope.messageCount = data.records.messageCount;
             $scope.icon = {"count" : $scope.messageCount};
         });
     
