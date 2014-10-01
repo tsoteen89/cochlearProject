@@ -829,6 +829,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+        //Remove Not Answered if answering a check box question that had been saved as not answered
+        if(angular.isArray($scope.singleAnswer.Answers[questionID])){
+            for (var key in $scope.singleAnswer.Answers[questionID]) {
+                if ($scope.singleAnswer.Answers[questionID][key] == 'Not Answered') {
+                    myArray.splice(key, 1);
+                }
+            }
+        }
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
     };
