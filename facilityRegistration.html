@@ -47,7 +47,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6"><input type="text" name="phone" placeholder="Phone" ng-model="facilityData.Phone"/> </div>
-                    <div class="col-md-6" ><input type="file" fileread="facilityData.image"> </div>
+                    <div class="col-md-6" ><input type="file" fileread="facilityData.image" accept="image/gif, image/jpeg, image/png"> </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6" >
@@ -90,7 +90,6 @@
                         </div>
                     </div>
                 </div>
-               <!-- {{facilityData}}-->
                 <input type="button" name="next" class="next action-button" value="Next" />
                 
             </fieldset>
@@ -110,6 +109,7 @@
                 
                 <input type="button" name="previous" class="previous action-button" value="Previous" />
                 <input type="submit" name="submit" class="submit action-button" value="Submit" ng-click="registerFacility()"/>
+               
             </fieldset>
         </form>
             </div>
