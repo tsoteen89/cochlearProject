@@ -114,14 +114,12 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
     return {
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
-				/*
 				if(data.records == false){
 					$cookieStore.remove('SessionID');
 					$cookieStore.remove('UserLevel');
 					$window.location.href = "#";
 					location.reload();
 				}
-				*/
 			});
 			return data;
 		},
@@ -829,6 +827,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+        //Remove Not Answered if answering a check box question that had been saved as not answered
+        if(angular.isArray($scope.singleAnswer.Answers[questionID])){
+            for (var key in $scope.singleAnswer.Answers[questionID]) {
+                if ($scope.singleAnswer.Answers[questionID][key] == 'Not Answered') {
+                    $scope.singleAnswer.Answers[questionID].splice(key, 1);
+                }
+            }
+        }
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
     };
@@ -3408,7 +3414,7 @@ controllers.BadgeCtrl = function($scope, persistData, getData, userInfo, message
 	
     
 getData.get($scope.unreadMessageURL).success(function(data) {
-            $scope.messageCount = data.records;
+            $scope.messageCount = data.records.messageCount;
             $scope.icon = {"count" : $scope.messageCount};
         });
     

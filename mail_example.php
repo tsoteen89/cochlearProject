@@ -15,10 +15,10 @@ $mail->Port = 465;                                    // TCP port to connect to
 
 $mail->From = 'admin@aii-hermes.org';
 $mail->FromName = 'Administrator';
-$mail->addAddress('jrrowe55@yahoo.com', 'James Rowe');     // Add a recipient
-$mail->addAddress('anne.v.lam@gmail.com', 'Anne Lam');            // Name is optional
-$mail->addAddress('t.osteen89@gmail.com', 'Travis Osteen');            // Name is optional
-$mail->addAddress('sanan.aamir@mwsu.edu', 'Sanan Amir');            // Name is optional
+$mail->addAddress('jgrisel@wf.net', 'Jed Grisel');     // Add a recipient
+//$mail->addAddress('anne.v.lam@gmail.com', 'Anne Lam');            // Name is optional
+//$mail->addAddress('t.osteen89@gmail.com', 'Travis Osteen');            // Name is optional
+//$mail->addAddress('sanan.aamir@mwsu.edu', 'Sanan Amir');            // Name is optional
 $mail->addAddress('terry.griffin@mwsu.edu','Terry Griffin');            // Name is optional
 //$mail->addReplyTo('info@example.com', 'Information');
 //$mail->addCC('cc@example.com');
@@ -37,6 +37,8 @@ $mail->Body    .= 'This is a test email from Aii-Hermes!!<br>';
 $mail->Body    .= 'I actually think it might work. Check there is an image attached.<br>';
 $mail->Body    .= 'Email me back if you get this, otherwise, I guess you won\'t know about it.<br>';
 $mail->Body    .= '<br>';
+$mail->Body    .= 'Yes james this works. This was generated at fuzzy taco....';
+
 $mail->Body    .= 'Terry<br>';
 //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
