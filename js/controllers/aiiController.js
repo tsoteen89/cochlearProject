@@ -1128,7 +1128,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.audioQs = data.records.Questions;
     });
     
-    
+    $scope.three = "3";
     
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= persistData.getPhaseName();
@@ -1149,7 +1149,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         "BKB-SIN": {"BKB-SIN Test": {}}};
 
     
-    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+    $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.    PhaseID;
             //**********************Copied from questionsControllerr****/
 
             //Grab all previously answered questions
