@@ -315,7 +315,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
                 top: 0, 
                 shadow: 'rgba(0,0,0,0.3) 1px 1px 1px'
             });
-            this.canvas.add(this.snapcircle);
+
         },
         
         clearCanvas : function(){
@@ -488,6 +488,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
         }
     });
     private.canvas.on('mouse:move', function(options) {
+        private.canvas.add(private.snapcircle);
         //e.target.setFill('red');
         var hover = private.canvas.getPointer(options.e);
         var snap = private.snapTo(hover.x,hover.y);
@@ -496,6 +497,12 @@ var AudioGram = function(canvas,audiogram_id,side) {
         //private.coordsrect.setTop(hover.y).setCoords();
         //private.coordsrect.setLeft(hover.x+25).setCoords();
         //private.coordsrect.setText(Math.round(hover.x)+","+Math.round(hover.y));
+        private.canvas.renderAll();
+    });
+    
+    private.canvas.on('mouse:out', function(options) {
+        console.log("mouse out");
+        private.canvas.remove(private.snapcircle);
         private.canvas.renderAll();
     });
 
