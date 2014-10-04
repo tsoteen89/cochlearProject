@@ -24,6 +24,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
         y_values        : [],               //-are "snapped" to.
         audiogram_vals  : [],
         coordsrect      : null,
+        snapcircle      : null,
         colors          : {
                             "background":"#000000",
                             "draw_line":"#000000",
@@ -169,13 +170,14 @@ var AudioGram = function(canvas,audiogram_id,side) {
             for(i=-10,y=this.graph_bounds.min.y+20;i<=120;i+=5,y+=this.row_height/2){
                 this.y_values.push({"value":i,"y":y});
             }
-            console.log(this.y_values);
+            //console.log(this.y_values);
             
             //Set the colors for left or right (red=right blue=left)
             if(this.side=='right')
                 this.colors.draw_line = "#FF0000";
             else
                 this.colors.draw_line = "#0000FF";
+            
             
             //Now we draw the outerborder, addsome labels, and draw all the graph lines.
             this.drawBackground();
@@ -278,8 +280,8 @@ var AudioGram = function(canvas,audiogram_id,side) {
                 });             
             }
             
-            console.log(this.x_values);
-            console.log("i= "+i);
+            //console.log(this.x_values);
+            //console.log("i= "+i);
             
             for(x=this.graph_bounds.min.x;i<this.x_labels.length*2;i++,x+=this.column_width){
                 //console.log(x,this.graph_bounds.min.y,x,this.graph_bounds.max.y);
@@ -298,14 +300,22 @@ var AudioGram = function(canvas,audiogram_id,side) {
             });
             this.canvas.add(this.vert_lines_grp);
 
-            this.coordsrect = new fabric.Text('x:100,y:100', {
-              left: 100,
-              top: 100,
-              fill: '#000000',
-              fontSize: 14
-            });
-            this.canvas.add(this.coordsrect);
+//            this.coordsrect = new fabric.Text('x:100,y:100', {
+//              left: 100,
+//              top: 100,
+//              fill: '#000000',
+//              fontSize: 14
+//            });
+//            this.canvas.add(this.coordsrect);
             
+            this.snapcircle = new fabric.Circle({
+                radius: 3, 
+                fill: 'red', 
+                left: 0, 
+                top: 0, 
+                shadow: 'rgba(0,0,0,0.3) 1px 1px 1px'
+            });
+
         },
         
         clearCanvas : function(){
@@ -335,9 +345,9 @@ var AudioGram = function(canvas,audiogram_id,side) {
             y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
             d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
             
-            console.log("d:"+d);
+            //console.log("d:"+d);
             r = (y % (this.row_height / 2)) / this.row_height;                      //Remainder (how close is it to the next value).
-            console.log("r:"+r);
+            //console.log("r:"+r);
             
             if(r > .5)
                 d = d + 1;
@@ -359,7 +369,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
             var p;                                  //current x pixel
             
             x = Math.round(x - this.graph_bounds.min.x);    //adjust x because of margins 
-            console.log('x is: '+x);    
+            //console.log('x is: '+x);    
             
             p = c;          //start off p as the width of one column
             
@@ -405,31 +415,61 @@ var AudioGram = function(canvas,audiogram_id,side) {
         */ 
         snapClick: function(x,y){
             console.log('snapClick '+this.side);
-            var d;      //Number of times divided into
-            var r;      //Remainder after division
-            var snap_x; //snapped to x value
-            var snap_y; //snapped to y value
-            var frequency;
+            var i;  //index
+            var d;  //difference
+            var cx; //closest x
+            var cy; //closest y
+            var min = this.canvas.width;   //Largest value that can be on this canvas
 
-            x = x - this.graph_bounds.min.x;            //adjust x because of margins   
-            d = x / (this.column_width / 2);            //How many 1/2 columns divide into x
-            r = x % (this.column_width / 2);            //Remainder (how close is it to the next value).
+            for(i=0;i<this.x_values.length;i++){
+                d = Math.abs(this.x_values[i].x - x);
+                console.log("d= "+d);
+                if(d < min){
+                    min = d;
+                    cx = this.x_values[i].x;
+                }
+            }
             
-            if(r/(this.column_width / 2) > .5)
-                d = d + 1;
+            min = this.canvas.height;
             
-            snap_x = Math.floor(d * (this.column_width / 2) + this.graph_bounds.min.x);//Multiply d by 1/2 column size to snap to an edge
+            for(i=0;i<this.y_values.length;i++){
+                d = Math.abs(this.y_values[i].y - y);
+                if(d < min){
+                    min = d;
+                    cy = this.y_values[i].y;
+                }
+            }            
             
-            y = y - this.graph_bounds.min.y;            //adjust y because of margins    
-            d = y / (this.row_height / 2);              //How many 1/2 rows divide into y
-            r = y % (this.row_height / 2);              //Remainder (how close is it to the next value).
+            this.canvas.add(new fabric.Text("X", { left: cx, top: cy-7,fontSize: 14,shadow: 'rgba(0,0,0,0.3) 2px 2px 2px'}));
+            console.log("cx "+cx+" cy "+cy);
+            return {"x":cx,"y":cy};
+        },
+        snapTo: function(x,y){
+            var i;  //index
+            var d;  //difference
+            var cx; //closest x
+            var cy; //closest y
+            var min = this.canvas.width;   //Largest value that can be on this canvas
+
+            for(i=0;i<this.x_values.length;i++){
+                d = Math.abs(this.x_values[i].x - x);
+                if(d < min){
+                    min = d;
+                    cx = this.x_values[i].x;
+                }
+            }
             
-            if(r/(this.row_height / 2) > .5)
-                d = d + 1;
+            min = this.canvas.height;
             
-            snap_y = Math.floor(d * (this.row_height / 2) + this.graph_bounds.min.y);//Multiply d by 1/2 column size to snap to an edge
-            this.canvas.add(new fabric.Text("X", { left: snap_x, top: snap_y,fontSize: 14,shadow: 'rgba(0,0,0,0.3) 2px 2px 2px'}));
-            return {"x":snap_x,"y":snap_y};
+            for(i=0;i<this.y_values.length;i++){
+                d = Math.abs(this.y_values[i].y - y);
+                if(d < min){
+                    min = d;
+                    cy = this.y_values[i].y;
+                }
+            }            
+            
+            return {"x":cx,"y":cy};
         }
 
     }
@@ -443,16 +483,26 @@ var AudioGram = function(canvas,audiogram_id,side) {
         if(private.inBounds(click.x, click.y)){
             var frequency = private.getFrequency(click.x);
             var decibels = private.getDecibels(click.y);
-            console.log(frequency);
-            console.log(decibels);
+            //console.log(frequency);
+            //console.log(decibels);
         }
     });
     private.canvas.on('mouse:move', function(options) {
+        private.canvas.add(private.snapcircle);
         //e.target.setFill('red');
         var hover = private.canvas.getPointer(options.e);
-        private.coordsrect.setTop(hover.y).setCoords();
-        private.coordsrect.setLeft(hover.x+25).setCoords();
-        private.coordsrect.setText(Math.round(hover.x)+","+Math.round(hover.y));
+        var snap = private.snapTo(hover.x,hover.y);
+        private.snapcircle.setTop(snap.y-1).setCoords();
+        private.snapcircle.setLeft(snap.x-1).setCoords();
+        //private.coordsrect.setTop(hover.y).setCoords();
+        //private.coordsrect.setLeft(hover.x+25).setCoords();
+        //private.coordsrect.setText(Math.round(hover.x)+","+Math.round(hover.y));
+        private.canvas.renderAll();
+    });
+    
+    private.canvas.on('mouse:out', function(options) {
+        console.log("mouse out");
+        private.canvas.remove(private.snapcircle);
         private.canvas.renderAll();
     });
 
