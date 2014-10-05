@@ -7,7 +7,7 @@
    </head>
     <body >
         <div ng-controller="regCtrl" class="container-fluid">
-      <!-- Header -->
+      <!-- Header/Nav Bar -->
       <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:8%">
          <a class="navbar-brand" style="color: black" href="#">Auditory Implant Initiative</a>
         </div>
@@ -32,6 +32,7 @@
                 <li>Facility Administrator Registration</li>
             </ul>
             <!-- fieldsets -->
+            <!----Facility Registration -->
             <fieldset>
                 <h3 class="fs-title">Step 1</h3>
                 <h3 class="fs-subtitle">Register your facility</h3>
@@ -41,14 +42,16 @@
                 <div class="row">
                     <div class="col-md-6"><input type="text" name="city" placeholder="City" ng-model="facilityData.City"/></div>
                     <div class="col-md-4">
-                        <select id="states" name="State" ng-options="states.name as states.name for states in usStates" ng-model="facilityData.State">                                       </select>
+                        <select id="states" name="State" ng-options="states.name as states.name for states in usStates" ng-model="facilityData.State">                                                       </select>
                     </div>
                     <div class="col-md-2"><input type="text" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" /></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"><input type="text" name="phone" placeholder="Phone" ng-model="facilityData.Phone"/> </div>
+                    <div class="col-md-6">
+                        <input type="text" name="phone" placeholder="Phone (1234567890)" ng-model="facilityData.Phone"/> </div>
                     <div class="col-md-6" ><input type="file" fileread="facilityData.image" accept="image/gif, image/jpeg, image/png"> </div>
                 </div>
+                <!---------------------------------- Facility Questions ------------------------>
                 <div class="row">
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
@@ -82,7 +85,7 @@
                     </div>
                     <div class="col-md-6" >
                         <div id="box" style="text-align:left">
-                            <label for="training"> If surgery is picked - Please list the level of Cochlear training completed by the surgeons</label>
+                            <label for="training"> If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons</label>
                             <div ng-repeat="training in facilityCochlearTraining">
                             <input type="checkbox" checklist-value="training.name" 
                                    checklist-model="facilityData.Training"> {{training.name}}<br>
@@ -90,16 +93,23 @@
                         </div>
                     </div>
                 </div>
+                <!---------------------------------- End Facility Questions ------------------------>
+                
                 <input type="button" name="next" class="next action-button" value="Next" />
                 
             </fieldset>
+            <!----Facility Adminstrator Registration -->
             <fieldset>
                 <h3 class="fs-title">Step 2</h3>
                 <h3 class="fs-subtitle">Register your facility administrator</h3>
                 <h3 class="fs-subtitle">This is the user who will oversee all administrative duties </h3>
                 <div class="row">
-                    <div class="col-md-6"><input type="text" name="first" placeholder="First Name" ng-model="administratorData.first_name"/> </div>
-                    <div class="col-md-6" ><input type="text" name="last" placeholder="Last Name" ng-model="administratorData.last_name"/> </div>
+                    <div class="col-md-5"><input type="text" name="first" placeholder="First Name" ng-model="administratorData.first_name"/> </div>
+                    <div class="col-md-5" ><input type="text" name="last" placeholder="Last Name" ng-model="administratorData.last_name"/> </div>
+                    <div class="col-md-2" >
+                        <select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles" ng-model="administratorData.TitleID"> 
+                        </select>
+                    </div>
                 </div>
                 <input type="text" name="username" placeholder="Username" ng-model="administratorData.username"/>
                 <input type="password" name="password" placeholder="Password" ng-model="administratorData.password"/>
@@ -132,11 +142,13 @@
    
    var controllers = {};
    
-   controllers.regCtrl =  function($scope, $http) {
+   controllers.regCtrl =  function($scope, $http, getData, $window) {
        
        $scope.administratorData = {};
        $scope.facilityData = {};
        $scope.facilityData.Services = {};
+       
+       //Choices for the facility questions on facility Registration
        $scope.facilityDescription = [
            { name: "Academic"},
            { name: "Tertiary"},
@@ -152,7 +164,13 @@
            { name: "General Otolaryngologist"},
            { name: "Fellowship Trained Otologist"}
        ];
+       //End Choices for facility questions
         
+       //get the UserTitles (MD, AUD, etc)
+       getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
+           $scope.userTitles = data.records;
+       }); 
+       
        //$scope.facilitaData.
        $scope.populations= ["5,000-10,000", "10,000-50,000","50,000-100,000","100,000-500,000","500,000-1,000,000","1,000,000+"]
        $scope.usStates = [
@@ -215,8 +233,9 @@
         ];
        
        $scope.registerFacility = function() {
-           $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData}
-           console.log("facility registration");
+           //send in one object that contains both form information
+           $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
+           
            $http({
                method  : 'POST',
                //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
@@ -225,8 +244,22 @@
                headers : { 'Content-Type': 'application/json' } 
            })
            .success(function(data) {
-               console.log(data);
-               //alert("Your facility and administrator have been registered with AII!");
+               console.log(data.records);
+               //if both are registered, let em know and redirect to sign in 
+               if(data.records["Facility Admin Registration Response"] == "Success" && data.records["Facility Registration Response"] == "Success"){
+                   
+                   alert("Your facility and administrator have been registered with AII!");
+                   $window.location.href = "./";
+                   
+               }else if(data.records["Facility Registration Response"] == "Success"){ //else if only fac was successful, alert admin problems
+                   
+                   alert("You are missing necssary information for your adminstrator.\n\nPlease enter any missing information and press submit again.");
+                   $scope.facilityData.FacilityID = data.records['FacilityID'];
+                   
+               }else{
+                   alert("You are missing necessary information for both your facility and your facility administrator.\n\n" +
+                         "Please enter any missing information and press submit again.");
+               }
            });
            
            
@@ -236,6 +269,34 @@
        
    }
    
+   //Added by Travis. 
+    /**
+     * @function getData - 
+     *  Helper function that accepts a URL API call and GET's an appropriate
+     *  JSON response for that URL.
+     *
+     * @param: string $http - reference to URL API call
+     * @returns {object} - 
+     *      @function get - returns a value based on a key
+     */
+    regApp.factory('getData', function($http){
+
+        return {
+            get: function(url) { 
+                var data = $http.get(url).success(function(data) {
+                });
+                return data;
+            },
+        }
+
+    });
+   
+    //Added by Anne.
+    /**
+     * attribute directive fileread 
+     * gets the base64 info of an image
+     * that is uploaded in a file type input
+     */
     regApp.directive("fileread", [function () {
         return {
             scope: {
