@@ -25,6 +25,8 @@ var AudioGram = function(canvas,audiogram_id,side) {
         audiogram_vals  : [],
         coordsrect      : null,
         snapcircle      : null,
+        rect1           : null,
+        rect2           : null,
         colors          : {
                             "background":"#000000",
                             "draw_line":"#000000",
@@ -196,7 +198,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
             var text = [];
             var lines = [];
             
-            var rect1 = new fabric.Rect({
+            rect1 = new fabric.Rect({
                 left: 0,
                 top: 0,
                 stroke : 'black',
@@ -208,7 +210,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
                 selectable: false
             });            
             
-            var rect2 = new fabric.Rect({
+            rect2 = new fabric.Rect({
                 left: this.graph_bounds.min.x,
                 top: this.graph_bounds.min.y,
                 stroke : 'black',
@@ -217,8 +219,12 @@ var AudioGram = function(canvas,audiogram_id,side) {
                 width: this.graph_size.width,
                 height: this.graph_size.height,
                 shadow: 'rgba(0,0,0,0.3) 3px 3px 3px',
-                selectable: false
-            });            
+                selectable: false,
+            });
+            
+            rect2.on('mouse:out', function(options) {
+                console.log("mouse out");
+            });
             
             this.rectgles_grp = new fabric.Group([rect1,rect2],{
                 left:0,
@@ -391,11 +397,19 @@ var AudioGram = function(canvas,audiogram_id,side) {
             
             return this.x_values[this.x_values.length-1];
         },
+        getSymbol : function(){
+            if(this.current_measure == 1){
+               
+            }
+        },
         inBounds : function(x,y){
-            return (x>=this.graph_bounds.min.x &&
+            if(x>=this.graph_bounds.min.x &&
                     x<=this.graph_bounds.max.x &&
                     y>=this.graph_bounds.min.y &&
                     y<=this.graph_bounds.max.y)
+                return true;
+            else
+                return false;
         },
         setCurrentMeasure : function(measure){
             console.log('setCurrentMeasure '+this.side);
@@ -473,6 +487,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
         }
 
     }
+        
     private._init();
     private.canvas.on('mouse:down', function(options) {
         var click = private.canvas.getPointer(options.e);
@@ -486,7 +501,9 @@ var AudioGram = function(canvas,audiogram_id,side) {
             //console.log(frequency);
             //console.log(decibels);
         }
+        private.rect2
     });
+
     private.canvas.on('mouse:move', function(options) {
         private.canvas.add(private.snapcircle);
         //e.target.setFill('red');
@@ -500,11 +517,7 @@ var AudioGram = function(canvas,audiogram_id,side) {
         private.canvas.renderAll();
     });
     
-    private.canvas.on('mouse:out', function(options) {
-        console.log("mouse out");
-        private.canvas.remove(private.snapcircle);
-        private.canvas.renderAll();
-    });
+
 
     // Expose public API
     return {
