@@ -23,9 +23,9 @@
             </nav>
       <br>
         
-        <!--Stolen form -->
-        <form id="msform" style="width:800px">
-            <!-- fieldsets -->
+        <!--Stolen form -------------------->
+        <form id="msform">
+            <!-- fieldset -->
             <fieldset>
                 <h3 class="fs-title">Register as a new user</h3>
                 <div class="row">
@@ -40,7 +40,7 @@
                 <input type="text" name="phone" placeholder="Phone Number" ng-model="registration.phone"/>
                 
                <!-- {{registration}}-->
-                <input type="submit" name="submit" class="submit action-button" value="Submit"/> <br>(not yet functionally ready)
+                <input type="submit" name="submit" class="submit action-button" value="Submit" ng-click="registerUser()"/> <br>(not yet functionally ready)
             </fieldset>
             
         </form>
@@ -66,13 +66,12 @@
    
    controllers.regCtrl =  function($scope, $http, getData) {
        
-       //need to grab facility id, set user level id based on title, ip address, created_on -handle with api
+       //need to grab facility id,-handle with api
        $scope.registration = {};
        getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
            $scope.userTitles = data.records;
        }); 
        $scope.registerUser = function() {
-           console.log("user registration");
            $http({
                method  : 'POST',
                //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
@@ -81,8 +80,8 @@
                headers : { 'Content-Type': 'application/json' } 
            })
            .success(function(data) {
-               console.log(data);
-               //alert("Your facility and administrator have been registered with AII!");
+               //console.log(data.records["User Registration Response"]);
+               alert(data.records["User Registration Response"]);
            });
            
            
