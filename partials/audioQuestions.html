@@ -126,8 +126,25 @@
                                             </div>
                                         </div>
                                         </div>
+                                       
+                      
+                                        <div>
+                                            <table>
+                                                <tr>
+                                                    <td ng-repeat="type in tests.AudioTestInput" style="border: 1px solid black; padding-left:15px; padding-right:15px;">
+                                                        <label style="font-size:.9vw;">{{type.Name}}</label>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
+                                                    <td ng-repeat="(test,value) in tests" style="border: 1px solid black; padding-left:15px; padding-right:15px;">
+                                                        {{value}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div><br>
+                                        
+                                        <!--
                                         <div class="row">
-
                                             <table ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
                                                 <tr ng-repeat="(test,value) in tests">
                                                     <td>
@@ -139,7 +156,7 @@
                                                 </tr>
                                             </table>
                                         </div>
-                                        
+                                        -->
                                     </form>
                                 </div>
                                 <button type="button" class="btn btn-default btn-sm" ng-click="clearCurrentTest(test)">

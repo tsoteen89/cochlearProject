@@ -1150,8 +1150,57 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
     
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.    PhaseID;
-            //**********************Copied from questionsControllerr****/
+    
+    //**********************Copied from questionsControllerr****/
 
+    //Grab all previously answered questions
+    getData.get($scope.answersURL).success(function(data) {
+        $scope.summaryAnswers = data.records;            
+    }).then(function(){
+        for(var answerID in $scope.summaryAnswers.Answers) {
+            $scope.answer.Answers[answerID] = $scope.summaryAnswers.Answers[answerID].Answers;
+        };
+    });
+    
+    //Show a child if Trigger has been set
+    $scope.showChild = function(data){
+        var index;
+        var indexB;
+
+        for(index=0; index < data.length; index++) {
+            for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
+                if($scope.audioQs[indexB].QuestionID == data[index]) {
+                    $scope.audioQs[indexB].IsChild = 0;
+                }
+            }
+        }
+    }
+
+    //Hide a child if the Trigger has been reset
+    $scope.hideChild = function(data){
+        var index;
+        var indexB;
+
+        for(index=0; index < data.length; index++) {
+            for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
+                if($scope.audioQs[indexB].QuestionID == data[index]) {
+                    $scope.audioQs[indexB].IsChild = 1;
+                }
+            }
+        }
+    }
+
+    //Post one answer and save it
+    //@param: int: questionID
+    $scope.postAnswers = function(questionID) {
+
+        $scope.singleAnswer = {};
+        $scope.singleAnswer.Answers = {};
+        $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
+        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer).then(function(){
+        
             //Grab all previously answered questions
             getData.get($scope.answersURL).success(function(data) {
                 $scope.summaryAnswers = data.records;            
@@ -1159,48 +1208,11 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
                 for(var answerID in $scope.summaryAnswers.Answers) {
                     $scope.answer.Answers[answerID] = $scope.summaryAnswers.Answers[answerID].Answers;
                 };
-            });
-            //Show a child if Trigger has been set
-            $scope.showChild = function(data){
-                var index;
-                var indexB;
+            })
+        });
 
-                for(index=0; index < data.length; index++) {
-                    for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
-                        if($scope.audioQs[indexB].QuestionID == data[index]) {
-                            $scope.audioQs[indexB].IsChild = 0;
-                        }
-                    }
-                }
-            }
-
-            //Hide a child if the Trigger has been reset
-            $scope.hideChild = function(data){
-                var index;
-                var indexB;
-
-                for(index=0; index < data.length; index++) {
-                    for(indexB=0; indexB < $scope.audioQs.length; indexB++) {
-                        if($scope.audioQs[indexB].QuestionID == data[index]) {
-                            $scope.audioQs[indexB].IsChild = 1;
-                        }
-                    }
-                }
-            }
-
-            //Post one answer and save it
-            //@param: int: questionID
-            $scope.postAnswers = function(questionID) {
-
-                $scope.singleAnswer = {};
-                $scope.singleAnswer.Answers = {};
-                $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
-                $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
-                $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
-                postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
-
-            };
-            //**********************Copied from questionsControllerr****/
+    };
+    //**********************Copied from questionsControllerr****/
     
     
     //Submit a complete audio test result.
@@ -1270,6 +1282,8 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         else if(data == 'BKB-SIN'){
             $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
+        
+        $scope.submitQuestions();
     }
     
     //Added by Travis/Anne
