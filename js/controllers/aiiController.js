@@ -1421,6 +1421,11 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
     };
     $scope.editDescrip =false;
+    $scope.setInactive = false;
+    
+    getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data){
+        $scope.InactiveReasons = data.records;
+    });
     $scope.submitDescriptionInfo = function(careTeam){
         putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + careTeam.CareTeamID,careTeam);
     };
