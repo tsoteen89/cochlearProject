@@ -35,7 +35,7 @@
 	
 	<!-- *********************   MESSAGES    ************************* -->
 	
-	<div class="messaging-system" ng-show="isSelectedTab('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox')">
+	<div class="messaging-system" ng-show="isSelectedTab('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox'); checkForRecipients()">
 	
 	  <div class="col-xs-10 button-wrapper">
 		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
