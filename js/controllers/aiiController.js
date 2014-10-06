@@ -1199,17 +1199,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer).then(function(){
-        
-            //Grab all previously answered questions
-            getData.get($scope.answersURL).success(function(data) {
-                $scope.summaryAnswers = data.records;            
-            }).then(function(){
-                for(var answerID in $scope.summaryAnswers.Answers) {
-                    $scope.answer.Answers[answerID] = $scope.summaryAnswers.Answers[answerID].Answers;
-                };
-            })
-        });
+        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
     };
     //**********************Copied from questionsControllerr****/
@@ -1225,7 +1215,17 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.Results[category]= $scope.answer.Results[category];
         $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
         
-        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer);
+        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer).then(function(){
+            console.log("Getting new Data");
+            //Grab all previously answered questions
+            getData.get($scope.answersURL).success(function(data) {
+                $scope.summaryAnswers = data.records;            
+            }).then(function(){
+                for(var answerID in $scope.summaryAnswers.Answers) {
+                    $scope.answer.Answers[answerID] = $scope.summaryAnswers.Answers[answerID].Answers;
+                };
+            })
+        });
     }
     
     //was used to get previous answers at one point....
@@ -1283,7 +1283,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
         
-        $scope.submitQuestions();
     }
     
     //Added by Travis/Anne
