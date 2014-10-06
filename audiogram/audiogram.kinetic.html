@@ -226,8 +226,10 @@
             height: 500
         });
         
-        var right_side = new AudioGram(stage_right,100,'right');
-        var left_side = new AudioGram(stage_left,100,'left');
+        var Stage = {};
+        
+        Stage['right'] = new AudioGram(stage_right,100,'right');
+        Stage['left'] = new AudioGram(stage_left,100,'left');
         
         /*
         * This function highlights the active measure button as well as
@@ -246,8 +248,8 @@
                 setTimeout( function (){
                     $( ".aud-btn" ).each(function( index ) {
                         if($( this ).hasClass( "active" )){
-                            right_side.setCurrentMeasure($( this ).find('input').attr('id'));
-                            left_side.setCurrentMeasure($( this ).find('input').attr('id'));
+                            Stage['right'].setCurrentMeasure($( this ).find('input').attr('id'));
+                            Stage['left'].setCurrentMeasure($( this ).find('input').attr('id'));
                         }
                     });
                 }, 0 );
@@ -263,16 +265,16 @@
             //Using the .length makes this a boolean operation
             //otherwise, it always returns true
             if($(this).find($(".fa-ban")).length){
-                right_side.setMasked(1);
-                left_side.setMasked(1);
+                Stage['right'].setMasked(1);
+                Stage['left'].setMasked(1);
                 $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
                 $('#BCL').html(']');
                 $('#BCR').html('[');        
                 $('#ACL').html('<i class="fa fa-square-o"></i>');
                 $('#ACR').html('&#x25b3;');
             }else{
-                right_side.setMasked(0);
-                left_side.setMasked(0);
+                Stage['right'].setMasked(0);
+                Stage['left'].setMasked(0);
                 $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');  
                 $('#BCR').html('<i class="fa fa-chevron-left"></i>');
                 $('#BCL').html('<i class="fa fa-chevron-right"></i>');
@@ -280,26 +282,19 @@
                 $('#ACL').html('&#10005;');
             }
         });
-        
-        $( ".clear-button" ).on( "click", function() {
-            if($( this ).find('a').attr('id') == 'clear1'){
-                right_side.clearStage();
-            }else{
-                left_side.clearStage();
-            }
-        });
-        
-        $(".audiogram-menu").on("click", function(){
-            console.log($( this ).attr('data'));
-        });
+                
+
         $('.audiogram-menu').on('click', function(event) {
+            console.log(Stage);
             var side = $( this ).attr('data');
             var action = $(event.target).closest('button').attr("data");
-            console.log("Action:", action);
-            if(side == 'right'){
-                right_side.clearStage();
-            }else{
-                left_side.clearStage();              
+            var current = null;
+            console.log(Stage[side]);
+            switch(action){
+                case 'Refresh': Stage[side].clear();
+                                break;
+                case 'Undo':    Stage[side].undo();
+                                break;
             }
         });
         

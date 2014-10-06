@@ -208,8 +208,11 @@ var AudioGram = function(stage,audiogram_id,side) {
             stage.add(layers['background']);
         },
         clearStage: function(){
-            layers['measures'].clear();
-            layers['measures'] = new Kinetic.Layer();
+            console.log("measures length:"+layers['measures'].length)
+
+            layers['measures'].removeChildren();
+
+            stage.draw();
         },
         /**
         * Adds measures to the audiogram. Each "measure" is snapped to the closest proper decibel and frequency.
@@ -234,8 +237,8 @@ var AudioGram = function(stage,audiogram_id,side) {
                 shadowOpacity: 0.3               
             }
             
-            var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);
-            console.log(this.currentMeasure,this.masked,this.side);          
+            //Goes and grabs the "shape" to be displayed based on these params
+            var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);         
             
             if (measureData.type == 'text')
             {
@@ -295,10 +298,10 @@ var AudioGram = function(stage,audiogram_id,side) {
             stack.push(shape);
             
             console.log(stack);
-            
+
             //Push measures into the "layer"
-            for(var i=0;i<stack.length;i++)
-                layers['measures'].add(stack[i]);
+            //for(var i=0;i<stack.length;i++)
+                layers['measures'].add(stack[stack.length-1]);
             
             //Add layer to stage
             stage.add(layers['measures']);
@@ -447,7 +450,7 @@ var AudioGram = function(stage,audiogram_id,side) {
                 return private[ prop ];
             }
         },
-        clearStage: function(){
+        clear: function(){
             private.clearStage();
         },
         setCurrentMeasure: function(measure){
