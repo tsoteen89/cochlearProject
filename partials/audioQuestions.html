@@ -126,20 +126,19 @@
                                             </div>
                                         </div>
                                         </div>
-                                       
-                      
-                                        <div>
+                                        
+                                        <div class="datagrid">
                                             <table>
-                                                <tr>
-                                                    <td ng-repeat="type in tests.AudioTestInput" style="border: 1px solid black; padding-left:15px; padding-right:15px;">
-                                                        <label style="font-size:.9vw;">{{type.Name}}</label>
-                                                    </td>
-                                                </tr>
-                                                <tr ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
-                                                    <td ng-repeat="(test,value) in tests" style="border: 1px solid black; padding-left:15px; padding-right:15px;">
-                                                        {{value}}
-                                                    </td>
-                                                </tr>
+                                                <thead>
+                                                    <tr>
+                                                        <th ng-repeat="type in tests.AudioTestInput" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{type.Name}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-class-even="'alt'" ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
+                                                        <td ng-repeat="(test,value) in tests" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{value}}</td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div><br>
                                         

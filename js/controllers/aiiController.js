@@ -1216,7 +1216,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
         
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer).then(function(){
-            console.log("Getting new Data");
             //Grab all previously answered questions
             getData.get($scope.answersURL).success(function(data) {
                 $scope.summaryAnswers = data.records;            
