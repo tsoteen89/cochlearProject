@@ -15,8 +15,15 @@
                         <div ng-hide="question.IsChild">
 
                             <span id="cp_questionForm">
-                            <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} <hovercard hover-tmpl-url="js/hoverCardDetail.html" style="text-align:right"><p style="color:#325bbd" class="fa fa-question-circle fa-2x"></p></hovercard></label>
-
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <hovercard hover-tmpl-url="js/hoverCardDetail.html"><p style="color:#325bbd" class="fa fa-question-circle fa-2x"></p></hovercard>
+                                </div>
+                            
+                            </div>
                                 <!-- Else Display only the single Input field -->
                                 <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">

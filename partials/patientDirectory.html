@@ -61,102 +61,97 @@
                                     ng-if="careTeam== patient.CareTeams[0] && userLevelID < 11"> Add new event</button>
                         </div>
                     </div>
-                  
-                    <!-- DOTS!!!-->
-                    <div class="row bs-wizard" >
-                          <!--Completed Phases-->
-                        <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1"
-                             ng-if="careTeam.CurrentPhaseID != 3">
-                          <div class="text-center bs-wizard-stepnum">
-                            &nbsp;
-                          </div>
-                          <div class="progress" >
-                            <div class="progress-bar">
-                            </div>
-                          </div>
-                          
-                          <a href="{{phase.CompletedPhaseHREF}}" ng-click="goToQuestions(careTeam, phase, patient)" 
-                             class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                            {{phase.Name}}
-                          </div>
-                        </div>
-                        <!--dealing with opening both phase 2 and 3-- not ideal yet-->
-                        <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 3">
-                          <div class="text-center bs-wizard-stepnum">
-                            &nbsp;
-                          </div>
-                          <div class="progress" >
-                            <div class="progress-bar">
-                            </div>
-                          </div>
-                          <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
-                             title={{phases[0].Name}}></a>
-                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                            {{phases[0].Name}}
-                          </div>
-                        </div>
-                        
-                          <!--Current Phase-->
-                        <!--dealing with opening both phase 2 and 3-- not ideal yet-->
-                        
-                        <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID ==3" ng-repeat="phase in phases.slice(1,3)" >
-                          <div class="text-center bs-wizard-stepnum">
-                            &nbsp;
-                          </div>
-                          <div class="progress" >
-                            <div class="progress-bar">
-                            </div>
-                          </div>
-                          <a href="{{phase.ActivePhaseHREF}}" 
-                             ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                            {{phase.Name}}
-                          </div>
-                        </div>
-                        
-                        <!--dealing with opening both phase 2 and 3-- not ideal yet-->
-                        <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID !=3" >
-                          <div class="text-center bs-wizard-stepnum">
-                            &nbsp;
-                          </div>
-                          <div class="progress">
-                            <div class="progress-bar">
-                            </div>
-                          </div>
-                          <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}"
-                          ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot" 
-                             title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
-                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                            {{phases[careTeam.CurrentPhaseID-1].Name}}
-                          </div>
-                        </div>
+                        <div class="row">
+                        <!-- DOTS!!!-->
+                        <div class="bs-wizard" >
+                              <!--Completed Phases-->
+                            <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1"
+                                 ng-if="careTeam.CurrentPhaseID != 3">
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                              <div class="progress" >
+                                <div class="progress-bar">
+                                </div>
+                              </div>
 
-                          <!--Future Phases-->
-                        <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
-                          <div class="text-center bs-wizard-stepnum">
-                            &nbsp;
-                          </div>
-                            <div class="progress" >
-                            <div class="progress-bar">
+                              <a href="{{phase.CompletedPhaseHREF}}" ng-click="goToQuestions(careTeam, phase, patient)" 
+                                 class="bs-wizard-dot" title={{phase.Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phase.Name}}
+                              </div>
                             </div>
+                            <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+                            <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 3">
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                              <div class="progress" >
+                                <div class="progress-bar">
+                                </div>
+                              </div>
+                              <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
+                                 title={{phases[0].Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phases[0].Name}}
+                              </div>
                             </div>
-                          <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                          <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                            {{phase.Name}}
-                          </div>
+
+                              <!--Current Phase-->
+                            <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+
+                            <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID ==3" ng-repeat="phase in phases.slice(1,3)" >
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                              <div class="progress" >
+                                <div class="progress-bar">
+                                </div>
+                              </div>
+                              <a href="{{phase.ActivePhaseHREF}}" 
+                                 ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phase.Name}}
+                              </div>
+                            </div>
+
+                            <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+                            <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID !=3" >
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                              <div class="progress">
+                                <div class="progress-bar">
+                                </div>
+                              </div>
+                              <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}"
+                              ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot" 
+                                 title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phases[careTeam.CurrentPhaseID-1].Name}}
+                              </div>
+                            </div>
+
+                              <!--Future Phases-->
+                            <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)">
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                                <div class="progress" >
+                                <div class="progress-bar">
+                                </div>
+                                </div>
+                              <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phase.Name}}
+                              </div>
+                            </div>
                         </div>
-                        <div class="col-xs-1 bs-wizard-step disabled">
-                          <div class="progress" style="background-color:#CAE5F0">
-                            <div class="progress-bar">
-                            </div>
-                          </div>
-                            <a><span class="fa pull-left" ng-click="isCollapsed = !isCollapsed" ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle':isCollapsed}" style="margin-top:-25px"></span></a>
-  
-                        </div>                        
-                      
-                      </div>
                     
+                            <a><span class="fa-2x fa " ng-click="isCollapsed = !isCollapsed" 
+                                     ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle ':isCollapsed}" style="margin-top:20px"></span></a>
+                        </div>
+                            
                     <!--Phase info collapse button-->
                 
                     
