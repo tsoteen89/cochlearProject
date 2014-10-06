@@ -20,9 +20,19 @@
         }
         .aud-btn{
             font-size:24px;
+            background-color: #383D44;
+            color:white;
+            margin:5px;
+        }
+        .aud-btn:hover{
+            
         }
         .aud-btn span{
             text-align:center;
+        }
+        
+        .btn-selected{
+            background-color: #1D72EF;
         }
         
         .aud-btn .left{
@@ -127,6 +137,7 @@
 
         #measure-buttons{
             padding-bottom:30px;
+            background: #222222;
         }
         
         #mask-buttons{
@@ -140,7 +151,7 @@
             width:500px;
             height:500px;
             border:1px solid #000;
-            background:#eeeeee;           
+            background:#7E7E7E;           
         }
         .aud-toolbar{
             margin-top:3px;
@@ -153,14 +164,15 @@
 	  <div class="row row-centered">
           <div class="col-xs-5 col-centered"  id="left_column">
               <div class="item">
+              </div>
+              <div class="item">
+                  <div class="content audiogram-container"><div id="audiogram_right"></div>
                     <div class="content menu audiogram-menu" data="right">
                         <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
                         <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-default" data="Cancel" id=""><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-xs btn-default" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
                     </div>
-              </div>
-              <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_right"></div></div>
+                  </div>
               </div>
           </div>
         <div class="col-xs-2 col-centered">
@@ -168,44 +180,47 @@
                   <div class="content" id="measure-buttons">
                     <!-- Auditory measure buttons -->
                     <div class="btn-group-vertical" data-toggle="buttons">
-                      <label class="btn btn-primary btn-info aud-btn active">
+                      <label class="btn aud-btn active">
                         <input type="radio" name="measure" id="AC" checked><span class="left" id="ACR"><i class="fa fa-circle-o"></i></span><span class="mid">AC</span><span class="right" id="ACL">&#10005;</span>
                       </label>
-                      <label class="btn btn-primary aud-btn">
+                      <label class="btn  aud-btn">
                         <input type="radio" name="measure" id="BC"><span class="left" id="BCR"><i class="fa fa-chevron-left"></i></span><span class="mid">BC</span><span class="right" id="BCL"><i class="fa fa-chevron-right"></i></span>
                       </label>
-                      <label class="btn btn-primary aud-btn">
+                      <label class="btn aud-btn">
                         <input type="radio" name="measure" id="MCL"><span class="left">M</span><span class="mid">MCL</span><span class="right">M</span>
                       </label>
-                      <label class="btn btn-primary aud-btn">
+                      <label class="btn aud-btn">
                         <input type="radio" name="measure" id="UCL"><span class="left">m</span><span class="mid">UCL</span><span class="right">m</span>
                       </label>
-                      <label class="btn btn-primary aud-btn">
+                      <label class="btn aud-btn">
                         <input type="radio" name="measure" id="SF"><span class="left">S</span><span class="mid">SF</span><span class="right">S</span>
                       </label>
-                      <label class="btn btn-primary aud-btn">
+                      <label class="btn aud-btn">
                         <input type="radio" name="measure" id="SF-A"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span>
                       </label>
-                    </div>
-                </div>
-            </div>
-              <div class="item">
                   <div class="content" id="mask-buttons">
                     <a class="btn btn-med btn-primary" href="#" id="mask_button">
                     <i class="fa fa-ban pull-left"></i> Masked</a>
                 </div>
+                    </div>
+                </div>
+            </div>
+              <div class="item">
+
             </div>
           </div><!-- End Button Column-->
           <div class="col-xs-5 col-centered" id="right_column">
               <div class="item">
+
+              </div>
+              <div class="item">
+                  <div class="content audiogram-container"><div id="audiogram_left"></div>
                     <div class="content menu audiogram-menu" data="left">
                         <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
                         <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-default" data="Cancel" id="cancel"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn-xs btn-default" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
                     </div>
-              </div>
-              <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_left"></div></div>
+                  </div>
               </div>
           </div>
 	  </div> <!-- End Row -->
@@ -240,9 +255,9 @@
             setTimeout( function (){
                 $( ".aud-btn" ).each(function( index ) {
                     if($( this ).hasClass( "active" )){
-                        $( this ).addClass('btn-info');
+                        $( this ).addClass('btn-selected');
                     }else{
-                        $( this ).removeClass('btn-info');
+                        $( this ).removeClass('btn-selected');
                     }
                 })
                 setTimeout( function (){
@@ -294,6 +309,8 @@
                 case 'Refresh': Stage[side].clear();
                                 break;
                 case 'Undo':    Stage[side].undo();
+                                break;
+                case 'Redo':    Stage[side].redo();
                                 break;
             }
         });
