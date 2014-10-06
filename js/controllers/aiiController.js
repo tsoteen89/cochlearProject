@@ -214,13 +214,18 @@ myApp.factory('putData', function($http){
  *      @function getUserLevel - return the current User Level.
  */
 myApp.factory('persistData', function () {
-    var CareTeamID;
+    //User info
+	var CareTeamID;
     var PhaseID;
     var loggedIn;
     var PhaseName;
     var PatientName;
     var dirAnchor;
     var userLevel;
+	
+	//Messaging info
+	var messageUsername = -1;
+	
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
@@ -270,6 +275,12 @@ myApp.factory('persistData', function () {
         },
         getUserLevel: function(data){
             return userLevel;
+        },
+		setMessageUsername: function(data){
+            messageUsername = data;
+        },
+        getMessageUsername: function(data){
+            return messageUsername;
         }
     };
 });
@@ -2070,6 +2081,17 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		return false;
 	}
 	
+	$scope.checkForRecipients = function(){
+		var recipient = persistData.getMessageUsername();
+		if(recipient != -1){
+			$scope.selectTab('composeMessage');
+			$scope.composeMessage = {};
+			$scope.composeMessage.ReceiverName = recipient;
+		}
+		//Reset the persist data
+		persistData.setMessageUsername(-1);
+	}
+	
 	//Toggles visibility of the message content display
 	$scope.togglePopup = function(message){
 		if($scope.selectedMessage == message || message == null){
@@ -3217,7 +3239,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 			//If SessionID is valid:
 			//		-store user information
 			//		-redirect to dashboard
-			if(data.records != false){
+			if(data.records['error'] != 100 && data.records['error'] != 200){
 				$scope.loggedIn = true;
 				
 				//Store the user information
@@ -3243,8 +3265,12 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 			}
 			//If SessionID is invalid, redirect to login page
 			else{
+				console.log("Bad cookie! sending to login page")
 				$scope.loggedIn = false;
+				$cookieStore.remove('SessionID');
+				$cookieStore.remove('UserLevel');
 				$window.location.href = "#";
+				location.reload();
 			}
 		});
 	}
