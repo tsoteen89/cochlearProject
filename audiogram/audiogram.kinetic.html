@@ -113,6 +113,11 @@
             vertical-align:middle;
             text-align:center;
         }
+        
+        button.btn.btn-xs.btn-default{
+            margin:5px;
+        }
+        
         .content:before {
             font-family:sans-serif;
             font-size:12px;
@@ -121,11 +126,11 @@
         }
 
         #measure-buttons{
-            padding-bottom:10px;
+            padding-bottom:30px;
         }
         
         #mask-buttons{
-            padding-bottom:20px;
+            padding-bottom:100px;
         }
         
         .fa{
@@ -137,6 +142,10 @@
             border:1px solid #000;
             background:#eeeeee;           
         }
+        .aud-toolbar{
+            margin-top:3px;
+        }
+
     </style>
   </head>
   <body>
@@ -144,13 +153,14 @@
 	  <div class="row row-centered">
           <div class="col-xs-5 col-centered"  id="left_column">
               <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_right"></div></div>
+                    <div class="content menu audiogram-menu" data="right">
+                        <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
+                        <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
+                        <button class="btn btn-xs btn-default" data="Cancel" id=""><i class="fa fa-trash"></i></button>
+                    </div>
               </div>
               <div class="item">
-                <div class="content clear-button" id="menu1">
-                    <a class="btn btn-xs btn-primary" href="#" id="clear1">
-                    <i class="fa fa-refresh pull-left"></i> Clear</a>
-                </div>
+                  <div class="content audiogram-container"><div id="audiogram_right"></div></div>
               </div>
           </div>
         <div class="col-xs-2 col-centered">
@@ -188,13 +198,14 @@
           </div><!-- End Button Column-->
           <div class="col-xs-5 col-centered" id="right_column">
               <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_left"></div></div>
+                    <div class="content menu audiogram-menu" data="left">
+                        <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
+                        <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
+                        <button class="btn btn-xs btn-default" data="Cancel" id="cancel"><i class="fa fa-trash"></i></button>
+                    </div>
               </div>
               <div class="item">
-                <div class="content clear-button" id="menu2">
-                    <a class="btn btn-xs btn-primary" href="#" id="clear2">
-                    <i class="fa fa-refresh pull-left"></i> Clear</a>
-                </div>
+                  <div class="content audiogram-container"><div id="audiogram_left"></div></div>
               </div>
           </div>
 	  </div> <!-- End Row -->
@@ -245,7 +256,8 @@
         
 
         /*
-        * When clicking the mask button, toggle mask on and off.
+        * When clicking the mask button, toggle mask on and off. Also change the "icons" on each of the buttons.
+        * Could be better written, but good for now.
         */
         $( "#mask_button" ).on( "click", function() {
             //Using the .length makes this a boolean operation
@@ -274,6 +286,20 @@
                 right_side.clearStage();
             }else{
                 left_side.clearStage();
+            }
+        });
+        
+        $(".audiogram-menu").on("click", function(){
+            console.log($( this ).attr('data'));
+        });
+        $('.audiogram-menu').on('click', function(event) {
+            var side = $( this ).attr('data');
+            var action = $(event.target).closest('button').attr("data");
+            console.log("Action:", action);
+            if(side == 'right'){
+                right_side.clearStage();
+            }else{
+                left_side.clearStage();              
             }
         });
         
