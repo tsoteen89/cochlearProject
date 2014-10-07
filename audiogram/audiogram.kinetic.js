@@ -1,10 +1,11 @@
 var AudioGram = function(stage,audiogram_id,side) {
-    var stage = stage;
-    var layers = {};
-    var stack = [];
-    var redoStack = [];
-    // Private data
+    var stage = stage;      //The whole kinetic stage!
+    var layers = {};        //Object to hold different layers by name
+    var stack = [];         //Stack of items added to board.
+    var redoStack = [];     //Stack to hold items removed via "undo"
+    var lineArray = [];     //Array to hold x,y vals to draw line between measures
     
+    // Private data
     var private = {
         audiogramId     : audiogram_id,         //Unique identifier for this audiogram
         objectId        : 0,                    //Numerical ID for objects on stage
@@ -43,12 +44,13 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             //Set the stroke color depending on which side it is.
             if(this.side == 'right')
-                this.strokeColor = 'red';
+                this.strokeColor = '#ED1D25';
             else
-                this.strokeColor = 'blue';
+                this.strokeColor = '#1D72EF';
             
             layers['background'] = new Kinetic.Layer();
             layers['measures'] = new Kinetic.Layer();
+            layers['connect'] = new Kinetic.Layer();
             
             //Load X labels (frequencies) into array
             for(i=125;i<=8000;i*=2){
@@ -227,10 +229,10 @@ var AudioGram = function(stage,audiogram_id,side) {
             var commonStyle = {
                 x: x,
                 y: y,
-                strokeWidth: 3,
-                shadowColor: 'black',
+                strokeWidth: 5,
+                shadowColor: 'white',
                 shadowBlur: 2,
-                shadowOffset: {x:3, y:3},
+                shadowOffset: {x:1, y:1},
                 shadowOpacity: 0.3,
                 draggable: true,
                 name: measureData.value+"-"+this.objectId
@@ -290,20 +292,64 @@ var AudioGram = function(stage,audiogram_id,side) {
                     var shape = new Kinetic.Line(commonStyle);
                 }
             }
+
             
             //Push latest measure onto stack
             stack.push(shape);
             
-            console.log(stack);
-
-            //Push measures into the "layer"
-            //for(var i=0;i<stack.length;i++)
-                layers['measures'].add(stack[stack.length-1]);
+            
+            this.connectMeasures();
+            
+            //Push measure into the "layer"
+            layers['measures'].add(stack[stack.length-1]);
             
             //Add layer to stage
             stage.add(layers['measures']);
             this.objectId++;
              
+        },
+        /**
+        * Connect the measures with a line. 
+        * @param {null}
+        * @return {null}
+        */ 
+        connectMeasures : function()
+        {
+            
+            var temp = [];
+            var points = [];
+            
+            for(var i=0;i<stack.length;i++){
+                if(stack[i].getX())
+                    temp.push({'x':stack[i].getX(),'y':stack[i].getY()});
+                else{
+                    var y = stack[i].getTensionPoints().pop();
+                    var x = stack[i].getTensionPoints().pop();
+                    temp.push({'x':x,'y':y});
+                }
+            }
+
+            temp = bubbleSort(temp);
+
+            for(var i=0;i<temp.length;i++){
+                points.push(temp[i].x);
+                points.push(temp[i].y);                
+            }
+           
+            var line = new Kinetic.Line({
+                points: points,
+                stroke: 'red',
+                strokeWidth: 5,
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
+            
+            //Push measure into the "layer"
+            layers['connect'].add(line);
+            
+            //Add layer to stage
+            stage.add(layers['connect']);
+//                
         },
         /**
         * Finds the closest decibel value (in increments of 5) to the mouse click
@@ -546,4 +592,48 @@ function GetMeasureData(measure,masked,side){
     }
     return measureData[measure][masked][side];
 }
-    
+
+/**
+* Bubble sort my audiogram array to "order" the 'x' values for printing and connecting 
+*   with a line. 
+* @param {null}
+* @return {null}
+*/ 
+function bubbleSort(points){
+    var swapped;
+    do {
+        swapped = false;
+        for (var i=0; i < points.length-1; i++) {
+            if (points[i]['x'] > points[i+1]['x']) {
+                var temp = points[i];
+                points[i] = points[i+1];
+                points[i+1] = temp;
+                swapped = true;
+            }
+        }
+    } while (swapped);
+    return points;
+}
+
+//var group = new Kinetic.Group({
+//    x: x,
+//    y: y,
+//});
+//
+//var rect = new Kinetic.Rect({
+//    x: 0,
+//    y: 0,
+//    stroke: '#555',
+//    strokeWidth: .5,
+//    fill: 'rgba(0,0,0,.1)',
+//    width: 40,
+//    height: 40,
+//    shadowColor: 'black',
+//    shadowBlur: 5,
+//    shadowOffset: {x:1,y:1},
+//    shadowOpacity: 0.1,
+//    cornerRadius: 5
+//});            
+//
+//group.add(rect);
+//group.add(shape);

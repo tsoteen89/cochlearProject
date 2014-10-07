@@ -14,217 +14,159 @@
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
     <script src="audiogram.kinetic.js"></script>  
     <style>
-        body {
-            margin: 10px;
-            padding: 10px;
+
+        .container{
+            background-color: #7E7E7E
         }
-        .aud-btn{
-            font-size:24px;
-            background-color: #383D44;
+        
+        .mea-btn {
+            background-color:#383D44;
             color:white;
-            margin:5px;
         }
-        .aud-btn:hover{
-            
-        }
-        .aud-btn span{
-            text-align:center;
-        }
+        
         
         .btn-selected{
-            background-color: #1D72EF;
+            background-color:#1D72EF;
+        }
+      
+    /*Audiograph action/menu buttons*/  
+        .audiogram-menu{
+            margin-bottom: 20px;
+            margin-top:-20px;
+            padding-left: 130px;
+        }
+        .btn-action{
+            background-color:#383D44;
+            color:white;
         }
         
-        .aud-btn .left{
-            float:left;
-            margin-left:-5px;
-        }
-        .aud-btn .right{
-            float:right;
-            margin-right:-5px;
-        }
-        .aud-btn .mid{
-            font-size:.5em;
-            margin-left:20px;
-            margin-right:20px;
-        }
-        /* centered columns styles */
-        .row-centered {
-            text-align:center;
-        }
-        .col-centered {
-            display:inline-block;
-            float:none;
-            /* reset the text-align */
-            text-align:left;
-            /* inline-block space fix */
-            margin-right:-4px;
-            padding:0;
-        }
-        .col-fixed {
-            /* custom width */
-            width:320px;
-        }
-        .col-min {
-            /* custom min width */
-            min-width:320px;
-        }
-        .col-max {
-            /* custom max width */
-            max-width:320px;
+        .btn-action:hover{
+            color:#7E7E7E;
         }
 
-        /* visual styles */
-        body {
-            padding-bottom:40px;
-        }
-        h1 {
-            margin:40px 0px 20px 0px;
-            color:#95c500;
-            font-size:28px;
-            line-height:34px;
-            text-align:center;
-        }
-        .container{
-            max-width:99%
-        }
-        [class*="col-"] {
-            padding-top:10px;
-            padding-bottom:15px;
-            /*border:1px solid #80aa00;*/
-            /*background:#d6ec94;*/
-        }
-        [class*="col-"]:before {
-            display:block;position:relative;
-            margin-bottom:8px;
-            font-family:sans-serif;
-            font-size:10px;
-            letter-spacing:1px;
-            /*color:#658600;*/
-            text-align:left;
-        }
-        .item {
-            width:100%;
-            height:100%;
-            /*border:1px solid #cecece;
-            padding:16px 8px;
-            background:#ededed;
-            background:-webkit-gradient(linear, left top, left bottom,color-stop(0%, #f4f4f4), color-stop(100%, #ededed));
-            background:-moz-linear-gradient(top, #f4f4f4 0%, #ededed 100%);
-            background:-ms-linear-gradient(top, #f4f4f4 0%, #ededed 100%);*/
-        }
-
-        /* content styles */
-        .item {
-            display:table;
-        }
-        .content {
-            display:table-cell;
-            vertical-align:middle;
-            text-align:center;
-        }
-        
-        button.btn.btn-xs.btn-default{
-            margin:5px;
-        }
-        
-        .content:before {
-            font-family:sans-serif;
-            font-size:12px;
-            letter-spacing:1px;
-            color:#747474;
-        }
-
-        #measure-buttons{
-            padding-bottom:30px;
-            background: #222222;
-        }
-        
-        #mask-buttons{
-            padding-bottom:100px;
-        }
-        
-        .fa{
+        i.fa.pull-left{
             padding-top:3px;
         }
-        .audiogram-container{
-            width:500px;
-            height:500px;
-            border:1px solid #000;
-            background:#7E7E7E;           
-        }
-        .aud-toolbar{
-            margin-top:3px;
-        }
+    /*Audiogram container styles*/            
 
+        #audiogram_left {
+            margin-left: -30px;
+        }
+    /*Measure buttons*/          
+        .mea-btn {
+          background-color: hsl(216, 9%, 21%) !important;
+          background-repeat: repeat-x;
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3a3e45", endColorstr="#30343a");
+          background-image: -khtml-gradient(linear, left top, left bottom, from(#3a3e45), to(#30343a));
+          background-image: -moz-linear-gradient(top, #3a3e45, #30343a);
+          background-image: -ms-linear-gradient(top, #3a3e45, #30343a);
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3a3e45), color-stop(100%, #30343a));
+          background-image: -webkit-linear-gradient(top, #3a3e45, #30343a);
+          background-image: -o-linear-gradient(top, #3a3e45, #30343a);
+          background-image: linear-gradient(#3a3e45, #30343a);
+          border-color: #30343a #30343a hsl(216, 9%, 20%);
+          color: #fff !important;
+          text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
+          -webkit-font-smoothing: antialiased;
+        }
+        
+        #measure-buttons{
+            padding-left: 40px;
+            padding-top: 100px;
+        }
+        #measure-buttons label.btn.mea-btn{
+            margin-top:5px;
+            border-radius:5px;
+        }
+        #mask-button{
+            margin-top:30px;
+            border-radius:5px;
+        }
+        
+        #mask-button a{
+            color:white
+        }
+        
+        #mask-button a:hover{
+            text-decoration: none;
+        }
+    /*title row*/
+        .title{
+            text-align:center;
+            padding:0px;
+            margin-top:-10px;
+            margin-bottom:-40px;
+        }
     </style>
   </head>
   <body>
-	<div class="container">
-	  <div class="row row-centered">
-          <div class="col-xs-5 col-centered"  id="left_column">
-              <div class="item">
-              </div>
-              <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_right"></div>
-                    <div class="content menu audiogram-menu" data="right">
-                        <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
-                        <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-default" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
-                    </div>
-                  </div>
-              </div>
-          </div>
-        <div class="col-xs-2 col-centered">
-              <div class="item">
-                  <div class="content" id="measure-buttons">
-                    <!-- Auditory measure buttons -->
-                    <div class="btn-group-vertical" data-toggle="buttons">
-                      <label class="btn aud-btn active">
-                        <input type="radio" name="measure" id="AC" checked><span class="left" id="ACR"><i class="fa fa-circle-o"></i></span><span class="mid">AC</span><span class="right" id="ACL">&#10005;</span>
-                      </label>
-                      <label class="btn  aud-btn">
-                        <input type="radio" name="measure" id="BC"><span class="left" id="BCR"><i class="fa fa-chevron-left"></i></span><span class="mid">BC</span><span class="right" id="BCL"><i class="fa fa-chevron-right"></i></span>
-                      </label>
-                      <label class="btn aud-btn">
-                        <input type="radio" name="measure" id="MCL"><span class="left">M</span><span class="mid">MCL</span><span class="right">M</span>
-                      </label>
-                      <label class="btn aud-btn">
-                        <input type="radio" name="measure" id="UCL"><span class="left">m</span><span class="mid">UCL</span><span class="right">m</span>
-                      </label>
-                      <label class="btn aud-btn">
-                        <input type="radio" name="measure" id="SF"><span class="left">S</span><span class="mid">SF</span><span class="right">S</span>
-                      </label>
-                      <label class="btn aud-btn">
-                        <input type="radio" name="measure" id="SF-A"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span>
-                      </label>
-                  <div class="content" id="mask-buttons">
-                    <a class="btn btn-med btn-primary" href="#" id="mask_button">
-                    <i class="fa fa-ban pull-left"></i> Masked</a>
-                </div>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-5 title">
+                <h2>Right Ear</h2>
+            </div>
+            <div class="col-xs-2">
+            </div>
+            <div class="col-xs-5 title">            
+                <h2>Left Ear</h2>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-xs-5"  id="left_column">
+            <div id="audiogram_right"></div>
+        </div>
+        <div class="col-xs-2">
+            <!-- Auditory measure buttons -->
+            <div class="btn-group-vertical" data-toggle="buttons" id="measure-buttons">
+                <label class="btn mea-btn active">
+                <input type="radio" name="measure" id="AC" checked><span class="left" id="ACR"><i class="fa fa-circle-o"></i></span><span class="mid">AC</span><span class="right" id="ACL">&#10005;</span>
+                </label>
+                <label class="btn  mea-btn">
+                <input type="radio" name="measure" id="BC"><span class="left" id="BCR"><i class="fa fa-chevron-left"></i></span><span class="mid">BC</span><span class="right" id="BCL"><i class="fa fa-chevron-right"></i></span>
+                </label>
+                <label class="btn mea-btn">
+                <input type="radio" name="measure" id="MCL"><span class="left">M</span><span class="mid">MCL</span><span class="right">M</span>
+                </label>
+                <label class="btn mea-btn">
+                <input type="radio" name="measure" id="UCL"><span class="left">m</span><span class="mid">UCL</span><span class="right">m</span>
+                </label>
+                <label class="btn mea-btn">
+                <input type="radio" name="measure" id="SF"><span class="left">S</span><span class="mid">SF</span><span class="right">S</span>
+                </label>
+                <label class="btn mea-btn">
+                <input type="radio" name="measure" id="SF-A"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span>
+                </label>
+                
+                <button type="button" class="btn mea-btn" id="mask-button">
+                  <a href="#" >
+                <i class="fa fa-ban pull-left"></i> Masked</a>
+                </button>
+                
+            </div>
+        </div><!-- End Button Column-->
+        <div class="col-xs-5" id="right_column">
+            <div id="audiogram_left"></div>
+        </div>
+        </div> <!-- End Row -->
+        <div class="row">
+            <div class="col-xs-5">
+                <div class="audiogram-menu" data="right">
+                    <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
+                    <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
+                    <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
                 </div>
             </div>
-              <div class="item">
-
+            <div class="col-xs-2">
             </div>
-          </div><!-- End Button Column-->
-          <div class="col-xs-5 col-centered" id="right_column">
-              <div class="item">
-
-              </div>
-              <div class="item">
-                  <div class="content audiogram-container"><div id="audiogram_left"></div>
-                    <div class="content menu audiogram-menu" data="left">
-                        <button class="btn btn-xs btn-default" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
-                        <button class="btn btn-xs btn-default" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-default" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
-                    </div>
-                  </div>
-              </div>
-          </div>
-	  </div> <!-- End Row -->
-	</div> <!-- End Container -->
+            <div class="col-xs-5">            
+                <div class="audiogram-menu" data="left">
+                    <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
+                    <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
+                    <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Container -->
     <script>
     $(function() {
         //combine stuff later        
@@ -251,24 +193,44 @@
         * setting the proper character for each board according to the 
         * measure.
         */
-        $( ".aud-btn" ).on( "click", function() {
-            setTimeout( function (){
-                $( ".aud-btn" ).each(function( index ) {
-                    if($( this ).hasClass( "active" )){
-                        $( this ).addClass('btn-selected');
-                    }else{
-                        $( this ).removeClass('btn-selected');
-                    }
-                })
+        $( ".mea-btn" ).on( "click", function() {
+            if($( this )[0].id == 'mask-button'){
+                 if($(this).find($(".fa-ban")).length){
+                    Stage['right'].setMasked(1);
+                    Stage['left'].setMasked(1);
+                    $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+                    $('#BCL').html(']');
+                    $('#BCR').html('[');        
+                    $('#ACL').html('<i class="fa fa-square-o"></i>');
+                    $('#ACR').html('&#x25b3;');
+                }else{
+                    Stage['right'].setMasked(0);
+                    Stage['left'].setMasked(0);
+                    $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');  
+                    $('#BCR').html('<i class="fa fa-chevron-left"></i>');
+                    $('#BCL').html('<i class="fa fa-chevron-right"></i>');
+                    $('#ACR').html('<i class="fa fa-circle-o"></i>');
+                    $('#ACL').html('&#10005;');
+                }                   
+            }else{
                 setTimeout( function (){
-                    $( ".aud-btn" ).each(function( index ) {
+                    $( ".mea-btn" ).each(function( index ) {
                         if($( this ).hasClass( "active" )){
-                            Stage['right'].setCurrentMeasure($( this ).find('input').attr('id'));
-                            Stage['left'].setCurrentMeasure($( this ).find('input').attr('id'));
+                            $( this ).addClass('btn-selected');
+                        }else{
+                            $( this ).removeClass('btn-selected');
                         }
-                    });
+                    })
+                    setTimeout( function (){
+                        $( ".mea-btn" ).each(function( index ) {
+                            if($( this ).hasClass( "active" )){
+                                Stage['right'].setCurrentMeasure($( this ).find('input').attr('id'));
+                                Stage['left'].setCurrentMeasure($( this ).find('input').attr('id'));
+                            }
+                        });
+                    }, 0 );
                 }, 0 );
-            }, 0 );
+            }
         });
         
 
