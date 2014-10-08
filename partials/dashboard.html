@@ -58,8 +58,8 @@
                 <p> Users @ {{facData.records.Name}}</p>    
                 <div class="scroll">
                     <ul class="list-unstyled">
-                        <li ng-repeat="user in facUsers.records" style="margin-left:5px"> 
-                            <div ng-class-odd="'odd'" ng-class-even="'even'">
+                        <li ng-repeat="user in facUsers.records" style="margin-left:5px" > 
+                            <div ng-class-odd="'odd'" ng-class-even="'even'" ng-click="sendMessageToUser(user.username)">
                                 <a href=""> {{user.first_name}}  {{user.last_name}}</a> 
                             </div>
                         </li>
@@ -74,7 +74,7 @@
                     </button>
                   </div>
                 </div>    
-             <!-- Modal for add user -->
+            <!-- Modal for add user -->
             <script type="text/ng-template" id="addUser.html">
                 <div class="modal-header">
                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -221,7 +221,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="inviteNewFacility()">
                                 <span class="glyphicon glyphicon-plus-sign"></span> Invite New Facility
                             </button>
-                             <!-- Modal for add user -->
+                             <!-- Modal for Invite New Facility -->
                             <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
                                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -334,9 +334,9 @@
 						<div class="scroll">
                             <ul class="list-unstyled">
                             
-				                <li ng-repeat="user in facCardUsers.records" style="margin-left:5px"> 
-                                   <div ng-class-odd="'odd'" ng-class-even="'even'">
-                                        <a href=""> {{user.first_name}}  {{user.last_name}}</a>
+				                <li ng-repeat="user in facCardUsers.records" style="margin-left:5px" > 
+                                   <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                        <a href="" ng-click="ok(); sendMessageToUser(user.username)"> {{user.first_name}}  {{user.last_name}}</a>
                                     </div>
                                 </li>
                             </ul>
