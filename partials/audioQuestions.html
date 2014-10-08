@@ -136,26 +136,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr ng-class-even="'alt'" ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
-                                                        <td ng-repeat="(test,value) in tests" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{value}}</td>
+                                                        <td ng-repeat="key in notSorted(tests)" ng-init="value = tests[key]" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{value}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div><br>
                                         
-                                        <!--
-                                        <div class="row">
-                                            <table ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
-                                                <tr ng-repeat="(test,value) in tests">
-                                                    <td>
-                                                        {{test}}
-                                                    </td>
-                                                    <td>
-                                                        {{value}}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        -->
+                          
                                     </form>
                                 </div>
                                 <button type="button" class="btn btn-default btn-sm" ng-click="clearCurrentTest(test)">

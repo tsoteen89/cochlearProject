@@ -1311,6 +1311,18 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         
     }
     
+    $scope.notSorted = function(obj){
+        if (!obj) {
+            return [];
+        }
+        
+        var X = Object.keys(obj);
+        
+        X.pop();
+        
+        return X;
+    }
+    
     //Added by Travis/Anne
     //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
     /**
