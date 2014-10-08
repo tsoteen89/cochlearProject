@@ -59,8 +59,8 @@
                 <div class="scroll">
                     <ul class="list-unstyled">
                         <li ng-repeat="user in facUsers.records" style="margin-left:5px" > 
-                            <div ng-class-odd="'odd'" ng-class-even="'even'" ng-click="sendMessageToUser(user.username)">
-                                <a href=""> {{user.first_name}}  {{user.last_name}}</a> 
+                            <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                <a href="" ng-click="sendMessageToUser(user.username)"> {{user.first_name}}  {{user.last_name}}</a> 
                             </div>
                         </li>
                             

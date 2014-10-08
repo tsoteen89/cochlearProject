@@ -539,6 +539,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				$scope.hideInviteButton = false;
 			}
 			
+			//When a user is clicked on, redirect to the messages page to send
+			//a new message to this user.
 			$scope.sendMessageToUser = function(username){
 				persistData.setMessageUsername(username);
 				$window.location.href = "#/messages";
@@ -2093,6 +2095,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		return false;
 	}
 	
+	//Checks if the user wants to send a message to another user
+	//whenever the page loads.
 	$scope.checkForRecipients = function(){
 		var recipient = persistData.getMessageUsername();
 		if(recipient != -1){
@@ -2100,6 +2104,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.composeMessage = {};
 			$scope.composeMessage.ReceiverUsername = recipient;
 		}
+		//If there was no request to send a message to a user,
+		//show the inbox page.
 		else{
 			$scope.setMessageType('inbox');
 		}
