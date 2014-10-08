@@ -392,6 +392,13 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	$scope.redirectToMessages = function() {
 		$window.location.href = "#/messages";
 	}
+	
+	//When a user is clicked on, redirect to the messages page to send
+	//a new message to this user.
+	$scope.sendMessageToUser = function(username){
+		persistData.setMessageUsername(username);
+		$window.location.href = "#/messages";
+	}
 
     
     
@@ -530,6 +537,11 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			}
 			else{
 				$scope.hideInviteButton = false;
+			}
+			
+			$scope.sendMessageToUser = function(username){
+				persistData.setMessageUsername(username);
+				$window.location.href = "#/messages";
 			}
 			
             //Choose to show either facility card or invite facility to patient's care team
@@ -1965,7 +1977,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
         $scope.draftMessages = data;
     });
 	
-	 //Grab all deleted messages using patientURL 
+	//Grab all deleted messages using patientURL 
     getData.get($scope.deletedURL).success(function(data) {
 		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
 		for(i = 0; i < data.records.length; i++)
@@ -2087,9 +2099,12 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	$scope.checkForRecipients = function(){
 		var recipient = persistData.getMessageUsername();
 		if(recipient != -1){
-			$scope.selectTab('composeMessage');
+			$scope.setMessageType('composeMessage');
 			$scope.composeMessage = {};
-			$scope.composeMessage.ReceiverName = recipient;
+			$scope.composeMessage.ReceiverUsername = recipient;
+		}
+		else{
+			$scope.setMessageType('inbox');
 		}
 		//Reset the persist data
 		persistData.setMessageUsername(-1);

@@ -6,7 +6,7 @@
 	}
 </style>
 
-<div class="container" ng-controller="messagingController" ng-init="selectTab('messages'); setMessageType('inbox')">
+<div class="container" ng-controller="messagingController" ng-init="selectTab('messages')">
     <div class="col-lg-7">
 		<label style="font-size:2vw; color:#4B92AE">Messages</label><br><br>
 	</div>
@@ -35,7 +35,7 @@
 	
 	<!-- *********************   MESSAGES    ************************* -->
 	
-	<div class="messaging-system" ng-show="isSelectedTab('messages')" ng-controller="messagingController" ng-init="setMessageType('inbox'); checkForRecipients()">
+	<div class="messaging-system" ng-show="isSelectedTab('messages')" ng-controller="messagingController" ng-init="checkForRecipients()">
 	
 	  <div class="col-xs-10 button-wrapper">
 		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
