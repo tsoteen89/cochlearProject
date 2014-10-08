@@ -1,7 +1,7 @@
 var AudioGram = function(stage,audiogram_id,side) {
     var stage = stage;      //The whole kinetic stage!
     var layers = {};        //Object to hold different layers by name
-    var stack = [];         //Stack of items added to board.
+    var stack = [];         //Stack of "actions".
     var redoStack = [];     //Stack to hold items removed via "undo"
     var lineArray = [];     //Array to hold x,y vals to draw line between measures
     
@@ -15,6 +15,8 @@ var AudioGram = function(stage,audiogram_id,side) {
                              "backColor":"#ffffff",
                              "containerColor":"#7E7E7E",
                              "fontLabelsColor": "#414141",
+                             "textColor": "#414141",
+                             "textShadowColor": "#222222",
                              "strokeColor": "#000000"
                           },
         stage           : stage,                //Element id for kinetic canvas  
@@ -53,6 +55,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             layers['background'] = new Kinetic.Layer();
             layers['measures'] = new Kinetic.Layer();
             layers['connect'] = new Kinetic.Layer();
+            layers['error'] = new Kinetic.Layer();
             
             //Load X labels (frequencies) into array
             for(i=125;i<=8000;i*=2){
@@ -216,6 +219,8 @@ var AudioGram = function(stage,audiogram_id,side) {
         },
         /**
         * Adds measures to the audiogram. Each "measure" is snapped to the closest proper decibel and frequency.
+        * Each measure starts with a common set of attributes, and is then refined depending on what type of 
+        * measure it is. 
         * Adds each new measure to a "stack" so we can "undo" the actions
         * @param {null}
         * @return {null} 
@@ -231,30 +236,32 @@ var AudioGram = function(stage,audiogram_id,side) {
 
             //Goes and grabs the "shape" to be displayed based on these params
             var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);  
-                        
+            
+            //Common styles to most measures
             var commonStyle = {
                 x: x,
                 y: y,
                 strokeWidth: 5,
-                shadowColor: 'white',
+                shadowColor: this.colors['textShadowColor'],
                 shadowBlur: 2,
                 shadowOffset: {x:1, y:1},
                 shadowOpacity: 0.3,
                 draggable: true,
                 name: measureData.value+"-"+this.objectId,
+                measure: this.currentMeasure,
                 center: {'x':x,'y':y},
                 audioValues: {'frequency':f.value,'decibels':d.value}
             }
             
        
-            
+            //Determine the actual measure type so it can be customized
             if (measureData.type == 'text')
             {
                 commonStyle['text'] = measureData.value;
                 commonStyle['fontSize'] = fontSize;
                 commonStyle['fontFamily'] = 'Courier';
-                commonStyle['fill'] = 'white';
-                commonStyle['shadowColor'] = '#15C2D2';
+                commonStyle['fill'] = this.colors['textColor'];
+                commonStyle['shadowColor'] = this.colors['textShadowColor'];
                 commonStyle['shadowBlur'] = 2;
                 commonStyle['shadowOffset'] = {x:4, y:4};
                 commonStyle['shadowOpacity'] = 0.4;
@@ -276,10 +283,9 @@ var AudioGram = function(stage,audiogram_id,side) {
                     commonStyle['height'] = 17;
                     commonStyle['center'].x = x;
                     commonStyle['center'].y = y;
+                    //Adjust x,y so rectangle is centered on coords
                     commonStyle['x'] -= commonStyle['width']/2;
-                    commonStyle['y'] -= commonStyle['height']/2;  
-
-                 
+                    commonStyle['y'] -= commonStyle['height']/2;
                     var shape = new Kinetic.Rect(commonStyle);
                 }else if(measureData.value == 'wedge'){
                     //remove base x,y because it throws line way off
@@ -317,7 +323,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             console.log(shape);
         
-            this.connectMeasures();
+            this.drawConnection();
             
             //Push measure into the "layer"
             layers['measures'].add(stack[stack.length-1]);
@@ -325,24 +331,27 @@ var AudioGram = function(stage,audiogram_id,side) {
             //Add layer to stage
             stage.add(layers['measures']);
             this.objectId++;
+            console.log(stack);
              
         },
         /**
-        * Connect the measures with a line. 
+        * Connect the measures with a line, just the air conduction measures
         * @param {null}
         * @return {null}
         */ 
-        connectMeasures : function()
+        drawConnection : function()
         {
             
             var temp = [];
             var points = [];
             
             for(var i=0;i<stack.length;i++){
-                var center = stack[i].getAttr('center');
-                var x = center.x;
-                var y = center.y;
-                temp.push({'x':x,'y':y});
+                if(stack[i].getAttr('measure') == 'AC'){
+                    var center = stack[i].getAttr('center');
+                    var x = center.x;
+                    var y = center.y;
+                    temp.push({'x':x,'y':y});
+                }
             }
 
             temp = bubbleSort(temp);
@@ -486,20 +495,69 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             return {"x":cx,"y":cy};
         },
+        /**
+        * Pops last item off the stack and removes it from the "stage"
+        * @param {void}
+        * @return {void}
+        */ 
         undoMeasure: function(){
-            var shape = stack.pop();
-            redoStack.push(shape);
-            shape.remove();
-            layers['measures'].draw();
-            this.connectMeasures();
-            this.objectId--;
+            if(stack.length > 0){
+                var shape = stack.pop();
+                redoStack.push(shape);
+                shape.remove();
+                layers['measures'].draw();
+                this.drawConnection();
+                this.objectId--;
+            }else{
+                
+                var tooltip = new Kinetic.Label({
+                    x: (this.graph_bounds.max.x - this.graph_bounds.min.x)/2,
+                    y: (this.graph_bounds.max.y - this.graph_bounds.min.y)/2,
+                    opacity: 0.75
+                });
+                tooltip.add(new Kinetic.Tag({
+                    fill: 'black',
+                    pointerDirection: 'down',
+                    pointerWidth: 10,
+                    pointerHeight: 10,
+                    lineJoin: 'round',
+                    shadowColor: 'black',
+                    shadowBlur: 10,
+                    shadowOffset: {x:10,y:20},
+                    shadowOpacity: 0.5
+                }));
+
+                tooltip.add(new Kinetic.Text({
+                    text: 'Nothing to undo!',
+                    fontFamily: 'Calibri',
+                    fontSize: 18,
+                    padding: 5,
+                    fill: 'white'
+                }));
+                
+                layers['error'].add(tooltip);
+                stage.add(layers['error']);
+                setTimeout(
+                    function(){
+                        console.log("doing it");
+                        tooltip.remove();
+                        layers['error'].draw();
+                    }, 
+                3000);
+            }
         },
+        /**
+        * Retreives last item popped off the stack and adds it to the "stage"
+        * @param {void}
+        * @return {void}
+        */
         redoMeasure: function(){
             var shape = redoStack.pop();
             stack.push(shape);
             layers['measures'].add(shape);            
             layers['measures'].draw();
-            this.connectMeasures();
+            this.drawConnection();
+            this.objectId++;
         }
         
     }
@@ -509,8 +567,23 @@ var AudioGram = function(stage,audiogram_id,side) {
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
-        //private.checkAdd();
-        private.addMeasure();
+        var shape = evt.target;
+        var name = null;
+        try{
+            name = shape.getName();
+        }catch(e){
+            console.log("oops");
+        }
+        
+        console.log(name);
+        setTimeout(function(){
+            layers['error'].removeChildren();
+            stage.draw();
+            setTimeout(function(){
+                private.addMeasure();
+            },0);
+
+        },0);
     });
     
     layers['measures'].on('click', function(evt) {
