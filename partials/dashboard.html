@@ -50,7 +50,7 @@
                       <b> Address: </b> <br>
                       {{facData.records.Address1}} <br>
                       <b> Phone: </b> ({{facData.records.Phone.slice(0,3)}}){{facData.records.Phone.slice(3,6)}}-{{facData.records.Phone.slice(6)}} <br>
-                      <b>Facility Admin:  </b><a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
+                      <b>Facility Admin:  </b><a href="" ng-click="sendMessageToUser(facilityAdmin.username)"> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
                       <button type="button" class="btn btn-default btn-sm" ng-if="userLevel < 11"> <a style="color:black; text-decoration:none;" href="#/mySettings/"><span class="fa fa-building"></span> Facility Settings </a></button> 
                     </div> 
                 </div>
@@ -58,9 +58,9 @@
                 <p> Users @ {{facData.records.Name}}</p>    
                 <div class="scroll">
                     <ul class="list-unstyled">
-                        <li ng-repeat="user in facUsers.records" style="margin-left:5px"> 
-                            <div ng-class-odd="'odd'" ng-class-even="'even'">
-                                <a href=""> {{user.first_name}}  {{user.last_name}}</a> 
+                        <li ng-repeat="user in facUsers.records" style="margin-left:5px" > 
+                            <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                <a href="" ng-click="sendMessageToUser(user.username)"> {{user.first_name}}  {{user.last_name}}</a> 
                             </div>
                         </li>
                             
@@ -74,7 +74,7 @@
                     </button>
                   </div>
                 </div>    
-             <!-- Modal for add user -->
+            <!-- Modal for add user -->
             <script type="text/ng-template" id="addUser.html">
                 <div class="modal-header">
                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -221,7 +221,7 @@
                             <button type="button" class="btn btn-default btn-sm" ng-click="inviteNewFacility()">
                                 <span class="glyphicon glyphicon-plus-sign"></span> Invite New Facility
                             </button>
-                             <!-- Modal for add user -->
+                             <!-- Modal for Invite New Facility -->
                             <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
                                     <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
@@ -327,16 +327,16 @@
 							  <b> Address: </b>
 							  {{facCard.records.Address1}} <br>
                               <b> Phone: </b> ({{facCard.records.Phone.slice(0,3)}}){{facCard.records.Phone.slice(3,6)}}-{{facCard.records.Phone.slice(6)}} <br>
-							  <b> Facility Admin: </b> <a> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
+							  <b> Facility Admin: </b> <a href="" ng-click="ok(); sendMessageToUser(facilityAdmin.username)"> {{facilityAdmin.first_name}} {{facilityAdmin.last_name}}</a> <br>
 							</div> 
 						</div>
 						<p> Users @ {{facCard.records.Name}}</p>    
 						<div class="scroll">
                             <ul class="list-unstyled">
                             
-				                <li ng-repeat="user in facCardUsers.records" style="margin-left:5px"> 
-                                   <div ng-class-odd="'odd'" ng-class-even="'even'">
-                                        <a href=""> {{user.first_name}}  {{user.last_name}}</a>
+				                <li ng-repeat="user in facCardUsers.records" style="margin-left:5px" > 
+                                   <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                        <a href="" ng-click="ok(); sendMessageToUser(user.username)"> {{user.first_name}}  {{user.last_name}}</a>
                                     </div>
                                 </li>
                             </ul>
