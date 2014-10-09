@@ -13,11 +13,11 @@
         <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
         <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
         <div ng-if="setInactive==true"  ng-repeat="reason in InactiveReasons" ng-show="!$first">
-            <input type=radio value={{reason.Reason}} name=inactiveReasons
-                   ng-model="patient.InactiveStatus"> {{reason.Reason}}
+            <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons
+                   ng-model="patient.reason"> {{reason.Reason}}
         </div>
-        <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ><!--ng-click="submitPatientInfo(patient)"--> </span></a>
-        
+        <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"><!--ng-click="submitPatientInfo(patient)"--> </span></a>
+        <!--End set patient to inactive-->
         <form ng-submit="submitPatientInfo(patient)">
             <br> 
             <div class="row">

@@ -1381,7 +1381,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 //************************************END QUESTION CONTROLLERS***************************************//
     
 
-
 //**************************************PATIENT CONTROLLERS******************************************//
 
     
@@ -1442,9 +1441,27 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
-    
+    $scope.patientInactiveStatus = 10;
     $scope.submitPatientInfo = function(patient){
-        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
+        $timeout(function(){
+            if(patient.reason){
+                console.log($scope.patientInactiveStatus);
+                patient.InactiveStatus = patient.reason;
+                patient.reason = null;
+            }
+            $timeout(function(){
+                putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID,patient);
+            },0);
+        },0);
+        
+        
+    };
+    $scope.showActivePatients = "10";
+    $scope.showInactive = function(){
+        $scope.showActivePatients = "!10";
+    };
+    $scope.showActive = function(){
+        $scope.showActivePatients = "10";
     };
     $scope.editDescrip =false;
     $scope.setInactive = false;
@@ -1476,6 +1493,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         console.log($location.hash());
         $timeout(function(){
             $anchorScroll();
+            $timeout(function(){
+                scrollBy(0, -60);
+            }, 0);
         }, 1000);
         
     };

@@ -5,8 +5,8 @@
 	<title> Auditory Implant Initiative </title>
 
     <link href="css/style.css" rel="stylesheet" type="text/css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href = "css/historyForm.css" rel = "stylesheet">
       <link href="js/angular-hovercard.css" rel="stylesheet">
       
@@ -52,7 +52,7 @@
                     <a class="navbar-brand cp_navbar-brand" href="#/dashboard"><img src="images/hermesCI.png" style="margin-top:-4%"></a>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#/dashboard"><i class="glyphicon glyphicon-user"></i> {{setUsername()}} {{title}} {{name}}</a>
+                            <a href="#/dashboard"><i class="fa fa-user"></i> {{setUsername()}} {{title}} {{name}}</a>
                         </li>
                         <li ng-controller="BadgeCtrl">
                             <a href="#/messages"><i class="fa fa-comment-o 3x" notification-badge="icon.count"></i></a>
@@ -61,7 +61,7 @@
                             <a href=""class="fa fa-cog" role="button" data-toggle="dropdown"></a>
                             <ul id="g-account-menu" class="dropdown-menu" role="menu">
                                 <li><a href="#/mySettings"><i class="fa fa-wrench"></i> My Settings</a></li>
-                                <li><a href="#/" ng-click="logout()"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
+                                <li><a href="#/" ng-click="logout()"><i class="fa fa-lock"></i> Logout</a></li>
                             </ul>
                         </li>
                     </ul>
