@@ -1,22 +1,28 @@
-<div id = "cp_patientContainer"class="col-md-3">
+<div id = "cp_patientContainer"class="col-md-3" >
     <br>
     <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
     <p class = "cp_patientSex" >{{patient.Sex}}</p>
     <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
     <br> 
     <br>
+    
     <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" > Patient Details</button>
     
     <div ng-show="show"><br>
         
+        <span ng-if="patient['Inactive Reason'] != 'Active'"> Inactive because of {{patient['Inactive Reason']}}</span>
+        
         <!--Set Patient To Inactive -->
-        <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
-        <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
-        <div ng-if="setInactive==true"  ng-repeat="reason in InactiveReasons" ng-show="!$first">
-            <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons
-                   ng-model="patient.reason"> {{reason.Reason}}
+        <div ng-if="patient['Inactive Reason'] == 'Active'">
+            <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
+            <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
+            <div ng-if="setInactive==true"  ng-repeat="reason in inactiveReasons" ng-show="!$first">
+                <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons
+                       ng-model="patient.reason"> {{reason.Reason}}
+            </div>
+            <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"><!--ng-click="submitPatientInfo(patient)"--> </span></a>
         </div>
-        <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"><!--ng-click="submitPatientInfo(patient)"--> </span></a>
+        
         <!--End set patient to inactive-->
         <form ng-submit="submitPatientInfo(patient)">
             <br> 

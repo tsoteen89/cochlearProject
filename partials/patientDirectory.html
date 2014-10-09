@@ -25,7 +25,7 @@
             </div>
         </div> <br>
         <div class="row">
-            <tabset>
+            <tabset style="cursor:pointer">
                 <tab heading="Active Patients" ng-click="showActive()">
                 </tab>
                 <tab heading="Inactive Patients" ng-click="showInactive()">
@@ -40,7 +40,7 @@
               <!-- patient usable within this scope-->
             <div class="container cp_patientPhase col-md-12" ng-controller="collapseCtrl" 
                  ng-mouseleave="isDataCollapsed = true;" 
-                 ng-repeat="patient in patientsData.records | filter: {InactiveStatus:showActivePatients}">
+                 ng-repeat="patient in patientsData.records | filter: {'Inactive Reason':showActivePatients}">
                 
             <div ng-controller="PatientPhaseCollapseCtrl" class="row">    
                 <!-- PATIENT BOX ON LEFT--------------------->

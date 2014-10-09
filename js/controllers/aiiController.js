@@ -1458,18 +1458,19 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
         
     };
-    $scope.showActivePatients = "10";
+    $scope.showActivePatients = "Active";
     $scope.showInactive = function(){
-        $scope.showActivePatients = "!10";
+        $scope.showActivePatients = "!Active";
     };
     $scope.showActive = function(){
-        $scope.showActivePatients = "10";
+        $scope.showActivePatients = "Active";
     };
+    
     $scope.editDescrip =false;
     $scope.setInactive = false;
     
     getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data){
-        $scope.InactiveReasons = data.records;
+        $scope.inactiveReasons = data.records;
     });
     $scope.submitDescriptionInfo = function(careTeam){
         putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + careTeam.CareTeamID,careTeam);
