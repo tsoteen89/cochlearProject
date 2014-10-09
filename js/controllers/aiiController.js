@@ -1286,6 +1286,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.phonemes=0;
         $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         $scope.answer.tests =null;
+        $scope.answer.ConditionsID = "";
     }
     
     //clears ONE test (or in case of aided audiogram (3 tests), so more results can be entered under the same ear conditions
@@ -1308,6 +1309,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         else if(data == 'BKB-SIN'){
             $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
         }
+        
         
     }
     
