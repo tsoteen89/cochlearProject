@@ -520,14 +520,15 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				}
             });     
             
-            //get the all the patients for YOUR (user who's logged in) facility
-			getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID).success(function(data) {
+            //get the all the patients for YOUR (user who's logged in) facility and exclude any patients the clicked facility already has
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/excludingExisting/"+ fac.FacilityID + '/' + $scope.sessionID).success(function(data) {
+                
                 for(var i = 0; i < data.records.length; i++){
 					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
 				}
-				$scope.facCardUserFacilityPatients = data;
-            }); 
-
+                $scope.facCardNonPatients = data.records;
+            });   
+            
 			$scope.displayInfo = true;
 			$scope.selectedPatient = [];
 			$scope.hideSendInvitationButton = true;
@@ -1548,8 +1549,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             });
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/"+ fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                 $scope.facCardUsers = data;
-            });          
-
+            });        
+            
 
             $scope.ok = function () {
                 $modalInstance.close();

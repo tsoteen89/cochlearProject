@@ -362,7 +362,7 @@
 						</p>    
 						<div class="scroll">
 							<ul>
-								<div ng-repeat="patient in facCardUserFacilityPatients.records | filter:searchPatients" for="{{patient}}"> 
+								<div ng-repeat="patient in facCardNonPatients | filter:searchPatients" for="{{patient}}"> 
 									<input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> {{patient.Name}} ({{patient.DOB}})
 								</div>
 							</ul>
