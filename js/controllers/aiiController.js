@@ -2221,11 +2221,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	
 	//Moves the contents of a draft message into the composing message
 	$scope.edit = function(){
-		$scope.composeMessage = {};
-		
-		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.ReceiverUsername;
-		$scope.composeMessage.Subject = $scope.selectedMessage.Subject;
-		$scope.composeMessage.Content = $scope.selectedMessage.Content;
+		$scope.composeMessage = $scope.selectedMessage;
+		$scope.composeMessage.isDraft = true;
 	}	
 	
 	//Posts the input message after properly filling out the appropriate fields of the message
@@ -2236,18 +2233,23 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		
 		//Define the SenderID as the current user
 		message.SenderID = $scope.userID;
-		//Generate Timestamp
-		message.Timestamp = Math.round((new Date().getTime()) / 1000);
 		message.Sent = 1;
 		message.SenderDeleted = 0;
 		message.ReceiverDeleted = 0;
 		
-		//Insure that all elements contain data before posting
-		if(message.ReceiverUsername && message.Subject && message.Content){
+		//If this message is an edited draft, PUT the message instead of POSTing
+		if(message.isDraft){
+			putData.put($scope.messageURL + message.MessageID, message).success(function(data){
+				$scope.refreshMessages();
+			});
+		}
+		//Insure that all elements contain data before POSTing
+		else if(message.ReceiverUsername && message.Subject && message.Content){
 			postData.post($scope.messageURL,message).success(function(data){
 				$scope.refreshMessages();
 			});
 		}
+		//If elements are missing, inform the user and save as draft if possible
 		else{
 			var errorMessage = "The message could not be sent due to:"
 			if(!message.ReceiverUsername){
@@ -2278,7 +2280,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		//POST a message where Sent is false. Only the content is required to be filled.
 		message.SenderID = $scope.userID;
 		//Generate Timestamp
-		message.Timestamp = Math.round((new Date().getTime()) / 1000);
 		message.Sent = 0;
 		message.SenderDeleted = 0;
 		message.ReceiverDeleted = 0;

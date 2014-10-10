@@ -38,7 +38,7 @@
 	<div class="messaging-system" ng-show="isSelectedTab('messages')" ng-controller="messagingController" ng-init="checkForRecipients()">
 	
 	  <div class="col-xs-10 button-wrapper">
-		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage')">
+		<button type="button" class="btn btn-default" ng-click="setMessageType('composeMessage');clearComposedMessage()">
 		  <span><i class="glyphicon glyphicon-plus"></i></span> New Message
 		</button>
 	  </div>
