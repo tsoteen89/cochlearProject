@@ -40,7 +40,7 @@
               <!-- patient usable within this scope-->
             <div class="container cp_patientPhase col-md-12" ng-controller="collapseCtrl" 
                  ng-mouseleave="isDataCollapsed = true;" 
-                 ng-repeat="patient in patientsData.records | filter: {'Inactive Reason':showActivePatients}">
+                 ng-repeat="patient in patientsData.records | filter: {'InactiveStatus':showActivePatients}">
                 
             <div ng-controller="PatientPhaseCollapseCtrl" class="row">    
                 <!-- PATIENT BOX ON LEFT--------------------->
