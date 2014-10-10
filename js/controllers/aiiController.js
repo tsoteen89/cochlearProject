@@ -224,7 +224,7 @@ myApp.factory('persistData', function ($cookieStore) {
     var userLevel;
 	
 	//Messaging info
-	var messageUsername = -1;
+	var messageRecipient = -1;
 	
     return {
         setCareTeamID:function (data) {
@@ -283,11 +283,11 @@ myApp.factory('persistData', function ($cookieStore) {
         getUserLevel: function(data){
             return userLevel;
         },
-		setMessageUsername: function(data){
-            messageUsername = data;
+		setMessageRecipient: function(data){
+            messageRecipient = data;
         },
-        getMessageUsername: function(data){
-            return messageUsername;
+        getMessageRecipient: function(data){
+            return messageRecipient;
         }
     };
 });
@@ -402,8 +402,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	
 	//When a user is clicked on, redirect to the messages page to send
 	//a new message to this user.
-	$scope.sendMessageToUser = function(username){
-		persistData.setMessageUsername(username);
+	$scope.sendMessageToUser = function(user){
+		persistData.setMessageRecipient(user);
 		$window.location.href = "#/messages";
 	}
 
@@ -549,8 +549,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			
 			//When a user is clicked on, redirect to the messages page to send
 			//a new message to this user.
-			$scope.sendMessageToUser = function(username){
-				persistData.setMessageUsername(username);
+			$scope.sendMessageToUser = function(user){
+				persistData.setMessageRecipient(user);
 				$window.location.href = "#/messages";
 			}
 			
@@ -2144,11 +2144,12 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	//Checks if the user wants to send a message to another user
 	//whenever the page loads.
 	$scope.checkForRecipients = function(){
-		var recipient = persistData.getMessageUsername();
+		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			$scope.setMessageType('composeMessage');
 			$scope.composeMessage = {};
-			$scope.composeMessage.ReceiverUsername = recipient;
+			$scope.composeMessage.ReceiverUsername = 
+				recipient.username + " <" + recipient.full_name + ">";
 		}
 		//If there was no request to send a message to a user,
 		//show the inbox page.
@@ -2156,7 +2157,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.setMessageType('inbox');
 		}
 		//Reset the persist data
-		persistData.setMessageUsername(-1);
+		persistData.setMessageRecipient(-1);
 	}
 	
 	//Toggles visibility of the message content display
@@ -2228,11 +2229,8 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	
 	//Moves the contents of a draft message into the composing message
 	$scope.edit = function(){
-		$scope.composeMessage = {};
-		
-		$scope.composeMessage.ReceiverUsername = $scope.selectedMessage.ReceiverUsername;
-		$scope.composeMessage.Subject = $scope.selectedMessage.Subject;
-		$scope.composeMessage.Content = $scope.selectedMessage.Content;
+		$scope.composeMessage = $scope.selectedMessage;
+		$scope.composeMessage.isDraft = true;
 	}	
 	
 	//Posts the input message after properly filling out the appropriate fields of the message
@@ -2243,18 +2241,23 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		
 		//Define the SenderID as the current user
 		message.SenderID = $scope.userID;
-		//Generate Timestamp
-		message.Timestamp = Math.round((new Date().getTime()) / 1000);
 		message.Sent = 1;
 		message.SenderDeleted = 0;
 		message.ReceiverDeleted = 0;
 		
-		//Insure that all elements contain data before posting
-		if(message.ReceiverUsername && message.Subject && message.Content){
+		//If this message is an edited draft, PUT the message instead of POSTing
+		if(message.isDraft){
+			putData.put($scope.messageURL + message.MessageID, message).success(function(data){
+				$scope.refreshMessages();
+			});
+		}
+		//Insure that all elements contain data before POSTing
+		else if(message.ReceiverUsername && message.Subject && message.Content){
 			postData.post($scope.messageURL,message).success(function(data){
 				$scope.refreshMessages();
 			});
 		}
+		//If elements are missing, inform the user and save as draft if possible
 		else{
 			var errorMessage = "The message could not be sent due to:"
 			if(!message.ReceiverUsername){
@@ -2285,7 +2288,6 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 		//POST a message where Sent is false. Only the content is required to be filled.
 		message.SenderID = $scope.userID;
 		//Generate Timestamp
-		message.Timestamp = Math.round((new Date().getTime()) / 1000);
 		message.Sent = 0;
 		message.SenderDeleted = 0;
 		message.ReceiverDeleted = 0;
