@@ -213,7 +213,7 @@ myApp.factory('putData', function($http){
  *      @function getDirAnchor - return the current Patient Directory Anchor.
  *      @function getUserLevel - return the current User Level.
  */
-myApp.factory('persistData', function () {
+myApp.factory('persistData', function ($cookieStore) {
     //User info
 	var CareTeamID;
     var PhaseID;
@@ -229,18 +229,24 @@ myApp.factory('persistData', function () {
     return {
         setCareTeamID:function (data) {
             CareTeamID = data;
+            $cookieStore.put('CareTeamID', CareTeamID);
             console.log(data);
+            
         },
         setPhaseID: function (data) {
             PhaseID = data;
+            $cookieStore.put('PhaseID', PhaseID);
+
             console.log(data);
         },
         setPhaseName: function (data) {
             PhaseName = data;
+            $cookieStore.put('PhaseName', PhaseName);
             console.log(data);
         },
         setPatientName:function(data){
             PatientName = data;
+            $cookieStore.put('PatientName', PatientName);
             console.log(data);
         },
         getPatientName:function(data){
@@ -265,6 +271,7 @@ myApp.factory('persistData', function () {
         },
         setDirAnchor: function(data){
             dirAnchor=  data;
+            $cookieStore.put('dirAnchor', dirAnchor);
             console.log(dirAnchor);
         },
         getDirAnchor: function(data){
@@ -754,7 +761,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
              *      @function ok - closes the modalInstance
  *
  */
-controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location){
+controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $cookieStore){
     
     $scope.limit = 5;
     $scope.offSet = 0;
@@ -764,15 +771,15 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.answer = {};
     $scope.answer.Answers = {};
-    $scope.answer.PhaseID = persistData.getPhaseID();
-    $scope.answer.CareTeamID = persistData.getCareTeamID();
-    $scope.phaseName=persistData.getPhaseName();
-    $scope.patientName= persistData.getPatientName();
+    $scope.answer.PhaseID = $cookieStore.get('PhaseID');
+    $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
+    $scope.phaseName=$cookieStore.get('PhaseName');
+    $scope.patientName= $cookieStore.get('PatientName');
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
-    $scope.dirAnchor = persistData.getDirAnchor();
+    $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.clickedPhase = null;
     
     $scope.isArray = function(check){
@@ -783,7 +790,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         return angular.isObject(check);
     }
 
-    getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+    getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('PhaseID')).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             console.log("first" + $scope.audioSummaryAnswers);
     });
@@ -853,7 +860,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer = {};
         $scope.singleAnswer.Answers = {};
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
-        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
         //Remove Not Answered if answering a check box question that had been saved as not answered
         if(angular.isArray($scope.singleAnswer.Answers[questionID])){
@@ -872,13 +879,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer = {};
         $scope.singleAnswer.Answers = {};
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
-        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID].toISOString().slice(0,10);
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
     };
     
-    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : persistData.getCareTeamID()};
+    $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : $cookieStore.get('CareTeamID')};
     //Post a surgery History. 
     $scope.postSurgery = function() {
         $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
@@ -1049,14 +1056,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
         if(phaseNumber == 2 || phaseNumber > 6){
         
-            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('CareTeamID')).success(function(data) {
                     $scope.patientSummaryAnswers = data.records.DetailedAnswers;
                     console.log("first" + $scope.audioSummaryAnswers);
             });
         }
         
         if(phaseNumber == 1 || phaseNumber > 2 && phaseNumber < 7){
-            $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" + phaseNumber; 
+            $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + phaseNumber; 
 
             getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                 $scope.patientSummaryAnswers = data.records;          
@@ -1086,7 +1093,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             
-            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('PhaseID')).success(function(data) {
                 $scope.patientSummaryAnswers = data.records;
             });
             $scope.ok = function () {
@@ -1147,10 +1154,10 @@ controllers.questionsController = function($scope, persistData, getData, postDat
              *      @function ok - closes the modalInstance
  *
  */
-controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll){
+controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll, $cookieStore){
     
     //Get Audiology Phase fields and test 
-    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + persistData.getPhaseID() + "/questions";
+    $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
         $scope.audioQs = data.records.Questions;
@@ -1159,14 +1166,14 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.three = "3";
     
     $scope.loggedIn = persistData.getLoggedIn();
-    $scope.phaseName= persistData.getPhaseName();
+    $scope.phaseName= $cookieStore.get('PhaseName');
     
     //Conditions object, will hold left and right ear conditions that are set
     $scope.conditions = {};
     
     $scope.answer = {};
-    $scope.answer.PhaseID = persistData.getPhaseID();
-    $scope.answer.CareTeamID = persistData.getCareTeamID();
+    $scope.answer.PhaseID = $cookieStore.get('PhaseID');
+    $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
     $scope.answer.Answers = {};
     
     //Must initialize, so ng-model recognizes objects to store the fields of each test
@@ -1225,7 +1232,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer = {};
         $scope.singleAnswer.Answers = {};
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
-        $scope.singleAnswer.CareTeamID = persistData.getCareTeamID();
+        $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
         postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
 
@@ -1339,7 +1346,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
      */
     $scope.getDataSummary = function(patientSummaryAnswers){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + persistData.getCareTeamID() + "/phaseAnswers/" +persistData.getPhaseID()).success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID')+ "/phaseAnswers/" +$cookieStore.get('PhaseID')).success(function(data) {
                 $scope.patientSummaryAnswers = data.records.DetailedAnswers;
             });
             $scope.ok = function () {
