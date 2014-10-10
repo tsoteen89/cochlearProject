@@ -224,7 +224,7 @@ myApp.factory('persistData', function ($cookieStore) {
     var userLevel;
 	
 	//Messaging info
-	var messageUsername = -1;
+	var messageRecipient = -1;
 	
     return {
         setCareTeamID:function (data) {
@@ -283,11 +283,11 @@ myApp.factory('persistData', function ($cookieStore) {
         getUserLevel: function(data){
             return userLevel;
         },
-		setMessageUsername: function(data){
-            messageUsername = data;
+		setMessageRecipient: function(data){
+            messageRecipient = data;
         },
-        getMessageUsername: function(data){
-            return messageUsername;
+        getMessageRecipient: function(data){
+            return messageRecipient;
         }
     };
 });
@@ -402,8 +402,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	
 	//When a user is clicked on, redirect to the messages page to send
 	//a new message to this user.
-	$scope.sendMessageToUser = function(username){
-		persistData.setMessageUsername(username);
+	$scope.sendMessageToUser = function(user){
+		persistData.setMessageRecipient(user);
 		$window.location.href = "#/messages";
 	}
 
@@ -549,8 +549,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			
 			//When a user is clicked on, redirect to the messages page to send
 			//a new message to this user.
-			$scope.sendMessageToUser = function(username){
-				persistData.setMessageUsername(username);
+			$scope.sendMessageToUser = function(user){
+				persistData.setMessageRecipient(user);
 				$window.location.href = "#/messages";
 			}
 			
@@ -2144,11 +2144,12 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	//Checks if the user wants to send a message to another user
 	//whenever the page loads.
 	$scope.checkForRecipients = function(){
-		var recipient = persistData.getMessageUsername();
+		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			$scope.setMessageType('composeMessage');
 			$scope.composeMessage = {};
-			$scope.composeMessage.ReceiverUsername = recipient;
+			$scope.composeMessage.ReceiverUsername = 
+				recipient.username + " <" + recipient.full_name + ">";
 		}
 		//If there was no request to send a message to a user,
 		//show the inbox page.
@@ -2156,7 +2157,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			$scope.setMessageType('inbox');
 		}
 		//Reset the persist data
-		persistData.setMessageUsername(-1);
+		persistData.setMessageRecipient(-1);
 	}
 	
 	//Toggles visibility of the message content display
