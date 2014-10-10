@@ -10,17 +10,17 @@
     
     <div ng-show="show"><br>
         
-        <span ng-if="patient['Inactive Reason'] != 'Active'"> Inactive because of {{patient['Inactive Reason']}}</span>
+        <span ng-if="patient.InactiveStatus != 10"> Inactive because of {{patient['Inactive Reason']}}</span>
         
         <!--Set Patient To Inactive -->
-        <div ng-if="patient['Inactive Reason'] == 'Active'">
+        <div ng-if="patient.InactiveStatus == 10">
             <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
             <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
             <div ng-if="setInactive==true"  ng-repeat="reason in inactiveReasons" ng-show="!$first">
                 <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons
-                       ng-model="patient.reason"> {{reason.Reason}}
+                       ng-model="patient.reason" > {{reason.Reason}} 
             </div>
-            <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"><!--ng-click="submitPatientInfo(patient)"--> </span></a>
+            <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"></span></a>
         </div>
         
         <!--End set patient to inactive-->

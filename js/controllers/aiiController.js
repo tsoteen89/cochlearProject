@@ -1451,11 +1451,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
-    $scope.patientInactiveStatus = 10;
     $scope.submitPatientInfo = function(patient){
         $timeout(function(){
             if(patient.reason){
-                console.log($scope.patientInactiveStatus);
                 patient.InactiveStatus = patient.reason;
                 patient.reason = null;
             }
@@ -1466,12 +1464,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
         
     };
-    $scope.showActivePatients = "Active";
+    $scope.showActivePatients = "10";
     $scope.showInactive = function(){
-        $scope.showActivePatients = "!Active";
+        $scope.showActivePatients = "!10";
     };
     $scope.showActive = function(){
-        $scope.showActivePatients = "Active";
+        $scope.showActivePatients = "10";
     };
     
     $scope.editDescrip =false;
