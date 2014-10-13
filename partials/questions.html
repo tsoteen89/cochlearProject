@@ -189,26 +189,37 @@
     </div><!--COL 6 div-->
 
     
-    
+        
     <script type="text/ng-template" id="dataSummary.html">
-        <div class="modal-header">
-            <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
+    
+            <div class="modal-header">
+                <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
+            </div>
+        <div id="divtoprint">
+            <div class="modal-body">
+                <completed-questions></completed-questions>
+            </div>
         </div>
-        <div class="modal-body">
-            <completed-questions></completed-questions>
-        </div>
+        
         <div class="modal-footer" ng-controller="questionsController">
             <button ng-click="ok()" class="btn btn-default"
                      style="float:left">
                 Back
             </button>
+
+            <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:30%">
+                Print
+            </button>
+
             <button ng-click="completePhase(); ok()" class="btn btn-default"
                     popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
                 Confirm
             </button>
         </div>
+        
     </script>
+
     
 </div>
     
