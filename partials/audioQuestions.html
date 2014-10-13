@@ -270,8 +270,12 @@
                  style="float:left">
             Back
         </button>
-        <button ng-click="completePhase(); ok()" class="btn btn-default"
+        <button ng-if="phaseName != '24 Month Visit'" ng-click="completePhase(); ok()" class="btn btn-default"
                 popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
+            Confirm
+        </button>
+        <button ng-if="phaseName == '24 Month Visit'" ng-click="completeCare(); ok()" class="btn btn-default"
+                popover="Click to complete data entry for this phase and complete this patient's care. The patient will be considered 'inactive' at this point." popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
             Confirm
         </button>
     </div>

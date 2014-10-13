@@ -222,11 +222,16 @@ myApp.factory('persistData', function ($cookieStore) {
     var PatientName;
     var dirAnchor;
     var userLevel;
+    var PatientID;
 	
 	//Messaging info
 	var messageRecipient = -1;
 	
     return {
+        setPatientID:function(data){
+            PatientID = data;
+            $cookieStore.put('PatientID', PatientID);
+        },
         setCareTeamID:function (data) {
             CareTeamID = data;
             $cookieStore.put('CareTeamID', CareTeamID);
@@ -1039,7 +1044,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
         
         //Update Current phase number in database
-        if($scope.answer.PhaseID != '2'){
+        if($scope.answer.PhaseID != '2' && $scope.answer.PhaseID != '11'){
             $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
             // Post the changed currentPhaseID here
             putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
@@ -1047,8 +1052,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             });
 
         }
-        
-        
+
+    }
+    
+    $scope.completeCare = function(){
+        var patID = $cookieStore.get('PatientID');
+        var updateToInactive = {'InactiveStatus': 60}
+        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patID, updateToInactive);
+        //Update Current phase number in database
+       
+        $scope.newPhase = {"CurrentPhaseID":12};
+        // Post the changed currentPhaseID here
+        putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
+            $location.path('patientDirectory')
+        });
+
     }
     
     $scope.patientSummary = function(phaseNumber){
@@ -1464,6 +1482,12 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
         
     };
+    
+    $scope.markPatientActive = function(patient){
+        var updateToActive = {'InactiveStatus': 10};
+        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+        patient.InactiveStatus = 10;
+    }
     $scope.showActivePatients = "10";
     $scope.showInactive = function(){
         $scope.showActivePatients = "!10";
@@ -1530,6 +1554,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setPhaseID(phase.PhaseID);
         persistData.setPhaseName(phase.Name);
         persistData.setPatientName(patient.First + " " + patient.Last);
+        persistData.setPatientID(patient.PatientID);
         persistData.setDirAnchor(patient.Last);
     };
     
@@ -1626,13 +1651,18 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                     $scope.answer.CareTeamID = data.records;
                 }).then(function(){
                     
-                    postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer);
+                    postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer).success(function(){
+                        var updateToActive = {'InactiveStatus': 10};
+                        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+                        patient.InactiveStatus = 10;
+                    });
+                    
                     $scope.ok();
                     
                 });
             }
             $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
+                $modalInstance.close();
             };
 
         };
