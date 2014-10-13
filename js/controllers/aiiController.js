@@ -780,6 +780,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
     $scope.phaseName=$cookieStore.get('PhaseName');
     $scope.patientName= $cookieStore.get('PatientName');
+    $scope.patientSex = $cookieStore.get('PatientSex');
+    $scope.patientDOB = $cookieStore.get('PatientDOB');
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.patientSummaryAnswers = {};
@@ -1128,6 +1130,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
         });
     }
+    
+    $scope.PrintContent = function(){
+        
+        var DocumentContainer = document.getElementById('divtoprint');
+        var WindowObject = window.open("", "PrintWindow",
+        "width=750,height=650,top=50,left=50,toolbars=no,scrollbars=yes,status=no,resizable=yes");
+        WindowObject.document.writeln(DocumentContainer.innerHTML);
+        WindowObject.document.close();
+        WindowObject.focus();
+        WindowObject.print();
+        WindowObject.close();
+        
+    }
+    
+    
 };
     
     
@@ -1465,7 +1482,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
          *      @sendCareTeamRequest - send an invite to selected facility to join patients careteam
  *
  */
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
@@ -1556,6 +1573,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setPatientName(patient.First + " " + patient.Last);
         persistData.setPatientID(patient.PatientID);
         persistData.setDirAnchor(patient.Last);
+        $cookieStore.put('PatientDOB', patient.DOB);
+        $cookieStore.put('PatientSex', patient.Sex);
+        
     };
     
     //Added by Anne
