@@ -775,6 +775,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
     $scope.phaseName=$cookieStore.get('PhaseName');
     $scope.patientName= $cookieStore.get('PatientName');
+    $scope.patientSex = $cookieStore.get('PatientSex');
+    $scope.patientDOB = $cookieStore.get('PatientDOB');
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.patientSummaryAnswers = {};
@@ -1462,7 +1464,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
          *      @sendCareTeamRequest - send an invite to selected facility to join patients careteam
  *
  */
-controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData) {   
+controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
@@ -1546,6 +1548,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setPhaseName(phase.Name);
         persistData.setPatientName(patient.First + " " + patient.Last);
         persistData.setDirAnchor(patient.Last);
+        $cookieStore.put('PatientDOB', patient.DOB);
+        $cookieStore.put('PatientSex', patient.Sex);
+        
     };
     
     //Added by Anne

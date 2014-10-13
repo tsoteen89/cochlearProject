@@ -3,6 +3,7 @@
 <div data-ng-controller="questionsController">    
     
     <div class="row">
+        {{patientName}}
         <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-4">{{phaseName}}</label>
         <hr>
         <form class="form form-verticle col-md-5 col-md-offset-1" id="form_850359" class="appnitro">
@@ -192,10 +193,11 @@
         
     <script type="text/ng-template" id="dataSummary.html">
     
-            <div class="modal-header">
-                <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
-            </div>
+    <div data-ng-controller="questionsController"> 
+        <div class="modal-header">
+            <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
+        </div>
         <div id="divtoprint">
             <div class="modal-body">
                 <completed-questions></completed-questions>
@@ -217,9 +219,11 @@
                 Confirm
             </button>
         </div>
+    </div>
         
     </script>
 
     
+</div>
 </div>
     
