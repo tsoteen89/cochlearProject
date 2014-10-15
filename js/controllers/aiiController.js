@@ -1194,6 +1194,11 @@ controllers.questionsController = function($scope, persistData, getData, postDat
  */
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll, $cookieStore){
     
+    $scope.patientName= $cookieStore.get('PatientName');
+    $scope.patientSex = $cookieStore.get('PatientSex');
+    $scope.patientDOB = $cookieStore.get('PatientDOB');
+    $scope.facilityName = $cookieStore.get('FacilityName');
+    $scope.facilityImage = $cookieStore.get('FacilityImage');
     //Get Audiology Phase fields and test 
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
@@ -1406,6 +1411,19 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 
 
         });
+    }
+    
+    $scope.PrintContent = function(){
+
+        var DocumentContainer = document.getElementById('divtoprint');
+        var WindowObject = window.open("", "PrintWindow",
+        "width=750,height=650,top=50,left=50,toolbars=no,scrollbars=yes,status=no,resizable=yes");
+        WindowObject.document.writeln(DocumentContainer.innerHTML);
+        WindowObject.document.close();
+        WindowObject.focus();
+        WindowObject.print();
+        WindowObject.close();
+        
     }
     
     //initialize these fields
