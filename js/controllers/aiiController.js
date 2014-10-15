@@ -368,7 +368,7 @@ myApp.factory('messageCount', function($rootScope){
          *      @function 
  *
  */
-controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout){
+controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout, $cookieStore){
     
 	$scope.userLevel = userInfo.get().UserLevelID;
     $scope.userFacilityID = userInfo.get().FacilityID;
@@ -381,6 +381,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
+        $cookieStore.put('FacilityName', $scope.facData.records.Name);
+        $cookieStore.put('FacilityImage', $scope.facData.records.FacilityImage);
     });
     
     
@@ -782,6 +784,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientName= $cookieStore.get('PatientName');
     $scope.patientSex = $cookieStore.get('PatientSex');
     $scope.patientDOB = $cookieStore.get('PatientDOB');
+    $scope.facilityName = $cookieStore.get('FacilityName');
+    $scope.facilityImage = $cookieStore.get('FacilityImage');
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.patientSummaryAnswers = {};
