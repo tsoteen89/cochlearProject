@@ -6,11 +6,14 @@
 
 <div class="form3D">
     
-    Facility Image HERE <br>
-    Facility Name HERE <br><br>
-    {{patientName}} <br>
+    <div class="col-md-4">
+        <img src="images/facilityLogo.png" ng-if="FacilityImage == null"/> 
+        <img src="images/facilityImages/{{FacilityImage}}" ng-if = "FacilityImage !=null"/>
+    </div><br><br><br>
+    <label>{{facilityName}}</label> <br><br>
+    <b>{{patientName}} <br>
     {{patientSex}} <br>
-    {{patientDOB}} <br>
+    {{patientDOB}} <br></b>
     
     <table class="table table-condensed">
         <caption></caption>
