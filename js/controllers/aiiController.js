@@ -557,7 +557,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			//a new message to this user.
 			$scope.sendMessageToUser = function(user){
 				persistData.setMessageRecipient(user);
-				$window.location.href = "#/messages";
 			}
 			
             //Choose to show either facility card or invite facility to patient's care team
