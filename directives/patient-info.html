@@ -20,8 +20,8 @@
             <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
             <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
             <div ng-if="setInactive==true"  ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
-                <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons
-                       ng-model="patient.reason" > {{reason.Reason}} 
+                <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="patient['Inactive Reason'] = reason.Reason"
+                       ng-model="patient.reason" > {{reason.Reason}}
             </div>
             <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"></span></a>
         </div>
