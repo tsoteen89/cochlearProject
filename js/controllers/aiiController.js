@@ -411,7 +411,6 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 	//a new message to this user.
 	$scope.sendMessageToUser = function(user){
 		persistData.setMessageRecipient(user);
-		$window.location.href = "#/messages";
 	}
 
     
