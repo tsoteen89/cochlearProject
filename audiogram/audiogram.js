@@ -1,97 +1,43 @@
-var AudioGram = function(element_id, audiogram_id,side) {
+var AudioGram = function(stage,audiogram_id,side) {
+    var stage = stage;      //The whole kinetic stage!
+    var layers = {};        //Object to hold different layers by name
+    var stack = [];         //Stack of "actions".
+    var redoStack = [];     //Stack to hold items removed via "undo"
+    var lineArray = [];     //Array to hold x,y vals to draw line between measures
+    
     // Private data
-    var imageObj = new Image();
     var private = {
-        font_size     : 16,
-        element_id    : element_id,
-        audiogram_id  : audiogram_id,
-        side          : side,
-        canvas        : null,           //Future reference to html element
-        ctx           : null,           //Future canvas reference
-        canvas_width  : 0,              //Width of canvas in pixels
-        canvas_height : 0,              //Height of canvas in pixels
-        column_width  : 0,		        //width of a column function based on width of canvas
-        row_height    : 0,              //height of a row function based on height of canvas
-        margins       : {"top":40,"bottom":20,"left":40,"right":20},
-        graph_bounds  : {"min":{"x":0,"y":0},"max":{"x":0,"y":0}},
-        graph_size    : {"width":0,"height":0},
-        crnt_measure  : null,
-        masked        : 'unmasked',     //Masked = masked Unmasked = unmasked :)
-        x_labels      : [],             //Values displayed on top of audiogram
-        y_labels      : [],             //These are the values on the left of the audiogram
-        x_values      : [],             //When audiogram is clicked, these are the values that
-        y_values      : [],             //-are "snapped" to.
-        audiogram_vals: [],
-        colors        : {
-                            "background":"#000000",
-                            "draw_line":"#000000",
-                            "border":"#000000",
-                            "graph_lines":"#000000",
-                            "labels":"#000000",
-                            "fill":"#000000"
-                        },
-        measureImages : {
-                "AC": {
-                    "unmasked": {
-                        "right": "./images/AC_Right.png",
-                        "left": "./images/AC_Left.png"
-                    },
-                    "masked": {
-                        "right": "./images/AC_Right_Masked.png",
-                        "left": "./images/AC_Left_Masked.png"
-                    }
-                },
-                "BC": {
-                    "unmasked": {
-                        "right": "./images/BC_Right.png",
-                        "left": "./images/BC_Left.png"
-                    },
-                    "masked": {
-                        "right": "./images/BC_Right_Masked.png",
-                        "left": "./images/BC_Left_Masked.png"
-                    }
-                },
-                "MCL": {
-                    "unmasked": {
-                        "right": "./images/MCL.png",
-                        "left": "./images/MCL.png"
-                    },
-                    "masked": {
-                        "right": "./images/MCL.png",
-                        "left": "./images/MCL.png"
-                    }
-                },
-                "UCL": {
-                    "unmasked": {
-                        "right": "./images/UCL.png",
-                        "left": "./images/UCL.png"
-                    },
-                    "masked": {
-                        "right": "./images/UCL.png",
-                        "left": "./images/UCL.png"
-                    }
-                },
-                "SF": {
-                    "unmasked": {
-                        "right": "./images/SF.png",
-                        "left": "./images/SF.png"
-                    },
-                    "masked": {
-                        "right": "./images/SF.png",
-                        "left": "./images/SF.png"
-                    }
-                },
-                "SF-A": {
-                    "unmasked": {
-                        "right": "./images/SF-A.png",
-                        "left": "./images/SF-A.png"
-                    },
-                    "masked": {
-                        "right": "./images/SF-A.png",
-                        "left": "./images/SF-A.png"
-                    }
-                }
-        },
+        audiogramId     : audiogram_id,         //Unique identifier for this audiogram
+        objectId        : 0,                    //Numerical ID for objects on stage
+        side            : side,                 //Left or right ear
+        colors     : {
+                             "lineColor":"#414141",
+                             "backColor":"#ffffff",
+                             "containerColor":"#7E7E7E",
+                             "fontLabelsColor": "#414141",
+                             "textColor": "#414141",
+                             "textShadowColor": "#222222",
+                             "strokeColor": "#000000"
+                          },
+        stage           : stage,                //Element id for kinetic canvas  
+        margins         : {
+                            "top":65,
+                            "bottom":30,
+                            "left":50,
+                            "right":30
+                          },
+        graph_bounds    : {
+                            "min":{"x":0,"y":0},
+                            "max":{"x":0,"y":0}
+                          },
+        graph_size      : {"width":null,"height":null},
+        currentMeasure  : 'AC',                 //AC, BC, MCL, etc.
+        masked          : 'unmasked',           //Masked = masked Unmasked = unmasked :)
+        x_labels        : [],
+        y_labels        : [],
+        x_values        : [],
+        y_values        : [],
+        
         /**
         * Initializes the audiogram graph
         * @param {null} 
@@ -99,18 +45,20 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @constructor
         */
         _init : function(){
-            console.log('constructor '+this.side);
             
-            //Initialize the canvas by locking it to it's element and 
-            //attaching some event listeners to it.
-            this.canvas = document.getElementById(this.element_id);
-            this.ctx = this.canvas.getContext('2d');
-            this.canvas_width = $('#'+this.element_id).width();
-            this.canvas_height = $('#'+this.element_id).height();
-            //font-family: 'Coda Caption', sans-serif;
-            this.ctx.font = '10pt Courier';
+            //Set the stroke color depending on which side it is.
+            if(this.side == 'right')
+                this.colors['strokeColor'] = '#ED1D25';
+            else
+                this.colors['strokeColor'] = '#1D72EF';
+            
+            layers['background'] = new Kinetic.Layer();
+            layers['measures'] = new Kinetic.Layer();
+            layers['connect'] = new Kinetic.Layer();
+            layers['error'] = new Kinetic.Layer();
+            
             //Load X labels (frequencies) into array
-            for(var i=125;i<=8000;i*=2){
+            for(i=125;i<=8000;i*=2){
                 var Label = "";
                 if(i>=1000){
                     Label = (i/1000) + 'K';
@@ -123,7 +71,7 @@ var AudioGram = function(element_id, audiogram_id,side) {
 
             //Load Y labels (dB presentation level) into array
             
-            for(var i=-10;i<=120;i+=10){
+            for(i=-10;i<=120;i+=10){
                 if(i<0)
                     this.y_labels.push(i);
                 else if(i<10)
@@ -134,217 +82,300 @@ var AudioGram = function(element_id, audiogram_id,side) {
                     this.y_labels.push(i);
             }
             
-            //Load Y possible values because we want more possibilities than just the labels
-            for(var i=-10;i<=120;i+=5){
-                this.y_values.push(i);
-            }
-            
-            //Load extra X values because we want more possibilities than just the listed frequencies.
-            this.x_values = [125,186,250,375,500,750,1000,1500,2000,3000,4000,6000,8000];
-            
             //Sets all the boundaries necessary for computing position and intersection stuff easily
             this.graph_bounds.min.x = this.margins.left;
             this.graph_bounds.min.y = this.margins.top;
-            this.graph_bounds.max.x = this.canvas_width - this.margins.right;
-            this.graph_bounds.max.y = this.canvas_height - this.margins.bottom;
-            this.graph_size.width = this.canvas_width-(this.margins.left+this.margins.right);
-            this.graph_size.height = this.canvas_height-(this.margins.top+this.margins.bottom);
+            this.graph_bounds.max.x = stage.getWidth() - this.margins.right;
+            this.graph_bounds.max.y = stage.getHeight() - this.margins.bottom;
+            this.graph_size.width = stage.getWidth()-(this.margins.left+this.margins.right);
+            this.graph_size.height = stage.getHeight()-(this.margins.top+this.margins.bottom);
             
             //calculate row width and column height so they get drawn evenly in the alloted space
-            this.column_width = Math.floor((this.graph_bounds.max.x - this.graph_bounds.min.x) / (this.x_labels.length-1));
-            this.row_height = Math.floor((this.graph_bounds.max.y - this.graph_bounds.min.y) / (this.y_labels.length-1));            
+            this.column_width = Math.floor((this.graph_bounds.max.x - this.graph_bounds.min.x) / (this.x_labels.length));      
+            this.row_height = Math.floor((this.graph_bounds.max.y - this.graph_bounds.min.y) / (this.y_labels.length));            
 
-            //Set the colors for left or right (red=right blue=left)
-            if(this.side=='right')
-                this.colors.draw_line = "#FF0000";
-            else
-                this.colors.draw_line = "#0000FF";
+            //Load extra X values because we want more possibilities than just the listed frequencies.
+            this.x_values = [{"value":125,"x":null},{"value":250,"x":null},{"value":375,"x":null},{"value":500,"x":null},{"value":750,"x":null},
+                             {"value":1000,"x":null},{"value":1500,"x":null},{"value":2000,"x":null},{"value":3000,"x":null},{"value":4000,"x":null},
+                             {"value":6000,"x":null},{"value":8000,"x":null}];
             
-            //Now we draw the outerborder, addsome labels, and draw all the graph lines.
-            this.drawOuterBorder();
-            this.drawLabels();
-            this.drawGraph();
-
-        },
-        /**
-        * When the graph is clicked, we add a "measure" to an array with: 
-        *   the currently selected measure depending on whether its masked or not. 
-        * @param {number} x The x coordinate for printing
-        * @param {number} y The y coordinate for printing
-        * @param {function} callback A callback function to sort json object base on 
-        *    x coordinate.
-        * @return {null} 
-        */
-        addMeasure: function(x,y){
-            console.log('addMeasure '+this.side);
-            
-            if(x<this.graph_bounds.min.x ||
-               x>this.graph_bounds.max.x ||
-               y<this.graph_bounds.min.y ||
-               y>this.graph_bounds.max.y){
-                alert("error");
-                return;
+            //Calculate the x coordinates for each line. Not necessary, but I'll do it now and store that values to make
+            //it easier later to "snap" to the lines when clicking.
+            for(i=0,x=this.graph_bounds.min.x+this.column_width/2 ;i<this.x_values.length;i++,x+=this.column_width/2){
+                if(i==1)
+                    x+=this.column_width/2;
+                this.x_values[i].x = x;
             }
             
-            var snap = this.snapClick(x,y);
-            var vals = {'measure':this.crnt_measure,
-                        'x':snap.x,'y':snap.y,
-                        'freq':this.getFrequency(x),
-                        'dB':this.getDecibels(y),
-                        'symbol':this.measureImages[this.crnt_measure][this.masked][this.side],
-                        'imgObj': new Image()
-                       }
-            vals.imgObj.src = this.measureImages[this.crnt_measure][this.masked][this.side];
-            this.audiogram_vals.push(vals);           
-            this.sortMeasures();
+            //Load Y possible values because we want more possibilities than just the labels
+            //I add 20 because that's how I shifted the actual lines. Needs fixing.
+            for(i=-10,y=this.graph_bounds.min.y+20;i<=120;i+=5,y+=this.row_height/2){
+                this.y_values.push({"value":i,"y":y});
+            }            
+            this.addBackgroundLayer();
         },
-        /**
-        * Used to clear everything off the graph to "refresh" the canvas. Can delete all objects or not.
-        * @param {boolean} delete_vals Optional parameter to delete all values as opposed to just clearing them.
-        * @return {null} 
-        */
-        clearBoard : function(delete_vals){
-            console.log('clearBoard '+this.side);
-
-            //default param defaults to 'false' (don't delete objects on canvas)
-            delete_vals = typeof delete_vals !== 'undefined' ? delete_vals : false;
+        addBackgroundLayer : function(){
+            //Add horizontal lines
+            var lines = [];
+            var labels = [];
             
-            this.ctx.save();
 
-            // Use the identity matrix while clearing the canvas
-            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            //Add horizontal lines
+            for(i=0,y=this.graph_bounds.min.y+20;i<this.y_labels.length;i++,y+=this.row_height){
+                var points = [this.graph_bounds.min.x,y,this.graph_bounds.max.x,y];
+                
+                lines.push(new Kinetic.Line({
+                    points: points,
+                    stroke:  this.colors["lineColor"],
+                    tension: 0,
+                    strokeWidth: 1,
+                    opacity: 0.5
+                }));
+            }
+            
+
+            //Add vertical lines
+            for(i=0,x=this.graph_bounds.min.x+30;i<this.x_labels.length;i++,x+=this.column_width){ 
+                var points = [x,this.graph_bounds.min.y,x,this.graph_bounds.max.y];
  
-            this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);    
-            
-            // Restore the transform
-            this.ctx.restore();  
-            
-            //Clear out everything currently 'saved'
-            if(delete_vals){
-                console.log("buh bye "+this.side);
-                this.audiogram_vals = [];
+                lines.push(new Kinetic.Line({
+                    points: points,
+                    stroke: this.colors["lineColor"],
+                    tension: 0,
+                    strokeWidth: 1,
+                    opacity: 0.5
+                }));
+            }
+
+            //Add dashed lines
+            for(i=0;i<this.x_values.length;i++){ 
+                var points = [this.x_values[i].x,this.graph_bounds.min.y,this.x_values[i].x,this.graph_bounds.max.y];
+ 
+                lines.push(new Kinetic.Line({
+                    points: points,
+                    stroke: this.colors["lineColor"],
+                    tension: 0,
+                    strokeWidth: 1,
+                    opacity: 0.2,
+                    dash: [3, 3]
+                }));
             }
             
-        },
-        /**
-        * Clear the lines from the graph. Not really necessary but I can't figure out my ghost line problem.
-        * @param {null}
-        * @return {null} 
-        */        
-        clearGraph : function(){
-            this.ctx.clearRect(this.graph_bounds.min.x,this.graph_bounds.min.y,this.graph_bounds.max.x,this.graph_bounds.max.y);
-        },
-        /**
-        * Actuall draws the "lines" giving the canvas it's graph appearance.
-        * @param {null}
-        * @return {null} 
-        */
-        drawGraph: function(){
-            console.log('drawGraph '+this.side);
+            //Add graph border (inner)
+            var rect = new Kinetic.Rect({
+                x: this.graph_bounds.min.x,
+                y: this.graph_bounds.min.y,
+                width: this.graph_size.width,
+                height: this.graph_size.height,
+                stroke: this.colors["lineColor"],
+                strokeWidth: 1,
+                fill:this.colors["backColor"]
+            });
+
+            //Add x labels acress top
+            y = this.graph_bounds.min.y-20;
+            for(i=0,x=this.graph_bounds.min.x+20;i<this.x_labels.length;i++,x+=this.column_width){
+                labels.push( new Kinetic.Text({
+                    x: x,
+                    y: y,
+                    text: this.x_labels[i].toString(),
+                    fontSize: 14,
+                    fontFamily: 'Calibri',
+                    fill: this.colors["fontLabelsColor"],
+                }));
+            }           
             
-            var x;
-            var y;
-            var i;
-            
-            //Draw an inner rectangle just inside the labels
-            this.ctx.rect(this.graph_bounds.min.x,this.graph_bounds.min.x,this.graph_size.width,this.graph_size.height);      
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeStyle = this.colors.graph_lines;
-            this.ctx.stroke();
-            
-            //Draw vertical lines
-            for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length-1;i++,x+=this.column_width){
-                this.ctx.beginPath();
-                this.ctx.moveTo(x,this.graph_bounds.min.y);
-                this.ctx.lineTo(x,this.graph_bounds.max.y);
-                this.ctx.stroke();
-            }
-            
-            //Draw horizontal lines
-            for(i=0,y=this.graph_bounds.min.y;i<this.y_labels.length-1;i++,y+=this.row_height){
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.graph_bounds.min.x,y);
-                this.ctx.lineTo(this.graph_bounds.max.x,y);
-                this.ctx.stroke();
-            }
-            this.ctx.closePath();
-        },
-        /**
-        * Draws the decible and frequency labels on the graph
-        * @param {null} 
-        * @return {null} 
-        */
-        drawLabels: function(){
-            console.log('drawLabels '+this.side);
-            var i;
-            var x;
-            var y;
-            this.ctx.strokeStyle = this.colors.labels;
-            for(i=0,x=this.graph_bounds.min.x;i<this.x_labels.length;i++,x+=this.column_width){
-                this.ctx.fillText(this.x_labels[i],x-10,this.graph_bounds.min.y-10);
-                this.ctx.stroke();
-            }
-            
+            //Add x labels down the side
+            x = this.graph_bounds.min.x-30;
             for(i=0,y=this.graph_bounds.min.y;i<this.y_labels.length;i++,y+=this.row_height){
-                this.ctx.fillText(this.y_labels[i],this.graph_bounds.min.x-30,y+5);
-                this.ctx.stroke();
-            }
-            this.ctx.closePath();
+                labels.push( new Kinetic.Text({
+                    x: x,
+                    y: y+15,
+                    text: this.y_labels[i].toString(),
+                    fontSize: 14,
+                    fontFamily: 'Calibri',
+                    fill: this.colors["fontLabelsColor"],
+                }));
+            }            
+            
+            layers['background'].add(rect);
+            
+            for(var i=0;i<lines.length;i++)
+                layers['background'].add(lines[i]);
+            
+            for(var i=0;i<labels.length;i++)
+                layers['background'].add(labels[i]);
+            
+            
+            stage.add(layers['background']);
+        },
+        clearStage: function(){
+            //redo will need fixed because I'm destroying the event stack
+            stack = [];
+            layers['measures'].removeChildren();
+            layers['connect'].removeChildren();
+            stage.draw();
+            
         },
         /**
-        * Prints the lines that connect measures on the graph.
-        * @param {null} 
+        * Adds measures to the audiogram. Each "measure" is snapped to the closest proper decibel and frequency.
+        * Each measure starts with a common set of attributes, and is then refined depending on what type of 
+        * measure it is. 
+        * Adds each new measure to a "stack" so we can "undo" the actions
+        * @param {null}
         * @return {null} 
         */ 
-        drawLines: function(){
-            console.log('drawLines '+this.side);
-                        
-            var i;
-            this.clearGraph();
-            this.drawGraph();
-            this.ctx.beginPath();
-             
-            this.ctx.strokeStyle = this.colors.draw_line;
-            this.ctx.lineWidth = 2;
-            if(this.audiogram_vals.length>1){
-                for(i=0;i<this.audiogram_vals.length-1;i++){
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
-                    this.ctx.lineTo(this.audiogram_vals[i+1].x,this.audiogram_vals[i+1].y);
-                    console.log(this.audiogram_vals[i].x,this.audiogram_vals[i].y);
-                    this.ctx.stroke();
-                    this.ctx.closePath();
+        addMeasure: function(){
+    
+            var snap = this.snapClick();
+            var x = snap.x;
+            var y = snap.y;
+            var d = this.getDecibels(y);
+            var f = this.getFrequency(x)
+            var fontSize = 34;
+
+            //Goes and grabs the "shape" to be displayed based on these params
+            var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);  
+            
+            //Common styles to most measures
+            var commonStyle = {
+                x: x,
+                y: y,
+                strokeWidth: 5,
+                shadowColor: this.colors['textShadowColor'],
+                shadowBlur: 2,
+                shadowOffset: {x:1, y:1},
+                shadowOpacity: 0.3,
+                draggable: true,
+                name: measureData.value+"-"+this.objectId,
+                measure: this.currentMeasure,
+                center: {'x':x,'y':y},
+                audioValues: {'frequency':f.value,'decibels':d.value}
+            }
+            
+       
+            //Determine the actual measure type so it can be customized
+            if (measureData.type == 'text')
+            {
+                commonStyle['text'] = measureData.value;
+                commonStyle['fontSize'] = fontSize;
+                commonStyle['fontFamily'] = 'Courier';
+                commonStyle['fill'] = this.colors['textColor'];
+                commonStyle['shadowColor'] = this.colors['textShadowColor'];
+                commonStyle['shadowBlur'] = 2;
+                commonStyle['shadowOffset'] = {x:4, y:4};
+                commonStyle['shadowOpacity'] = 0.4;
+                //Adjust text to go up and left
+                commonStyle['x'] = x - (fontSize/4);
+                commonStyle['y'] = y - (fontSize/2);
+                var shape = new Kinetic.Text(commonStyle); 
+            }else{
+                commonStyle['stroke'] = this.colors['strokeColor'];
+                if(measureData.value == 'circle'){
+                    commonStyle['radius'] = 10;
+                    var shape = new Kinetic.Circle(commonStyle);
+                }else if(measureData.value == 'triangle'){
+                    commonStyle['sides'] = 3;
+                    commonStyle['radius'] = 12;
+                    var shape = new Kinetic.RegularPolygon(commonStyle);
+                }else if(measureData.value == 'square'){
+                    commonStyle['width'] = 17;
+                    commonStyle['height'] = 17;
+                    commonStyle['center'].x = x;
+                    commonStyle['center'].y = y;
+                    //Adjust x,y so rectangle is centered on coords
+                    commonStyle['x'] -= commonStyle['width']/2;
+                    commonStyle['y'] -= commonStyle['height']/2;
+                    var shape = new Kinetic.Rect(commonStyle);
+                }else if(measureData.value == 'wedge'){
+                    //remove base x,y because it throws line way off
+                    commonStyle['x'] = null;
+                    commonStyle['y'] = null;
+                    if(this.side == 'right'){
+                        commonStyle['points'] =  [x+10, y-10, x, y,x+10,y+10];
+                    }else{
+                        commonStyle['points'] =  [x-10, y-10, x, y,x-10,y+10];
+                    }
+                    var shape = new Kinetic.Line(commonStyle);
+                }else if(measureData.value == 'x'){
+                    //remove base x,y because it throws line way off
+                    commonStyle['x'] = null;
+                    commonStyle['y'] = null;
+                    commonStyle['points'] =  [x+10, y-10, x, y,x+10,y+10,x-10, y-10, x, y,x-10,y+10];
+
+                    var shape = new Kinetic.Line(commonStyle);
+                }else if(measureData.value == 'bracket'){
+                    //remove base x,y because it throws line way off
+                    commonStyle['x'] = null;
+                    commonStyle['y'] = null;
+                    if(this.side == 'right'){
+                        commonStyle['points'] =  [x+6, y-10, x, y-10,x,y+10,x+6,y+10];
+                    }else{
+                        commonStyle['points'] =  [x-6, y-10, x, y-10,x,y+10,x-6,y+10];
+                    }
+                    var shape = new Kinetic.Line(commonStyle);
                 }
             }
 
-
             
-        },        
-        /**
-        * Prints the measures currently saved in an array. Prints the "measure symbol" [X,O,M...] for each measure.
-        * @param {null} 
-        * @return {null} 
-        */ 
-        drawMeasures: function(){
-            console.log('drawMeasures '+this.side);
-                        
-            var i;
-            for(i=0;i<this.audiogram_vals.length;i++){
-                this.ctx.drawImage(this.audiogram_vals[i].imgObj,this.audiogram_vals[i].x-12,this.audiogram_vals[i].y-12);
-            }
+            //Push latest measure onto stack
+            stack.push(shape);
+            
+            console.log(shape);
+        
+            this.drawConnection();
+            
+            //Push measure into the "layer"
+            layers['measures'].add(stack[stack.length-1]);
+            
+            //Add layer to stage
+            stage.add(layers['measures']);
+            this.objectId++;
+            console.log(stack);
+             
         },
         /**
-        * Draws the very outer border of the canvas. Could probably be combined with another method.
-        * @param {null} 
-        * @return {null} 
-        */
-        drawOuterBorder: function() {
-            console.log('drawOuterBorder '+this.side);
-            this.ctx.rect(0, 0, this.canvas_width, this.canvas_height);
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeStyle = this.colors.border;
-            this.ctx.stroke();
-            this.ctx.closePath();
+        * Connect the measures with a line, just the air conduction measures
+        * @param {null}
+        * @return {null}
+        */ 
+        drawConnection : function()
+        {
+            
+            var temp = [];
+            var points = [];
+            
+            for(var i=0;i<stack.length;i++){
+                if(stack[i].getAttr('measure') == 'AC'){
+                    var center = stack[i].getAttr('center');
+                    var x = center.x;
+                    var y = center.y;
+                    temp.push({'x':x,'y':y});
+                }
+            }
+
+            temp = bubbleSort(temp);
+
+            for(var i=0;i<temp.length;i++){
+                points.push(temp[i].x);
+                points.push(temp[i].y);                
+            }
+           
+            var line = new Kinetic.Line({
+                points: points,
+                stroke: this.colors['strokeColor'],
+                strokeWidth: 2,
+                lineCap: 'round',
+                lineJoin: 'round'
+            });
+            
+            layers['connect'].removeChildren();
+            
+            //Push measure into the "layer"
+            layers['connect'].add(line);
+            
+            //Add layer to stage
+            stage.add(layers['connect']);
         },
         /**
         * Finds the closest decibel value (in increments of 5) to the mouse click
@@ -355,13 +386,18 @@ var AudioGram = function(element_id, audiogram_id,side) {
             console.log('getDecibels '+this.side);
             var d;
             var r;
-            y = y - this.graph_bounds.min.y;              //adjust y because of margins    
-            d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
-            r = y % (this.row_height / 2);                      //Remainder (how close is it to the next value).
             
-            if(r/(this.row_height / 2) > .5)
+            y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
+            d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
+            
+            //console.log("d:"+d);
+            r = (y % (this.row_height / 2)) / this.row_height;                      //Remainder (how close is it to the next value).
+            //console.log("r:"+r);
+            
+            if(r > .5)
                 d = d + 1;
-            return this.y_values[d];
+            console.log(this.y_values[d-1]);
+            return this.y_values[d-1];
         },
         /**
         * Finds the closest frequency value (within an array of acceptable values) to the mouse click
@@ -370,74 +406,56 @@ var AudioGram = function(element_id, audiogram_id,side) {
         */ 
         getFrequency: function(x){
             console.log('getFrequency '+this.side);
+           
             var d;
             var r;
-            x = x - this.graph_bounds.min.x;                    //adjust x because of margins   
-            d = Math.floor(x / (this.column_width / 2));        //How many 1/2 columns divide into x
+            var c = this.column_width;              //short var name for column width
+            var c2 = c / 2;                         //ref to column width div 2
+            var i;                                  //loop counter
+            var p;                                  //current x pixel
             
-            r = x % (this.column_width / 2);
+            x = Math.round(x - this.graph_bounds.min.x);    //adjust x because of margins 
+            //console.log('x is: '+x);    
             
-            if(r/(this.column_width / 2) > .5){
-                d = d + 1;
+            p = c;          //start off p as the width of one column
+            
+            //If x is within the first column, return 125hz
+            if(x < p){
+                return this.x_values[0].value;
             }
-                        
-            //This hot mess is because:
-            //Labels =              125,250,500,1000,2000,4000,8000
-            //Possible Returns =    125,250,375,500,1000,1500,2000,3000,6000,8000
-            //So there's a values between every label except <500. Snapping to the
-            //nearest frequency changes for values below 500.
-            if(d>=4){                                         
-                return this.x_values[d];
+            
+            for(i=1,p+=c2;i<this.x_values.length;i++,p+=c2){
+                if(x < p){
+                    //If it's closer to the previous value, snap to it.
+                    var ratio = ((x%c2) / c2);
+                    if(ratio < .5)
+                        return this.x_values[i-1]
+                    else
+                        return this.x_values[i];
+                }
+            }
+            
+            return this.x_values[this.x_values.length-1];
+        },
+        inBounds : function(x,y){
+            if(x>=this.graph_bounds.min.x &&
+                    x<=this.graph_bounds.max.x &&
+                    y>=this.graph_bounds.min.y &&
+                    y<=this.graph_bounds.max.y)
+                return true;
+            else
+                return false;
+        },
+        setCurrentMeasure: function(measure){
+            this.currentMeasure = measure;
+        },
+        setMasked: function(masked){
+            if(masked){
+                this.masked = 'masked';
             }else{
-                r = x % this.column_width;
-                r /= this.column_width
-
-                if(d == 3 && r >.50)
-                    return this.x_values[4]                    //Hacky
-                else if(d == 0)
-                    return this.x_values[0];
-                else if(d == 1 && r < .50)
-                    return this.x_values[0]
-                else
-                    return this.x_values[2]                    
-            
+                this.masked = 'unmasked';
             }
         },
-        /**
-        * Finds the closest frequency value (within an array of acceptable values) to the mouse click
-        * @param {Element} canvas Reference to the canvas.
-        * @param {Object} evt An event object of a mouse click.        
-        * @return {Object} {x,y} The x and y coordinates of the mouse click pulled out of the evt object.
-        */
-        getMousePos: function(canvas, evt) {
-            console.log('getMousePos '+this.side);
-            var rect = canvas.getBoundingClientRect();
-            return {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
-        },
-        /**
-        * Print error
-        * @param {number} error_num The error number to be handled 
-        * @return {null}
-        */ 
-        printError: function(error_num){
-            console.log(error_num);
-        },
-        /**
-        * redrawCanvas
-        * @param {null} 
-        * @return {null}
-        */ 
-        redrawCanvas: function(){
-            this.clearBoard();
-            this.drawLabels();
-            this.drawGraph();
-            this.drawLines();
-            this.drawOuterBorder();
-            this.drawMeasures();
-        },       
         /**
         * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
         *    audiogram value set. So, it snaps it to the closest dB value in increments of 5 and an acceptable 
@@ -446,132 +464,133 @@ var AudioGram = function(element_id, audiogram_id,side) {
         * @param {number} y
         * @return {object} {x,y}
         */ 
-        snapClick: function(x,y){
+        snapClick: function(){
             console.log('snapClick '+this.side);
-            var d;      //Number of times divided into
-            var r;      //Remainder after division
-            var snap_x; //snapped to x value
-            var snap_y; //snapped to y value
+            var i;  //index
+            var d;  //difference
+            var cx; //closest x
+            var cy; //closest y
+            var min = stage.getWidth();   //Largest value that can be on this canvas
+            
+            var x = stage.getPointerPosition().x;
+            var y = stage.getPointerPosition().y;
 
-            x = x - this.graph_bounds.min.x;                    //adjust x because of margins   
-            d = Math.floor(x / (this.column_width / 2));        //How many 1/2 columns divide into x
-            r = x % (this.column_width / 2);                    //Remainder (how close is it to the next value).
-            
-            if(r/(this.column_width / 2) > .5)
-                d = d + 1;
-            
-            snap_x = d * (this.column_width / 2) + this.graph_bounds.min.x;//Multiply d by 1/2 column size to snap to an edge
-            
-            y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
-            d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
-            r = y % (this.row_height / 2);                      //Remainder (how close is it to the next value).
-            
-            if(r/(this.row_height / 2) > .5)
-                d = d + 1;
-            
-            snap_y = d * (this.row_height / 2) + this.graph_bounds.min.y;//Multiply d by 1/2 column size to snap to an edge
-            
-            return {"x":snap_x,"y":snap_y};
-        },
-        /**
-        * Turn masking on and off
-        * @param {string} mask
-        * @return {object} {x,y}
-        */ 
-        setMasked: function(mask){
-            console.log('setMasked '+this.side);
-            
-            if(mask)
-                this.masked = 'masked';
-            else
-                this.masked = 'unmasked';
-            console.log(this.masked);
-        },        
-        /**
-        * Sets the current measure ['AC','BC',...] so we know what symbol to display on audiogram.
-        * @param {number} x 
-        * @param {number} y
-        * @return {object} {x,y}
-        */ 
-        setMeasure: function(measure){
-            console.log('setMeasure '+this.side);
-            
-            this.crnt_measure = measure;
-            console.log(this.crnt_measure);
-        },
-        setTxtCharacter: function(measure){
-            this.crnt_measure = measure;
-//            characterSet = {
-//                'AC': {'right':0x25EF,'left':0x2716}, //
-//                'BC': {'right':0x276E,'left':0x276F},
-//                'MCL': {'right':0x004D,'left':0x004D},
-//                'UCL': {'right':0x006D,'left':0x006D},
-//                'SF': {'right':0x0053,'left':0x0053},
-//                'SF-A': {'right':0x0041,'left':0x0041}
-//            };
-            characterSet = {
-                'AC': {'right':'O','left':'X'}, 
-                'BC': {'right':'<','left':'>'},
-                'MCL': {'right':'M','left':'M'},
-                'UCL': {'right':'m','left':'m'},
-                'SF': {'right':'S','left':'S'},
-                'SF-A': {'right':'A','left':'A'}
-            };
-            this.current_char = characterSet[measure][side];
-        },
-        /**
-        * Bubble sort my audiogram array to "order" the 'x' values for printing and connecting 
-        *   with a line. 
-        * @param {null}
-        * @return {null}
-        */ 
-        sortMeasures : function()
-        {
-            console.log('sortMeasures '+this.side);
-            var swapped;
-            do {
-                swapped = false;
-                for (var i=0; i < this.audiogram_vals.length-1; i++) {
-                    if (this.audiogram_vals[i]['x'] > this.audiogram_vals[i+1]['x']) {
-                        var temp = this.audiogram_vals[i];
-                        this.audiogram_vals[i] = this.audiogram_vals[i+1];
-                        this.audiogram_vals[i+1] = temp;
-                        swapped = true;
-                    }
+            for(i=0;i<this.x_values.length;i++){
+                d = Math.abs(this.x_values[i].x - x);
+                if(d < min){
+                    min = d;
+                    cx = this.x_values[i].x;
                 }
-            } while (swapped);
-        },
-        temp : function(){
-            for (var i=0; i < this.audiogram_vals.length; i++) {
-                var x = this.audiogram_vals[i]['x']-12;
-                var y = this.audiogram_vals[i]['y']-12;
-                var width = 24;
-                var height = 24;
-                var imgData = this.ctx.getImageData(x, y, width, height);
-                //this.ctx.rect(x, y, 24, 24);
-                console.log(imgData.data);
             }
-        }
-    }
-    private._init();
-    private.canvas.addEventListener('click', function(evt) {
-        setTimeout(function () {
-            var mousePos = private.getMousePos(private.canvas, evt);
-            mousePos.x = Math.floor(mousePos.x);
-            mousePos.y = Math.floor(mousePos.y);
             
-            setTimeout(function () {
-                private.addMeasure(mousePos.x,mousePos.y);
-                setTimeout(function () {
-                    private.clearBoard();
-                    setTimeout(function () {
-                        private.redrawCanvas();
-                        console.log(private.audiogram_vals);
-                    }, 0);
-                }, 0);
-            }, 0);
+            min = stage.getHeight();
+            
+            for(i=0;i<this.y_values.length;i++){
+                d = Math.abs(this.y_values[i].y - y);
+                if(d < min){
+                    min = d;
+                    cy = this.y_values[i].y;
+                }
+            }            
+            
+            return {"x":cx,"y":cy};
+        },
+        /**
+        * Pops last item off the stack and removes it from the "stage"
+        * @param {void}
+        * @return {void}
+        */ 
+        undoMeasure: function(){
+            if(stack.length > 0){
+                var shape = stack.pop();
+                redoStack.push(shape);
+                shape.remove();
+                layers['measures'].draw();
+                this.drawConnection();
+                this.objectId--;
+            }else{
+                
+                var tooltip = new Kinetic.Label({
+                    x: (this.graph_bounds.max.x - this.graph_bounds.min.x)/2,
+                    y: (this.graph_bounds.max.y - this.graph_bounds.min.y)/2,
+                    opacity: 0.75
+                });
+                tooltip.add(new Kinetic.Tag({
+                    fill: 'black',
+                    pointerDirection: 'down',
+                    pointerWidth: 10,
+                    pointerHeight: 10,
+                    lineJoin: 'round',
+                    shadowColor: 'black',
+                    shadowBlur: 10,
+                    shadowOffset: {x:10,y:20},
+                    shadowOpacity: 0.5
+                }));
+
+                tooltip.add(new Kinetic.Text({
+                    text: 'Nothing to undo!',
+                    fontFamily: 'Calibri',
+                    fontSize: 18,
+                    padding: 5,
+                    fill: 'white'
+                }));
+                
+                layers['error'].add(tooltip);
+                stage.add(layers['error']);
+                setTimeout(
+                    function(){
+                        console.log("doing it");
+                        tooltip.remove();
+                        layers['error'].draw();
+                    }, 
+                3000);
+            }
+        },
+        /**
+        * Retreives last item popped off the stack and adds it to the "stage"
+        * @param {void}
+        * @return {void}
+        */
+        redoMeasure: function(){
+            var shape = redoStack.pop();
+            stack.push(shape);
+            layers['measures'].add(shape);            
+            layers['measures'].draw();
+            this.drawConnection();
+            this.objectId++;
+        }
+        
+    }
+
+    private._init();
+     
+    //Create a click event for the "stage". Based on "current state", events
+    //will be handled
+    $(stage.getContent()).on('click', function(evt) {
+        var shape = evt.target;
+        var name = null;
+        try{
+            name = shape.getName();
+        }catch(e){
+            console.log("oops");
+        }
+        
+        console.log(name);
+        setTimeout(function(){
+            layers['error'].removeChildren();
+            stage.draw();
+            setTimeout(function(){
+                private.addMeasure();
+            },0);
+
         },0);
-    }, false);
+    });
+    
+    layers['measures'].on('click', function(evt) {
+        // get the shape that was clicked on
+        var shape = evt.target;
+        alert('you clicked on \"' + shape.getName() + '\"');
+    });
 
     // Expose public API
     return {
@@ -580,77 +599,133 @@ var AudioGram = function(element_id, audiogram_id,side) {
                 return private[ prop ];
             }
         },
-        setMasked: function(val){
-            setTimeout(function () {
-                private.setMasked(val);
-                setTimeout(function () {
-                    private.clearBoard();
-                    setTimeout(function () {
-                        private.redrawCanvas();
-                    }, 0);
-                }, 0);
-            }, 0);
+        clear: function(){
+            console.log("hello");
+            private.clearStage();
         },
-        setMeasure: function(char){
-            setTimeout(function () {
-                private.setMeasure(char);
-                setTimeout(function () {
-                    private.clearBoard();
-                    setTimeout(function () {
-                        private.redrawCanvas();
-                    }, 0);
-                }, 0);
-            }, 0);
+        setCurrentMeasure: function(measure){
+            private.setCurrentMeasure(measure);
         },
-        clearBoard: function(){
-            setTimeout(function () {
-                private.clearBoard(true);
-                setTimeout(function () {
-                    private.clearBoard();
-                    setTimeout(function () {
-                        private.redrawCanvas();
-                    }, 0);
-                }, 0);
-
-            }, 0);
-            
+        setMasked: function(masked){
+            private.setMasked(masked);
+        },
+        undo: function(){
+            private.undoMeasure();
+        },
+        redo: function(){
+            private.redoMeasure();
         }
     }
-};
+}
 
+function GetMeasureData(measure,masked,side){
+    measureData = 
+    {
+        "AC": {
+            "unmasked": {
+                "right": {"type":"shape","value":"circle"},
+                "left": {"type":"shape","value":"x"}
+            },
+            "masked": {
+                "right": {"type":"shape","value":"triangle"},
+                "left": {"type":"shape","value":"square"}
+            }
+        },
+        "BC": {
+            "unmasked": {
+                "right": {"type":"shape","value":"wedge"},
+                "left": {"type":"shape","value":"wedge"}
+            },
+            "masked": {
+                "right": {"type":"shape","value":"bracket"},
+                "left": {"type":"shape","value":"bracket"}
+            }
+        },
+        "MCL": {
+            "unmasked": {
+                "right": {"type":"text","value":"M"},
+                "left": {"type":"text","value":"M"}
+            },
+            "masked": {
+                "right": {"type":"text","value":"M"},
+                "left": {"type":"text","value":"M"}
+            }
+        },
+        "UCL": {
+            "unmasked": {
+                "right": {"type":"text","value":"m"},
+                "left": {"type":"text","value":"m"}
+            },
+            "masked": {
+                "right": {"type":"text","value":"m"},
+                "left": {"type":"text","value":"m"}
+            }
+        },
+        "SF": {
+            "unmasked": {
+                "right": {"type":"text","value":"S"},
+                "left": {"type":"text","value":"S"}
+            },
+            "masked": {
+                "right": {"type":"text","value":"S"},
+                "left": {"type":"text","value":"S"}
+            }
+        },
+        "SF-A": {
+            "unmasked": {
+                "right": {"type":"text","value":"A"},
+                "left": {"type":"text","value":"A"}
+            },
+            "masked": {
+                "right": {"type":"text","value":"A"},
+                "left": {"type":"text","value":"A"}
+            }
+        }
+    }
+    return measureData[measure][masked][side];
+}
 
+/**
+* Bubble sort my audiogram array to "order" the 'x' values for printing and connecting 
+*   with a line. 
+* @param {null}
+* @return {null}
+*/ 
+function bubbleSort(points){
+    var swapped;
+    do {
+        swapped = false;
+        for (var i=0; i < points.length-1; i++) {
+            if (points[i]['x'] > points[i+1]['x']) {
+                var temp = points[i];
+                points[i] = points[i+1];
+                points[i+1] = temp;
+                swapped = true;
+            }
+        }
+    } while (swapped);
+    return points;
+}
 
-function OrderEvents() {
-    var args = arguments;
-    if (args.length <= 0)
-        return;
-    (function chain(i) {
-        if (i >= args.length || typeof args[i] !== 'function')
-            return;
-        window.setTimeout(function() {
-            args[i]();
-            chain(i + 1);
-        },1000);
-    })(0);
-}  
-//var MySort = function sortJsonArrayByProperty(objArray, prop, direction){
-//    if (arguments.length<2) throw new Error("sortJsonArrayByProp requires 2 arguments");
-//    var direct = arguments.length>2 ? arguments[2] : 1; //Default to ascending
+//var group = new Kinetic.Group({
+//    x: x,
+//    y: y,
+//});
 //
-//    if (objArray && objArray.constructor===Array){
-//        var propPath = (prop.constructor===Array) ? prop : prop.split(".");
-//        objArray.sort(function(a,b){
-//            for (var p in propPath){
-//                if (a[propPath[p]] && b[propPath[p]]){
-//                    a = a[propPath[p]];
-//                    b = b[propPath[p]];
-//                }
-//            }
-//            console.log(typeof(a),typeof(b));
-//            // convert numeric strings to integers
-//            a = a.match(/^\d+$/) ? +a : a;
-//            b = b.match(/^\d+$/) ? +b : b;
-//            return ( (a < b) ? -1*direct : ((a > b) ? 1*direct : 0) );
-//        });
-//    }
-//}
+//var rect = new Kinetic.Rect({
+//    x: 0,
+//    y: 0,
+//    stroke: '#555',
+//    strokeWidth: .5,
+//    fill: 'rgba(0,0,0,.1)',
+//    width: 40,
+//    height: 40,
+//    shadowColor: 'black',
+//    shadowBlur: 5,
+//    shadowOffset: {x:1,y:1},
+//    shadowOpacity: 0.1,
+//    cornerRadius: 5
+//});            
+//
+//group.add(rect);
+//group.add(shape);
