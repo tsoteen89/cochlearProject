@@ -9,13 +9,23 @@
     <hr>
     <div class="row">
         <div class="col-md-7 col-md-offset-2">
-
-            <completed-questions></completed-questions>
+            <div id="divtoprint">
+                <completed-questions></completed-questions>
+            </div>
             <hr>
-
         </div>
-        <div class="col-md-2" ng-controller="apiPatientsController">
-        <a href="" style="position:fixed" ng-click="goToPatDir(dirAnchor)"><button class="btn btn-primary">Patient Directory</button></a>
+        
+        <div class="col-md-2">
+            
+            <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:2%">
+                Print
+            </button>
+            
+            <a href="" style="position:fixed" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor)">
+                <button class="btn btn-primary">
+                    Patient Directory
+                </button>
+            </a>
         </div>
     </div>
     

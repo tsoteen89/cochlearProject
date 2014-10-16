@@ -5,6 +5,18 @@
 </style>
 
 <div class="form3D">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="images/facilityLogo.png" ng-if="FacilityImage == null"/> 
+            <img src="images/facilityImages/{{FacilityImage}}" ng-if = "FacilityImage !=null"/>
+        </div>
+    </div>
+    <div class="row">
+        <label>{{facilityName}}</label> <br><br>
+        <b>{{patientName}} <br>
+        {{patientSex}} <br>
+        {{patientDOB}} <br></b>
+    </div>
     <table class="table table-condensed">
         <caption></caption>
         <thead>
