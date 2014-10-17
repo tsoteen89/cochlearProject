@@ -125,7 +125,7 @@
                               </div>
                             </div>
 
-                            <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+                            <!--REGULAR ACTIVE DOTS(JUST ONE)---->
                             <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID !=3 && careTeam.CurrentPhaseID !=12" >
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
@@ -135,7 +135,8 @@
                                 </div>
                               </div>
                               <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}"
-                              ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" class="bs-wizard-dot" 
+                              ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
+                                 ng-class="{'bs-wizard-dot-late':careTeam.isLateToVisit, 'bs-wizard-dot':!careTeam.isLateToVisit}"
                                  title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
                               <div class="bs-wizard-info text-center" collapse="!isCollapsed">
                                 {{phases[careTeam.CurrentPhaseID-1].Name}}
