@@ -13,8 +13,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
 <!--      http://www.bootstraptoggle.com/-->
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
+    <link href="./css/bootstrap-toggle.css" rel="stylesheet">
+    <script src="./js/bootstrap-toggle.js"></script>
     <script src="audiogram.js"></script>  
     <style>
         /* scheme 1 */
@@ -179,6 +179,72 @@
             margin-top:-10px;
             margin-bottom:-40px;
         }
+    /* toggle */
+.onoffswitch {
+    position: relative; width: 108px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 5px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 23px; padding: 0; line-height: 23px;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: normal;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;-webkit-font-smoothing: antialiased;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 8px;
+    background-color: #30343A; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 8px;
+    background-color: #30343A; color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 26px; margin: 0px;
+    background: #34383E;
+    border: 2px solid #999999;
+    border-left-color: #34383E;
+    border-right-color: #34383E; 
+    border-radius: 5px;
+    position: absolute; top: 0; bottom: 0; right: 78px;
+    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+    background-image: -moz-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -webkit-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: -o-linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background-image: linear-gradient(center top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+span#mask-switch:before {
+    content: "  Masked";
+}
+span#noresponse-switch:before {
+    content: "  Response";
+}
+span#mask-switch:after {
+    content: "  Masked";
+}
+span#noresponse-switch:after {
+    content: "  Response";
+}
     </style>
   </head>
   <body>
@@ -235,10 +301,19 @@
                         <a href="#" ><i class="fa fa-ban pull-left"></i> Masked</a>
                     </button>
                 </div>
-                <div class="btn-toolbar">               
-                    <input type="checkbox" checked data-toggle="toggle" data-on="<span style='font-weight:bold;font-size:14px'>&#10003;</span> Masked" data-off="<span style='font-weight:bold;font-size:14px'>&#11097;</span> Masked" data-onstyle="success" data-offstyle="danger" data-size="mini">
-                    <input type="checkbox" checked data-toggle="toggle" data-on="No Response&nbsp;&nbsp;&nbsp;&nbsp;" data-off="No Response&nbsp;&nbsp;&nbsp;&nbsp;" data-onstyle="success" data-offstyle="danger" data-size="mini">
-                    <input type="checkbox" checked data-toggle="toggle" data-on="No Response&nbsp;&nbsp;&nbsp;&nbsp;" data-off="No Response&nbsp;&nbsp;&nbsp;&nbsp;" data-onstyle="success" data-offstyle="danger" data-size="mini">
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="mask-switch" >
+                    <label class="onoffswitch-label" for="mask-switch">
+                        <span class="onoffswitch-inner" id="mask-switch"></span>
+                        <span class="onoffswitch-switch"><i class="fa fa-volume-up"></i></span>
+                    </label>
+                </div>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="noresponse-switch" >
+                    <label class="onoffswitch-label" for="noresponse-switch">
+                        <span class="onoffswitch-inner" id="noresponse-switch"></span>
+                        <span class="onoffswitch-switch"><i class="fa fa-bell-o"></i></span>
+                    </label>
                 </div>
             </div>
         </div><!-- End Button Column-->
