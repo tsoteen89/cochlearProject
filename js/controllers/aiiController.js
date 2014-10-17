@@ -893,7 +893,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID].toISOString().slice(0,10);
-        postData.post('http://killzombieswith.us/aii-api/v1/answers/ + cookieSessionID,$scope.singleAnswer);
+        postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID,$scope.singleAnswer);
 
     };
     
