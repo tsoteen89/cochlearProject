@@ -768,6 +768,9 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
  */
 controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $cookieStore){
     
+    //get the SessionID stored
+	var cookieSessionID = $cookieStore.get('SessionID');
+    
     $scope.limit = 5;
     $scope.offSet = 0;
     $scope.limitArray = new Array();
@@ -879,7 +882,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 }
             }
         }
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+        postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.singleAnswer);
 
     };
     
@@ -1193,6 +1196,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
  */
 controllers.audioQuestionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $route,$timeout, $anchorScroll, $cookieStore){
     
+    //get the SessionID stored
+	var cookieSessionID = $cookieStore.get('SessionID');
+    
     $scope.patientName= $cookieStore.get('PatientName');
     $scope.patientSex = $cookieStore.get('PatientSex');
     $scope.patientDOB = $cookieStore.get('PatientDOB');
@@ -1292,7 +1298,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.Results[category]= $scope.answer.Results[category];
         $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
         
-        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults',$scope.singleAnswer).then(function(){
+        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults/'+ cookieSessionID ,$scope.singleAnswer).then(function(){
             //Grab all previously answered questions
             getData.get($scope.answersURL).success(function(data) {
                 $scope.summaryAnswers = data.records;            
@@ -3473,6 +3479,15 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 		//Remove the Session ID and User Level from the cookie
 		$cookieStore.remove('SessionID');
 		$cookieStore.remove('UserLevel');
+        $cookieStore.remove('CareTeamID');
+        $cookieStore.remove('FacilityName');
+        $cookieStore.remove('PhaseID');
+        $cookieStore.remove('PhaseName');
+        $cookieStore.remove('PatientName');
+        $cookieStore.remove('PatientID');
+        $cookieStore.remove('dirAnchor');
+        $cookieStore.remove('PatientID');
+        $cookieStore.remove('PatientSex');
     }
 }
 
