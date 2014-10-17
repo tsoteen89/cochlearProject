@@ -893,7 +893,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID].toISOString().slice(0,10);
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+        postData.post('http://killzombieswith.us/aii-api/v1/answers/ + cookieSessionID,$scope.singleAnswer);
 
     };
     
@@ -1282,7 +1282,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
         $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
-        postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.singleAnswer);
+        postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID,$scope.singleAnswer);
 
     };
     //**********************Copied from questionsControllerr****/
@@ -1662,7 +1662,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.addNewEvent = function(patient){
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, patient) {
-            
+            var cookieSessionID = $cookieStore.get('SessionID');
             $scope.newEvent={"Description":null, "OriginalFacilityID": 100, "CurrentPhaseID":3, "CreatedOn": new Date(), "PatientID": patient.PatientID};
             $scope.patient = patient;
             
@@ -1697,7 +1697,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                     $scope.answer.CareTeamID = data.records;
                 }).then(function(){
                     
-                    postData.post('http://killzombieswith.us/aii-api/v1/answers',$scope.answer).success(function(){
+                    postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID,$scope.answer).success(function(){
                         var updateToActive = {'InactiveStatus': 10};
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
                         patient.InactiveStatus = 10;
