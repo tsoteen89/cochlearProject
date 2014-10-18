@@ -1533,6 +1533,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     }
     $scope.showActivePatients = "10";
     $scope.showInactive = function(){
+        console.log("inshowInactive()");
         $scope.showActivePatients = "!10";
     };
     $scope.showActive = function(){
@@ -1558,9 +1559,34 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         return age;
     }
     
-    $scope.goToPatDir = function(last){
-        $location.path('/patientDirectory/');
-        $scope.scrollTo(last);
+    $scope.goToPatDir = function(patient){
+        //console.log($location.$$path);
+        if($location.$$path != "/patientDirectory"){
+            $location.path('/patientDirectory/');
+            $scope.scrollTo(patient); // patient here is actually just the last name.. for now
+            /*
+            $timeout(function(){
+                if(patient.InactiveStatus != 10){
+                    $scope.showActivePatients = "!10";
+                }
+
+                $timeout(function(){
+                    $scope.scrollTo(patient.Last);
+                }, 1000);
+            }, 2000);  
+            */
+        }else{
+            $timeout(function(){
+                if(patient.InactiveStatus != 10){
+                    $scope.showInactive();
+                }
+
+                $timeout(function(){
+                    $scope.scrollTo(patient.Last);
+                }, 0);
+            }, 1000);    
+        }
+        
                 
     };
     
