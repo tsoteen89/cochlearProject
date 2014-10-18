@@ -3,9 +3,8 @@
     <div class="row">
         <div class="col-md-offset-4">
             <label style="font-size:2vw; color:#4B92AE" >{{phaseName}}</label>
-            <hr>
         </div>
-        
+        <hr>
     </div>
     
     <div class="row">
@@ -15,8 +14,18 @@
 
             </div>
         </div>
-    <div class="col-md-2" ng-controller="apiPatientsController">
-        <a href="" style="position:fixed" ng-click="goToPatDir(dirAnchor)"><button class="btn btn-primary">Patient Directory</button></a>
+        
+        <div class="col-md-2" >
+            <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor)" style="position:fixed" >
+                <button class="btn btn-primary">
+                    Patient Directory
+                </button>
+            </a> <br> <br>
+            <!-- dont think its working in audiology. just putting button here
+            <button ng-click="PrintContent()" style="position:fixed"  class="btn btn-default">
+                Print
+            </button>
+-->
+        </div>
     </div>
-
 </div>

@@ -15,7 +15,7 @@
                    <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
                   <input type="text" class="form-control" placeholder="Search Patients" 
                          typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" 
-                         ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last)">
+                         ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item)">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">
                             <span class="glyphicon glyphicon-search"></span>
@@ -25,6 +25,7 @@
             </div>
         </div> <br>
         <div class="row">
+            {{showActivePatients}}
             <tabset style="cursor:pointer">
                 <tab heading="Active Patients" ng-click="showActive()">
                 </tab>
@@ -34,7 +35,6 @@
         </div>
     </div>
     
-    <br>
     <div id = "cp_patientDirectory" class="container">
           <div class="row">
               <!-- patient usable within this scope-->
