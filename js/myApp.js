@@ -1,7 +1,7 @@
 //Travis Osteen
 (function(){
 var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
-                                     'aiiController','myApp.directives','ngClickSelect','yaru22.directives.hovercard']);
+                                     'aiiController','myApp.directives','ngClickSelect','yaru22.directives.hovercard', 'reports']);
 
 
 myApp.config(function ($routeProvider) {
@@ -68,6 +68,10 @@ myApp.config(function ($routeProvider) {
   .when('/completedAudiology',
   {
       templateUrl: 'partials/completedAudiology.html'
+  })
+  .when('/facilityReport',
+  {
+      templateUrl: 'partials/facilityReport.html'
   })
   .otherwise({redirectTo: 'partials/dashboard.html'});
 
