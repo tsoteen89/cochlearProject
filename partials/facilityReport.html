@@ -1,0 +1,51 @@
+<div ng-controller="reportCtrl">
+
+    <div class="row">
+        <div class="col-md-offset-5">
+            <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
+        </div>
+        
+    </div>
+    <hr>
+    <style>
+        table, th, td, tbody, tr {
+           border: 1px solid #164a5e;
+            border-color: 1px solid black;
+            border-top: 1px solid black;
+        }
+        .bold{
+            font-weight: bold;
+        }
+        .plain{
+            font-weight:normal;
+        }
+    </style>
+
+    <div class="form3D">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="images/facilityLogo.png" ng-if="FacilityImage == null"/> 
+                <img src="images/facilityImages/{{FacilityImage}}" ng-if = "FacilityImage !=null"/>
+            </div>
+        </div>
+        <div class="row">
+            <h3 style="text-align:center">{{facilityName}}</h3>
+            <h1 style="text-align:center">Facility Report</h1> <br><br>
+        </div>
+        <table class="table table-condensed">
+            <caption></caption>
+            <thead>
+            <tr align="Center">
+              <td colspan="1" style="background-color:#cae5f0"><h4><b>Data Element</b></h4></td>
+              <td colspan="1" style="background-color:#cae5f0" ng-repeat="patient in facilityReport"><b>{{patient.First}} {{patient.Last}}</b></h3></td>
+            </tr>
+            </thead>
+            <tbody ng-repeat="(key, value) in questions">
+                <tr ng-repeat="val in value">
+                  <td style="background-color:#cae5f0" ng-class="{bold:$first, plain:!$first}">{{val}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
