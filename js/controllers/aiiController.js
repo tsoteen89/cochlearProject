@@ -3408,7 +3408,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 			//If SessionID is valid:
 			//		-store user information
 			//		-redirect to dashboard
-			if(data.records['error'] != 100 && data.records['error'] != 200){
+			if(data.records['error'] != 'Token Timeout' && data.records['error'] != 200){
 				$scope.loggedIn = true;
 				
 				//Store the user information
@@ -3446,7 +3446,6 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 	//If no stored SessionID, redirect to login page
 	else{
 		$scope.loggedIn = false;
-		$window.location.href = "#";
 	}
 	
 	
@@ -3495,7 +3494,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
         console.log("in logout function");
         $http({
             method  : "DELETE",
-            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs/" + $scope.sessionID,
+            url     : "http://killzombieswith.us/aii-api/v1/sessionLogs/" + cookieSessionID,
             headers : { 'Content-Type': 'application/json' }
         })
         .then(function(response){
