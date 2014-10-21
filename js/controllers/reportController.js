@@ -6,6 +6,10 @@ var myApp = angular.module('reports', ['ui.bootstrap','ngCookies']);
 var controllers = {};
     
 controllers.reportCtrl = function($scope, getData, $cookieStore) {
+    /*
+    //get the SessionID stored
+	var cookieSessionID = $cookieStore.get('SessionID');
+    */
     $scope.facilityName = $cookieStore.get('FacilityName');
     var fullFacilityURL = '../aii-api/v1/reports/fullFacility/123'; 
     getData.get(fullFacilityURL).success(function(data) {
