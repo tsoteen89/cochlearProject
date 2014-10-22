@@ -28,8 +28,12 @@
                     </form>            
                 </div>
                 
-                <div ng-if="cookieTimeout == true" class="col-md 3" style="padding-left:5%">
-                    Timout
+                <div ng-if="tokenTimeout == true" class="col-md 3" style="padding-left:5%">
+                    <h5 style="color: red">Token Timeout </h3>
+                </div>
+                
+                <div ng-if="invalidToken == true" class="col-md 3" style="padding-left:5%">
+                    <h5 style="color: red">Invalid Token </h3>
                 </div>
                 
             </div>

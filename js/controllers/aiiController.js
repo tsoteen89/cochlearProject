@@ -115,9 +115,15 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
 				if(typeof data.records['error'] != 'undefined'){
-					if(data.records['error'] == 100 || data.records['error'] == 200){
+					if(data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token"){
 						$cookieStore.remove('SessionID');
 						$cookieStore.remove('UserLevel');
+                        if(data.records['error'] == 'Token Timeout'){
+                            $cookieStore.put('BadToken','Token Timeout');
+                        }
+                        if(data.records['error'] == "Invalid Token"){
+                            $cookieStore.put('BadToken','Invalid Token');
+                        }
 						$window.location.href = "#";
 						location.reload();
 					}
@@ -1564,17 +1570,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         if($location.$$path != "/patientDirectory"){
             $location.path('/patientDirectory/');
             $scope.scrollTo(patient); // patient here is actually just the last name.. for now
-            /*
-            $timeout(function(){
-                if(patient.InactiveStatus != 10){
-                    $scope.showActivePatients = "!10";
-                }
-
-                $timeout(function(){
-                    $scope.scrollTo(patient.Last);
-                }, 1000);
-            }, 2000);  
-            */
         }else{
             $timeout(function(){
                 if(patient.InactiveStatus != 10){
@@ -3386,11 +3381,14 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
  *      @returns - NULL
  *
  */
-controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo, cookie, $cookieStore ){
+controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo, cookie, $cookieStore, $timeout ){
     
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
+    $scope.invalidLogin = false;
+    $scope.tokenTimeout = false;
+    $scope.invalidToken = false;
     
     //Used by Terry for testing. Will delete before production
     var c = {};
@@ -3408,7 +3406,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 			//If SessionID is valid:
 			//		-store user information
 			//		-redirect to dashboard
-			if(data.records['error'] != 'Token Timeout' && data.records['error'] != 200){
+			if(data.records['error'] != 'Token Timeout' && data.records['error'] != "Invalid Token"){
 				$scope.loggedIn = true;
 				
 				//Store the user information
@@ -3438,7 +3436,13 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				$scope.loggedIn = false;
 				$cookieStore.remove('SessionID');
 				$cookieStore.remove('UserLevel');
-				$window.location.href = "#";
+                if(data.records['error'] == 'Token Timeout'){
+                    $cookieStore.put('BadToken','Token Timeout');
+                }
+                if(data.records['error'] == "Invalid Token"){
+                    $cookieStore.put('BadToken','Invalid Token');
+                }
+                $window.location.href = "#";
 				location.reload();
 			}
 		});
@@ -3446,6 +3450,12 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 	//If no stored SessionID, redirect to login page
 	else{
 		$scope.loggedIn = false;
+        if($cookieStore.get('BadToken') == "Token Timeout"){
+            $scope.tokenTimeout = true;
+        }
+        if($cookieStore.get('BadToken') == "Invalid Token"){
+            $scope.invalidToken = true;
+        }
 	}
 	
 	
@@ -3466,6 +3476,10 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 
     $scope.submit = function(){
 
+        $cookieStore.remove('BadToken');
+        $scope.tokenTimeout = false;
+        $scope.invalidToken = false;
+        
         $http({
             method  : 'POST',
             url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
@@ -3484,7 +3498,14 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
             }
             else {
               
-               $window.location = "#/";
+                $window.location = "#/";
+                $scope.invalidLogin = true;
+                $scope.userlogin.username = "";
+                $scope.userlogin.password = "";
+                $timeout(function(){
+                    $scope.invalidLogin = false;
+                }, 2000);
+                
             
             }
         });
