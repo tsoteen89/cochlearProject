@@ -6,6 +6,9 @@
                    
                     <form role = "form" name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
                          <h4>Sign in</h4>
+                            <div ng-if="invalidLogin == true">
+                                <h5 style="color: red">Incorrect Username or Password </h3>
+                            </div>
                          <hr>
                         <div class = "form-group">
                             <label for = "inputUsername" class = "cp_loginLabel">Username</label>
@@ -24,6 +27,11 @@
    
                     </form>            
                 </div>
+                
+                <div ng-if="cookieTimeout == true" class="col-md 3" style="padding-left:5%">
+                    Timout
+                </div>
+                
             </div>
         </div>
     </div>
@@ -37,4 +45,5 @@
             </div>
         </div>
     </div>
+
 </body>
