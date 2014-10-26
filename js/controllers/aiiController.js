@@ -1210,6 +1210,8 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.patientDOB = $cookieStore.get('PatientDOB');
     $scope.facilityName = $cookieStore.get('FacilityName');
     $scope.facilityImage = $cookieStore.get('FacilityImage');
+    $scope.dirAnchor = $cookieStore.get('dirAnchor');
+    $scope.phaseID = $cookieStore.get('PhaseID');
     //Get Audiology Phase fields and test 
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
@@ -1251,6 +1253,20 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         };
     });
     
+    $scope.isArray = function(check){
+        return angular.isArray(check);
+    }
+    
+    $scope.checkboxTrigger = function(data){
+        var other = false;
+        
+        for(var i=0;i<data.length;i++){
+            if(data[i] == 'Other'){
+                other = true;
+            }
+        }
+        return other;
+    }
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
@@ -1518,6 +1534,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
+    $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.submitPatientInfo = function(patient){
         $timeout(function(){
             if(patient.reason){
