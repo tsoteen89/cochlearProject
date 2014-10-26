@@ -1730,12 +1730,17 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 $scope.answer.Answers[10] = patient.DOB;
                 $scope.answer.Answers[20] = patient.Sex;
                 $scope.answer.Answers[30] = patient.Race;
-                
+                $scope.answer.Answers[40] = patient.BMI;
+                $scope.answer.Answers[45] = patient.Height;
+                $scope.answer.Answers[46] = patient.Weight;
+            
+                //create new event for that patient...
                 postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent).success(function(data) {
                     $scope.answer.CareTeamID = data.records;
                 }).then(function(){
-                    
+                    //post known demo answers to that event 
                     postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID,$scope.answer).success(function(){
+                        //if patient was inactive, new event re-activates them.
                         var updateToActive = {'InactiveStatus': 10};
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
                         patient.InactiveStatus = 10;
