@@ -73,6 +73,14 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/facilityReport.html'
   })
+  .when('/audiogram',
+  {
+      templateUrl: 'partials/audiogram/index.html'
+  })
+  .when('/sentenceTesting',
+  {
+      templateUrl: 'partials/sentenceTesting.html'
+  })
   .otherwise({redirectTo: 'partials/dashboard.html'});
 
 });
