@@ -59,7 +59,8 @@ myApp.config(function ($routeProvider) {
   })
   .when('/patientDirectory',
   {
-      templateUrl: 'partials/patientDirectory.html'
+      templateUrl: 'partials/patientDirectory.html',
+      reloadOnSearch: false
   })
   .when('/completedQuestions',
   {
