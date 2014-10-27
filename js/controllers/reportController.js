@@ -16,23 +16,23 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
     }
      
     $scope.facilityName = $cookieStore.get('FacilityName');
-    var fullFacilityURL = '../aii-api/v1/reports/fullFacility/'+ cookieSessionID; 
+    var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/'+ cookieSessionID; 
     getData.get(fullFacilityURL).success(function(data) {
         $scope.facilityReport = data.records;
     }).then(function(){
         $scope.patientNum = Object.keys($scope.facilityReport).length;
     });
     
-    var questionsURL = '../aii-api/v1/reports/allQuestions'; 
+    var questionsURL = 'http://killzombieswith.us/aii-api/v1/reports/allQuestions'; 
     getData.get(questionsURL).success(function(data) {
         $scope.questions = data.records;
     });
     
     $scope.export = function(){
-        var blob = new Blob([document.getElementById('report').innerHTML], {
+        var blob = new Blob([document.getElementById('facReport').innerHTML], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
+            saveAs(blob, "Facility_Report.xls");
     };
     
     
