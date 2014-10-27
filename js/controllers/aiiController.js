@@ -2327,7 +2327,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 				}).then(function(){
                     $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
                     getData.get($scope.unreadMessageURL).success(function(data) {
-                        $scope.messageCount = data.records;
+                        $scope.messageCount = data.records['messageCount'];
                     }).then(function (){
                         messageCount.prepForBroadcast($scope.messageCount);
                    });
