@@ -28,6 +28,14 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         $scope.questions = data.records;
     });
     
+    $scope.export = function(){
+        var blob = new Blob([document.getElementById('report').innerHTML], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+            });
+            saveAs(blob, "Report.xls");
+    };
+    
+    
     
 };
     
