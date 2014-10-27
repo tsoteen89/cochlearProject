@@ -1,6 +1,22 @@
 <body>
+    
+    
+    <div ng-if="invalidToken == true" class = "row">
+        <div class = "col-md-3 col-md-offset-4" style="padding:15px;border:3px solid #000;box-shadow:0 0 20px 0 #787878;border-radius:10px;background-color:white;font-weight:bold">
+            <center><h4 style="color: red;margin:auto;">You no longer have a valid session on this device. <br> User may be logged in on another device.</h4></center>
+        </div>
+    </div>
+    
+    <div ng-if="tokenTimeout == true" class = "row">
+        <div class = "col-md-3 col-md-offset-4" style="padding:15px;border:3px solid #000;box-shadow:0 0 20px 0 #787878;border-radius:10px;background-color:white;font-weight:bold">
+            <center><h4 style="color: red;margin:auto;">User Session Has Timed Out</h4></center>
+        </div>
+    </div>
+    
     <div id = "cp_loginContainer" ng-if = "!loggedIn">
-        <div class = "container"> 
+        
+        <div class = "container">
+            
             <div class = "row">
                 <div class = "col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
                    
@@ -28,8 +44,8 @@
                     </form>            
                 </div>
                 
-                <div ng-if="cookieTimeout == true" class="col-md 3" style="padding-left:5%">
-                    Timout
+                <div ng-if="tokenTimeout == true" class="col-md 3" style="padding-left:5%">
+                    <h5 style="color: red">User Session Has Timed Out</h3>
                 </div>
                 
             </div>

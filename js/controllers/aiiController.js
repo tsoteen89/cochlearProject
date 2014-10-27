@@ -115,9 +115,15 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
 				if(typeof data.records['error'] != 'undefined'){
-					if(data.records['error'] == 100 || data.records['error'] == 200){
+					if(data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token"){
 						$cookieStore.remove('SessionID');
 						$cookieStore.remove('UserLevel');
+                        if(data.records['error'] == 'Token Timeout'){
+                            $cookieStore.put('BadToken','Token Timeout');
+                        }
+                        if(data.records['error'] == "Invalid Token"){
+                            $cookieStore.put('BadToken','Invalid Token');
+                        }
 						$window.location.href = "#";
 						location.reload();
 					}
@@ -770,7 +776,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
-    
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
     $scope.limit = 5;
     $scope.offSet = 0;
     $scope.limitArray = new Array();
@@ -1204,6 +1210,8 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.patientDOB = $cookieStore.get('PatientDOB');
     $scope.facilityName = $cookieStore.get('FacilityName');
     $scope.facilityImage = $cookieStore.get('FacilityImage');
+    $scope.dirAnchor = $cookieStore.get('dirAnchor');
+    $scope.phaseID = $cookieStore.get('PhaseID');
     //Get Audiology Phase fields and test 
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
@@ -1245,6 +1253,20 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         };
     });
     
+    $scope.isArray = function(check){
+        return angular.isArray(check);
+    }
+    
+    $scope.checkboxTrigger = function(data){
+        var other = false;
+        
+        for(var i=0;i<data.length;i++){
+            if(data[i] == 'Other'){
+                other = true;
+            }
+        }
+        return other;
+    }
     //Show a child if Trigger has been set
     $scope.showChild = function(data){
         var index;
@@ -1509,9 +1531,12 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
  *
  */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
+    //hmm 
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
+    $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.submitPatientInfo = function(patient){
         $timeout(function(){
             if(patient.reason){
@@ -1531,13 +1556,21 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
         patient.InactiveStatus = 10;
     }
+    $scope.showActiveTab = true;
+    $scope.showInactiveTab = false;
     $scope.showActivePatients = "10";
     $scope.showInactive = function(){
         console.log("inshowInactive()");
         $scope.showActivePatients = "!10";
+        $scope.showInactiveTab = true;
+        $scope.showActiveTab = false;
+        //$scope.$apply();
+        console.log('showActivePatients:', $scope.showActivePatients);
     };
     $scope.showActive = function(){
         $scope.showActivePatients = "10";
+        $scope.showInactiveTab = false;
+        $scope.showActiveTab = true;
     };
     
     $scope.editDescrip =false;
@@ -1559,42 +1592,48 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         return age;
     }
     
-    $scope.goToPatDir = function(patient){
+    $scope.goToPatDir = function(last, inactiveStatus){
         //console.log($location.$$path);
         if($location.$$path != "/patientDirectory"){
             $location.path('/patientDirectory/');
-            $scope.scrollTo(patient); // patient here is actually just the last name.. for now
-            /*
+            //$scope.scrollTo(last); // patient here is actually just the last name.. for now
+            
             $timeout(function(){
-                if(patient.InactiveStatus != 10){
-                    $scope.showActivePatients = "!10";
+                if(inactiveStatus != 10){
+                   // $scope.$apply();
+                    $scope.scrollTo(last, true); //NOT working for pages outside of patient directory
+                    //$scope.$apply();
+                }else{
+                    $scope.scrollTo(last, false);
                 }
-
-                $timeout(function(){
-                    $scope.scrollTo(patient.Last);
-                }, 1000);
-            }, 2000);  
-            */
+            }, 0);    
+            
         }else{
-            $timeout(function(){
-                if(patient.InactiveStatus != 10){
-                    $scope.showInactive();
-                }
-
-                $timeout(function(){
-                    $scope.scrollTo(patient.Last);
-                }, 0);
-            }, 1000);    
-        }
-        
+                
+            if(inactiveStatus != 10){
+                $scope.scrollTo(last, true);
+            }else{
+                $scope.scrollTo(last, false);
+            }
+                 
+        } 
                 
     };
-    
-    $scope.scrollTo = function(id) {
+    /*
+        
+        */
+    $scope.scrollTo = function(id, showInactive) {
+        
+        if(showInactive){
+            $scope.showInactive();
+        }else{
+            $scope.showActive();
+        }
         $location.hash(id);
-        console.log($location.hash());
         $timeout(function(){
+            
             $anchorScroll();
+            console.log("scrolling");
             $timeout(function(){
                 scrollBy(0, -60);
             }, 0);
@@ -1627,6 +1666,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setDirAnchor(patient.Last);
         $cookieStore.put('PatientDOB', patient.DOB);
         $cookieStore.put('PatientSex', patient.Sex);
+        $cookieStore.put('PatientInactiveStatus', patient.InactiveStatus);
         
     };
     
@@ -1718,12 +1758,17 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 $scope.answer.Answers[10] = patient.DOB;
                 $scope.answer.Answers[20] = patient.Sex;
                 $scope.answer.Answers[30] = patient.Race;
-                
+                $scope.answer.Answers[40] = patient.BMI;
+                $scope.answer.Answers[45] = patient.Height;
+                $scope.answer.Answers[46] = patient.Weight;
+            
+                //create new event for that patient...
                 postData.post('http://killzombieswith.us/aii-api/v1/careTeams',$scope.newEvent).success(function(data) {
                     $scope.answer.CareTeamID = data.records;
                 }).then(function(){
-                    
+                    //post known demo answers to that event 
                     postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID,$scope.answer).success(function(){
+                        //if patient was inactive, new event re-activates them.
                         var updateToActive = {'InactiveStatus': 10};
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
                         patient.InactiveStatus = 10;
@@ -3386,11 +3431,14 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
  *      @returns - NULL
  *
  */
-controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo, cookie, $cookieStore ){
+controllers.loginControl = function ($scope,$http,$window,persistData,getData, $location, userInfo, cookie, $cookieStore, $timeout ){
     
     $scope.userlogin = {};
     $scope.dataObj = {};
     $scope.loggedIn;
+    $scope.invalidLogin = false;
+    $scope.tokenTimeout = false;
+    $scope.invalidToken = false;
     
     //Used by Terry for testing. Will delete before production
     var c = {};
@@ -3408,7 +3456,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 			//If SessionID is valid:
 			//		-store user information
 			//		-redirect to dashboard
-			if(data.records['error'] != 'Token Timeout' && data.records['error'] != 200){
+			if(data.records['error'] != 'Token Timeout' && data.records['error'] != "Invalid Token"){
 				$scope.loggedIn = true;
 				
 				//Store the user information
@@ -3438,7 +3486,13 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 				$scope.loggedIn = false;
 				$cookieStore.remove('SessionID');
 				$cookieStore.remove('UserLevel');
-				$window.location.href = "#";
+                if(data.records['error'] == 'Token Timeout'){
+                    $cookieStore.put('BadToken','Token Timeout');
+                }
+                if(data.records['error'] == "Invalid Token"){
+                    $cookieStore.put('BadToken','Invalid Token');
+                }
+                $window.location.href = "#";
 				location.reload();
 			}
 		});
@@ -3446,6 +3500,12 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 	//If no stored SessionID, redirect to login page
 	else{
 		$scope.loggedIn = false;
+        if($cookieStore.get('BadToken') == "Token Timeout"){
+            $scope.tokenTimeout = true;
+        }
+        if($cookieStore.get('BadToken') == "Invalid Token"){
+            $scope.invalidToken = true;
+        }
 	}
 	
 	
@@ -3466,6 +3526,10 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
 
     $scope.submit = function(){
 
+        $cookieStore.remove('BadToken');
+        $scope.tokenTimeout = false;
+        $scope.invalidToken = false;
+        
         $http({
             method  : 'POST',
             url     : 'http://killzombieswith.us/aii-api/v1/sessionLogs',
@@ -3484,7 +3548,14 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
             }
             else {
               
-               $window.location = "#/";
+                $window.location = "#/";
+                $scope.invalidLogin = true;
+                $scope.userlogin.username = "";
+                $scope.userlogin.password = "";
+                $timeout(function(){
+                    $scope.invalidLogin = false;
+                }, 2000);
+                
             
             }
         });

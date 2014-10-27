@@ -5,233 +5,104 @@
     }
 </style>
 
-<div data-ng-controller="audioQuestionsController" class="col-md-8 col-md-offset-2" style="background-color: #CAE5F0; border-radius: 10px 10px 10px 10px; -webkit-box-shadow: 0px 0px 5px 3px grey; -moz-box-shadow: 0px 0px 5px 3px grey; box-shadow: 0px 0px 5px 3px grey;">
-    <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-4">{{phaseName}}</label>
-    <hr>
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="col-md-8 col-md-offset-2 col-xs-6">
-                
-                <div class="select-audio-tests" style="margin-bottom:5px">
-                    <label >
-                    1. Set up Ear Conditions
-                    </label>
-                </div>
-                
-                <!-- DISPLAY Left Ear Condition -->
-                <div class="select-ear-condition">
-                    <label class="description">Left Ear </label>
-                    <br>
-                    <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                    <select ng-model="conditions.Left" class="large">
-                        <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
-                    </select>
-                </div>
-                
-                <!-- DISPLAY Right Ear Condition -->
-                <div class="select-ear-condition">
-                    <label class="description">Right Ear </label>
-                    <br>
-                    <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                    <select ng-model="conditions.Right" ng-blur="updateResults();" class="large">
-                        <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
-                    </select>
-                    <br> 
-                </div>
-                
-                <div class="select-audio-tests" style="margin-bottom:5px">
-                    <label >
-                    2. Select Tests performed under these conditions
-                    </label>
-                </div>
-                
-                <!-- DISPLAY TESTS -->
-                <div class="select-audio-tests" class="container">
-                    <div>
-                        <label style="font-size: 1.0vw; color:#4B92AE">Please Select Tests Performed</label>
-                        <br>
-                        <div ng-repeat="categories in audioQuestions.Categories">
-                            <input  type="Checkbox" checklist-value="categories.AudioCategory"
-                                checklist-model="answer.tests">
-                            <label class="choice">{{categories.AudioCategory}}</label> 
-                        </div>
-                    </div>
-                    <br>
-                    <div ng-repeat="test in answer.tests" class="row">
-                        <div ng-repeat="categories in audioQuestions.Categories" class="col-md-12">
-                            <div ng-if="categories.AudioCategory == test" class="col-md-12">
-                                <label class="description" style="margin-top: 2%;font-size: 1.8vw; color:#4B92AE;">{{categories.AudioCategory}} </label>
-                                <hr>
-                                <div ng-repeat="tests in categories.Tests" class="row" >
-                                    <label style="font-size: 1.3vw;">{{tests.AudioTestName}}</label><br>
-                                    <form class="form">
-                                        <div class="row">
-                                        <div ng-repeat="type in tests.AudioTestInput" style="margin-left:5%;float:left;">
-                                            <label style="font-size:.9vw;">{{type.Name}}</label> <br>
-                                            <!-- Question Inputs Displayed -->
-                                            <!-- submit results if this field is last in test-->
-                                            <div class="form-group"  ng-if="type.InputType == 'Number' && $last">
-                                                <input type="number" min={{type.MinValue}} max={{type.MaxValue}}
-                                                    ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]"
-                                                    ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
-                                                <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
-                                            </div>
-                                            <!--NUMBER TYPE TESTS-->
-                                            <!-- if field ISNT last in test, dont call submitQuestions() and handle cnc words inefficiently-just for now-->
-                                            <div class="form-group" ng-if="type.InputType == 'Number' && !$last">
-                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                    ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]"
-                                                    id="{{type.Label}}" ng-if="type.Name != 'Words with 3 Phonemes Correct' && type.Name != 'Phonemes Correct'">
-                                                <label ng-if="type.Name != 'Words with 3 Phonemes Correct' && type.Name != 'Phonemes Correct'"
-                                                    class="control-label" for="{{type.Label}}"> {{type.Unit}}</label>
-                                                <!-- words with 3 phonemes -->
-                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                    ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]"
-                                                    id="{{type.Label}}" ng-if="type.Name == 'Words with 3 Phonemes Correct'" 
-                                                    ng-change="updateWordsWith3()">
-                                                <label ng-if="type.Name == 'Words with 3 Phonemes Correct'"
-                                                    class="control-label" for="{{type.Label}}"> 
-                                                ({{answer.Results["CNC"]["CNC Test"]["Words with 3 Phonemes Correct"]}}/50 {{wordswith3}}% )
-                                                </label>
-                                                <!-- end words with 3 phonemes-->
-                                                <!--phonemes correct-->
-                                                <input type="number" name="type.Label" min={{type.MinValue}} max={{type.MaxValue}}
-                                                    ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]"
-                                                    id="{{type.Label}}" ng-if="type.Name == 'Phonemes Correct'" ng-change="updatePhonemes()">
-                                                <label ng-if="type.Name == 'Phonemes Correct'"
-                                                    class="control-label" for="{{type.Label}}"> 
-                                                ({{answer.Results["CNC"]["CNC Test"]["Phonemes Correct"]}}/150 {{phonemes}}% )
-                                                </label>
-                                                <!--end phonemes correct-->
-                                            </div>
-                                            <!--SELECT TYPE TESTS-->
-                                            <!-- submit results if this field is last in test-->
-                                            <div class="form-group" ng-if="type.InputType == 'Select' && $last" 
-                                                style="margin-bottom:20px;">
-                                                <select  ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" 
-                                                    ng-blur="submitQuestions(categories.AudioCategory)" id="{{type.Label}}">
-                                                    <option> </option>
-                                                    <option ng-repeat="values in type.Values">{{values}}</option>
-                                                </select>
-                                                <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
-                                            </div>
-                                            <!-- if field ISNT last in test, dont call submitQuestions()-->
-                                            <div class="form-group" ng-if="type.InputType == 'Select' && !$last"
-                                                style="margin-bottom:20px;">
-                                                <select ng-model="answer.Results[categories.AudioCategory][tests.AudioTestName][type.Name]" id="{{type.Label}}">
-                                                    <option> </option>
-                                                    <option ng-repeat="values in type.Values">{{values}}</option>
-                                                </select>
-                                                <label class="control-label" for="{{type.Label}}"> {{type.Unit}}</label> 
-                                            </div>
-                                        </div>
-                                        </div>
-                                        
-                                        <div class="datagrid">
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th ng-repeat="type in tests.AudioTestInput" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{type.Name}}</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr ng-class-even="'alt'" ng-repeat="tests in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][tests.AudioTestName]">
-                                                        <td ng-repeat="key in notSorted(tests)" ng-init="value = tests[key]" style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{value}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div><br>
-                                        
-                          
-                                    </form>
-                                </div>
-                                <button type="button" class="btn btn-default btn-sm" ng-click="clearCurrentTest(test)">
-                                <span class="glyphicon glyphicon-plus-sign"></span> Add Test Under Current Conditions
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <br><br>
-                    <br><br><br>
-                    
- 
-                    
-                    <button ng-click="submitQuestions()" class="btn btn-default" > Submit Data</button>
-                </div>
-                <button ng-click="setNewCondition()" class="btn btn-default" style="margin-top:5px"> Enter Data for new condition setup</button>
-                <!-----------------------Questions-------->
-                <div class="select-audio-tests" style="margin-bottom:5px">
-                    <label class="description">Questions</label>
-                    <ul class="list-unstyled">
-                        <li ng-repeat= "question in audioQs">
-                            <div ng-hide="question.IsChild" class="container">
-                                <span >
-                                    <div class="row">
-                                        <div class="col-md-11">
-                                            <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <hovercard hover-tmpl-url="js/hoverCardDetail.html"><p style="color:#325bbd" class="fa fa-question-circle fa-2x"></p></hovercard>
-                                        </div>
+<div class="row">
+    <div class="form3D container col-md-8 col-md-offset-2" style="width:60%; background-color: #CAE5F0; margin-bottom:60px" ng-controller="audioQuestionsController">
+        <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
+        <hr>
 
-                                    </div>
-                                    <!-- Else Display only the single Input field -->
-                                    <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                    </select>
-                                    <div ng-if="question.Input.Type == 'Date'">
-                                        <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                    </div>
-                                    <div ng-if="question.Input.Type == 'Text'">
-                                        <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                    </div>
-                                    <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
-                                        <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                        <label class="choice" >{{values}}</label>
-                                    </div>
-                                    <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                                        <input type={{question.Input.Type}} checklist-value="values" 
-                                            checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                        <label class="choice" >{{values}}</label>
-                                    </div>
-                                </span>
-                            </div>
-                            <!-- Divs with logic used to display or hide children questions -->
-                            <div ng-if="question.Input.Type != 'Checkbox'">
-                                <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
-                                    {{showChild(question.Children)}}
-                                </div>
-                                <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
-                                    {{hideChild(question.Children)}}
-                                </div>
-                            </div>
-                            <div ng-if="question.Input.Type == 'Checkbox'">
-                                <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
-                                    {{showChild(question.Children)}}
-                                </div>
-                                <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
-                                    {{hideChild(question.Children)}}               
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    
-                    <button ng-click="getDataSummary()" class="btn btn-default"
-                        popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
-                    Finished
-                    </button>
-                    <br>
-                </div>
-            </div>
-
+        <div class="col-md-8 col-md-offset-2">
+            <a href = "#/audiogram"> 
+                <button type="button" class="select-audio-tests btn btn-lg btn-block">  
+                    <h1> Audiograms </h1> 
+                    <span style="font-size: 12px"ng-if="phaseID !=2"> (It is recommended that residual hearing be tested at at least 1 month and 6 month visits.)</span>
+                </button>
+            </a>
+            <br><br><br>
+            <a href = "#/sentenceTesting"> <button type="button" class="select-audio-tests btn btn-lg btn-block">  <h1> Sentence Testing </h1>  </button> </a>
         </div>
+
+        <div class="col-md-8 col-md-offset-2">
+            <!-----------------------Questions-------->
+                    <div class="select-audio-tests" style="margin-bottom:5px">
+                        <label class="description">Questions</label>
+                        <ul class="list-unstyled">
+                            <li ng-repeat= "question in audioQs">
+                                <div ng-hide="question.IsChild" class="container">
+                                    <span >
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <hovercard hover-tmpl-url="js/hoverCardDetail.html"><p style="color:#325bbd" class="fa fa-question-circle fa-2x"></p></hovercard>
+                                            </div>
+
+                                        </div>
+                                        <!-- Else Display only the single Input field -->
+                                        <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                        </select>
+                                        <div ng-if="question.Input.Type == 'Date'">
+                                            <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
+                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                        </div>
+                                        <div ng-if="question.Input.Type == 'Text'">
+                                            <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                        </div>
+                                        <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                            <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                            <label class="choice" >{{values}}</label>
+                                        </div>
+                                        <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                            <input type={{question.Input.Type}} checklist-value="values" 
+                                                checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                            <label class="choice" >{{values}}</label>
+                                        </div>
+                                    </span>
+                                </div>
+                                <!-- Divs with logic used to display or hide children questions -->
+                                <div ng-if="question.Input.Type != 'Checkbox'">
+                                    <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
+                                        {{showChild(question.Children)}}
+                                    </div>
+                                    <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
+                                        {{hideChild(question.Children)}}
+                                    </div>
+                                </div>
+                                <div ng-if="question.Input.Type == 'Checkbox'">
+                                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
+                                        {{showChild(question.Children)}}
+                                    </div>
+                                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
+                                        {{hideChild(question.Children)}}               
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <button ng-click="getDataSummary()" class="btn btn-default"
+                            popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
+                        Finished
+                        </button>
+                        <br> 
+                    </div>
+            
+        </div>
+
     </div>
-    <!--container fluid-->
+    <div class="col-md-2" >
+        <br>
+        <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
+            <button class="btn btn-info">
+                Patient Directory
+            </button>
+        </a> 
+
+    </div>
+    
 </div>
-<br>
 <script type="text/ng-template" id="dataSummary.html">
 <div ng-controller="audioQuestionsController">
     <div class="modal-header">
@@ -262,8 +133,9 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="answer in summaryAnswers.Answers">
-                      <td><b>{{answer.Question}}</b></td>
-                      <td>{{answer.Answers}}</td>
+                      <td width="60%"><b>{{answer.Question}}</b></td>
+                      <td width="40%"ng-if="!isArray(answer.Answers) && !isObject(answer.Answers)" >{{answer.Answers}}</td>
+            <td width="40%"ng-if="isArray(answer.Answers)"><span ng-repeat="answer in answer.Answers"> {{answer}},</span></td>
                     </tr>
                     </tbody>
                 </table>
@@ -289,4 +161,3 @@
     </div>
 </div>
 </script>
-</div>

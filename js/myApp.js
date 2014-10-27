@@ -59,7 +59,8 @@ myApp.config(function ($routeProvider) {
   })
   .when('/patientDirectory',
   {
-      templateUrl: 'partials/patientDirectory.html'
+      templateUrl: 'partials/patientDirectory.html',
+      reloadOnSearch: false
   })
   .when('/completedQuestions',
   {
@@ -72,6 +73,14 @@ myApp.config(function ($routeProvider) {
   .when('/facilityReport',
   {
       templateUrl: 'partials/facilityReport.html'
+  })
+  .when('/audiogram',
+  {
+      templateUrl: 'partials/audiogram/index.html'
+  })
+  .when('/sentenceTesting',
+  {
+      templateUrl: 'partials/sentenceTesting.html'
   })
   .otherwise({redirectTo: 'partials/dashboard.html'});
 

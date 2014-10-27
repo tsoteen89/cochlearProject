@@ -17,7 +17,7 @@
 		<div class="col-lg-5" >
             <div class="input-group custom-search-form">
                <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
-              <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last)">
+              <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last, $item.InactiveStatus)">
               <span class="input-group-btn">
               <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>

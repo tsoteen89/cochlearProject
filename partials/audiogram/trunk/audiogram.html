@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Coda+Caption:800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="audiogram.js"></script>
+    <style>
+        body {
+            margin: 10px;
+            padding: 10px;
+        }
+        .aud-btn{
+            font-size:24px;
+        }
+        .aud-btn span{
+            text-align:center;
+        }
+        
+        .aud-btn .left{
+            float:left;
+            margin-left:-5px;
+        }
+        .aud-btn .right{
+            float:right;
+            margin-right:-5px;
+        }
+        .aud-btn .mid{
+            font-size:.5em;
+            margin-left:20px;
+            margin-right:20px;
+        }
+        /* centered columns styles */
+        .row-centered {
+            text-align:center;
+        }
+        .col-centered {
+            display:inline-block;
+            float:none;
+            /* reset the text-align */
+            text-align:left;
+            /* inline-block space fix */
+            margin-right:-4px;
+            padding:0;
+        }
+        .col-fixed {
+            /* custom width */
+            width:320px;
+        }
+        .col-min {
+            /* custom min width */
+            min-width:320px;
+        }
+        .col-max {
+            /* custom max width */
+            max-width:320px;
+        }
+
+        /* visual styles */
+        body {
+            padding-bottom:40px;
+        }
+        h1 {
+            margin:40px 0px 20px 0px;
+            color:#95c500;
+            font-size:28px;
+            line-height:34px;
+            text-align:center;
+        }
+        .container{
+            max-width:99%
+        }
+        [class*="col-"] {
+            padding-top:10px;
+            padding-bottom:15px;
+            /*border:1px solid #80aa00;*/
+            /*background:#d6ec94;*/
+        }
+        [class*="col-"]:before {
+            display:block;position:relative;
+            margin-bottom:8px;
+            font-family:sans-serif;
+            font-size:10px;
+            letter-spacing:1px;
+            /*color:#658600;*/
+            text-align:left;
+        }
+        .item {
+            width:100%;
+            height:100%;
+            /*border:1px solid #cecece;
+            padding:16px 8px;
+            background:#ededed;
+            background:-webkit-gradient(linear, left top, left bottom,color-stop(0%, #f4f4f4), color-stop(100%, #ededed));
+            background:-moz-linear-gradient(top, #f4f4f4 0%, #ededed 100%);
+            background:-ms-linear-gradient(top, #f4f4f4 0%, #ededed 100%);*/
+        }
+
+        /* content styles */
+        .item {
+            display:table;
+        }
+        .content {
+            display:table-cell;
+            vertical-align:middle;
+            text-align:center;
+        }
+        .content:before {
+            font-family:sans-serif;
+            font-size:12px;
+            letter-spacing:1px;
+            color:#747474;
+        }
+
+        #measure-buttons{
+            padding-bottom:10px;
+        }
+        
+        #mask-buttons{
+            padding-bottom:20px;
+        }
+        
+        .fa{
+            padding-top:3px;
+        }
+    </style>
+  </head>
+  <body>
+	<div class="container">
+	  <div class="row row-centered">
+          <div class="col-xs-5 col-centered">
+              <div class="item">
+                  <div class="content"><canvas id="myCanvas" width="400" height="400"></canvas></div>
+              </div>
+              <div class="item">
+                <div class="content clear-button" id="menu1">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear1">
+                    <i class="fa fa-refresh pull-left"></i> Clear</a>
+                </div>
+              </div>
+          </div>
+        <div class="col-xs-2 col-centered">
+              <div class="item">
+                  <div class="content" id="measure-buttons">
+                    <!-- Auditory measure buttons -->
+                    <div class="btn-group-vertical" data-toggle="buttons">
+                      <label class="btn btn-primary btn-info aud-btn active">
+                        <input type="radio" name="measure" id="AC" checked><span class="left">&bigcirc;</span><span class="mid">AC</span><span class="right">&#10005;</span>
+                      </label>
+                      <label class="btn btn-primary aud-btn">
+                        <input type="radio" name="measure" id="BC"><span class="left">&lt;</span><span class="mid">BC</span><span class="right">&gt;</span>
+                      </label>
+                      <label class="btn btn-primary aud-btn">
+                        <input type="radio" name="measure" id="MCL"><span class="left">M</span><span class="mid">MCL</span><span class="right">M</span>
+                      </label>
+                      <label class="btn btn-primary aud-btn">
+                        <input type="radio" name="measure" id="UCL"><span class="left">m</span><span class="mid">UCL</span><span class="right">m</span>
+                      </label>
+                      <label class="btn btn-primary aud-btn">
+                        <input type="radio" name="measure" id="SF"><span class="left">S</span><span class="mid">SF</span><span class="right">S</span>
+                      </label>
+                      <label class="btn btn-primary aud-btn">
+                        <input type="radio" name="measure" id="SF-A"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+              <div class="item">
+                  <div class="content" id="mask-buttons">
+                    <a class="btn btn-med btn-primary" href="#" id="mask_button">
+                    <i class="fa fa-ban pull-left"></i> Masked</a>
+                </div>
+            </div>
+          </div><!-- End Button Column-->
+          <div class="col-xs-5 col-centered">
+              <div class="item">
+                  <div class="content"><canvas id="myCanvas2" width="400" height="400"></canvas></div>
+              </div>
+              <div class="item">
+                <div class="content clear-button" id="menu2">
+                    <a class="btn btn-xs btn-primary" href="#" id="clear2">
+                    <i class="fa fa-refresh pull-left"></i> Clear</a>
+                </div>
+              </div>
+          </div>
+	  </div> <!-- End Row -->
+	</div> <!-- End Container -->
+    <script>
+        
+        //Initialize left and right audiogram boards
+        var board1 = new AudioGram("myCanvas",100,'right');
+        var board2 = new AudioGram("myCanvas2",200,'left');
+        
+        //Log some data
+        console.log(board1.get('x_labels'));
+        console.log(board1.get('y_labels'));
+        
+        //Find the active "measure" button, and send that to the 
+        //audiogram class.
+        $( ".aud-btn" ).each(function( index ) {
+            if($( this ).hasClass( "active" )){
+                board1.setMeasure($( this ).find('input').attr('id'));
+                board2.setMeasure($( this ).find('input').attr('id'));
+            }
+        });
+
+        /*
+        * When one of the auditory measure buttons is pressed, this 
+        * calls 'DisplayActiveMeasure'. I had to use 'setTimeout' 
+        * because it has to wait on the proper element to be set to
+        * 'active'. Without the timeout, it was always one click behind.
+        */
+        $( ".aud-btn" ).on( "mouseup", function() {
+            setTimeout( HighlightActiveMeasure, 0 );
+        });
+        
+        /*
+        * This function highlights the active measure button as well as
+        * setting the proper character for each board according to the 
+        * measure.
+        */
+        function HighlightActiveMeasure(){
+            $( ".aud-btn" ).each(function( index ) {
+                if($( this ).hasClass( "active" )){
+                    $( this ).addClass('btn-info');
+                    //console.log($( this ).find('input').attr('id'));
+                    //board1.setMeasure($( this ).find('input').attr('id'));
+                    //board2.setMeasure($( this ).find('input').attr('id'));
+                }else{
+                    $( this ).removeClass('btn-info');
+                }
+            });
+        }
+        
+        /*
+        * When clicking the mask button, toggle mask on and off.
+        */
+        $( "#mask_button" ).on( "click", function() {
+            //Using the .length makes this a boolean operation
+            //otherwise, it always returns true
+            if($(this).find($(".fa-ban")).length){
+                board1.setMasked(1);
+                board2.setMasked(1);
+                $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+            }else{
+                board1.setMasked(0);
+                board2.setMasked(0);
+                $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');              
+            }
+            setTimeout( HighlightActiveMeasure, 0 );
+        });
+        
+        $( ".clear-button" ).on( "click", function() {
+            if($( this ).find('a').attr('id') == 'clear1'){
+                board1.clearBoard();
+            }else{
+                board2.clearBoard();
+            }
+        });
+    </script>      
+  </body>
+</html>
