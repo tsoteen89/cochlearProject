@@ -776,7 +776,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
-    
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
     $scope.limit = 5;
     $scope.offSet = 0;
     $scope.limitArray = new Array();
@@ -1531,6 +1531,8 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
  *
  */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
+    //hmm 
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
@@ -1554,13 +1556,21 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
         patient.InactiveStatus = 10;
     }
+    $scope.showActiveTab = true;
+    $scope.showInactiveTab = false;
     $scope.showActivePatients = "10";
     $scope.showInactive = function(){
         console.log("inshowInactive()");
         $scope.showActivePatients = "!10";
+        $scope.showInactiveTab = true;
+        $scope.showActiveTab = false;
+        //$scope.$apply();
+        console.log('showActivePatients:', $scope.showActivePatients);
     };
     $scope.showActive = function(){
         $scope.showActivePatients = "10";
+        $scope.showInactiveTab = false;
+        $scope.showActiveTab = true;
     };
     
     $scope.editDescrip =false;
@@ -1582,31 +1592,48 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         return age;
     }
     
-    $scope.goToPatDir = function(patient){
+    $scope.goToPatDir = function(last, inactiveStatus){
         //console.log($location.$$path);
         if($location.$$path != "/patientDirectory"){
             $location.path('/patientDirectory/');
-            $scope.scrollTo(patient); // patient here is actually just the last name.. for now
-        }else{
+            //$scope.scrollTo(last); // patient here is actually just the last name.. for now
+            
             $timeout(function(){
-                if(patient.InactiveStatus != 10){
-                    $scope.showInactive();
+                if(inactiveStatus != 10){
+                   // $scope.$apply();
+                    $scope.scrollTo(last, true); //NOT working for pages outside of patient directory
+                    //$scope.$apply();
+                }else{
+                    $scope.scrollTo(last, false);
                 }
-
-                $timeout(function(){
-                    $scope.scrollTo(patient.Last);
-                }, 0);
-            }, 1000);    
-        }
-        
+            }, 0);    
+            
+        }else{
+                
+            if(inactiveStatus != 10){
+                $scope.scrollTo(last, true);
+            }else{
+                $scope.scrollTo(last, false);
+            }
+                 
+        } 
                 
     };
-    
-    $scope.scrollTo = function(id) {
+    /*
+        
+        */
+    $scope.scrollTo = function(id, showInactive) {
+        
+        if(showInactive){
+            $scope.showInactive();
+        }else{
+            $scope.showActive();
+        }
         $location.hash(id);
-        console.log($location.hash());
         $timeout(function(){
+            
             $anchorScroll();
+            console.log("scrolling");
             $timeout(function(){
                 scrollBy(0, -60);
             }, 0);
@@ -1639,6 +1666,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setDirAnchor(patient.Last);
         $cookieStore.put('PatientDOB', patient.DOB);
         $cookieStore.put('PatientSex', patient.Sex);
+        $cookieStore.put('PatientInactiveStatus', patient.InactiveStatus);
         
     };
     
