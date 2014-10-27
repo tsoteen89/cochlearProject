@@ -3435,7 +3435,7 @@ controllers.loginControl = function ($scope,$http,$window,persistData,getData, $
     
     $scope.userlogin = {};
     $scope.dataObj = {};
-    $scope.loggedIn;
+    $scope.loggedIn = false;
     $scope.invalidLogin = false;
     $scope.tokenTimeout = false;
     $scope.invalidToken = false;
