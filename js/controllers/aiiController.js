@@ -1155,6 +1155,13 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
     }
     
+    $scope.export = function(){
+        var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+            });
+            saveAs(blob, "Report.xls");
+    };
+    
     
 };
     
@@ -1452,6 +1459,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         WindowObject.close();
         
     }
+    
+    $scope.export = function(){
+        var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+            });
+            saveAs(blob, "Report.xls");
+    };
     
     //initialize these fields
     $scope.wordswith3=0;

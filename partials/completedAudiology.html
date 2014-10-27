@@ -9,8 +9,8 @@
     
     <div class="row">
         <div class="col-md-7 col-md-offset-2">
-            <div ng-repeat="condition in audioSummaryAnswers">
-                <div id="divtoprint">
+            <div id="divtoprint">
+                <div ng-repeat="condition in audioSummaryAnswers">
                     <completed-audiology></completed-audiology>
                 </div>
             </div>
@@ -25,6 +25,10 @@
         
             <button ng-click="PrintContent()" style="position:fixed"  class="btn btn-default">
                 Print
+            </button><br><br>
+            
+            <button ng-click="export()" style="position:fixed"  class="btn btn-default">
+                Export & Save
             </button>
         </div>
     </div>
