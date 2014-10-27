@@ -7,6 +7,7 @@ var controllers = {};
     
 controllers.reportCtrl = function($scope, getData, $cookieStore) {
     
+    $scope.careTeams=[];
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
     console.log(cookieSessionID);
@@ -15,12 +16,28 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         return angular.isArray(check);
     }
      
+    $scope.isObject = function(check){
+        return angular.isObject(check);
+    }
+    
     $scope.facilityName = $cookieStore.get('FacilityName');
     var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/'+ cookieSessionID; 
     getData.get(fullFacilityURL).success(function(data) {
         $scope.facilityReport = data.records;
     }).then(function(){
-        $scope.patientNum = Object.keys($scope.facilityReport).length;
+
+        for(var patient in $scope.facilityReport){
+            if($scope.isArray($scope.facilityReport[patient].CareTeams)){
+                    for(var careTeam in $scope.facilityReport[patient].CareTeams){
+                        $scope.careTeams.push($scope.facilityReport[patient].CareTeams[careTeam]);
+                    }
+               }
+            else{
+                $scope.careTeams.push($scope.facilityReport[patient].CareTeams);
+            }
+        }       
+    }).then(function(){
+        $scope.eventNum = Object.keys($scope.careTeams).length;
     });
     
     var questionsURL = 'http://killzombieswith.us/aii-api/v1/reports/allQuestions'; 
@@ -28,9 +45,15 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         $scope.questions = data.records;
     });
     
+    
+    
+    $scope.getCareTeamLength = function (object){
+        return Object.keys(object).length;
+    }
     $scope.export = function(){
         var blob = new Blob([document.getElementById('facReport').innerHTML], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            
             });
             saveAs(blob, "Facility_Report.xls");
     };
