@@ -10,8 +10,6 @@
     <style>
         table, th, td, tbody, tr {
            border: 1px solid #164a5e;
-            border-color: 1px solid black;
-            border-top: 1px solid black;
         }
         .bold{
             font-weight: bold;
@@ -23,14 +21,14 @@
         }
     </style>
 
-    <div class="form3D" class="container" >
+    <div class="form3D container" >
         <div class="row">
             <div class="col-md-4">
                 <img src="images/facilityLogo.png" ng-if="FacilityImage == null"/> 
                 <img src="images/facilityImages/{{FacilityImage}}" ng-if = "FacilityImage !=null"/>
             </div>
-            <div class="col-md-4">
-                <button ng-click="export()" class="btn btn-default">
+            <div class="col-md-3 col-md-offset-5">
+                <button ng-click="export()" class="btn btn-info ">
                     Export To Spreadsheet
                 </button>
             </div>
@@ -40,8 +38,10 @@
             <h1 style="text-align:center">Facility Report</h1> <br><br>
             wait for report to load... not complete
         </div>
-        <div id="report"> <!--ID used to identify exportable html-->
-            <table class="table table-condensed" >
+        <div class="row" id="facReport"> <!--ID used to identify exportable html-->
+            <table class="table table-condensed">
+                <col width="150">
+                <col ng-repeat="patient in facilityReport" width="100">
                 <caption></caption>
                 <thead>
                 <tr align="Center">
