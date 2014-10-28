@@ -1,0 +1,28 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+ <title>Audiogram Hearing Response - no border</title>
+ <defs>
+  <marker refY="50" refX="50" markerHeight="5" markerWidth="5" viewBox="0 0 100 100" se_type="reverseslash" orient="auto" markerUnits="strokeWidth" id="se_marker_end_path3306">
+   <path stroke-width="10" stroke="#007f7f" fill="#007f7f" d="m30,0l40,100"/>
+  </marker>
+  <marker refY="50" refX="50" markerHeight="5" markerWidth="5" viewBox="0 0 100 100" se_type="verticalslash" orient="auto" markerUnits="strokeWidth" id="se_marker_mid_path3306">
+   <path stroke-width="10" stroke="#007f7f" fill="#007f7f" d="m50,0l0,100"/>
+  </marker>
+  <marker refY="50" refX="50" markerHeight="5" markerWidth="5" viewBox="0 0 100 100" se_type="verticalslash" orient="auto" markerUnits="strokeWidth" id="se_marker_start_path3306">
+   <path stroke-width="10" stroke="#007f7f" fill="#007f7f" d="m50,0l0,100"/>
+  </marker>
+ </defs>
+ <metadata id="metadata12390">image/svg+xmlOther map symbolsMohamed IbrahimPublic Domainclker.comother map symbols</metadata>
+ <g>
+  <path d="m249.89087,43.24217l10.53918,0c59.11371,0.11777 93.02753,56.40528 93.263,94.49942c-0.23547,7.41864 -2.06073,13.83636 -10.42145,13.65974c-17.72229,0.17662 -11.42236,-28.3793 -26.02411,-52.57819c-6.88873,-11.9523 -29.08582,-33.56056 -54.40341,-33.38394l-9.30276,0c-13.54196,-0.17663 -39.09506,7.65418 -56.22864,33.38394c-21.37274,31.08765 -7.35974,53.87348 -25.31757,53.75571c-2.7084,0.11777 -10.65695,-0.70651 -10.53918,-13.54196c0.76538,-58.466 54.40338,-95.67696 88.43492,-95.79473" id="path3290" stroke="#00bfbf" fill-rule="nonzero" fill="#00bfbf"/>
+  <path d="m258.89801,366.54199c22.19699,0.23602 39.33099,-22.25598 39.56598,-37.741l0,-32.147c-0.23499,-65.82599 68.888,-91.73199 68.65201,-157.61699c0.23599,-61.7044 -55.522,-108.3359 -108.21799,-108.2181c-43.68701,-0.1178 -73.48001,28.026 -84.72501,42.6278c-33.7964,41.8033 -14.367,81.66429 -38.2711,81.66429c-6.8299,0 -13.4831,-3.82799 -13.6009,-17.36899c-1.0598,-65.3552 52.93099,-134.65476 137.893,-134.77249c68.534,0.11777 135.89001,54.75669 135.89001,138.54048c0,77.601 -67.94501,93.793 -67.94501,161.97401l0,29.08499c0,29.91 -26.672,64.11899 -70.47702,64.29501c-1.58997,-0.47101 -3.47398,-1.05902 -5.53499,-1.29501c-8.06599,-2.414 -13.659,-10.83401 -11.716,-19.13501c2.29601,-7.18399 8.94901,-8.94998 17.95699,-9.892l0.53003,0l0,0z" id="path3292" stroke="#00bfbf" fill-rule="nonzero" fill="#00bfbf"/>
+  <path stroke-width="0" d="m21.00308,274.57608c0.11777,-7.77188 6.24106,-13.95413 13.89523,-13.8952c7.47755,-0.05893 13.60085,6.12332 13.9541,13.8952c-0.35326,7.24207 -6.47655,13.42422 -13.9541,13.12982c-7.65417,0.2944 -13.77747,-5.88776 -13.89523,-13.12982" id="path3298" stroke="#007f7f" fill-rule="nonzero" fill="#00bfbf"/>
+  <path marker-start="url(#se_marker_start_path3306)" marker-mid="url(#se_marker_mid_path3306)" marker-end="url(#se_marker_end_path3306)" stroke-width="0" d="m105.91255,213.63634l5.06287,-21.20248c67.56953,19.57585 121.70298,78.35948 143.17142,154.30702l-18.937,7.0675c-19.37509,-68.54352 -68.34843,-122.0546 -129.29729,-140.17209" id="path3306" stroke="#007f7f" fill-rule="evenodd" fill="#00bfbf" transform="rotate(41.181427001953125 180.02969360351562,273.1211242675781) "/>
+  <title>Layer 1</title>
+  <path stroke-width="0" d="m88.79248,243.88983l3.12427,-11.51515c41.69676,10.63171 75.10217,42.5573 88.35022,83.8047l-11.68591,3.83841c-11.95627,-37.22626 -42.1774,-66.2883 -79.78857,-76.12796" stroke="#007f7f" fill-rule="evenodd" fill="#00bfbf" transform="rotate(45 134.52972412109378,276.19622802734375) " id="svg_1"/>
+  <path stroke-width="0" d="m62.76676,256.47351l2.16968,-7.56454c28.95697,6.98422 52.15589,27.95673 61.3562,55.05301l-8.11546,2.52155c-8.30324,-24.45471 -29.29076,-43.54608 -55.41042,-50.01001" stroke="#007f7f" fill-rule="evenodd" fill="#00bfbf" transform="rotate(49.39208984375 94.52970123291013,277.69622802734375) " id="svg_2"/>
+  <path stroke-width="0" d="m43.46487,260.15088l1.3395,-5.37862c17.87646,4.96596 32.19826,19.87788 37.87807,39.14406l-5.01006,1.79282c-5.12595,-17.38785 -18.08261,-30.96231 -34.2075,-35.55826" stroke="#007f7f" fill-rule="evenodd" fill="#00bfbf" transform="rotate(43.34162902832031 63.07365417480471,275.2406921386719) " id="svg_3"/>
+  <path d="m62.5,65c0,2 0,9 0,16c0,4 2,11 3,19l1,5l1,3l0,1" id="svg_4" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#007f7f" fill="none"/>
+  <path d="m54.5,56c0,1 0,4 0,13c0,10 1.28472,15.92484 3,23c1.20139,4.95547 1.48626,8.82375 2,11c0.22975,0.97325 0,2 0,3c0,5 0,6 0,7c0,2 0,3 0,6l1,2l0,2" id="svg_5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#007f7f" fill="none"/>
+  <path d="m66.5,76c0,2 -0.49874,4.94672 -1,12c-0.42533,5.98491 -1.49903,14.95332 -2,23c-0.68351,10.97874 0,20 0,25c0,2 0,6 0,7l0,4l0,0l1,0" id="svg_6" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#007f7f" fill="none"/>
+ </g>
+</svg>

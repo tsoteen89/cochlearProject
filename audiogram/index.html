@@ -13,9 +13,9 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
 <!--      http://www.bootstraptoggle.com/-->
-    <link href="./css/bootstrap-toggle.css" rel="stylesheet">
-    <script src="./js/bootstrap-toggle.js"></script>
-    <script src="./audiogram.js"></script>  
+    <!-- <link href="./css/bootstrap-toggle.css" rel="stylesheet">-->
+    <!-- <script src="./js/bootstrap-toggle.js"></script>-->
+    <script src="js/audiogram.js"></script>  
     <style>
         /* scheme 1 */
         /* turquiose #64D4F9 */
@@ -111,7 +111,6 @@
         
         .border{
             border-color: #15C2D2 #15C2D2 HSL(185, 82%, 45%);
-            border-width: 2px;
             font-weight:bold;
         }
         
@@ -145,6 +144,7 @@
         #mask-button{
             margin-top:30px;
             border-radius:5px;
+            border-width: 2px;
         }
         
         #mask-button .fa{
@@ -159,6 +159,7 @@
             text-decoration: none;
         }
         /*bad programming*/
+        
         #no-response-button .fa{
             font-size:18px;
         }
@@ -265,7 +266,7 @@
                         <button type="button" class="btn btn-default" data-toggle="tooltip" title="Save">
                             <i class="fa fa-save"></i>
                         </button>
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Print">
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Print" id="printAudiogram">
                             <i class="fa fa-print"></i>
                         </button>
                     </div>
@@ -321,6 +322,11 @@
                 <div class="btn-toolbar">               
                     <button type="button" class="btn mea-btn" id="mask-button">
                         <a href="#" ><i class="fa fa-ban pull-left"></i> Masked</a>
+                    </button>
+                </div>
+                <div class="btn-toolbar">               
+                    <button type="button" class="btn mea-btn" id="no-response-button">
+                        <a href="#" ><i class="fa fa-check pull-left"></i> Response</a>
                     </button>
                 </div>
                 <!--
@@ -413,7 +419,20 @@
                     $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
                     $('#ACR').html('<i class="fa fa-circle-o"></i>');
                     $('#ACL').html('&#10005;');
-                }                   
+                }
+            }else if(clicked == 'no-response-button'){
+                if($(this).find($(".fa-ban")).length){
+                    $( this ).addClass('border');
+                    $( this ).blur();
+                    Stage['right'].setNoResponse(0);
+                    Stage['left'].setNoResponse(0);
+                    $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');                   
+                }else{
+                    $( this ).removeClass('border');
+                    Stage['right'].setNoResponse(1);
+                    Stage['left'].setNoResponse(1);
+                    $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');                    
+                }
             }else{
                 setTimeout( function (){
                     $( ".mea-btn" ).each(function( index ) {
@@ -453,7 +472,10 @@
             }
             $(event.target).closest('button').blur();
         });
-        
+        $('#printAudiogram').on('click', function(event) {
+            Stage['right'].getAudiogram();
+            Stage['left'].getAudiogram();            
+        });
         $('#mask-switch').on('change',function(event) {
             
             var icon = $('#mask-switch-icon').find('i');
@@ -472,6 +494,7 @@
             //$(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
             //$('#mask-switch-icon').html('<i class="fa fa-ban pull-left"></i>');
         });
+    
         console.log('hello');
     });
     </script>      
