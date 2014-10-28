@@ -3,20 +3,33 @@
     <div class="row">
         <div class="col-md-offset-4">
             <label style="font-size:2vw; color:#4B92AE" >{{phaseName}}</label>
-            <hr>
         </div>
-        
+        <hr>
     </div>
     
     <div class="row">
         <div class="col-md-7 col-md-offset-2">
-            <div ng-repeat="condition in audioSummaryAnswers">
-                <completed-audiology></completed-audiology>
-
+            <div id="divtoprint">
+                <div ng-repeat="condition in audioSummaryAnswers">
+                    <completed-audiology></completed-audiology>
+                </div>
             </div>
         </div>
-    <div class="col-md-2" ng-controller="apiPatientsController">
-        <a href="" style="position:fixed" ng-click="goToPatDir(dirAnchor)"><button class="btn btn-primary">Patient Directory</button></a>
+        
+        <div class="col-md-2" >
+            <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
+                <button class="btn btn-primary">
+                    Patient Directory
+                </button>
+            </a> <br> <br>
+        
+            <button ng-click="PrintContent()" style="position:fixed"  class="btn btn-default">
+                Print
+            </button><br><br>
+            
+            <button ng-click="export()" style="position:fixed"  class="btn btn-default">
+                Export & Save
+            </button>
+        </div>
     </div>
-
 </div>
