@@ -19,6 +19,7 @@ var AudioGram = function(stage,audiogram_id,side) {
                              "textShadowColor": "#222222",
                              "strokeColor": "#000000"
                           },
+        dirtyBit        : false,                //Flag used to not add a measure if another one was clicked on
         stage           : stage,                //Element id for kinetic canvas  
         margins         : {
                             "top":65,
@@ -233,6 +234,9 @@ var AudioGram = function(stage,audiogram_id,side) {
             if(snap.error){
                 console.log(snap.type);
                 return;
+            }else{
+                console.log(snap.x+','+snap.y);
+                this.checkCollision(snap);
             }
             
             var x = snap.x;
@@ -328,7 +332,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             //Push latest measure onto stack
             stack.push(shape);
             
-            console.log(shape);
+            //console.log(shape);
         
             this.drawConnection();
             
@@ -338,8 +342,23 @@ var AudioGram = function(stage,audiogram_id,side) {
             //Add layer to stage
             stage.add(layers['measures']);
             this.objectId++;
-            console.log(stack);
+            //console.log(stack);
              
+        },
+        checkCollision : function(snap){
+            var x = snap.x;
+            var y = snap.y;
+            var attr = null;
+            
+            for(var i=0;i<stack.length;i++){
+                attr = stack[i].getAttrs();
+                if(x == attr.center.x){
+                    console.log("Hit:"+x+','+y+' '+attr.center.x+','+attr.center.y);
+                    //return an object reference?
+                }else{
+                    console.log("Miss:"+x+','+y+' '+attr.center.x+','+attr.center.y);
+                }
+            }
         },
         /**
         * Connect the measures with a line, just the air conduction measures
@@ -392,7 +411,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         getAudiogram: function(){
             var audiogram = {};
             for(var i=0;i<stack.length;i++){
-                console.log(stack[i].getAttrs());
+                //console.log(stack[i].getAttrs());
             }
         },
         /**
@@ -401,7 +420,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {null} 
         */        
         getDecibels: function(y){
-            console.log('getDecibels '+this.side);
+            //console.log('getDecibels '+this.side);
             var d;
             var r;
             
@@ -414,7 +433,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             if(r > .5)
                 d = d + 1;
-            console.log(this.y_values[d-1]);
+            //console.log(this.y_values[d-1]);
             return this.y_values[d-1];
         },
         /**
@@ -569,7 +588,7 @@ var AudioGram = function(stage,audiogram_id,side) {
                 stage.add(layers['error']);
                 setTimeout(
                     function(){
-                        console.log("doing it");
+                        //console.log("doing it");
                         tooltip.remove();
                         layers['error'].draw();
                     }, 
@@ -597,6 +616,11 @@ var AudioGram = function(stage,audiogram_id,side) {
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
+        if(private.dirtyBit){
+            private.dirtyBit = false;
+            return;
+        }
+
         var shape = evt.target;
         var name = null;
         
@@ -618,9 +642,11 @@ var AudioGram = function(stage,audiogram_id,side) {
     });
     
     layers['measures'].on('click', function(evt) {
+        private.dirtyBit = true;
         // get the shape that was clicked on
         var shape = evt.target;
-        alert('you clicked on \"' + shape.getName() + '\"');
+        //alert('you clicked on \"' + shape.getName() + '\"');
+        //array.splice(5, 1);
     });
 
     // Expose public API
@@ -631,7 +657,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             }
         },
         clear: function(){
-            console.log("hello");
             private.clearStage();
         },
         getAudiogram: function(){

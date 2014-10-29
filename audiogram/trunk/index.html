@@ -249,11 +249,10 @@
     span#noresponse-switch:after {
         content: "  Response";
     }
-    .tool{
-        padding: 2px 5px 2px 5px;
-        margin-top: -25px;
-        margin-bottom: 10px;
-        width:75px;
+        /*for three grouped button*/
+    #radioBtn .notActive{
+        color: #3276b1;
+        background-color: #fff;
     }
     </style>
   </head>
@@ -266,10 +265,10 @@
             </div>
             <div class="col-md-2">
                     <div class="btn-group" style="float: right">
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Search" id="searchAudiogram">
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Search">
                             <i class="fa fa-search"></i>
                         </button>
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Save" id="saveAudiogram">
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Save">
                             <i class="fa fa-save"></i>
                         </button>
                         <button type="button" class="btn btn-default" data-toggle="tooltip" title="Print" id="printAudiogram">
@@ -325,6 +324,32 @@
                         <a href="#"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span></a>
                     </button>
                  </div>
+                <div class="btn-toolbar">               
+                    <button type="button" class="btn mea-btn" id="mask-button">
+                        <a href="#" ><i class="fa fa-ban pull-left"></i> Masked</a>
+                    </button>
+                </div>
+                <div class="btn-toolbar">               
+                    <button type="button" class="btn mea-btn" id="no-response-button">
+                        <a href="#" ><i class="fa fa-check pull-left"></i> Response</a>
+                    </button>
+                </div>
+                <!--
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="mask-switch" >
+                    <label class="onoffswitch-label" for="mask-switch">
+                        <span class="onoffswitch-inner" id="mask-switch"></span>
+                        <span class="onoffswitch-switch" id="mask-switch-icon"><i class="fa fa-plus-square-o"></i></span>
+                    </label>
+                </div>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="noresponse-switch" >
+                    <label class="onoffswitch-label" for="noresponse-switch">
+                        <span class="onoffswitch-inner" id="noresponse-switch"></span>
+                        <span class="onoffswitch-switch"><i class="fa fa-plus-square-o"></i></span>
+                    </label>
+                </div>
+                -->
             </div>
         </div><!-- End Button Column-->
         <div class="col-md-5" id="right_column">
@@ -332,28 +357,56 @@
         </div>
         </div> <!-- End Row -->
         <div class="row">
-            <div class="col-xs-4" style="text-align:center">
+            <div class="col-md-4">
                 <div class="audiogram-menu" data="right">
                     <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
                     <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
                     <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
                 </div>
             </div>
-            <div class="col-xs-4" style="text-align:center">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-default tool"  id="mask-tool">
-                        <img src="images/masked_volume_off.svg" width="20" id="mask-tool-svg"><br>
-                        <!--<span>Masked<i class="fa fa-ban pull-right"></i></span>-->
-                        <span>Masked</span>
-                    </button>
-                    <button type="button" class="btn btn-default tool" id="response-tool">
-                        <img src="images/hear_response.svg" width="20" id="response-tool-svg"><br>
-                        <!--<span>Response <i class="fa fa-check pull-right"></i></span>-->
-                        <span>Response</span>                   
-                    </button>
+            <div class="col-md-4">
+                    <div class="btn-group" style="float: right">
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Search">
+                            <img src="images/masked_volume_off.svg" width="20"><br>
+                            <span>Masked<i class="fa fa-ban pull-right"></i></span>
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" title="Save">
+                            <img src="images/hear_response.svg" width="20"><br>
+                            <span>Response <i class="fa fa-check pull-right"></i></span>
+                        </button>
                     </div>
+
             </div>
-            <div class="col-xs-4" style="text-align:left">            
+<!--
+                    <div class="form-group">
+                        <div class="col-sm-7 col-md-7">
+                            <div class="input-group">
+                                <div id="radioBtn" class="btn-group">
+                                    <a class="btn btn-primary btn-sm active" data-toggle="fun" data-title="Y">YES</a>
+                                    <a class="btn btn-primary btn-sm">Response</a>
+                                    <a class="btn btn-primary btn-sm notActive" data-toggle="fun" data-title="N">NO</a>
+                                </div>
+                                <input type="hidden" name="fun" id="fun">
+                            </div>
+                        </div>
+                    </div>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="mask-switch" >
+                    <label class="onoffswitch-label" for="mask-switch">
+                        <span class="onoffswitch-inner" id="mask-switch"></span>
+                        <span class="onoffswitch-switch" id="mask-switch-icon"><i class="fa fa-plus-square-o"></i></span>
+                    </label>
+                </div>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="noresponse-switch" >
+                    <label class="onoffswitch-label" for="noresponse-switch">
+                        <span class="onoffswitch-inner" id="noresponse-switch"></span>
+                        <span class="onoffswitch-switch"><i class="fa fa-plus-square-o"></i></span>
+                    </label>
+                </div>
+-->
+
+            <div class="col-md-4">            
                 <div class="audiogram-menu" data="left">
                     <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
                     <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
@@ -362,7 +415,6 @@
             </div>
         </div>
     </div> <!-- End Container -->
-    <div id="temp1"></div>
     <script>
     $(function() {
         //combine stuff later        
@@ -390,47 +442,43 @@
         * measure.
         * It's a cluster Fart, I will admit.
         */
-        $("#mask-tool").on( "click", function(event) {
-            var clicked = $( this )[0].id;
-             if($('#mask-tool-svg').attr("src") == "images/masked_volume_off.svg" ){
-                //$( this ).addClass('border');
-                $( this ).blur();
-                Stage['right'].setMasked(1);
-                Stage['left'].setMasked(1);
-                $('#BCL').html('&nbsp;&nbsp;]');
-                $('#BCR').html('[&nbsp;&nbsp;');        
-                $('#ACL').html('<i class="fa fa-square-o"></i>');
-                $('#ACR').html('&#x25b3;');
-                $('#mask-tool-svg').attr("src","images/masked_volume.svg");
-            }else{
-                //$( this ).removeClass('border');
-                Stage['right'].setMasked(0);
-                Stage['left'].setMasked(0);
-                $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');  
-                $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
-                $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
-                $('#ACR').html('<i class="fa fa-circle-o"></i>');
-                $('#ACL').html('&#10005;');
-                $('#mask-tool-svg').attr("src","images/masked_volume_off.svg");
-            }
-        });
-        $("#response-tool").on( "click", function(event) {
-            var clicked = $( this )[0].id;
-             if($('#response-tool-svg').attr("src") == "images/hear_response_no.svg" ){
-                //$( this ).addClass('border');
-                $( this ).blur();
-                Stage['right'].setNoResponse(1);
-                Stage['left'].setNoResponse(1);
-                $('#response-tool-svg').attr("src","images/hear_response.svg");
-            }else{
-                //$( this ).removeClass('border');
-                Stage['right'].setNoResponse(0);
-                Stage['left'].setNoResponse(0);
-                $('#response-tool-svg').attr("src","images/hear_response_no.svg" );
-            }
-        });
         $( ".mea-btn" ).on( "click", function(event) {
             var clicked = $( this )[0].id;
+            if(clicked == 'mask-button'){
+                 if($(this).find($(".fa-ban")).length){
+                    $( this ).addClass('border');
+                    $( this ).blur();
+                    Stage['right'].setMasked(1);
+                    Stage['left'].setMasked(1);
+                    $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+                    $('#BCL').html('&nbsp;&nbsp;]');
+                    $('#BCR').html('[&nbsp;&nbsp;');        
+                    $('#ACL').html('<i class="fa fa-square-o"></i>');
+                    $('#ACR').html('&#x25b3;');
+                }else{
+                    $( this ).removeClass('border');
+                    Stage['right'].setMasked(0);
+                    Stage['left'].setMasked(0);
+                    $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');  
+                    $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
+                    $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
+                    $('#ACR').html('<i class="fa fa-circle-o"></i>');
+                    $('#ACL').html('&#10005;');
+                }
+            }else if(clicked == 'no-response-button'){
+                if($(this).find($(".fa-ban")).length){
+                    $( this ).addClass('border');
+                    $( this ).blur();
+                    Stage['right'].setNoResponse(0);
+                    Stage['left'].setNoResponse(0);
+                    $(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');                   
+                }else{
+                    $( this ).removeClass('border');
+                    Stage['right'].setNoResponse(1);
+                    Stage['left'].setNoResponse(1);
+                    $(this).find($(".fa-check")).removeClass('fa-check').addClass('fa-ban');                    
+                }
+            }else{
                 setTimeout( function (){
                     $( ".mea-btn" ).each(function( index ) {
                         if($( this )[0].id != 'mask-button'){
@@ -451,6 +499,7 @@
                         });
                     }, 0 );
                 }, 0 );
+            }
         });
         
         $('.audiogram-menu').on('click', function(event) {
@@ -469,46 +518,36 @@
             $(event.target).closest('button').blur();
         });
         $('#printAudiogram').on('click', function(event) {
-            //Stage['right'].getAudiogram();
-            //Stage['left'].getAudiogram();
-            
-            var ImgData = {};   //Json object image data to be posted back and combined.
-            ImgData['background'] = null;
-            ImgData['right'] = {};
-            ImgData['left'] = {};
-            var canvass = null //Will hold the multiple layers of canvas' that are created
-                
-            canvass = $("#audiogram_right").find(".kineticjs-content").children();
-            console.log(canvass.length);
-            ImgData['background'] = canvass[0].toDataURL("image/png");
-            ImgData['right']['line'] = canvass[1].toDataURL("image/png");
-            ImgData['right']['measures'] = canvass[2].toDataURL("image/png");  
-            
-            canvass = $("#audiogram_left").find(".kineticjs-content").children();
-            ImgData['left']['line'] = canvass[1].toDataURL("image/png");
-            ImgData['left']['measures'] = canvass[2].toDataURL("image/png");            
-            console.log(ImgData);
-            //var img = ImgData['right']['line'].toDataURL("image/png");
-            //$("#temp1").html('<img src="'+img+'"/>');
-
-            $.post( "class.audiogram.php", ImgData)
-                .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
-                });
+            Stage['right'].getAudiogram();
+            Stage['left'].getAudiogram();            
         });
-        $('#saveAudiogram').on('click', function(event) {
-             $.post( "class.audiogram.php", SaveData)
-                .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
-                });           
-        });
-        $('#searchAudiogram').on('click', function(event) {
-            $.post( "class.audiogram.php", searchData)
-                .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
-                });           
+        $('#mask-switch').on('change',function(event) {
+            
+            var icon = $('#mask-switch-icon').find('i');
+            
+            if( icon.is('.fa-plus-square-o')) {
+                icon.removeClass('fa-plus-square-o').addClass('fa-ban');
+                $('.onoffswitch-label').css("border:2px solid #15C2D2");
+            }else{
+                icon.removeClass('fa-ban').addClass('fa-plus-square-o');
+                $('.onoffswitch-label').css("border:2px solid #999999");
+            }
+            
+            //console.log(icon.hasClass('fa'));
+            //console.log($( "i:first-of-type" ).addClass( "fot" );
+            //console.log($('#mask-switch-icon')[0].hasClass("fa-plus-square-o"));
+            //$(this).find($(".fa-ban")).removeClass('fa-ban').addClass('fa-check');
+            //$('#mask-switch-icon').html('<i class="fa fa-ban pull-left"></i>');
         });
     
+        $('#radioBtn a').on('click', function(){
+            var sel = $(this).data('title');
+            var tog = $(this).data('toggle');
+            $('#'+tog).prop('value', sel);
+
+            $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+            $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+        });
     });
     </script>      
   </body>
