@@ -417,16 +417,15 @@
         $("#response-tool").on( "click", function(event) {
             var clicked = $( this )[0].id;
              if($('#response-tool-svg').attr("src") == "images/hear_response_no.svg" ){
-                //$( this ).addClass('border');
-                $( this ).blur();
-                Stage['right'].setNoResponse(1);
-                Stage['left'].setNoResponse(1);
-                $('#response-tool-svg').attr("src","images/hear_response.svg");
-            }else{
-                //$( this ).removeClass('border');
+                 console.log("noresponseimage");
                 Stage['right'].setNoResponse(0);
                 Stage['left'].setNoResponse(0);
-                $('#response-tool-svg').attr("src","images/hear_response_no.svg" );
+                $('#response-tool-svg').attr("src","images/hear_response.svg");
+            }else{
+                 console.log("responseimage");
+                Stage['right'].setNoResponse(1);
+                Stage['left'].setNoResponse(1);
+                $('#response-tool-svg').attr("src","images/hear_response_no.svg");
             }
         });
         $( ".mea-btn" ).on( "click", function(event) {

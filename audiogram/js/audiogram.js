@@ -34,7 +34,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         graph_size      : {"width":null,"height":null},
         currentMeasure  : 'AC',                 //AC, BC, MCL, etc.
         masked          : 'unmasked',           //Masked = masked Unmasked = unmasked :)
-        no_response     : 'response',           //response = patient could hear , no_response = patient couldn't hear
+        no_response     : 0,             //true = patient could hear , false = patient couldn't hear
         x_labels        : [],
         y_labels        : [],
         x_values        : [],
@@ -115,6 +115,32 @@ var AudioGram = function(stage,audiogram_id,side) {
                 this.y_values.push({"value":i,"y":y});
             }            
             this.addBackgroundLayer();
+        },
+        arrow : function(x1, y1, x2, y2, w) {
+            
+            var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
+            var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+            
+            x2 = x1+pl;
+            y2 = y1;
+            
+
+            var poly = new Kinetic.Line({
+                points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
+                fill: this.colors['strokeColor'],
+                stroke: this.colors['strokeColor'],
+                strokeWidth: 2,
+                closed: true,
+                rotation: pr,
+                x: x1,
+                y: y1,
+                shadowColor: 'black',
+                shadowBlur: 10,
+                shadowOffset: {x:2,y:2},
+                shadowOpacity: 0.5
+              });
+
+            return poly;
         },
         addBackgroundLayer : function(){
             //Add horizontal lines
@@ -228,7 +254,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {null} 
         */ 
         addMeasure: function(){
-    
+            console.log(private.no_response);
             var snap = this.snapClick();
             
             if(snap.error){
@@ -236,7 +262,8 @@ var AudioGram = function(stage,audiogram_id,side) {
                 return;
             }else{
                 console.log(snap.x+','+snap.y);
-                this.checkCollision(snap);
+                var snapped = this.snapMeasure(snap);
+
             }
             
             var x = snap.x;
@@ -244,6 +271,9 @@ var AudioGram = function(stage,audiogram_id,side) {
             var d = this.getDecibels(y);
             var f = this.getFrequency(x)
             var fontSize = 34;
+            
+            var arrow = null;   //holds arrow if needed (for a no response)
+            var group = null;   //group shape with arrow if needed
 
             //Goes and grabs the "shape" to be displayed based on these params
             var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);  
@@ -327,10 +357,55 @@ var AudioGram = function(stage,audiogram_id,side) {
                     var shape = new Kinetic.Line(commonStyle);
                 }
             }
+            
+            if(this.no_response == 1){
+                var x1 = x+5;
+                var x2 = x+15;
+                var y1 = y+5;
+                var y2 = y+15;
+                var w = 2;
+                
+                var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
+                var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+
+                x2 = x1+pl;
+                y2 = y1;
+
+
+                var arrow = new Kinetic.Line({
+                    points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
+                    fill: this.colors['strokeColor'],
+                    stroke: this.colors['strokeColor'],
+                    strokeWidth: 2,
+                    closed: true,
+                    rotation: pr,
+                    x: x1,
+                    y: y1,
+                    shadowColor: 'black',
+                    shadowBlur: 10,
+                    shadowOffset: {x:2,y:2},
+                    shadowOpacity: 0.5,
+                    center: {'x':x,'y':y},
+                    audioValues: {'frequency':f.value,'decibels':d.value},
+                    measure: this.currentMeasure
+                  });
+                
+                console.log(arrow);
+                group = new Kinetic.Group({
+                    x: x,
+                    y: y,
+                });
+                group.add(arrow);
+                group.add(shape);
+                //Push latest measure onto stack
+                stack.push(arrow);
+                stack.push(shape);
+            }else{
+                //Push latest measure onto stack
+                stack.push(shape);
+            }
 
             
-            //Push latest measure onto stack
-            stack.push(shape);
             
             //console.log(shape);
         
@@ -339,26 +414,39 @@ var AudioGram = function(stage,audiogram_id,side) {
             //Push measure into the "layer"
             layers['measures'].add(stack[stack.length-1]);
             
+            //hack!!!!
+            if(this.no_response == 1)        
+                layers['measures'].add(stack[stack.length-2]);
+            
             //Add layer to stage
             stage.add(layers['measures']);
             this.objectId++;
-            //console.log(stack);
+            console.log(stack);
              
         },
-        checkCollision : function(snap){
+        /**
+        * Checks to see if a measure is being added to the same frequency. 
+        * If it is, it removes the existing at that x, so the new one will
+        * appear to "snap" to the correct location.
+        * @param {coord} - x,y coords
+        * @return {bool} - returns true for remove, false for not
+        */ 
+        snapMeasure : function(snap){
             var x = snap.x;
             var y = snap.y;
             var attr = null;
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
+                //console.log(stack);
                 if(x == attr.center.x){
-                    console.log("Hit:"+x+','+y+' '+attr.center.x+','+attr.center.y);
-                    //return an object reference?
-                }else{
-                    console.log("Miss:"+x+','+y+' '+attr.center.x+','+attr.center.y);
+                    stage.remove(layers['measures']);
+                    stack.splice(i,1);
+                    //console.log(stack);
+                    return true
                 }
             }
+            return false;           
         },
         /**
         * Connect the measures with a line, just the air conduction measures
@@ -442,7 +530,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {null} 
         */ 
         getFrequency: function(x){
-            console.log('getFrequency '+this.side);
+            //console.log('getFrequency '+this.side);
            
             var d;
             var r;
@@ -493,12 +581,9 @@ var AudioGram = function(stage,audiogram_id,side) {
                 this.masked = 'unmasked';
             }
         },
-        setNoResponse: function(response){
-            if(response){
-                this.response = 'response';
-            }else{
-                this.response = 'no_response';
-            }            
+        setNoResponse: function(no_response){
+            this.no_response = no_response;
+            //console.log("response: "+this.no_response);
         },
         /**
         * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
@@ -509,7 +594,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {object} {x,y}
         */ 
         snapClick: function(){
-            console.log('snapClick '+this.side);
+            //console.log('snapClick '+this.side);
 
             var i;  //index
             var d;  //difference
