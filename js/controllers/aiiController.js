@@ -1908,11 +1908,19 @@ controllers.patientFormController = function($scope, $http, postData,dateFilter,
     
     var sessionID = $cookieStore.get('SessionID');
     
+    $scope.formatDate = function() {
+        $scope.formData.DOB = $scope.formData.dob.toISOString().slice(0,10);
+    };
+    
     // Post function to add a new Patient to the system
     $scope.addPatient = function() {
-        $scope.formData.DOB = $scope.formData.dob.toISOString().slice(0,10);
-        postData.post('http://killzombieswith.us/aii-api/v1/patients/' + sessionID,$scope.formData);
-        $location.path('/patientDirectory/');
+        postData.post('http://killzombieswith.us/aii-api/v1/patients/' + sessionID,$scope.formData).success(function(data) {
+            alert(data.records);
+            
+            if(data.records == "Successfully added a patient"){
+                $location.path('/patientDirectory/');
+            };
+        });
     };
     
 }
