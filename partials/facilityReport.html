@@ -1,36 +1,33 @@
+
+<style>
+    table, th, td, tbody, tr {
+       border: 1px solid #164a5e;
+    }
+    .bold{
+        font-weight: bold;
+        background-color: #97afd4;
+    }
+    .plain{
+        font-weight:normal;
+        background-color:#cae5f0
+    }
+</style>
+<center>
 <div ng-controller="reportCtrl">
 
-    <div class="row">
-        <div class="col-md-offset-5">
-            <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
-        </div>
-        
-    </div>
+    <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
     <hr>
-    <style>
-        table, th, td, tbody, tr {
-           border: 1px solid #164a5e;
-        }
-        .bold{
-            font-weight: bold;
-            background-color: #97afd4;
-        }
-        .plain{
-            font-weight:normal;
-            background-color:#cae5f0
-        }
-    </style>
-        <div>
+
+    <div>
         <div class ="row">
-            <div class="col-md-3 col-md-offset-5">
-                Please wait for report to load..
-                <button ng-click="export()" class="btn btn-info ">
-                    Export To Spreadsheet
-                </button> <br> <br>
-            </div>
+            
+            {{loadMessage}}
+            <button ng-click="export()" class="btn btn-info ">
+                Export To Spreadsheet
+            </button> <br> <br>
         </div>
             
-        <div id="facReport" class="row"> <!--ID used to identify exportable html-->
+        <div id="facReport"> <!--ID used to identify exportable html-->
         
             <table class="table table-condensed form3D">
                 <caption></caption>
@@ -57,33 +54,15 @@
                         <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td>
                         <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
                             <span ng-if="!isArray(careTeams[$index].Data[key][questionNumb])
-                                && !isObject(careTeams[$index].Data[key][questionNumb])"> {{careTeams[$index].Data[key][questionNumb]}} </span>
-                            <span ng-if="isObject(careTeams[$index].Data[key][questionNumb]) && questionNumb != 085" 
-                                  ng-repeat="answer in careTeams[$index].Data[key][questionNumb]"> {{answer}},</span>
+                                && !isObject(careTeams[$index].Data[key][questionNumb])"> {{careTeams[$index].Data[key][questionNumb]}} <span ng-if="$last" >{{clearMessage()}}  
+                                </span> </span>
+                            <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb != 085" 
+                                  ng-repeat="answer in careTeams[$parent.$index].Data[key][questionNumb] track by $index" > {{answer}},</span>
                             <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb == 085"
                                   ng-repeat="surgery in careTeams[$parent.$index].Data[key][questionNumb] track by $index"> <span >{{$index +1}}. </span> 
                                 <span ng-repeat="(surgeryInfo, value) in surgery track by $index"> <b> {{surgeryInfo}}</b>: <br>  {{value}} <br> </span> <hr>
                             </span>
                         </td> 
-
-<!-- && !isArray(careTeams[$index].Data[key][questionNumb])-->
-                        <!--<td ng-repeat="count in careTeams" ng-if="questionNumb != 0 && isArray(careTeams[$index].Data[key][questionNumb])">
-                            <span ng-repeat="answer in careTeams[$index].Data[key][questionNumb]"> {{answer}},</span></td>-->
-
-                        <!--
-                        <td ng-repeat="count in careTeams"  ng-if="!isArray(careTeams[$index].Data[key][questionNumb])
-                                && !isObject(careTeams[$index].Data[key][questionNumb]) && questionNumb != 0" >                                   
-                            {{careTeams[$index].Data[key][questionNumb]}}
-                        </td>
-                        <!--
-                        <td ng-repeat="count in careTeams" ng-if="isArray(careTeams[$index].Data[key][questionNumb]) && questionNumb != 0">
-                            <span ng-repeat="answer in careTeams[$index].Data[key][questionNumb]"> {{answer}},</span>
-                        </td>
-                        <td ng-repeat="count in careTeams" ng-if="isObject(careTeams[$index].Data[key][questionNumb]) && questionNumb != 0">
-                            <span ng-repeat="surgery in careTeams[$index].Data[key][questionNumb]">{{$index +1}}.)  
-                                <p ng-repeat="(surgeryInfo, value) in surgery"> <b> {{surgeryInfo}}</b> : {{value}}</p> 
-                            </span>
-                        </td>-->
                     </tr>
                 </tbody>
             </table>
@@ -92,34 +71,4 @@
     
 
 </div>
-
-<!--
-<table class="table table-condensed" style="width=10%; float:left">
-            <caption></caption>
-            <thead>
-            <tr align="Center">
-              <td colspan="1" style="background-color:#cae5f0"><h4><b>Data Element</b></h4></td>
-            </tr>
-            </thead>
-            <tbody ng-repeat="(key, value) in questions">
-                <tr ng-repeat="(questionNumb, val) in value">
-                    <td style="background-color:#cae5f0" ng-class="{bold:$first, plain:!$first}">{{val}}</td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-condensed" ng-repeat="patient in facilityReport" style="width=10%; float:left">
-            <caption></caption>
-            <thead>
-            <tr align="Center">
-              <td colspan="1" style="background-color:#cae5f0" ><b>{{patient.First}} {{patient.Last}}</b></h3></td>
-            </tr>
-            </thead>
-            <tbody ng-repeat="(key, value) in questions">
-                <tr ng-repeat="(questionNumb, val) in value">
-                   <!-- <td> phase = {{key}} QuestionNumb = {{questionNumb}} value = {{val}} answer == {{patient.CareTeams[0].Data[key][questionNumb]}} </td>-->
-<!--
-                    <td ng-if="!$first">{{patient.CareTeams[0].Data[key][questionNumb]}}</td>
-                </tr>
-            </tbody>
-        </table>
--->
+</center>
