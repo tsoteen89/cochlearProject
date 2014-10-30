@@ -127,3 +127,13 @@ myApp.directive('notificationBadge', function($timeout){
     }
 });
 
+myApp.directive('myRepeatDirective', function() {
+  return function(scope, element, attrs) {
+    if (scope.$last){
+        console.log("last");
+        //scope.loadMessage ="";
+        //scope.$apply();
+    }
+  };
+})
+

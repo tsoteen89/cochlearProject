@@ -66,6 +66,15 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         
     };
     
+    $scope.loadMessage = "Please wait for report to load...";
+    
+    $scope.clearMessage = function(){
+        
+        $scope.loadMessage =" ";
+        
+    };
+    
+    
     
     
 };
