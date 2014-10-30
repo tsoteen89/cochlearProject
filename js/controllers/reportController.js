@@ -54,9 +54,9 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         
         if (navigator.userAgent.indexOf('Mac OS X') != -1) {
             var blob = new Blob([document.getElementById('facReport').innerHTML], {
-                type: "application/x-iwork-pages-sffpages"
+                type: "application/x-iwork-numbers-sffnumbers"
             });
-            saveAs(blob, "Facility_Report.pages");
+            saveAs(blob, "Facility_Report.numbers");
         } else {
             var blob = new Blob([document.getElementById('facReport').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
