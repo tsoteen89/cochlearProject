@@ -51,12 +51,29 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         return Object.keys(object).length;
     }
     $scope.export = function(){
-        var blob = new Blob([document.getElementById('facReport').innerHTML], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            
+        
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+            var blob = new Blob([document.getElementById('facReport').innerHTML], {
+                type: "application/x-iwork-numbers-sffnumbers"
+            });
+            saveAs(blob, "Facility_Report.numbers");
+        } else {
+            var blob = new Blob([document.getElementById('facReport').innerHTML], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             });
             saveAs(blob, "Facility_Report.xls");
+        }
+        
     };
+    
+    $scope.loadMessage = "Please wait for report to load...";
+    
+    $scope.clearMessage = function(){
+        
+        $scope.loadMessage =" ";
+        
+    };
+    
     
     
     

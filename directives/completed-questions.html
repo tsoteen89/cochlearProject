@@ -30,7 +30,7 @@
           <td width="60%"><b>{{answer.Question}}</b></td>
           <td width="40%"ng-if="!isArray(answer.Answers) && !isObject(answer.Answers)" >{{answer.Answers}}</td>
             <td width="40%"ng-if="isArray(answer.Answers)"><span ng-repeat="answer in answer.Answers"> {{answer}},</span></td>
-            <td width="40%"ng-if="isObject(answer.Answers) && !isArray(answer.Answers)"><span ng-repeat="surgery in answer.Answers">{{$index +1}}.)  <p ng-repeat="(surgeryInfo, value) in surgery"> <b> {{surgeryInfo}}</b> : {{value}}</p> </span></td>
+            <td width="40%"ng-if="isObject(answer.Answers) && !isArray(answer.Answers)"><span ng-repeat="surgery in answer.Answers">{{$index +1}}.  <span ng-repeat="(surgeryInfo, value) in surgery"> <b> {{surgeryInfo}}</b> : {{value}} <br></span> <hr> </span></td>
         </tr>
         </tbody>
     </table>
