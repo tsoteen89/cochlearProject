@@ -440,7 +440,9 @@ var AudioGram = function(stage,audiogram_id,side) {
                 attr = stack[i].getAttrs();
                 //console.log(stack);
                 if(x == attr.center.x){
-                    stage.remove(layers['measures']);
+                    console.log(stage.length);
+                    stage[i].remove();
+                    //stage.
                     stack.splice(i,1);
                     //console.log(stack);
                     return true
@@ -680,6 +682,34 @@ var AudioGram = function(stage,audiogram_id,side) {
                 3000);
             }
         },
+        contextMenu : function(){
+            var menu = [{
+                    name: 'create',
+                    img: 'images/blocked.png',
+                    title: 'create button',
+                    fun: function () {
+                        alert('i am add button')
+                    }
+                }, {
+                    name: 'update',
+                    img: 'images/blocked.png',
+                    title: 'update button',
+                    fun: function () {
+                        alert('i am update button')
+                    }
+                }, {
+                    name: 'delete',
+                    img: 'images/blocked.png',
+                    title: 'create button',
+                    fun: function () {
+                        alert('i am add button')
+                    }
+                }];
+
+            //Calling context menu
+             //$('.contextMenu').html("<b>Boom</b>");
+             $('.contextMenu').contextMenu(menu);
+        },
         /**
         * Retreives last item popped off the stack and adds it to the "stage"
         * @param {void}
@@ -701,6 +731,8 @@ var AudioGram = function(stage,audiogram_id,side) {
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
+        evt.preventDefault();
+        console.log("w:"+evt.which);
         if(private.dirtyBit){
             private.dirtyBit = false;
             return;
@@ -730,6 +762,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         private.dirtyBit = true;
         // get the shape that was clicked on
         var shape = evt.target;
+        private.contextMenu();
         //alert('you clicked on \"' + shape.getName() + '\"');
         //array.splice(5, 1);
     });

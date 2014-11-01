@@ -7,7 +7,8 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-
+    <link rel="stylesheet" href="css/contextMenu.css">
+      
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -15,6 +16,7 @@
 <!--      http://www.bootstraptoggle.com/-->
     <!-- <link href="./css/bootstrap-toggle.css" rel="stylesheet">-->
     <!-- <script src="./js/bootstrap-toggle.js"></script>-->
+    <script src="js/contextMenu.js"></script> 
     <script src="js/audiogram.js"></script>  
     <style>
         /* scheme 1 */
@@ -255,10 +257,17 @@
         margin-bottom: 10px;
         width:75px;
     }
+.testButton {
+width: 80px;
+height: 80px;
+background: #3382c0;
+color: #FFF;
+}
     </style>
   </head>
   <body>
     <div class="container">
+        <div class="testButton iw-mTrigger" id="testButton1">Click me</div>
         <div class="row">
             <div class="col-md-5">
             </div>
@@ -367,6 +376,34 @@
     $(function() {
         //combine stuff later        
         
+        
+            var menu = [{
+                    name: 'create',
+                    img: '<i class="fa fa-times fa-2x"></i>',
+                    title: 'create button',
+                    fun: function () {
+                        alert('i am add button')
+                    }
+                }, {
+                    name: 'update',
+                    img: '<i class="fa fa-times fa-2x"></i>',
+                    title: 'update button',
+                    fun: function () {
+                        alert('i am update button')
+                    }
+                }, {
+                    name: 'delete',
+                    img: '<i class="fa fa-times"></i>',
+                    title: 'create button',
+                    fun: function () {
+                        alert('i am add button')
+                    }
+                }];
+
+            //Calling context menu
+             $('.testButton').html("<b>Boom</b>");
+             $('.testButton').contextMenu(menu);
+        
         var stage_right = new Kinetic.Stage({
             container: 'audiogram_right',
             width: 500,
@@ -390,7 +427,7 @@
         * measure.
         * It's a cluster Fart, I will admit.
         */
-        $("#mask-tool").on( "click", function(event) {
+        $("#mask-tool").on( "mouseDown", function(event) {
             var clicked = $( this )[0].id;
              if($('#mask-tool-svg').attr("src") == "images/masked_volume_off.svg" ){
                 //$( this ).addClass('border');
