@@ -7,7 +7,7 @@
  */
 ;(function ($, window, document, undefined) {
     "use strict";
-            console.log("whoop");
+
     $.fn.contextMenu = function (method, selector, option) {
         //parameter fix
         if (!methods[method]) {
@@ -274,6 +274,7 @@
             });
         },
         eventHandler: function (e) {
+            console.log(e);
             e.preventDefault();
             var trigger = $(this),
                 trgrData = trigger.data('iw-menuData'),

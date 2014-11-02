@@ -47,7 +47,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @constructor
         */
         _init : function(){
-            
+
             //Set the stroke color depending on which side it is.
             if(this.side == 'right')
                 this.colors['strokeColor'] = '#ED1D25';
@@ -72,7 +72,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             }
 
             //Load Y labels (dB presentation level) into array
-            
             for(i=-10;i<=120;i+=10){
                 if(i<0)
                     this.y_labels.push(i);
@@ -707,7 +706,7 @@ var AudioGram = function(stage,audiogram_id,side) {
                 }];
 
             //Calling context menu
-             //$('.contextMenu').html("<b>Boom</b>");
+             $('.contextMenu').html("<b>Boom</b>");
              $('.contextMenu').contextMenu(menu);
         },
         /**
@@ -731,8 +730,8 @@ var AudioGram = function(stage,audiogram_id,side) {
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
-        evt.preventDefault();
-        console.log("w:"+evt.which);
+        console.log(evt.button);
+
         if(private.dirtyBit){
             private.dirtyBit = false;
             return;
@@ -747,7 +746,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             console.log("oops");
         }
         
-        console.log(name);
         setTimeout(function(){
             layers['error'].removeChildren();
             stage.draw();
@@ -776,6 +774,9 @@ var AudioGram = function(stage,audiogram_id,side) {
         },
         clear: function(){
             private.clearStage();
+        },
+        contextMenu: function(){
+            console.log("my context menu");
         },
         getAudiogram: function(){
             private.getAudiogram();

@@ -257,12 +257,12 @@
         margin-bottom: 10px;
         width:75px;
     }
-.testButton {
-width: 80px;
-height: 80px;
-background: #3382c0;
-color: #FFF;
-}
+    .testButton {
+        width: 80px;
+        height: 80px;
+        background: #3382c0;
+        color: #FFF;
+    }
     </style>
   </head>
   <body>
@@ -377,32 +377,32 @@ color: #FFF;
         //combine stuff later        
         
         
-            var menu = [{
-                    name: 'create',
-                    img: '<i class="fa fa-times fa-2x"></i>',
-                    title: 'create button',
-                    fun: function () {
-                        alert('i am add button')
-                    }
-                }, {
-                    name: 'update',
-                    img: '<i class="fa fa-times fa-2x"></i>',
-                    title: 'update button',
-                    fun: function () {
-                        alert('i am update button')
-                    }
-                }, {
-                    name: 'delete',
-                    img: '<i class="fa fa-times"></i>',
-                    title: 'create button',
-                    fun: function () {
-                        alert('i am add button')
-                    }
-                }];
+        var menu = [{
+                name: 'create',
+                img: '<i class="fa fa-times fa-2x"></i>',
+                title: 'create button',
+                fun: function () {
+                    alert('i am add button')
+                }
+            }, {
+                name: 'update',
+                img: '<i class="fa fa-times fa-2x"></i>',
+                title: 'update button',
+                fun: function () {
+                    alert('i am update button')
+                }
+            }, {
+                name: 'delete',
+                img: '<i class="fa fa-times"></i>',
+                title: 'create button',
+                fun: function () {
+                    alert('i am add button')
+                }
+        }];
 
-            //Calling context menu
-             $('.testButton').html("<b>Boom</b>");
-             $('.testButton').contextMenu(menu);
+        //Calling context menu
+         $('.testButton').html("<b>Boom</b>");
+         $('.testButton').contextMenu(menu);
         
         var stage_right = new Kinetic.Stage({
             container: 'audiogram_right',
@@ -418,16 +418,29 @@ color: #FFF;
         
         var Stage = {};
         
-        Stage['right'] = new AudioGram(stage_right,100,'right');
-        Stage['left'] = new AudioGram(stage_left,100,'left');
-        
+        //Block right click on canvas menu
+        setTimeout(function(){
+            Stage['right'] = new AudioGram(stage_right,100,'right');
+            Stage['left'] = new AudioGram(stage_left,100,'left');
+            setTimeout(function(){
+                document.getElementById('audiogram_right').addEventListener('contextmenu', function (event) {
+                    event.preventDefault();
+                    Stage['right'].contextMenu(this);
+                });
+                document.getElementById('audiogram_left').addEventListener('contextmenu', function (event) {
+                    event.preventDefault();
+                    Stage['left'].contextMenu(this);
+                });
+            },0);
+        },0);
+
         /*
         * This function highlights the active measure button as well as
         * setting the proper character for each board according to the 
         * measure.
         * It's a cluster Fart, I will admit.
         */
-        $("#mask-tool").on( "mouseDown", function(event) {
+        $("#mask-tool").on( "click", function(event) {
             var clicked = $( this )[0].id;
              if($('#mask-tool-svg').attr("src") == "images/masked_volume_off.svg" ){
                 //$( this ).addClass('border');
