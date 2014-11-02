@@ -8,11 +8,15 @@ var controllers = {};
 controllers.reportCtrl = function($scope, getData, $cookieStore) {
     
     $scope.careTeams=[];
+    
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
     console.log(cookieSessionID);
+    $scope.facilityName = $cookieStore.get('FacilityName');
     
-     $scope.isArray = function(check){
+    //Functions to test whether answers are in arrays or objects, so formating can be done
+    //for ng repeat
+    $scope.isArray = function(check){
         return angular.isArray(check);
     }
      
@@ -20,12 +24,14 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         return angular.isObject(check);
     }
     
-    $scope.facilityName = $cookieStore.get('FacilityName');
+    //get the full facilities answer report
     var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/'+ cookieSessionID; 
+    
     getData.get(fullFacilityURL).success(function(data) {
         $scope.facilityReport = data.records;
     }).then(function(){
-
+        //push just all the patients' events into an array - needed to make ng-repeat easier, since careTeams are nested
+        //so deep in the facilityReport
         for(var patient in $scope.facilityReport){
             if($scope.isArray($scope.facilityReport[patient].CareTeams)){
                     for(var careTeam in $scope.facilityReport[patient].CareTeams){
@@ -37,21 +43,24 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
             }
         }       
     }).then(function(){
+        //get the number of events
         $scope.eventNum = Object.keys($scope.careTeams).length;
     });
     
+    //get the list of questions
     var questionsURL = 'http://killzombieswith.us/aii-api/v1/reports/allQuestions'; 
     getData.get(questionsURL).success(function(data) {
         $scope.questions = data.records;
     });
     
-    
-    
+    //get the number of events for a patient
     $scope.getCareTeamLength = function (object){
         return Object.keys(object).length;
     }
+    
+    //Export to spreadsheet function
     $scope.export = function(){
-        
+        //this format for Mac Numbers isn't openable....
         if (navigator.userAgent.indexOf('Mac OS X') != -1) {
             var blob = new Blob([document.getElementById('facReport').innerHTML], {
                 type: "application/x-iwork-numbers-sffnumbers"
@@ -66,9 +75,10 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         
     };
     
-    $scope.loadMessage = "Please wait for report to load...";
     
-    $scope.clearMessage = function(){
+    //Bad loading message code 
+    $scope.loadMessage = "Please wait for report to load...";
+    $scope.clearMessage = function(){ //called on last interation of ng-repeat of the answers...
         
         $scope.loadMessage =" ";
         

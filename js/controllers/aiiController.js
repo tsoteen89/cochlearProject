@@ -810,10 +810,18 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('PhaseID')).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
-            console.log("first" + $scope.audioSummaryAnswers);
+            //console.log("first" + $scope.audioSummaryAnswers);
     });
     
-    
+    $scope.getMaxNumOfTest = function(resultSet){
+        $scope.max =0;
+        for(var i = 0; i< Object.keys(resultSet).length; i++){
+            if(Object.keys(resultSet[i]).length < $scope.max){
+                $scope.max = Object.keys(resultSet[i]).length;
+            }
+        }
+        
+    }
     //Grab all previously answered questions
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records;            
@@ -822,7 +830,6 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
         };
     });
-    
     
     //Get Number of Questions contained in a phase
     getData.get($scope.questionsURL).success(function(data) {
@@ -1241,10 +1248,10 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     //Must initialize, so ng-model recognizes objects to store the fields of each test
     $scope.answer.Results = { 
-        "Aided Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}},
-        "AzBio" :{ "AzBio Test": {}}, 
-        "CNC": {"CNC Test": {}}, 
-        "BKB-SIN": {"BKB-SIN Test": {}}};
+        //"Aided Audiogram" : {"Pure Tone Average": {}, "Speech Reception Threshold": {}, "Speech Discrimination Score" : {}},
+        "AzBio": {}, 
+        "CNC": {}, 
+        "BKB-SIN": {}};
 
     
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.    PhaseID;
@@ -1318,13 +1325,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     
     //Submit a complete audio test result.
-    $scope.submitQuestions = function(category){
+    $scope.submitQuestions = function(test){
         console.log("Submit Questions Called");
         $scope.singleAnswer = {};
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $scope.answer.CareTeamID
         $scope.singleAnswer.Results = {};
-        $scope.singleAnswer.Results[category]= $scope.answer.Results[category];
+        $scope.singleAnswer.Results[test]= $scope.answer.Results[test];
         $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
         
         postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults/'+ cookieSessionID ,$scope.singleAnswer).then(function(){
@@ -1362,14 +1369,15 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     //clears conditions set and any tests and results in the form so a new set up can be entereed
     $scope.setNewCondition = function(){
         $scope.conditions = {};
-        $scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
+        /*$scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
         $scope.answer.Results["Aided Audiogram"]["Speech Reception Threshold"] = {};
         $scope.answer.Results["Aided Audiogram"]["Speech Discrimination Score"] = {};
-        $scope.answer.Results["AzBio"]["AzBio Test"] = {};
-        $scope.answer.Results["CNC"]["CNC Test"] = {};
+        */
+        $scope.answer.Results["AzBio"] = {};
+        $scope.answer.Results["CNC"] = {};
         $scope.wordswith3=0;
         $scope.phonemes=0;
-        $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
+        $scope.answer.Results["BKB-SIN"] = {};
         $scope.answer.tests =null;
         $scope.answer.ConditionsID = "";
     }
@@ -1384,15 +1392,15 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             $scope.answer.Results["Aided Audiogram"]["Speech Discrimination Score"] = {};
         }
         else if(data == 'AzBio'){
-            $scope.answer.Results["AzBio"]["AzBio Test"] = {};
+            $scope.answer.Results["AzBio"] = {};
         }
         else if(data == 'CNC'){
-            $scope.answer.Results["CNC"]["CNC Test"] = {};
+            $scope.answer.Results["CNC"] = {};
             $scope.wordswith3=0;
             $scope.phonemes=0;
         }
         else if(data == 'BKB-SIN'){
-            $scope.answer.Results["BKB-SIN"]["BKB-SIN Test"] = {};
+            $scope.answer.Results["BKB-SIN"] = {};
         }
         
         
@@ -1470,15 +1478,15 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     //initialize these fields
     $scope.wordswith3=0;
     $scope.phonemes=0;
-    $scope.answer.Results["CNC"]["CNC Test"]["Words with 3 Phonemes Correct"] =0;
-    $scope.answer.Results["CNC"]["CNC Test"]["Phonemes Correct"] =0;
+    $scope.answer.Results["CNC"]["Words with 3 Phonemes Correct"] =0;
+    $scope.answer.Results["CNC"]["Phonemes Correct"] =0;
     
     //update percentage numbers
     $scope.updateWordsWith3 = function(){
-        $scope.wordswith3= parseInt(($scope.answer.Results["CNC"]["CNC Test"]["Words with 3 Phonemes Correct"]/50)*100);
+        $scope.wordswith3= parseInt(($scope.answer.Results["CNC"]["Words with 3 Phonemes Correct"]/50)*100);
     }
     $scope.updatePhonemes = function(){
-        $scope.phonemes= parseInt(($scope.answer.Results["CNC"]["CNC Test"]["Phonemes Correct"]/150)*100) ;
+        $scope.phonemes= parseInt(($scope.answer.Results["CNC"]["Phonemes Correct"]/150)*100) ;
     }
     
     
