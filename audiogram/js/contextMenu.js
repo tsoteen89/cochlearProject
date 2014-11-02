@@ -9,6 +9,7 @@
     "use strict";
 
     $.fn.contextMenu = function (method, selector, option) {
+        console.log('fn.contextMenu');
         //parameter fix
         if (!methods[method]) {
             option = selector;
@@ -63,15 +64,18 @@
 
     var methods = {
         menu: function (selector, option) {
+            console.log('menu');
             var trigger = $(this);
             selector = iMethods.createMenuList(trigger, selector, option);
             iMethods.contextMenuBind.call(this, selector, option, 'menu');
         },
         popup: function (selector, option) {
+            console.log('popup');
             $(selector).addClass('iw-contextMenu');
             iMethods.contextMenuBind.call(this, selector, option, 'popup');
         },
         update: function (selector, option) {
+            console.log('update');
             var self = this;
             this.each(function () {
                 var trgr = $(this),
@@ -125,6 +129,7 @@
             });
         },
         refresh: function () {
+            console.log('refresh');
             var menuData = this.filter(function () {
                     return !!$(this).data('iw-menuData');
                 }).data('iw-menuData'),
@@ -137,6 +142,7 @@
         },
         //to force context menu to close
         close: function () {
+            console.log('close');
             var menuData = this.data('iw-menuData');
             if (menuData) {
                 iMethods.closeContextMenu(menuData.option, this, menuData.menu, null);
@@ -144,6 +150,7 @@
         },
         //to get value of a key
         value: function (key) {
+            console.log('value');
             var menuData = this.data('iw-menuData');
             if (menuData[key]) {
                 return menuData[key];
@@ -153,6 +160,7 @@
             return null;
         },
         destroy: function () {
+            console.log('destroy');
             this.each(function () {
                 var trgr = $(this),
                     menuId = trgr.data('iw-menuData').menuId,
@@ -182,6 +190,7 @@
     };
     var iMethods = {
         contextMenuBind: function (selector, option, method) {
+            console.log('contextMenuBind');
             var trigger = this,
                 menu = $(selector),
                 menuData = menu.data('iw-menuData');
@@ -274,6 +283,7 @@
             });
         },
         eventHandler: function (e) {
+            console.log('contextMenuBind');
             console.log(e);
             e.preventDefault();
             var trigger = $(this),
@@ -505,7 +515,7 @@
         },
 
         clickEvent: function (e) {
-
+            console.log('clickEvent');
             var button = e.data.trigger.get(0);
 
             if ((button !== e.target) && ($(e.target).closest('.iw-contextMenu').length == 0)) {
@@ -513,7 +523,7 @@
             }
         },
         keyEvent: function (e) {
-            
+            console.log('keyEvent');
             e.preventDefault();
             var menu = e.data.menu,
                 option = e.data.option,

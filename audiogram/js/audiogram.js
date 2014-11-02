@@ -35,6 +35,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         currentMeasure  : 'AC',                 //AC, BC, MCL, etc.
         masked          : 'unmasked',           //Masked = masked Unmasked = unmasked :)
         no_response     : 0,             //true = patient could hear , false = patient couldn't hear
+        ctx_menu_id     : 0,
         x_labels        : [],
         y_labels        : [],
         x_values        : [],
@@ -47,7 +48,10 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @constructor
         */
         _init : function(){
-
+            
+            //Add the contex menu for audiogram
+            this.ctx_menu_id = this.addContextMenu();
+            
             //Set the stroke color depending on which side it is.
             if(this.side == 'right')
                 this.colors['strokeColor'] = '#ED1D25';
@@ -253,22 +257,26 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {null} 
         */ 
         addMeasure: function(){
-            console.log(private.no_response);
             var snap = this.snapClick();
             
+            //Mainly right now, if you don't click on the canvas, you get no action
             if(snap.error){
                 console.log(snap.type);
                 return;
             }else{
                 console.log(snap.x+','+snap.y);
                 var snapped = this.snapMeasure(snap);
-
             }
             
+            //Get current adjusted x&y coords.
             var x = snap.x;
             var y = snap.y;
+            
+            //Get frequency and decibels assigned to the coordinate (x,y)
             var d = this.getDecibels(y);
             var f = this.getFrequency(x)
+            
+            //Arbitrary font size right now.
             var fontSize = 34;
             
             var arrow = null;   //holds arrow if needed (for a no response)
@@ -397,6 +405,7 @@ var AudioGram = function(stage,audiogram_id,side) {
                 group.add(arrow);
                 group.add(shape);
                 //Push latest measure onto stack
+                //stack.push(group);
                 stack.push(arrow);
                 stack.push(shape);
             }else{
@@ -423,6 +432,9 @@ var AudioGram = function(stage,audiogram_id,side) {
             console.log(stack);
              
         },
+        makeNoResponse : function(){
+            
+        },
         /**
         * Checks to see if a measure is being added to the same frequency. 
         * If it is, it removes the existing at that x, so the new one will
@@ -431,19 +443,17 @@ var AudioGram = function(stage,audiogram_id,side) {
         * @return {bool} - returns true for remove, false for not
         */ 
         snapMeasure : function(snap){
+            var snap = this.snapClick();
             var x = snap.x;
             var y = snap.y;
             var attr = null;
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
-                //console.log(stack);
                 if(x == attr.center.x){
-                    console.log(stage.length);
                     stage[i].remove();
                     //stage.
                     stack.splice(i,1);
-                    //console.log(stack);
                     return true
                 }
             }
@@ -516,13 +526,11 @@ var AudioGram = function(stage,audiogram_id,side) {
             y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
             d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
             
-            //console.log("d:"+d);
             r = (y % (this.row_height / 2)) / this.row_height;                      //Remainder (how close is it to the next value).
-            //console.log("r:"+r);
             
             if(r > .5)
                 d = d + 1;
-            //console.log(this.y_values[d-1]);
+
             return this.y_values[d-1];
         },
         /**
@@ -540,8 +548,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             var i;                                  //loop counter
             var p;                                  //current x pixel
             
-            x = Math.round(x - this.graph_bounds.min.x);    //adjust x because of margins 
-            //console.log('x is: '+x);    
+            x = Math.round(x - this.graph_bounds.min.x);    //adjust x because of margins    
             
             p = c;          //start off p as the width of one column
             
@@ -581,10 +588,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             }else{
                 this.masked = 'unmasked';
             }
-        },
-        setNoResponse: function(no_response){
-            this.no_response = no_response;
-            //console.log("response: "+this.no_response);
         },
         /**
         * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
@@ -681,33 +684,74 @@ var AudioGram = function(stage,audiogram_id,side) {
                 3000);
             }
         },
-        contextMenu : function(){
-            var menu = [{
-                    name: 'create',
-                    img: 'images/blocked.png',
-                    title: 'create button',
-                    fun: function () {
-                        alert('i am add button')
-                    }
-                }, {
-                    name: 'update',
-                    img: 'images/blocked.png',
-                    title: 'update button',
-                    fun: function () {
-                        alert('i am update button')
-                    }
-                }, {
-                    name: 'delete',
-                    img: 'images/blocked.png',
-                    title: 'create button',
-                    fun: function () {
-                        alert('i am add button')
-                    }
-                }];
+        getClosestMeasure : function(){
+            var snap = this.snapClick();
+            var x = snap.x;
+            var y = snap.y;
+            var attr = null;
+            
+            for(var i=0;i<stack.length;i++){
+                attr = stack[i].getAttrs();
+                if(x == attr.center.x && y == attr.center.y){
+                    return attr;
+                }
+            }
+            return false;
+        },
+        /**
+        * Adds the context menu to the DOM. A right click method on a "measurement" on the 
+        * canvas will fire off the "addContextMenu". 
+        * @param {void}
+        * @return {void}
+        */ 
+        addContextMenu : function(){
+            var id=0;
+            var This = this;
+            context.init({preventDoubleContext: true});
+            id = context.attach('#audiogram_choices', [
+                {header: 'Options'},
+                {text: 'Delete', href: '#'},
+                {text: 'Copy', href: '#'},
+                /*{divider: true},*/
+                {text: 'No Response', href: '#',action: function(e){
+			         e.preventDefault();
+                     console.log(e);
+                     var measure = This.getClosestMeasure();
+                     console.log(measure);
+			         console.log('change no response');
+		        }},
+            ]);
+            return id;
+        },
+        /**
+        * Changes the css of our context menu and displays it at the location in which the 
+        * canvas was clicked.
+        * @param {void}
+        * @return {void}
+        */ 
+        showContextMenu : function(){
+            console.log('showing'+this.ctx_menu_id);
+            var x1 = $("#audiogram_"+this.side).offset().left;
+            var y1 = $("#audiogram_"+this.side).offset().top;
 
-            //Calling context menu
-             $('.contextMenu').html("<b>Boom</b>");
-             $('.contextMenu').contextMenu(menu);
+            var x2 = stage.getPointerPosition().x;
+            var y2 = stage.getPointerPosition().y;
+                
+            console.log('x: ' + x + ' y: ' + y);
+            $('#dropdown-'+this.ctx_menu_id).css('position','absolute');
+            $('#dropdown-'+this.ctx_menu_id).css('display','block');
+            $('#dropdown-'+this.ctx_menu_id).css('top',y1+y2);
+            $('#dropdown-'+this.ctx_menu_id).css('left',x1+x2);
+
+        },
+        /**
+        * Will hide the context menu. Right now the js library 'context.js' hides the element
+        * by binding a click event to the body of the page.
+        * @param {void}
+        * @return {void}
+        */ 
+        hideContextMenu : function(){
+            $('#dropdown-'+this.ctx_menu_id).css('display','none');
         },
         /**
         * Retreives last item popped off the stack and adds it to the "stage"
@@ -760,8 +804,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         private.dirtyBit = true;
         // get the shape that was clicked on
         var shape = evt.target;
-        private.contextMenu();
-        //alert('you clicked on \"' + shape.getName() + '\"');
+        alert('you clicked on \"' + shape.getName() + '\"');
         //array.splice(5, 1);
     });
 
@@ -775,8 +818,8 @@ var AudioGram = function(stage,audiogram_id,side) {
         clear: function(){
             private.clearStage();
         },
-        contextMenu: function(){
-            console.log("my context menu");
+        showContextMenu: function(){
+            private.showContextMenu();
         },
         getAudiogram: function(){
             private.getAudiogram();
@@ -787,8 +830,8 @@ var AudioGram = function(stage,audiogram_id,side) {
         setMasked: function(masked){
             private.setMasked(masked);
         },
-        setNoResponse: function(response){
-            private.setNoResponse(response);
+        makeNoResponse: function(response){
+            private.makeNoResponse(response);
         },
         undo: function(){
             private.undoMeasure();
