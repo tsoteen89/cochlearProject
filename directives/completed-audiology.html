@@ -19,29 +19,31 @@
     </div>
     <div class="row">
         {{getMaxNumOfTest(condition.Results)}}
-        <table class="table table-condensed">
+        <table class="table table-condensed" style="table-layout: fixed;">
           <caption></caption>
           <thead >
             <tr align= "center" >
               <td colspan ={{max}} style="background-color:#cae5f0"><h3><b>Testing Conditions</b></h3></td>
             </tr>    
             <tr>
-                <td colspan ={{max/2}} ><b> Left Ear Condition:</b> {{condition.LeftAidCondition}} </td>
-                <td colspan ={{max/2}}><b> Right Ear Condition:</b> {{condition.RightAidCondition}} </td>  
+                <td style="width:50%"><b> Left Ear Condition:</b> {{condition.LeftAidCondition}} </td>
+                <td style="width:50%"><b> Right Ear Condition:</b>{{condition.RightAidCondition}} </td>  
             </tr>
             <tr align= "center">
               <td colspan ={{max}}  style="background-color:#cae5f0"><h3><b>Results</b></h3></td>
             </tr> 
           </thead>
+            
             <tbody ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]">
                 <tr >       
                   <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
                 </tr> 
-                <!--<tr align= "center">  
+                <!--
+                <tr align= "center">  
                     <td>  </td>
                     <td ng-repeat="result in condition.Results[test.AudioTestName]" > <b> {{$index+1}} </b> </td> 
                 </tr>  
-                -->
+-->
                 <tr  ng-repeat="field in test.AudioTestInput">
                     <td><b> {{field.Name}} ({{field.Unit}}) </b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]">{{result[field.Name]}}</td>

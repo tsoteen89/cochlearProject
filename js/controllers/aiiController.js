@@ -815,11 +815,12 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.getMaxNumOfTest = function(resultSet){
         $scope.max =0;
-        for(var i = 0; i< resultSet.length; i++){
-            if(resultSet[i].length < $scope.max){
-                $scope.max = resultSet[i].length;
+        for(var key in resultSet){
+            if(resultSet[key].length > $scope.max){
+                $scope.max = resultSet[key].length +1;
             }
-        }
+        
+      }
         
     }
     //Grab all previously answered questions
