@@ -18,7 +18,7 @@
         <b> DOB: </b> {{patientDOB}} <br>
     </div>
     <div class="row">
-        {{getMaxNumOfTest(condition.Result)}}
+        {{getMaxNumOfTest(condition.Results)}}
         <table class="table table-condensed">
           <caption></caption>
           <thead >
@@ -34,10 +34,10 @@
             </tr> 
           </thead>
             <tbody ng-repeat="test in audioQuestions.Tests">
-                <tr>       
+                <tr ng-if="condition.Results[test.AudioTestName]">       
                   <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
                 </tr> 
-                <tr ng-repeat="field in test.AudioTestInput">
+                <tr ng-if="condition.Results[test.AudioTestName]" ng-repeat="field in test.AudioTestInput">
                     <td><b> {{field.Name}} ({{field.Unit}}) </b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]">{{result[field.Name]}}</td>
                 </tr>
