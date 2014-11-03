@@ -1,5 +1,5 @@
 <style>
-    table, th, td {
+    table, th, td, tbody {
        border: 1px solid #164a5e;
     }
 </style>
@@ -33,11 +33,16 @@
               <td colspan ={{max}}  style="background-color:#cae5f0"><h3><b>Results</b></h3></td>
             </tr> 
           </thead>
-            <tbody ng-repeat="test in audioQuestions.Tests">
-                <tr ng-if="condition.Results[test.AudioTestName]">       
+            <tbody ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]">
+                <tr >       
                   <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
                 </tr> 
-                <tr ng-if="condition.Results[test.AudioTestName]" ng-repeat="field in test.AudioTestInput">
+                <!--<tr align= "center">  
+                    <td>  </td>
+                    <td ng-repeat="result in condition.Results[test.AudioTestName]" > <b> {{$index+1}} </b> </td> 
+                </tr>  
+                -->
+                <tr  ng-repeat="field in test.AudioTestInput">
                     <td><b> {{field.Name}} ({{field.Unit}}) </b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]">{{result[field.Name]}}</td>
                 </tr>
