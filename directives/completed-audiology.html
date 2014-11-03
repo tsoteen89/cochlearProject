@@ -3,7 +3,7 @@
        border: 1px solid #164a5e;
     }
 </style>
-<div class="form3D">
+<div class="form3D" ng-controller="audioQuestionsController">
 
     <div class="row">
         <div class="col-md-4">
@@ -33,7 +33,16 @@
               <td colspan ={{max}}  style="background-color:#cae5f0"><h3><b>Results</b></h3></td>
             </tr> 
           </thead>
-            
+            <tbody ng-repeat="test in audioQuestions.Tests">
+                <tr>       
+                  <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
+                </tr> 
+                <tr ng-repeat="field in test.AudioTestInput">
+                    <td><b> {{field.Name}} ({{field.Unit}}) </b></td> 
+                    <td ng-repeat="result in condition.Results[test.AudioTestName]">{{result[field.Name]}}</td>
+                </tr>
+            </tbody>
+            <!--
           <tbody ng-repeat="(test, results) in condition.Results">
             <tr>       
               <td colspan ={{max}} ><h4><b>{{test}}</b></h4> </td> 
@@ -43,11 +52,11 @@
                 <td ng-repeat="result in results" > <b> {{$index+1}} </b> </td> 
             </tr>  
             <tr ng-repeat="(field, value) in results[0]">
-                <td><b> {{field}} </b></td> <!-- Name of field-->
+                <td><b> {{field}} </b></td> 
                 <td ng-repeat="result in results">{{result[field]}}</td>
             </tr>
             
-          </tbody>
+          </tbody> -->
         </table>
     </div>
 </div>
