@@ -692,6 +692,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
+                console.log(attr.center.x+','+x+':'+attr.center.y+','+y);
                 if(x == attr.center.x && y == attr.center.y){
                     return attr;
                 }
@@ -737,11 +738,16 @@ var AudioGram = function(stage,audiogram_id,side) {
             var x2 = stage.getPointerPosition().x;
             var y2 = stage.getPointerPosition().y;
                 
-            console.log('x: ' + x + ' y: ' + y);
-            $('#dropdown-'+this.ctx_menu_id).css('position','absolute');
-            $('#dropdown-'+this.ctx_menu_id).css('display','block');
-            $('#dropdown-'+this.ctx_menu_id).css('top',y1+y2);
-            $('#dropdown-'+this.ctx_menu_id).css('left',x1+x2);
+            var attr = this.getClosestMeasure(x2,y2);
+            console.log(attr);
+            console.log('x: ' + x + ' y: ' + y);  
+                
+            if(attr !== false){
+                $('#dropdown-'+this.ctx_menu_id).css('position','absolute');
+                $('#dropdown-'+this.ctx_menu_id).css('display','block');
+                $('#dropdown-'+this.ctx_menu_id).css('top',y1+y2);
+                $('#dropdown-'+this.ctx_menu_id).css('left',x1+x2);
+            }
 
         },
         /**
@@ -930,6 +936,27 @@ function bubbleSort(points){
     } while (swapped);
     return points;
 }
+
+//function Person(I) {
+//  I = I || {};
+//
+//  Object.reverseMerge(I, {
+//    name: "McLovin",
+//    age: 25,
+//    homeState: "Hawaii"
+//  });
+//
+//  return {
+//    introduce: function() {
+//      return "Hi I'm " + I.name + " and I'm " + I.age;
+//    }
+//  };
+//}
+//
+//var fogel = Person({
+//  age: "old enough"
+//});
+//fogel.introduce(); // "Hi I'm McLovin and I'm old enough"
 
 //var group = new Kinetic.Group({
 //    x: x,
