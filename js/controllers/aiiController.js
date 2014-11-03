@@ -815,9 +815,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     $scope.getMaxNumOfTest = function(resultSet){
         $scope.max =0;
-        for(var i = 0; i< Object.keys(resultSet).length; i++){
-            if(Object.keys(resultSet[i]).length < $scope.max){
-                $scope.max = Object.keys(resultSet[i]).length;
+        for(var i = 0; i< resultSet.length; i++){
+            if(resultSet[i].length < $scope.max){
+                $scope.max = resultSet[i].length;
             }
         }
         
