@@ -814,9 +814,9 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     });
     
     $scope.getMaxNumOfTest = function(resultSet){
-        $scope.max =0;
+        $scope.max =2;
         for(var key in resultSet){
-            if(resultSet[key].length > $scope.max){
+            if(resultSet[key].length+1 > $scope.max){
                 $scope.max = resultSet[key].length +1;
             }
         
@@ -1235,7 +1235,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     });
     
     $scope.three = "3";
-    
+    $scope.isObject = function(check){
+        return angular.isObject(check);
+    }
     $scope.loggedIn = persistData.getLoggedIn();
     $scope.phaseName= $cookieStore.get('PhaseName');
     
