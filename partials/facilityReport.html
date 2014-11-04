@@ -11,6 +11,9 @@
         font-weight:normal;
         background-color:#cae5f0
     }
+    tr:hover{
+        background: #97afc0;
+    }
 </style>
 <center>
 <div ng-controller="reportCtrl">
@@ -29,15 +32,12 @@
             
         <div id="facReport"> <!--ID used to identify exportable html-->
         
-            <table class="table table-condensed form3D">
-                <caption></caption>
+            <table class="table table-condensed table-responsive form3D" style="table-layout:fixed" >
+                
                 <thead>
                 <tr align="center">
-                    <td colspan="{{eventNum + 1}}"> Facility Report for {{facilityName}}</td>
-                </tr>     
-                <tr align="center">
-                    <td colspan="1" style="background-color:#cae5f0"></td>
-                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0" ng-repeat="patient in facilityReport">
+                    <td style="background-color:#cae5f0; width:200px"></td>
+                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport">
                         <b>{{patient.First}} {{patient.Last}}</b></h3></td>
                 </tr>
                 <tr align="Center">
@@ -45,7 +45,7 @@
                     <td colspan="1" style="background-color:#cae5f0" ng-repeat="careTeam in careTeams">
                         <b>{{careTeam.Description}}</b></h3></td>
                 </tr>
-                
+
                 </thead>
                 <tbody ng-repeat="(key, value) in questions">
                     <tr ng-repeat="(questionNumb, val) in value" align="left">
