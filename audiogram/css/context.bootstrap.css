@@ -69,3 +69,27 @@
 .compressed-context .nav-header{
 	padding:1px 13px;
 	}
+.ctx-header{
+    border-bottom: 1px solid #EEE;
+    padding: 5px 5px 5px 10px;
+    font-weight:bold;
+}
+
+.ctx-li{
+    list-style: none;
+    padding-left: 20px;
+    /*border-bottom: 1px solid #EEE;*/
+    cursor: pointer;
+    position: relative;
+}
+
+.ctx-a{
+    display:inline;
+    padding: 0px 0px 0px 0px;
+    margin-left: -20px;
+}
+
+.ctx-fa{
+    margin-left:-10px;
+    padding-right:15px;
+}

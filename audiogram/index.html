@@ -17,6 +17,7 @@
     <!-- <link href="./css/bootstrap-toggle.css" rel="stylesheet">-->
     <!-- <script src="./js/bootstrap-toggle.js"></script>-->
     <script src="js/context.js"></script> 
+    <script src="js/contextMenu.js"></script> 
     <script src="js/audiogram.js"></script>  
     <style>
         /* scheme 1 */
@@ -324,20 +325,23 @@
         var Stage = {};
         
         //create both canvas' and add 'right-click' event handlers to each canvas
-        setTimeout(function(){
-            Stage['right'] = new AudioGram(stage_right,100,'right');
-            Stage['left'] = new AudioGram(stage_left,100,'left');
-            setTimeout(function(){
-                document.getElementById('audiogram_right').addEventListener('contextmenu', function (event) {
-                    event.preventDefault();
-                    Stage['right'].showContextMenu(this);
-                });
-                document.getElementById('audiogram_left').addEventListener('contextmenu', function (event) {
-                    event.preventDefault();
-                    Stage['left'].showContextMenu(this);
-                });
-            },0);
-        },0);
+        //should be handled in audiogram.js
+        //setTimeout(function(){
+            Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
+            Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
+            Stage['right'].bindContextMenu();
+            Stage['left'].bindContextMenu();       
+//            setTimeout(function(){
+//                document.getElementById('audiogram_right').addEventListener('contextmenu', function (event) {
+//                    event.preventDefault();
+//                    Stage['right'].showContextMenu(this);
+//                });
+//                document.getElementById('audiogram_left').addEventListener('contextmenu', function (event) {
+//                    event.preventDefault();
+//                    Stage['left'].showContextMenu(this);
+//                });
+//            },0);
+//        },0);
 
         /*
         * This function highlights the active measure button as well as
@@ -386,8 +390,8 @@
                     setTimeout( function (){
                         $( ".mea-btn" ).each(function( index ) {
                             if($( this ).hasClass( "border" )){
-                                Stage['right'].setCurrentMeasure(clicked);
-                                Stage['left'].setCurrentMeasure(clicked);
+                                Stage['right'].setMeasureType(clicked);
+                                Stage['left'].setMeasureType(clicked);
                             }
                         });
                     }, 0 );
@@ -420,7 +424,7 @@
             var canvass = null //Will hold the multiple layers of canvas' that are created
                 
             canvass = $("#audiogram_right").find(".kineticjs-content").children();
-            console.log(canvass.length);
+            //console.log(canvass.length);
             ImgData['background'] = canvass[0].toDataURL("image/png");
             ImgData['right']['line'] = canvass[1].toDataURL("image/png");
             ImgData['right']['measures'] = canvass[2].toDataURL("image/png");  
@@ -428,25 +432,25 @@
             canvass = $("#audiogram_left").find(".kineticjs-content").children();
             ImgData['left']['line'] = canvass[1].toDataURL("image/png");
             ImgData['left']['measures'] = canvass[2].toDataURL("image/png");            
-            console.log(ImgData);
+            //console.log(ImgData);
             //var img = ImgData['right']['line'].toDataURL("image/png");
             //$("#temp1").html('<img src="'+img+'"/>');
 
             $.post( "class.audiogram.php", ImgData)
                 .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
+                       //console.log( "Data Loaded: " + data );
                 });
         });
         $('#saveAudiogram').on('click', function(event) {
              $.post( "class.audiogram.php", SaveData)
                 .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
+                       //console.log( "Data Loaded: " + data );
                 });           
         });
         $('#searchAudiogram').on('click', function(event) {
             $.post( "class.audiogram.php", searchData)
                 .done(function( data ) {
-                       console.log( "Data Loaded: " + data );
+                       //console.log( "Data Loaded: " + data );
                 });           
         });
     

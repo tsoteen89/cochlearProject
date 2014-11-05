@@ -17,7 +17,6 @@
             method = 'popup';
         }
 
-
         //need to check for array object
         else if (selector) {
             if (!((selector instanceof Array) || (typeof selector === 'string') || (selector.nodeType) || (selector.jquery))) {

@@ -50,13 +50,13 @@ var context = context || (function () {
 	function buildMenu(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '"></ul>');
-        var i = 0, linkTarget = '';
+			$menu = $('<ul class="dropdown-menu dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '" style="display: inline-block; position: fixed; overflow-y: hidden; overflow-x: auto; "></ul>');
+        var i = 0, linkTarget = '',fa_icon='';
         for(i; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
 				$menu.append('<li class="divider"></li>');
 			} else if (typeof data[i].header !== 'undefined') {
-				$menu.append('<li class="nav-header">' + data[i].header + '</li>');
+				$menu.append('<li class="ctx-header">' + data[i].header + '</li>');
 			} else {
 				if (typeof data[i].href == 'undefined') {
 					data[i].href = '#';
@@ -64,10 +64,13 @@ var context = context || (function () {
 				if (typeof data[i].target !== 'undefined') {
 					linkTarget = ' target="'+data[i].target+'"';
 				}
+				if (typeof data[i].fa_icon !== 'undefined') {
+					fa_icon = data[i].fa_icon;
+				}
 				if (typeof data[i].subMenu !== 'undefined') {
 					$sub = ('<li class="dropdown-submenu"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '</a></li>');
 				} else {
-					$sub = $('<li><a tabindex="-1" href="' + data[i].href + '"'+linkTarget+'>' + data[i].text + '</a></li>');
+					$sub = $('<li class="ctx-li"><a class="ctx-a" tabindex="-1" href="' + data[i].href + '"'+linkTarget+'><i class="fa '+fa_icon+' ctx-fa"></i>' + data[i].text + '</a></li>');
 				}
 				if (typeof data[i].action !== 'undefined') {
 					var actiond = new Date(),

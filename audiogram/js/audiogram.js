@@ -1,15 +1,17 @@
-var AudioGram = function(stage,audiogram_id,side) {
-    var stage = stage;      //The whole kinetic stage!
-    var layers = {};        //Object to hold different layers by name
-    var stack = [];         //Stack of "actions".
-    var redoStack = [];     //Stack to hold items removed via "undo"
-    var lineArray = [];     //Array to hold x,y vals to draw line between measures
+var AudioGram = function(stage,audiogram_id,side,element_id) {
+    var stage = stage;                  //The whole kinetic stage!
+    var layers = {};                    //Object to hold different layers by name
+    var stack = [];                     //Stack of "actions".
+    var redoStack = [];                 //Stack to hold items removed via "undo"
+    var lineArray = [];                 //Array to hold x,y vals to draw line between measures
+    var globalClick = {'x':0,'y':0};    //Global click to help me with context menu right now.
     
     // Private data
     var private = {
         audiogramId     : audiogram_id,         //Unique identifier for this audiogram
         objectId        : 0,                    //Numerical ID for objects on stage
         side            : side,                 //Left or right ear
+        element_id      : element_id,
         colors     : {
                              "lineColor":"#414141",
                              "backColor":"#ffffff",
@@ -20,7 +22,6 @@ var AudioGram = function(stage,audiogram_id,side) {
                              "strokeColor": "#000000"
                           },
         dirtyBit        : false,                //Flag used to not add a measure if another one was clicked on
-        stage           : stage,                //Element id for kinetic canvas  
         margins         : {
                             "top":65,
                             "bottom":30,
@@ -32,10 +33,11 @@ var AudioGram = function(stage,audiogram_id,side) {
                             "max":{"x":0,"y":0}
                           },
         graph_size      : {"width":null,"height":null},
-        currentMeasure  : 'AC',                 //AC, BC, MCL, etc.
+        measureType     : 'AC',                 //AC, BC, MCL, etc.
         masked          : 'unmasked',           //Masked = masked Unmasked = unmasked :)
         no_response     : 0,             //true = patient could hear , false = patient couldn't hear
-        ctx_menu_id     : 0,
+        ctx_menu1_id    : 0,
+        ctx_menu2_id    : 0,
         x_labels        : [],
         y_labels        : [],
         x_values        : [],
@@ -50,8 +52,8 @@ var AudioGram = function(stage,audiogram_id,side) {
         _init : function(){
             
             //Add the contex menu for audiogram
-            this.ctx_menu_id = this.addContextMenu();
-            
+            this.addContextMenus();
+                        
             //Set the stroke color depending on which side it is.
             if(this.side == 'right')
                 this.colors['strokeColor'] = '#ED1D25';
@@ -119,6 +121,66 @@ var AudioGram = function(stage,audiogram_id,side) {
             }            
             this.addBackgroundLayer();
         },
+        /**
+        * Adds the context menu to the DOM. A right click method on a "measurement" on the 
+        * canvas will fire off the "addContextMenu". 
+        * @param {void}
+        * @return {void}
+        */ 
+        addContextMenus : function(){
+            var id=0;
+            var self = this;
+            context.init({preventDoubleContext: true});
+            this.ctx_menu1_id = context.attach('#measure_choices', [
+                {header: 'Options'},
+                {text: 'Delete', href: '#', action: function(e){
+			         e.preventDefault();
+                     var x = globalClick.x;
+                     var y = globalClick.y;
+                     var index = self.measureClicked(x,y);
+                     var measure = stack[index];
+                     console.log("Delete: "+measure);
+		        },fa_icon:'fa-close'},
+                {text: 'Toggle Masked', href: '#',fa_icon:'fa-headphones'},
+                /*{divider: true},*/
+                {text: 'No Response', href: '#', action: function(e){
+			         e.preventDefault();
+                     var x = globalClick.x;
+                     var y = globalClick.y;
+                     var index = self.measureClicked(x,y);
+                     var measure = stack[index];
+                     self.makeNoResponse(measure);
+                     console.log("No response: "+measure);
+		        },fa_icon:'fa-thumbs-o-down'}
+            ]);
+            this.ctx_menu2_id = context.attach('#audiogram_choices', [
+                {header: 'Options'},
+                {text: 'Undo', href: '#', action: function(e){
+			        e.preventDefault();
+                    self.undoMeasure();
+                    console.log("Undo");
+		        },fa_icon:'fa-history'},
+                {text: 'Redo', href: '#',fa_icon:'fa-rotate-right'},
+                {divider: true},
+                {text: 'Clear Audiogram', href: '#', action: function(e){
+			         e.preventDefault();
+                     var x = globalClick.x;
+                     var y = globalClick.y;
+                     var index = self.measureClicked(x,y);
+                     var measure = stack[index];
+                     console.log("No response: "+measure);
+		        },fa_icon:'fa-refresh'}
+            ]);
+        },
+        /**
+        * Adds a downward arrow to a measure to indicate no-response 
+        * @param {int} x1 - Starting coords
+        * @param {int} y1
+        * @param {int} x2 - Ending coords
+        * @param {int} y2
+        * @param {int} w - Width of arrow head
+        * @return {shape} - kinetic js line
+        */ 
         arrow : function(x1, y1, x2, y2, w) {
             
             var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
@@ -127,7 +189,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             x2 = x1+pl;
             y2 = y1;
             
-
             var poly = new Kinetic.Line({
                 points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
                 fill: this.colors['strokeColor'],
@@ -145,6 +206,11 @@ var AudioGram = function(stage,audiogram_id,side) {
 
             return poly;
         },
+        /**
+        * Adds the layer with the "graph" looking lines 
+        * @param {void}
+        * @return {void}
+        */ 
         addBackgroundLayer : function(){
             //Add horizontal lines
             var lines = [];
@@ -240,14 +306,6 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             stage.add(layers['background']);
         },
-        clearStage: function(){
-            //redo will need fixed because I'm destroying the event stack
-            stack = [];
-            layers['measures'].removeChildren();
-            layers['connect'].removeChildren();
-            stage.draw();
-            
-        },
         /**
         * Adds measures to the audiogram. Each "measure" is snapped to the closest proper decibel and frequency.
         * Each measure starts with a common set of attributes, and is then refined depending on what type of 
@@ -258,14 +316,22 @@ var AudioGram = function(stage,audiogram_id,side) {
         */ 
         addMeasure: function(){
             var snap = this.snapClick();
+            var index = false;
             
             //Mainly right now, if you don't click on the canvas, you get no action
             if(snap.error){
                 console.log(snap.type);
                 return;
             }else{
-                console.log(snap.x+','+snap.y);
-                var snapped = this.snapMeasure(snap);
+                //Not a new item, lets make adjustements, and by adustments I mean delete some stuff....
+                index = this.measureClicked(snap.x,snap.y);
+                //if you click in the same frequency, you snap the existing one to the new location
+                index = this.sameFrequency(snap);
+                if(index){
+                    stack[index].destroy();
+                    stack.splice(index,1);
+                    console.log(index);
+                }
             }
             
             //Get current adjusted x&y coords.
@@ -278,12 +344,9 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             //Arbitrary font size right now.
             var fontSize = 34;
-            
-            var arrow = null;   //holds arrow if needed (for a no response)
-            var group = null;   //group shape with arrow if needed
 
             //Goes and grabs the "shape" to be displayed based on these params
-            var measureData = GetMeasureData(this.currentMeasure,this.masked,this.side);  
+            var measureData = GetMeasureData(this.measureType,this.masked,this.side);  
             
             //Common styles to most measures
             var commonStyle = {
@@ -296,12 +359,11 @@ var AudioGram = function(stage,audiogram_id,side) {
                 shadowOpacity: 0.3,
                 draggable: true,
                 name: measureData.value+"-"+this.objectId,
-                measure: this.currentMeasure,
+                measure: this.measureType,
                 center: {'x':x,'y':y},
                 audioValues: {'frequency':f.value,'decibels':d.value}
             }
             
-       
             //Determine the actual measure type so it can be customized
             if (measureData.type == 'text')
             {
@@ -365,99 +427,42 @@ var AudioGram = function(stage,audiogram_id,side) {
                 }
             }
             
-            if(this.no_response == 1){
-                var x1 = x+5;
-                var x2 = x+15;
-                var y1 = y+5;
-                var y2 = y+15;
-                var w = 2;
-                
-                var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
-                var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+            stack.push(shape);
 
-                x2 = x1+pl;
-                y2 = y1;
-
-
-                var arrow = new Kinetic.Line({
-                    points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
-                    fill: this.colors['strokeColor'],
-                    stroke: this.colors['strokeColor'],
-                    strokeWidth: 2,
-                    closed: true,
-                    rotation: pr,
-                    x: x1,
-                    y: y1,
-                    shadowColor: 'black',
-                    shadowBlur: 10,
-                    shadowOffset: {x:2,y:2},
-                    shadowOpacity: 0.5,
-                    center: {'x':x,'y':y},
-                    audioValues: {'frequency':f.value,'decibels':d.value},
-                    measure: this.currentMeasure
-                  });
-                
-                console.log(arrow);
-                group = new Kinetic.Group({
-                    x: x,
-                    y: y,
-                });
-                group.add(arrow);
-                group.add(shape);
-                //Push latest measure onto stack
-                //stack.push(group);
-                stack.push(arrow);
-                stack.push(shape);
-            }else{
-                //Push latest measure onto stack
-                stack.push(shape);
-            }
-
-            
-            
-            //console.log(shape);
-        
             this.drawConnection();
             
             //Push measure into the "layer"
             layers['measures'].add(stack[stack.length-1]);
             
-            //hack!!!!
-            if(this.no_response == 1)        
-                layers['measures'].add(stack[stack.length-2]);
-            
             //Add layer to stage
             stage.add(layers['measures']);
             this.objectId++;
-            console.log(stack);
+            console.log(stack.length);
              
         },
-        makeNoResponse : function(){
-            
+        /**
+        * Binds the context menu to our canvas 
+        * @param {void}
+        * @return {void}
+        */ 
+        bindContextMenu : function(){
+            $('#'+this.element_id).bind('contextmenu', $.proxy(function (event) {
+                event.preventDefault();
+                this.showContextMenu();
+            },this));
         },
         /**
-        * Checks to see if a measure is being added to the same frequency. 
-        * If it is, it removes the existing at that x, so the new one will
-        * appear to "snap" to the correct location.
-        * @param {coord} - x,y coords
-        * @return {bool} - returns true for remove, false for not
+        * Removes all items from the stage, then redraws the clean stage. 
+        * @param {void}
+        * @return {void}
         */ 
-        snapMeasure : function(snap){
-            var snap = this.snapClick();
-            var x = snap.x;
-            var y = snap.y;
-            var attr = null;
+        clearStage: function(){
+            //redo will need fixed because I'm destroying the event stack
+            stack = [];
+            layers['measures'].removeChildren();
+            layers['connect'].removeChildren();
+            stage.draw();
             
-            for(var i=0;i<stack.length;i++){
-                attr = stack[i].getAttrs();
-                if(x == attr.center.x){
-                    stage[i].remove();
-                    //stage.
-                    stack.splice(i,1);
-                    return true
-                }
-            }
-            return false;           
         },
         /**
         * Connect the measures with a line, just the air conduction measures
@@ -466,7 +471,6 @@ var AudioGram = function(stage,audiogram_id,side) {
         */ 
         drawConnection : function()
         {
-            
             var temp = [];
             var points = [];
             
@@ -514,6 +518,35 @@ var AudioGram = function(stage,audiogram_id,side) {
             }
         },
         /**
+        * When stage is clicked, this function find the "object / measure" on the canvas that it would collide with.
+        * Not allowed to be on same "y" coordinate.
+        * @param {int} x - Optional x 
+        * @param {int} y - Optional y
+        * @return {int} i - index of shape in stack
+        */ 
+        measureClicked : function(x,y){
+            if(typeof x == "undefined" && typeof y == "undefined"){
+                var snap = this.snapClick();
+                x = snap.x;
+                y = snap.y;
+            }else{
+                var snap = this.snapClick(x,y);
+                x = snap.x;
+                y = snap.y;                
+            }
+            
+            var attr = null;
+            console.log(x+','+y);
+            
+            for(var i=0;i<stack.length;i++){
+                attr = stack[i].getAttrs();
+                if(x == attr.center.x && y == attr.center.y){
+                    return i;
+                }
+            }
+            return false;
+        },
+        /**
         * Finds the closest decibel value (in increments of 5) to the mouse click
         * @param {number} y The 'y' coordinate of the mouse click.
         * @return {null} 
@@ -526,7 +559,7 @@ var AudioGram = function(stage,audiogram_id,side) {
             y = y - this.graph_bounds.min.y;                    //adjust y because of margins    
             d = Math.floor(y / (this.row_height / 2));          //How many 1/2 rows divide into y
             
-            r = (y % (this.row_height / 2)) / this.row_height;                      //Remainder (how close is it to the next value).
+            r = (y % (this.row_height / 2)) / this.row_height;  //Remainder (how close is it to the next value).
             
             if(r > .5)
                 d = d + 1;
@@ -570,6 +603,12 @@ var AudioGram = function(stage,audiogram_id,side) {
             
             return this.x_values[this.x_values.length-1];
         },
+        /**
+        * Simply makes sure mouse click is on the "audiogram" before adding a measure.
+        * @param {int} x - Coords of where click happened
+        * @param {int} y
+        * @return {bool} - True = in bounds / False = not.
+        */ 
         inBounds : function(x,y){
             if(x>=this.graph_bounds.min.x &&
                     x<=this.graph_bounds.max.x &&
@@ -579,8 +618,80 @@ var AudioGram = function(stage,audiogram_id,side) {
             else
                 return false;
         },
-        setCurrentMeasure: function(measure){
-            this.currentMeasure = measure;
+        /**
+        * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
+        * @param {void}
+        * @return {void}
+        */
+        makeNoResponse : function(shape){
+            console.log("shape");   
+            console.log(shape);
+            var arrow = null;   //holds arrow if needed (for a no response)
+            var group = null;   //group shape with arrow if needed
+            var x1 = shape.center.x+5;
+            var x2 = shape.center.x+15;
+            var y1 = shape.center.y+5;
+            var y2 = shape.center.y+15;
+            var w = 2;
+
+            var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
+            var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+
+            x2 = x1+pl;
+            y2 = y1;
+
+            var arrow = new Kinetic.Line({
+                points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
+                fill: this.colors['strokeColor'],
+                stroke: this.colors['strokeColor'],
+                strokeWidth: 2,
+                closed: true,
+                rotation: pr,
+                x: x1,
+                y: y1,
+                shadowColor: 'black',
+                shadowBlur: 10,
+                shadowOffset: {x:2,y:2},
+                shadowOpacity: 0.5,
+                center: {'x':x,'y':y},
+                audioValues: {'frequency':shape.audioValues.frequency,'decibels':shape.audioValues.decibels},
+                measure: this.measureType
+              });
+            console.log("arrow");
+            console.log(arrow);
+            group = new Kinetic.Group({
+                x: x,
+                y: y,
+            });
+            group.add(arrow);
+            group.add(shape);
+            console.log("group");
+            console.log(group);
+            //Push latest measure onto stack
+            //stack.push(group);
+            //stack.push(arrow);
+            //stack.push(shape);            
+        },
+        /**
+        * Retreives last item popped off the stack and adds it to the "stage"
+        * @param {void}
+        * @return {void}
+        */
+        redoMeasure: function(){
+            var shape = redoStack.pop();
+            stack.push(shape);
+            layers['measures'].add(shape);            
+            layers['measures'].draw();
+            this.drawConnection();
+            this.objectId++;
+        },
+        /**
+        * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
+        * @param {void}
+        * @return {void}
+        */
+        setMeasureType: function(measure_type){
+            this.measureType = measure_type;
         },
         setMasked: function(masked){
             if(masked){
@@ -590,14 +701,49 @@ var AudioGram = function(stage,audiogram_id,side) {
             }
         },
         /**
+        * Changes the css of our context menu and displays it at the location in which the 
+        * canvas was clicked.
+        * @param {void}
+        * @return {void}
+        */ 
+        showContextMenu : function(){
+            console.log('showContextMenu: '+this.ctx_menu1_id);
+            var x1 = $("#audiogram_"+this.side).offset().left;
+            var y1 = $("#audiogram_"+this.side).offset().top;
+
+            var x2 = stage.getPointerPosition().x;
+            var y2 = stage.getPointerPosition().y;
+            
+            //Because the "bound" method on the context menu doesn't know or have access to (yet) the
+            //stages x,y click location, I'm saving that click globally so I can use it in the context
+            //menu handler. Crap.
+            globalClick.x = x2;
+            globalClick.y = y2;
+                
+            var attr = this.measureClicked(x2,y2);
+            console.log("showContextMenu  - attr: "+attr);
+                
+            if(attr !== false){
+                $('#dropdown-'+this.ctx_menu1_id).css('position','absolute');
+                $('#dropdown-'+this.ctx_menu1_id).css('display','block');
+                $('#dropdown-'+this.ctx_menu1_id).css('top',y1+y2);
+                $('#dropdown-'+this.ctx_menu1_id).css('left',x1+x2);
+            }else{
+                $('#dropdown-'+this.ctx_menu2_id).css('position','absolute');
+                $('#dropdown-'+this.ctx_menu2_id).css('display','block');
+                $('#dropdown-'+this.ctx_menu2_id).css('top',y1+y2);
+                $('#dropdown-'+this.ctx_menu2_id).css('left',x1+x2);                
+            }
+        },
+        /**
         * Takes a mouse click and "snaps" it to the closest allowable x,y that corresponds with an appropriate 
         *    audiogram value set. So, it snaps it to the closest dB value in increments of 5 and an acceptable 
         *    frequency (dictated by an array of frequencies).
-        * @param {number} x 
-        * @param {number} y
+        * @param {number} x  //Pass in x and y, in case "stage.getPointerPosition()" is not defined.
+        * @param {number} y  //Not always necessary.
         * @return {object} {x,y}
         */ 
-        snapClick: function(){
+        snapClick: function(inX,inY){
             //console.log('snapClick '+this.side);
 
             var i;  //index
@@ -605,9 +751,18 @@ var AudioGram = function(stage,audiogram_id,side) {
             var cx; //closest x
             var cy; //closest y
             var min = stage.getWidth();   //Largest value that can be on this canvas
+            var x = 0;
+            var y = 0;
             
-            var x = stage.getPointerPosition().x;
-            var y = stage.getPointerPosition().y;
+            //See if stage has a current mouse click. If it's not defined then I don't want to throw an error.
+            var coord = stage.getPointerPosition();
+            if (typeof coord != 'undefined'){
+                x = stage.getPointerPosition().x;
+                y = stage.getPointerPosition().y;
+            }else{
+                x = inX;
+                y = inY;
+            }
             
             if(!this.inBounds(x,y)){
                 return {"x":-1,"y":-1,"error":1,"type":"Out of bounds"}
@@ -630,8 +785,28 @@ var AudioGram = function(stage,audiogram_id,side) {
                     cy = this.y_values[i].y;
                 }
             }            
-            
             return {"x":cx,"y":cy,"error":0,"type":null};
+        },
+        /**
+        * Checks to see if a measure is being added to the same frequency. 
+        * If it is, it removes the existing at that x, so the new one will
+        * appear to "snap" to the correct location.
+        * @param {coord} - x,y coords
+        * @return {bool} - returns true for remove, false for not
+        */ 
+        sameFrequency : function(snap){
+            var snap = this.snapClick();
+            var x = snap.x;
+            var y = snap.y;
+            var attr = null;
+            
+            for(var i=0;i<stack.length;i++){
+                attr = stack[i].getAttrs();
+                if(x == attr.center.x){
+                    return i;
+                }
+            }
+            return false;           
         },
         /**
         * Pops last item off the stack and removes it from the "stage"
@@ -684,104 +859,13 @@ var AudioGram = function(stage,audiogram_id,side) {
                 3000);
             }
         },
-        getClosestMeasure : function(){
-            var snap = this.snapClick();
-            var x = snap.x;
-            var y = snap.y;
-            var attr = null;
-            
-            for(var i=0;i<stack.length;i++){
-                attr = stack[i].getAttrs();
-                console.log(attr.center.x+','+x+':'+attr.center.y+','+y);
-                if(x == attr.center.x && y == attr.center.y){
-                    return attr;
-                }
-            }
-            return false;
-        },
-        /**
-        * Adds the context menu to the DOM. A right click method on a "measurement" on the 
-        * canvas will fire off the "addContextMenu". 
-        * @param {void}
-        * @return {void}
-        */ 
-        addContextMenu : function(){
-            var id=0;
-            var This = this;
-            context.init({preventDoubleContext: true});
-            id = context.attach('#audiogram_choices', [
-                {header: 'Options'},
-                {text: 'Delete', href: '#'},
-                {text: 'Copy', href: '#'},
-                /*{divider: true},*/
-                {text: 'No Response', href: '#',action: function(e){
-			         e.preventDefault();
-                     console.log(e);
-                     var measure = This.getClosestMeasure();
-                     console.log(measure);
-			         console.log('change no response');
-		        }},
-            ]);
-            return id;
-        },
-        /**
-        * Changes the css of our context menu and displays it at the location in which the 
-        * canvas was clicked.
-        * @param {void}
-        * @return {void}
-        */ 
-        showContextMenu : function(){
-            console.log('showing'+this.ctx_menu_id);
-            var x1 = $("#audiogram_"+this.side).offset().left;
-            var y1 = $("#audiogram_"+this.side).offset().top;
-
-            var x2 = stage.getPointerPosition().x;
-            var y2 = stage.getPointerPosition().y;
-                
-            var attr = this.getClosestMeasure(x2,y2);
-            console.log(attr);
-            console.log('x: ' + x + ' y: ' + y);  
-                
-            if(attr !== false){
-                $('#dropdown-'+this.ctx_menu_id).css('position','absolute');
-                $('#dropdown-'+this.ctx_menu_id).css('display','block');
-                $('#dropdown-'+this.ctx_menu_id).css('top',y1+y2);
-                $('#dropdown-'+this.ctx_menu_id).css('left',x1+x2);
-            }
-
-        },
-        /**
-        * Will hide the context menu. Right now the js library 'context.js' hides the element
-        * by binding a click event to the body of the page.
-        * @param {void}
-        * @return {void}
-        */ 
-        hideContextMenu : function(){
-            $('#dropdown-'+this.ctx_menu_id).css('display','none');
-        },
-        /**
-        * Retreives last item popped off the stack and adds it to the "stage"
-        * @param {void}
-        * @return {void}
-        */
-        redoMeasure: function(){
-            var shape = redoStack.pop();
-            stack.push(shape);
-            layers['measures'].add(shape);            
-            layers['measures'].draw();
-            this.drawConnection();
-            this.objectId++;
-        }
-        
     }
-
+    
     private._init();
      
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
-        console.log(evt.button);
-
         if(private.dirtyBit){
             private.dirtyBit = false;
             return;
@@ -793,7 +877,7 @@ var AudioGram = function(stage,audiogram_id,side) {
         try{
             name = shape.getName();
         }catch(e){
-            console.log("oops");
+            console.log("clean click");
         }
         
         setTimeout(function(){
@@ -806,13 +890,14 @@ var AudioGram = function(stage,audiogram_id,side) {
         },0);
     });
     
-    layers['measures'].on('click', function(evt) {
-        private.dirtyBit = true;
-        // get the shape that was clicked on
-        var shape = evt.target;
-        alert('you clicked on \"' + shape.getName() + '\"');
-        //array.splice(5, 1);
-    });
+//    layers['measures'].on('click', function(evt) {
+//        private.dirtyBit = true;
+//        // get the shape that was clicked on
+//        var shape = evt.target;
+//        console.log('you clicked on \"' + shape.getName() + '\"');
+//        //private.showContextMenu(shape);
+//        //array.splice(5, 1);
+//    });
 
     // Expose public API
     return {
@@ -820,6 +905,9 @@ var AudioGram = function(stage,audiogram_id,side) {
             if ( private.hasOwnProperty( prop ) ) {
                 return private[ prop ];
             }
+        },
+        bindContextMenu: function(){
+            private.bindContextMenu();
         },
         clear: function(){
             private.clearStage();
@@ -830,8 +918,8 @@ var AudioGram = function(stage,audiogram_id,side) {
         getAudiogram: function(){
             private.getAudiogram();
         },
-        setCurrentMeasure: function(measure){
-            private.setCurrentMeasure(measure);
+        setMeasureType: function(measure_type){
+            private.setMeasureType(measure_type);
         },
         setMasked: function(masked){
             private.setMasked(masked);
