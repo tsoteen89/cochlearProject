@@ -540,7 +540,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
-                if(x == attr.center.x && y == attr.center.y){
+                if(x == attr.x && y == attr.y){
                     return i;
                 }
             }
@@ -583,7 +583,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             x = Math.round(x - this.graph_bounds.min.x);    //adjust x because of margins    
             
-            p = c;          //start off p as the width of one column
+            p = c;      //start off p as the width of one column
             
             //If x is within the first column, return 125hz
             if(x < p){
@@ -624,16 +624,14 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {void}
         */
         makeNoResponse : function(shape){
-            console.log("shape");   
-            console.log(shape);
             var arrow = null;   //holds arrow if needed (for a no response)
             var group = null;   //group shape with arrow if needed
-            var x1 = shape.center.x+5;
-            var x2 = shape.center.x+15;
-            var y1 = shape.center.y+5;
-            var y2 = shape.center.y+15;
+            var x1 = shape.x()+5;
+            var x2 = shape.x()+15;
+            var y1 = shape.y()+5;
+            var y2 = shape.y()+15;
             var w = 2;
-
+            
             var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
             var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
 
@@ -653,24 +651,24 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 shadowBlur: 10,
                 shadowOffset: {x:2,y:2},
                 shadowOpacity: 0.5,
-                center: {'x':x,'y':y},
-                audioValues: {'frequency':shape.audioValues.frequency,'decibels':shape.audioValues.decibels},
+                center: {'x':x1,'y':y1},
                 measure: this.measureType
-              });
-            console.log("arrow");
-            console.log(arrow);
+            });
             group = new Kinetic.Group({
-                x: x,
-                y: y,
+                x: x1,
+                y: y1,
             });
             group.add(arrow);
             group.add(shape);
-            console.log("group");
-            console.log(group);
             //Push latest measure onto stack
-            //stack.push(group);
-            //stack.push(arrow);
-            //stack.push(shape);            
+            stack.push(group);
+            layers['measures'].removeChildren();
+            for(var i=0; i<stack.length;i++){
+                layers['measures'].add(stack[i]);   
+            }    
+            layers['measures'].draw();
+            stage.add(layers['measures']);
+            console.log(layers['measures']);
         },
         /**
         * Retreives last item popped off the stack and adds it to the "stage"
@@ -802,7 +800,8 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
-                if(x == attr.center.x){
+                console.log(attr);
+                if(x == attr.x){
                     return i;
                 }
             }
@@ -822,7 +821,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 this.drawConnection();
                 this.objectId--;
             }else{
-                
                 var tooltip = new Kinetic.Label({
                     x: (this.graph_bounds.max.x - this.graph_bounds.min.x)/2,
                     y: (this.graph_bounds.max.y - this.graph_bounds.min.y)/2,
