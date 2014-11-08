@@ -436,8 +436,21 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.addUser= function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             
+			$scope.sessionID = userInfo.get().SessionID;
             $scope.addUser = {};
-            //****** place  future email api call here******/ 
+			
+			//Grab the user titles
+			getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
+			   $scope.userTitles = data.records;
+		   }); 
+			
+            //Send invitation to the potential user
+			$scope.sendInvitation = function() {
+				$scope.inviteUserURL = "http://killzombieswith.us/aii-api/v1/users/invite/" + $scope.sessionID;
+				postData.post($scope.inviteUserURL, $scope.addUser);
+				$modalInstance.close();
+			}
+			
             $scope.ok = function () {
                 $modalInstance.close();
             };
