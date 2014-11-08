@@ -782,6 +782,8 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.limitArray = new Array();
     $scope.n = 0;
     $scope.finished = false;
+    $scope.page = 1;
+    $scope.finalPage = null;
     
     $scope.answer = {};
     $scope.answer.Answers = {};
@@ -799,6 +801,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.clickedPhase = null;
+    
+    if($scope.phaseName == 'Initial Surgical Consultation'){
+        $scope.finalPage = 4;
+    }else if($scope.phaseName == 'Preoperative Visit'){
+        $scope.finalPage = 3;
+    }else if($scope.phaseName == 'One week Postoperative Visit'){
+        $scope.finalPage = 4;
+    }else if($scope.phaseName == 'Activation'){
+        $scope.finalPage = 1;
+    }
+    
+    if($scope.phaseName == 'Activation'){
+        $scope.finished = true;
+    };
+    
     
     $scope.isArray = function(check){
         return angular.isArray(check);
@@ -932,7 +949,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //Display the next set of questions for a phase
     $scope.nextPage = function(){
-        
+        $scope.page = $scope.page + 1;
         //If questions on the previous page lack an answer, save an answer for that question with "Not Answered" as the text
         for (question in this.finalQuestions) {
             console.log(question);
@@ -996,6 +1013,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //function used to display questions from previous pages
     $scope.previousPage = function() {
+        $scope.page = $scope.page - 1;
         $scope.finished = false;
         $scope.limit = $scope.limitArray.pop();
         $scope.offSet = $scope.offSet - $scope.limit;
@@ -1729,6 +1747,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
                     },0).then(function(){
                         $scope.ok();
+                        document.getElementById(patient.First).className = "switchtwo";
                     });
                 },0);
 
@@ -1769,6 +1788,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
                     },0).then(function(){
                         $scope.ok();
+                        document.getElementById(patient.First).className = "switch";
                     });
                 },0);
 
