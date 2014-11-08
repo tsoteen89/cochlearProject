@@ -44,9 +44,18 @@
                 
             <div ng-controller="PatientPhaseCollapseCtrl" class="row">    
                 <!-- PATIENT BOX ON LEFT--------------------->
-                <a id="{{patient.Last}}"></a>
-                    <patient-info></patient-info>
                 
+                <!--
+                <div style="margin-left:15%">
+                    <input type="checkbox" id="switch1" name="switch1" class="switch" />
+                    <label for="switch1">first switch</label>
+                </div>
+-->
+                
+                <a id="{{patient.Last}}"></a>
+                <patient-info>
+                </patient-info>
+
                     
                 <!-- END PATIENT BOX ON LEFT--------------------->
 

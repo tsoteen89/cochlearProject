@@ -1,113 +1,171 @@
 <div id = "cp_patientContainer"class="col-md-3" >
-    <br>
-    <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
-    <p class = "cp_patientSex" >{{patient.Sex}}</p>
-    <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
-    <br> 
-    <br>
-    
-    <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" > Patient Details</button>
-    
-    <div ng-show="show"><br>
-        
-        <div ng-if="patient.InactiveStatus != 10">
-            <span> Inactive because of {{patient['Inactive Reason']}}</span> <br>
-            <input type="checkbox" name="changeActive" value="10" ng-click="markPatientActive(patient)"> Mark Patient As Active<br>
-        </div> 
-        
-        <!--Set Patient To Inactive -->
-        <div ng-if="patient.InactiveStatus == 10">
-            <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
-            <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
-            <div ng-if="setInactive==true"  ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
-                <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="patient['Inactive Reason'] = reason.Reason"
-                       ng-model="patient.reason" > {{reason.Reason}}
-            </div>
-            <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"></span></a>
+    <div class="row">
+        <div class="col-md-8">
+            <br>
+            <p id = "cp_patientFname">{{patient.First }}  {{patient.Last |uppercase }}</p>
+            <p class = "cp_patientSex" >{{patient.Sex}}</p>
+            <p class = "cp_patientAge">{{calcAge(patient.DOB)}} yrs old </p>
+            <br><br>
         </div>
-        
-        <!--End set patient to inactive-->
-        <form ng-submit="submitPatientInfo(patient)">
-            <br> 
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Phone:</label>
-                </div>
-                <div class="col-md-8">
-                    <text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
-                    <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
-                </div>
+        <div class="col-md-3">
+            <br>
+            Patient Status
+            <br>
+            <div ng-if="patient.InactiveStatus != 10">
+                <input ng-click="inactivity(patient)" type="checkbox" id="{{patient.First}}" name="{{patient.First}}" class="switchtwo" />
+                <label for="{{patient.First}}">l</label>
             </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Email:</label> 
-                </div>
-                <div class="col-md-8">
-                    <a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
-                    <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Address:</label>
-                </div>
-                <div class="col-md-9" ng-if="editPatient != true">
-                    {{patient.Address1}} <br> {{patient.City}}, <br>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-8 col-md-offset-3">
-                    <text ng-if="editPatient != true"> {{patient.State}} {{patient.Zipcode}} </text>
-                </div>
-            </div>
-
-            <div ng-if="editPatient == true">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label>Street:</label>
-                    </div>
-                    <div class="col-md-9">
-                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Address1"> &nbsp <br>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <label>City:</label>
-                    </div>
-                    <div class="col-md-9">
-                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.City"> &nbsp <br>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <label>State:</label>
-                    </div>
-                    <div class="col-md-9">
-                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.State"> &nbsp <br>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <label>Zip:</label>
-                    </div>
-                    <div class="col-md-9">
-                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Zipcode">
-                    </div>
-                </div>
-                
+            <div ng-if="patient.InactiveStatus == 10">
+                <input ng-click="activity(patient)" type="checkbox" id="{{patient.First}}" name="{{patient.First}}" class="switch" />
+                <label for="{{patient.First}}">l</label>
             </div>
             
-            <a href=""><span class="fa " ng-click="editPatient = !editPatient; submitPatientInfo(patient)" 
-                        ng-class="{'fa-pencil-square-o':!editPatient, 'fa-floppy-o':editPatient}" ></span></a>
+        </div>
+    </div>
+    
+    <script type="text/ng-template" id="active.html">
+        <div ng-contoller="apiPatientsController">
+            <div class="modal-header">
+                <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Reason for {{modalPatient.First}} {{modalPatient.Last}} to be Inactive</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
+                            <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="setReason(reason.Reason); setReasonID(reason.ReasonID)"
+                                   ng-model="patient.reason" > {{reason.Reason}}
+                        </div>
+                    <br>
+                    <a href="" ng-click="submitPatientInfo(modalPatient)" class="btn btn-primary col-md-3 col-md-offset-1">Submit</a>
+                    <br>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">Close</button>
+            </div>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="inactive.html">
+        <div ng-contoller="apiPatientsController">
+            <div class="modal-header">
+                <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Make {{modalPatient.First}} {{modalPatient.Last}} Active?</h4>
+            </div>
+            <div class="modal-body">
+                <a href="" ng-click="submitPatientInfo(modalPatient)" class="btn btn-primary col-md-3 col-md-offset-1">Yes</a>
+                <a href="" ng-click="ok()" class="btn btn-primary col-md-3 col-md-offset-1">No</a>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">Close</button>
+            </div>
+        </div>
+    </script>
 
-            
-        </form>
+        <button type="button" class="btn btn-info btn-sm" ng-click="show =!show" > Patient Details</button>
+
+        <div ng-show="show"><br>
+
+            <div ng-if="patient.InactiveStatus != 10">
+                <span> Inactive because of {{patient['Inactive Reason']}}</span> <br>
+                <input type="checkbox" name="changeActive" value="10" ng-click="markPatientActive(patient)"> Mark Patient As Active<br>
+            </div> 
+
+            <!--Set Patient To Inactive -->
+            <div ng-if="patient.InactiveStatus == 10">
+                <i class="fa fa-lock" style="cursor:pointer" ng-click="setInactive = !setInactive"> Set Patient to Inactive</i> <br>
+                <span ng-if="setInactive==true"> Reasons to mark a patient as Inactive </span>
+                <div ng-if="setInactive==true"  ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
+                    <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="patient['Inactive Reason'] = reason.Reason"
+                           ng-model="patient.reason" > {{reason.Reason}}
+                </div>
+                <a href=""><span class="fa fa-floppy-o" ng-if="setInactive == true" ng-click="submitPatientInfo(patient)"></span></a>
+            </div>
+
+            <!--End set patient to inactive-->
+            <form ng-submit="submitPatientInfo(patient)">
+                <br> 
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Phone:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <text ng-if="editPatient != true">({{patient.Phone.slice(0,3)}}){{patient.Phone.slice(3,6)}}-{{patient.Phone.slice(6)}}</text>
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Phone"><br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Email:</label> 
+                    </div>
+                    <div class="col-md-8">
+                        <a ng-if="editPatient != true" id = "cp_email" href="mailto:{{patient.Email}}">{{patient.Email}}</a>
+                        <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Email"><br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Address:</label>
+                    </div>
+                    <div class="col-md-9" ng-if="editPatient != true">
+                        {{patient.Address1}} <br> {{patient.City}}, <br>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-3">
+                        <text ng-if="editPatient != true"> {{patient.State}} {{patient.Zipcode}} </text>
+                    </div>
+                </div>
+
+                <div ng-if="editPatient == true">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Street:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Address1"> &nbsp <br>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>City:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.City"> &nbsp <br>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>State:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.State"> &nbsp <br>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Zip:</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input ng-click-select type="text" ng-if="editPatient == true" ng-model="patient.Zipcode">
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href=""><span class="fa " ng-click="editPatient = !editPatient; submitPatientInfo(patient)" 
+                            ng-class="{'fa-pencil-square-o':!editPatient, 'fa-floppy-o':editPatient}" ></span></a>
+
+
+            </form>
+        </div>
     </div>
 </div> 
 

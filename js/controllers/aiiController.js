@@ -1695,6 +1695,97 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         
     };
     
+    
+    $scope.activity = function(patient){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            
+            $scope.modalPatient = patient;
+            
+            getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data){
+                $scope.inactiveReasons = data.records;
+            });
+
+            $scope.ok = function () {
+                document.getElementById(patient.First).className = "switchtwo";
+                $modalInstance.close();
+                
+            };
+            
+            $scope.setReasonID = function(reasonID) {
+                $scope.modalPatient.reason = reasonID;
+            };
+            
+            $scope.setReason = function(reason) {
+                $scope.modalPatient['Inactive Reason'] = reason;
+            };
+        
+            $scope.submitPatientInfo = function(modalPatient){
+                $timeout(function(){
+                    if(modalPatient.reason){
+                        modalPatient.InactiveStatus = modalPatient.reason;
+                        modalPatient.reason = null;
+                    }
+                    $timeout(function(){
+                        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
+                    },0).then(function(){
+                        $scope.ok();
+                    });
+                },0);
+
+
+            };
+            
+        };
+
+        var modalInstance = $modal.open({
+          templateUrl: 'active.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg'
+
+        });
+    } 
+    
+    $scope.inactivity = function(patient){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            
+            $scope.modalPatient = patient;
+
+            $scope.ok = function () {
+                document.getElementById(patient.First).className = "switch";
+                $modalInstance.close();
+            };
+            
+            $scope.modalPatient.reason = 10;
+            
+            $scope.modalPatient['Inactive Reason'] = null;
+        
+            $scope.submitPatientInfo = function(modalPatient){
+                $timeout(function(){
+                    if(modalPatient.reason){
+                        modalPatient.InactiveStatus = modalPatient.reason;
+                        modalPatient.reason = null;
+                    }
+                    $timeout(function(){
+                        putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
+                    },0).then(function(){
+                        $scope.ok();
+                    });
+                },0);
+
+
+            };
+            
+        };
+
+        var modalInstance = $modal.open({
+          templateUrl: 'inactive.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg'
+
+        });
+    }    
+    
+    
     //Added by Anne
     //***********************Get Fac card MODAL IN  Patient directory in see care team details when you click on a patients provider****************//
     /**
@@ -1735,7 +1826,9 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             }
           }
          
-        });                                              
+        });             
+        
+        
     }
     
     //Added by Anne

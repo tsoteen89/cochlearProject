@@ -3,9 +3,15 @@
 <div data-ng-controller="questionsController">    
     
     <div class="row">
-        {{patientName}}
-        <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-4">{{phaseName}}</label>
+        <div class="col-md-2 col-md-offset-1">
+            <label style="font-size: 24px">{{patientName}}</label>
+            <label style="font-size: 24px">DOB: {{patientDOB}}</label>
+        </div>
+        <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-1">{{phaseName}}</label>
         <hr>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-md-offset-2">
         <form class="form form-verticle col-md-5 col-md-offset-1" id="form_850359" class="appnitro">
             <div class="control-group" >
 
@@ -185,49 +191,49 @@
             <br>
            <completed-audiology></completed-audiology>
         </div>
-    </div>
+        </div>
 
-    </div><!--COL 6 div-->
+        </div><!--COL 6 div-->
 
     
         
-    <script type="text/ng-template" id="dataSummary.html">
-    
-    <div data-ng-controller="questionsController"> 
-        <div class="modal-header">
-            <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
-        </div>
-        <div id="divtoprint">
-            <div class="modal-body">
-                <completed-questions></completed-questions>
+        <script type="text/ng-template" id="dataSummary.html">
+
+        <div data-ng-controller="questionsController"> 
+            <div class="modal-header">
+                <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
+            </div>
+            <div id="divtoprint">
+                <div class="modal-body">
+                    <completed-questions></completed-questions>
+                </div>
+            </div>
+
+            <div class="modal-footer" ng-controller="questionsController">
+                <button ng-click="ok()" class="btn btn-default"
+                         style="float:left">
+                    Back
+                </button>
+
+                <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:15%">
+                    Print
+                </button>
+
+                <button ng-click="export()" class="btn btn-default" style="margin-right:10%">
+                    Export & Save
+                </button>
+
+                <button ng-click="completePhase(); ok()" class="btn btn-default"
+                        popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
+                    Confirm
+                </button>
             </div>
         </div>
-        
-        <div class="modal-footer" ng-controller="questionsController">
-            <button ng-click="ok()" class="btn btn-default"
-                     style="float:left">
-                Back
-            </button>
 
-            <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:15%">
-                Print
-            </button>
+        </script>
 
-            <button ng-click="export()" class="btn btn-default" style="margin-right:10%">
-                Export & Save
-            </button>
-
-            <button ng-click="completePhase(); ok()" class="btn btn-default"
-                    popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
-                Confirm
-            </button>
         </div>
     </div>
-        
-    </script>
-
-    
-</div>
 </div>
     

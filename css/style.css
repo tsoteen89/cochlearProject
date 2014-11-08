@@ -101,3 +101,117 @@ div #sticky_sidetab1{
     
     
 .datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 10px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00557F; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEf4; color: #00557F; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #006699;background: #E1EEf4;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #006699;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #00557F; color: #FFFFFF; background: none; background-color:#006699;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+
+input.switch:empty
+{
+	margin-left: -999px;
+}
+
+input.switch:empty ~ label
+{
+	position: relative;
+	float: left;
+	line-height: 1.4em;
+	text-indent: 0em;
+	margin: 0.2em 0em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+input.switch:empty ~ label:before, 
+input.switch:empty ~ label:after
+{
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: ' ';
+	width: 3.6em;
+	background-color: #393;
+	border-radius: 0.3em;
+	box-shadow: inset 0 0.2em 0 rgba(0,0,0,0.3);
+	-webkit-transition: all 100ms ease-in;
+	transition: all 100ms ease-in;
+}
+
+input.switch:empty ~ label:after
+{
+	width: 1.4em;
+	top: 0.1em;
+	bottom: 0.1em;
+	margin-left: 0.1em;
+	background-color: #fff;
+	border-radius: 0.15em;
+	box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.2);
+}
+
+input.switch:checked ~ label:before
+{
+	background-color: #c33;
+}
+
+input.switch:checked ~ label:after
+{
+	margin-left: 2em;
+}
+
+input.switchtwo:empty
+{
+	margin-left: -999px;
+}
+
+input.switchtwo:empty ~ label
+{
+	position: relative;
+	float: left;
+	line-height: 1.4em;
+	text-indent: 0em;
+	margin: 0.2em 0em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+input.switchtwo:empty ~ label:before, 
+input.switchtwo:empty ~ label:after
+{
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: ' ';
+	width: 3.6em;
+	background-color: #c33;
+	border-radius: 0.3em;
+	box-shadow: inset 0 0.2em 0 rgba(0,0,0,0.3);
+	-webkit-transition: all 100ms ease-in;
+	transition: all 100ms ease-in;
+}
+
+input.switchtwo:empty ~ label:after
+{
+	width: 1.4em;
+	top: 0.1em;
+	bottom: 0.1em;
+	margin-left: 2.1em;
+	background-color: #fff;
+	border-radius: 0.15em;
+	box-shadow: inset 0 -0.2em 0 rgba(0,0,0,0.2);
+}
+
+input.switchtwo:checked ~ label:before
+{
+	background-color: #393;
+}
+
+input.switchtwo:checked ~ label:after
+{
+	margin-left: .1em;
+}
