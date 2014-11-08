@@ -148,9 +148,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                      var x = globalClick.x;
                      var y = globalClick.y;
                      var index = self.measureClicked(x,y);
-                     var measure = stack[index];
-                     self.makeNoResponse(measure);
-                     console.log("No response: "+measure);
+                     self.makeNoResponse(index);
 		        },fa_icon:'fa-thumbs-o-down'}
             ]);
             this.ctx_menu2_id = context.attach('#audiogram_choices', [
@@ -163,12 +161,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 {text: 'Redo', href: '#',fa_icon:'fa-rotate-right'},
                 {divider: true},
                 {text: 'Clear Audiogram', href: '#', action: function(e){
-			         e.preventDefault();
-                     var x = globalClick.x;
-                     var y = globalClick.y;
-                     var index = self.measureClicked(x,y);
-                     var measure = stack[index];
-                     console.log("No response: "+measure);
+			        e.preventDefault();
+                    self.clearStage();
+                    console.log("Clear");
 		        },fa_icon:'fa-refresh'}
             ]);
         },
@@ -438,7 +433,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             stage.add(layers['measures']);
             this.objectId++;
             console.log(stack.length);
-             
         },
         /**
         * Binds the context menu to our canvas 
@@ -473,13 +467,26 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         {
             var temp = [];
             var points = [];
+            var measure = null;
+            var shape = null;
+            
+            console.log("Stack:");
+            console.log(stack);
+            
             
             for(var i=0;i<stack.length;i++){
-                if(stack[i].getAttr('measure') == 'AC'){
-                    var center = stack[i].getAttr('center');
-                    var x = center.x;
-                    var y = center.y;
-                    temp.push({'x':x,'y':y});
+                console.log(stack[i].getChildren().length);
+                if(stack[i].getChildren().length==0){
+                    shape = stack[i];
+                }else{
+                    shape = stack[i]['children'][1];
+                }
+                console.log(shape.getClassName());
+                if(shape.getClassName() === 'Circle' && shape.getAttr('measure') == 'AC'){
+                    temp.push({'x':shape.x(),'y':shape.y()});
+                }else if(shape.getClassName() === 'Line' && shape.getAttr('measure') == 'AC'){
+                    var center = shape.getAttr('center') 
+                    temp.push({'x':center.x,'y':center.y});                    
                 }
             }
 
@@ -525,6 +532,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {int} i - index of shape in stack
         */ 
         measureClicked : function(x,y){
+            console.log(stack);
             if(typeof x == "undefined" && typeof y == "undefined"){
                 var snap = this.snapClick();
                 x = snap.x;
@@ -536,11 +544,10 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             }
             
             var attr = null;
-            console.log(x+','+y);
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
-                if(x == attr.x && y == attr.y){
+                if(x == attr.center.x && y == attr.center.y){
                     return i;
                 }
             }
@@ -620,16 +627,21 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         },
         /**
         * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
-        * @param {void}
+        * @param {int} - index location within the stack of the "shape"
         * @return {void}
         */
-        makeNoResponse : function(shape){
-            var arrow = null;   //holds arrow if needed (for a no response)
-            var group = null;   //group shape with arrow if needed
-            var x1 = shape.x()+5;
-            var x2 = shape.x()+15;
-            var y1 = shape.y()+5;
-            var y2 = shape.y()+15;
+        makeNoResponse : function(index){     
+            var arrow = null;           //holds arrow if needed (for a no response)
+            var shape = stack[index]; 
+            var group = null;           //group shape with arrow if needed
+            
+            
+            var attr = shape.getAttrs();
+            var x1 = attr.center.x+5;
+            var x2 = attr.center.x+15;
+            var y1 = attr.center.y+5;
+            var y2 = attr.center.y+15;
+            
             var w = 2;
             
             var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
@@ -639,7 +651,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             y2 = y1;
 
             var arrow = new Kinetic.Line({
-                points: [0,0+w,	0,0-w,	x2-x1-3*w,y2-y1-w,		x2-x1-3*w,y2-y1-2*w,	  x2-x1,y2-y1,	  x2-x1-3*w,y2-y1+2*w,   x2-x1-3*w, 0+w],
+                points: [0,0+w,	0,0-w, x2-x1-3*w,y2-y1-w, x2-x1-3*w,y2-y1-2*w, x2-x1,y2-y1, x2-x1-3*w,y2-y1+2*w, x2-x1-3*w, 0+w],
                 fill: this.colors['strokeColor'],
                 stroke: this.colors['strokeColor'],
                 strokeWidth: 2,
@@ -654,21 +666,19 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 center: {'x':x1,'y':y1},
                 measure: this.measureType
             });
-            group = new Kinetic.Group({
-                x: x1,
-                y: y1,
-            });
+            group = new Kinetic.Group();
             group.add(arrow);
             group.add(shape);
             //Push latest measure onto stack
-            stack.push(group);
+            stack[index] = group;
             layers['measures'].removeChildren();
-            for(var i=0; i<stack.length;i++){
-                layers['measures'].add(stack[i]);   
+            console.log("Stack:");
+            console.log(stack);
+            for(var i=0;i<stack.length;i++){
+                layers['measures'].add(stack[i]);
             }    
             layers['measures'].draw();
             stage.add(layers['measures']);
-            console.log(layers['measures']);
         },
         /**
         * Retreives last item popped off the stack and adds it to the "stage"
@@ -719,7 +729,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             globalClick.y = y2;
                 
             var attr = this.measureClicked(x2,y2);
-            console.log("showContextMenu  - attr: "+attr);
                 
             if(attr !== false){
                 $('#dropdown-'+this.ctx_menu1_id).css('position','absolute');
@@ -813,6 +822,8 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {void}
         */ 
         undoMeasure: function(){
+            console.log("Before:");
+            console.log(stack);
             if(stack.length > 0){
                 var shape = stack.pop();
                 redoStack.push(shape);
@@ -856,7 +867,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     }, 
                 3000);
             }
-        },
+            console.log("After:");
+            console.log(stack);
+        }
     }
     
     private._init();
@@ -874,8 +887,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         
         try{
             name = shape.getName();
+            console.log("clicked shape");
         }catch(e){
-            console.log("clean click");
+            console.log("clicked canvas");
         }
         
         setTimeout(function(){
