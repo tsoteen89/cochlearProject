@@ -434,7 +434,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
      *      @function ok - closes the modalInstance
      */
     $scope.addUser= function(){
-        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+        var ModalInstanceCtrl = function ($scope, $modalInstance, postData) {
             
 			$scope.sessionID = userInfo.get().SessionID;
             $scope.addUser = {};
@@ -446,7 +446,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			
             //Send invitation to the potential user
 			$scope.sendInvitation = function() {
-				$scope.inviteUserURL = "http://killzombieswith.us/aii-api/v1/users/invite/" + $scope.sessionID;
+				$scope.inviteUserURL = "http://killzombieswith.us/aii-api/v1/userInvites/" + $scope.sessionID;
 				postData.post($scope.inviteUserURL, $scope.addUser);
 				$modalInstance.close();
 			}
