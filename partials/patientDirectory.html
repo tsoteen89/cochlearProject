@@ -66,14 +66,15 @@
                     <!-- careTeam(event) info-->
                     <div class="row">
                         <div class="col-md-9">
-                            <em>Event Description: </em><span ng-if="!editDescrip"> {{careTeam.Description}}</span>
+                            <b>Event Description: </b><span ng-if="!editDescrip"><b> {{careTeam.Description}} </b></span>
                             <input ng-click-select type="text" ng-if="editDescrip" ng-model="careTeam.Description">
                             <a href=""><span class="fa " ng-click="editDescrip = !editDescrip; submitDescriptionInfo(careTeam)" ng-class="{'fa-pencil-square-o':!editDescrip, 'fa-floppy-o':editDescrip}" ></span></a> <br>
                                                 
 
                             <em>Current Phase: </em> <span ng-if="careTeam.CurrentPhaseID == 3" > Candidacy Testing / </span>           
                                                     {{phases[careTeam.CurrentPhaseID-1].Name}}<br> 
-                            <em>Implant Type: </em> {{careTeam.ImplantType}} <br>
+                            <em>Device Details: </em> {{careTeam.ImplantType}} <br>
+                            
                         </div>
                         <div class="col-md-3">
                             <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
