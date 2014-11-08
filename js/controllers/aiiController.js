@@ -1706,8 +1706,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             });
 
             $scope.ok = function () {
-                document.getElementById(patient.First).className = "switchtwo";
                 $modalInstance.close();
+                document.getElementById(patient.First).className = "switchtwo";
                 
             };
             
@@ -1751,8 +1751,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             $scope.modalPatient = patient;
 
             $scope.ok = function () {
-                document.getElementById(patient.First).className = "switch";
                 $modalInstance.close();
+                document.getElementById(patient.First).className = "switch";
             };
             
             $scope.modalPatient.reason = 10;
