@@ -199,6 +199,30 @@
         background: #3382c0;
         color: #FFF;
     }
+    .audioInputs{
+        width:50px;
+    }
+    .audioInputs-container{
+        width:350px;
+    }
+    .audioInputs-heading{
+        text-align:center;
+        font-weight:bold;
+    }
+    .audioInputs-rowLabel{
+        text-align:right;
+    }
+    .audioInputs-table tr {
+       line-height: 10px;
+       min-height: 10px;
+       height: 10px;
+    }
+    .audioInputs-table th{
+        text-align:center;
+    }
+    .audioInputs-table td{
+        text-align:center;
+    }
     </style>
   </head>
   <body>
@@ -269,7 +293,28 @@
                         <a href="#"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span></a>
                     </button>
                  </div>
+                <br>
+                <div class="btn-toolbar">
+                    <button type="button" class="btn btn-default tool"  id="mask-tool">
+                        <img src="images/masked_volume_off.svg" width="20" id="mask-tool-svg"><br>
+                        <span>Masked</span>
+                    </button>
+                </div>
             </div>
+
+<!--
+		<div class="col-xs-2 col-xs-offset-2">
+			<div class="input-group number-spinner">
+				<span class="input-group-btn">
+					<button class="btn btn-default" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+				</span>
+				<input type="text" class="form-control text-center" value="ACL">
+				<span class="input-group-btn">
+					<button class="btn btn-default" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+				</span>
+			</div>
+		</div>
+-->
         </div><!-- End Button Column-->
         <div class="col-md-5" id="right_column">
             <div id="audiogram_left"></div>
@@ -284,27 +329,48 @@
                 </div>
             </div>
             <div class="col-xs-4" style="text-align:center">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-default tool"  id="mask-tool">
-                        <img src="images/masked_volume_off.svg" width="20" id="mask-tool-svg"><br>
-                        <!--<span>Masked<i class="fa fa-ban pull-right"></i></span>-->
-                        <span>Masked</span>
-                    </button>
-                    <button type="button" class="btn btn-default tool" id="response-tool">
-                        <img src="images/hear_response.svg" width="20" id="response-tool-svg"><br>
-                        <!--<span>Response <i class="fa fa-check pull-right"></i></span>-->
-                        <span>Response</span>                   
-                    </button>
-                    </div>
+
             </div>
-            <div class="col-xs-4" style="text-align:left">            
-                <div class="audiogram-menu" data="left">
+            <div class="col-xs-4" style="text-align:center">            
+                <div class="audiogram-menu" data="left" style="margin-left:0px;padding-left:0px;">
                     <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
                     <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
                     <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-4">
+                <div class="panel panel-default audioInputs-container">
+                  <!-- Default panel contents -->
+                  <div class="panel-heading audioInputs-heading">Speech Audiometry</div>
+
+                  <!-- Table -->
+                  <table class="table audioInputs-table">
+                     <tr style="text-align:center"><th></th><th>SRT</th><th>Mask</th><th></th></tr>
+                     <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                     <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                     <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                  </table>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="panel panel-default audioInputs-container">
+                  <!-- Default panel contents -->
+                  <div class="panel-heading audioInputs-heading">Word Recognition</div>
+                  <!-- Table -->
+                  <table class="table audioInputs-table">
+                     <tr style="text-align:center"><th></th><th>%</th><th>Stimulus</th><th>Mask</th><th>Noise</th></tr>
+                     <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
+                     <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
+                     <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
+                  </table>
+                </div>
+            </div>
+            <div class="col-xs-2"></div>
+        </div>
+    </div>
     </div> <!-- End Container --> 
     <script>
     $(function() {
@@ -453,8 +519,13 @@
                        //console.log( "Data Loaded: " + data );
                 });           
         });
-    
+        window.onbeforeunload = enableBeforeUnload;
     });
+    function enableBeforeUnload() {
+        window.onbeforeunload = function (e) {
+            return "Are you sure you want to navigate away?";
+        };
+    }
     </script>      
   </body>
 </html>

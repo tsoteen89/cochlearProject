@@ -9,7 +9,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
     // Private data
     var private = {
         audiogramId     : audiogram_id,         //Unique identifier for this audiogram
-        objectId        : 0,                    //Numerical ID for objects on stage
         side            : side,                 //Left or right ear
         element_id      : element_id,
         colors     : {
@@ -321,8 +320,14 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 //Not a new item, lets make adjustements, and by adustments I mean delete some stuff....
                 index = this.measureClicked(snap.x,snap.y);
                 //if you click in the same frequency, you snap the existing one to the new location
-                index = this.sameFrequency(snap);
                 if(index){
+                    this.showContextMenu();
+                    return;
+                }
+                index = this.sameFrequency(snap);
+                if(index)
+                    console.log(index+','+stack[index].getAttr('measure')+','+this.measureType);
+                if(index && stack[index].getAttr('measure') == this.measureType){
                     stack[index].destroy();
                     stack.splice(index,1);
                     console.log(index);
@@ -353,10 +358,11 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 shadowOffset: {x:1, y:1},
                 shadowOpacity: 0.3,
                 draggable: true,
-                name: measureData.value+"-"+this.objectId,
                 measure: this.measureType,
                 center: {'x':x,'y':y},
-                audioValues: {'frequency':f.value,'decibels':d.value}
+                audioValues: {'frequency':f.value,'decibels':d.value},
+                audioLine: false,
+                noResponse: false
             }
             
             //Determine the actual measure type so it can be customized
@@ -378,16 +384,19 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 commonStyle['stroke'] = this.colors['strokeColor'];
                 if(measureData.value == 'circle'){
                     commonStyle['radius'] = 10;
+                    commonStyle['audioLine'] = true;
                     var shape = new Kinetic.Circle(commonStyle);
                 }else if(measureData.value == 'triangle'){
                     commonStyle['sides'] = 3;
                     commonStyle['radius'] = 12;
+                    commonStyle['audioLine'] = true;
                     var shape = new Kinetic.RegularPolygon(commonStyle);
                 }else if(measureData.value == 'square'){
                     commonStyle['width'] = 17;
                     commonStyle['height'] = 17;
                     commonStyle['center'].x = x;
                     commonStyle['center'].y = y;
+                    commonStyle['audioLine'] = true;
                     //Adjust x,y so rectangle is centered on coords
                     commonStyle['x'] -= commonStyle['width']/2;
                     commonStyle['y'] -= commonStyle['height']/2;
@@ -406,6 +415,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     //remove base x,y because it throws line way off
                     commonStyle['x'] = null;
                     commonStyle['y'] = null;
+                    commonStyle['audioLine'] = true;
                     commonStyle['points'] =  [x+10, y-10, x, y,x+10,y+10,x-10, y-10, x, y,x-10,y+10];
 
                     var shape = new Kinetic.Line(commonStyle);
@@ -424,15 +434,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             stack.push(shape);
 
-            this.drawConnection();
-            
-            //Push measure into the "layer"
-            layers['measures'].add(stack[stack.length-1]);
-            
-            //Add layer to stage
-            stage.add(layers['measures']);
-            this.objectId++;
-            console.log(stack.length);
+            this.drawStack();
         },
         /**
         * Binds the context menu to our canvas 
@@ -459,34 +461,85 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
         },
         /**
-        * Connect the measures with a line, just the air conduction measures
-        * @param {null}
-        * @return {null}
-        */ 
-        drawConnection : function()
-        {
+        * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
+        * @param {int} - index location within the stack of the "shape"
+        * @return {void}
+        */
+        drawArrow : function(index){     
+            var arrow = null;           //holds arrow if needed (for a no response)
+            var shape = stack[index]; 
+
+            var attr = shape.getAttrs();
+            var x1 = attr.center.x+5;
+            var x2 = attr.center.x+15;
+            var y1 = attr.center.y+5;
+            var y2 = attr.center.y+15;
+            
+            var w = 2;
+            
+            var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
+            var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+
+            x2 = x1+pl;
+            y2 = y1;
+
+            var arrow = new Kinetic.Line({
+                points: [0,0+w,	0,0-w, x2-x1-3*w,y2-y1-w, x2-x1-3*w,y2-y1-2*w, x2-x1,y2-y1, x2-x1-3*w,y2-y1+2*w, x2-x1-3*w, 0+w],
+                fill: this.colors['strokeColor'],
+                stroke: this.colors['strokeColor'],
+                strokeWidth: 2,
+                closed: true,
+                rotation: pr,
+                x: x1,
+                y: y1,
+                shadowColor: 'black',
+                shadowBlur: 10,
+                shadowOffset: {x:2,y:2},
+                shadowOpacity: 0.5,
+                center: {'x':x1,'y':y1},
+                measure: this.measureType
+            });
+            
+            return arrow;
+        },
+        /**
+        * One function to draw contents of stack. Basically this method redraws everything on the audiogram.
+        * @param {null} 
+        * @return {json} 
+        */
+        drawStack: function(){
+            console.log("drawStack");
+            console.log("Stack:");
+            console.log(stack);
+            
             var temp = [];
             var points = [];
             var measure = null;
             var shape = null;
             
-            console.log("Stack:");
-            console.log(stack);
-            
-            
+            //Draw measures first
+            layers['measures'].removeChildren();
+            console.log(layers['measures']);
             for(var i=0;i<stack.length;i++){
-                console.log(stack[i].getChildren().length);
-                if(stack[i].getChildren().length==0){
-                    shape = stack[i];
-                }else{
-                    shape = stack[i]['children'][1];
+                layers['measures'].add(stack[i]);
+
+                if(stack[i].getAttr('noResponse')){
+                    arrow = this.drawArrow(i);
+                    layers['measures'].add(arrow);
                 }
-                console.log(shape.getClassName());
-                if(shape.getClassName() === 'Circle' && shape.getAttr('measure') == 'AC'){
-                    temp.push({'x':shape.x(),'y':shape.y()});
-                }else if(shape.getClassName() === 'Line' && shape.getAttr('measure') == 'AC'){
-                    var center = shape.getAttr('center') 
-                    temp.push({'x':center.x,'y':center.y});                    
+            }
+            
+            //Add layer to stage
+            stage.add(layers['measures']);
+
+                        
+            //Draw line connecting any measure that has the attribute 'audioLine' set to 'true'
+            for(var i=0;i<stack.length;i++){
+                shape = stack[i];
+                if(shape.getAttr('audioLine')){
+                    var center = shape.getAttr('center'); 
+                    console.log(center);
+                    temp.push({'x':center.x,'y':center.y});
                 }
             }
 
@@ -547,6 +600,13 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             for(var i=0;i<stack.length;i++){
                 attr = stack[i].getAttrs();
+                try {
+                    x == attr.center.x;
+                }
+                catch(err) {
+                    console.log("Stack Error:");
+                    console.log(stack);
+                }
                 if(x == attr.center.x && y == attr.center.y){
                     return i;
                 }
@@ -625,60 +685,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             else
                 return false;
         },
-        /**
-        * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
-        * @param {int} - index location within the stack of the "shape"
-        * @return {void}
-        */
-        makeNoResponse : function(index){     
-            var arrow = null;           //holds arrow if needed (for a no response)
-            var shape = stack[index]; 
-            var group = null;           //group shape with arrow if needed
-            
-            
-            var attr = shape.getAttrs();
-            var x1 = attr.center.x+5;
-            var x2 = attr.center.x+15;
-            var y1 = attr.center.y+5;
-            var y2 = attr.center.y+15;
-            
-            var w = 2;
-            
-            var pr = (Math.atan2(y2-y1, x2-x1)/(Math.PI/180));
-            var pl = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
-
-            x2 = x1+pl;
-            y2 = y1;
-
-            var arrow = new Kinetic.Line({
-                points: [0,0+w,	0,0-w, x2-x1-3*w,y2-y1-w, x2-x1-3*w,y2-y1-2*w, x2-x1,y2-y1, x2-x1-3*w,y2-y1+2*w, x2-x1-3*w, 0+w],
-                fill: this.colors['strokeColor'],
-                stroke: this.colors['strokeColor'],
-                strokeWidth: 2,
-                closed: true,
-                rotation: pr,
-                x: x1,
-                y: y1,
-                shadowColor: 'black',
-                shadowBlur: 10,
-                shadowOffset: {x:2,y:2},
-                shadowOpacity: 0.5,
-                center: {'x':x1,'y':y1},
-                measure: this.measureType
-            });
-            group = new Kinetic.Group();
-            group.add(arrow);
-            group.add(shape);
-            //Push latest measure onto stack
-            stack[index] = group;
-            layers['measures'].removeChildren();
-            console.log("Stack:");
-            console.log(stack);
-            for(var i=0;i<stack.length;i++){
-                layers['measures'].add(stack[i]);
-            }    
-            layers['measures'].draw();
-            stage.add(layers['measures']);
+        makeNoResponse: function(index){
+            stack[index].attrs.noResponse = true;
+            this.drawStack();
         },
         /**
         * Retreives last item popped off the stack and adds it to the "stage"
@@ -687,11 +696,10 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         */
         redoMeasure: function(){
             var shape = redoStack.pop();
-            stack.push(shape);
-            layers['measures'].add(shape);            
-            layers['measures'].draw();
-            this.drawConnection();
-            this.objectId++;
+            if (typeof(shape) != "undefined"){
+                stack.push(shape);
+                this.drawStack();
+            }
         },
         /**
         * Turns a measure on Audiogram into a "no-response" by adding a downward arrow to the icon. 
@@ -808,9 +816,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             var attr = null;
             
             for(var i=0;i<stack.length;i++){
-                attr = stack[i].getAttrs();
-                console.log(attr);
-                if(x == attr.x){
+                center = stack[i].getAttr('center');
+                console.log(center);
+                if(x == center.x){
                     return i;
                 }
             }
@@ -822,15 +830,12 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {void}
         */ 
         undoMeasure: function(){
-            console.log("Before:");
-            console.log(stack);
             if(stack.length > 0){
                 var shape = stack.pop();
                 redoStack.push(shape);
                 shape.remove();
                 layers['measures'].draw();
-                this.drawConnection();
-                this.objectId--;
+                this.drawStack();
             }else{
                 var tooltip = new Kinetic.Label({
                     x: (this.graph_bounds.max.x - this.graph_bounds.min.x)/2,
@@ -867,8 +872,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     }, 
                 3000);
             }
-            console.log("After:");
-            console.log(stack);
         }
     }
     
@@ -1014,6 +1017,23 @@ function GetMeasureData(measure,masked,side){
     }
     return measureData[measure][masked][side];
 }
+
+var confirmOnPageExit = function (e) 
+{
+    // If we haven't been passed the event get the window.event
+    e = e || window.event;
+
+    var message = 'Are you sure you want to navigate away?';
+
+    // For IE6-8 and Firefox prior to version 4
+    if (e) 
+    {
+        e.returnValue = message;
+    }
+
+    // For Chrome, Safari, IE8+ and Opera 12+
+    return message;
+};
 
 /**
 * Bubble sort my audiogram array to "order" the 'x' values for printing and connecting 
