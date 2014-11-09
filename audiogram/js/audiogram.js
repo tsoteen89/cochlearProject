@@ -138,9 +138,24 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                      var y = globalClick.y;
                      var index = self.measureClicked(x,y);
                      var measure = stack[index];
-                     console.log("Delete: "+measure);
+                     redoStack.push(stack[index]);
+                     stack[index].destroy();
+                     stack.splice(index,1);
+                     console.log("Deleted: "+index);
+                     self.drawStack();
 		        },fa_icon:'fa-close'},
-                {text: 'Toggle Masked', href: '#',fa_icon:'fa-headphones'},
+                {text: 'Toggle Masked', href: '#',action: function(e){
+			         e.preventDefault();
+                     var x = globalClick.x;
+                     var y = globalClick.y;
+                     var index = self.measureClicked(x,y);
+                     var measure = stack[index];
+                     var attr = measure.getAttr('masked');
+                     stack[index].destroy();
+                     stack.splice(index,1);
+
+                     self.drawStack();
+		        },fa_icon:'fa-headphones'},
                 /*{divider: true},*/
                 {text: 'No Response', href: '#', action: function(e){
 			         e.preventDefault();
@@ -320,14 +335,15 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 //Not a new item, lets make adjustements, and by adustments I mean delete some stuff....
                 index = this.measureClicked(snap.x,snap.y);
                 //if you click in the same frequency, you snap the existing one to the new location
-                if(index){
+                if(index !== false){
                     this.showContextMenu();
                     return;
                 }
+                
                 index = this.sameFrequency(snap);
-                if(index)
-                    console.log(index+','+stack[index].getAttr('measure')+','+this.measureType);
-                if(index && stack[index].getAttr('measure') == this.measureType){
+                console.log(":::"+typeof(index));
+                if(index !== false && stack[index].getAttr('measure') == this.measureType){
+                    redoStack.push(stack[index])
                     stack[index].destroy();
                     stack.splice(index,1);
                     console.log(index);
@@ -362,7 +378,8 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 center: {'x':x,'y':y},
                 audioValues: {'frequency':f.value,'decibels':d.value},
                 audioLine: false,
-                noResponse: false
+                noResponse: false,
+                masked: false
             }
             
             //Determine the actual measure type so it can be customized
@@ -390,6 +407,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     commonStyle['sides'] = 3;
                     commonStyle['radius'] = 12;
                     commonStyle['audioLine'] = true;
+                    commonStyle['masked'] = true;
                     var shape = new Kinetic.RegularPolygon(commonStyle);
                 }else if(measureData.value == 'square'){
                     commonStyle['width'] = 17;
@@ -397,6 +415,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     commonStyle['center'].x = x;
                     commonStyle['center'].y = y;
                     commonStyle['audioLine'] = true;
+                    commonStyle['masked'] = true;
                     //Adjust x,y so rectangle is centered on coords
                     commonStyle['x'] -= commonStyle['width']/2;
                     commonStyle['y'] -= commonStyle['height']/2;
@@ -423,6 +442,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     //remove base x,y because it throws line way off
                     commonStyle['x'] = null;
                     commonStyle['y'] = null;
+                    commonStyle['masked'] = true;
                     if(this.side == 'right'){
                         commonStyle['points'] =  [x+6, y-10, x, y-10,x,y+10,x+6,y+10];
                     }else{
@@ -813,7 +833,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             var snap = this.snapClick();
             var x = snap.x;
             var y = snap.y;
-            var attr = null;
+            var center = null;
             
             for(var i=0;i<stack.length;i++){
                 center = stack[i].getAttr('center');

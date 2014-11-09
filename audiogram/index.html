@@ -8,7 +8,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/context.bootstrap.css">
-      
+    <link rel="stylesheet" href="css/chosen.css">   
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -17,7 +17,8 @@
     <!-- <link href="./css/bootstrap-toggle.css" rel="stylesheet">-->
     <!-- <script src="./js/bootstrap-toggle.js"></script>-->
     <script src="js/context.js"></script> 
-    <script src="js/contextMenu.js"></script> 
+    <script src="js/contextMenu.js"></script>
+    <script src="js/chosen.jquery.js"></script> 
     <script src="js/audiogram.js"></script>  
     <style>
         /* scheme 1 */
@@ -228,9 +229,29 @@
   <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-7" style="padding-top:5px">
+                <div class="container-fluid well span6" style="padding:0px 0px 0px 5px;margins:5px 0px 0px 0px">
+                    <div class="row-fluid">
+                        <div class="col-xs-4">
+                           <label class="item item-input"  style="font-size:18px"> <span class="input-label" style="font-size:20px">Patient: </span> John Smith</label>
+                            <label class="item item-input" style="font-size:14px"> <span class="input-label" style="font-size:14px">Date of Birth: </span> 10 Oct 1950 </label>
+ 
+                        </div>
+                        <div class="col-xs-8">
+                            <label class="item item-input"> <span class="input-label" style="font-size:16px">Title: </span> 
+                                <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." class="chosen-select-deselect" id="audiogramTitleID">
+                                    <option value=""></option>
+                                    <option>Pre Operative Audiogram</option>
+                                    <option>Aided Testing</option>
+                                    <option>Residual Hearing</option>                                    
+                                </select>
+                            </label>
+                            <label class="item item-input"> <span class="input-label" style="font-size:16px">Date: </span> <input type="date"></label>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-3">
             </div>
             <div class="col-md-2">
                 <div class="btn-group" style="float: right">
@@ -349,9 +370,9 @@
                   <!-- Table -->
                   <table class="table audioInputs-table">
                      <tr style="text-align:center"><th></th><th>SRT</th><th>Mask</th><th></th></tr>
-                     <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                     <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                     <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                     <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="spch_aud-srt-r"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                     <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="spch_aud-srt-l"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                     <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="spch_aud-srt-l"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
                   </table>
                 </div>
             </div>
@@ -504,8 +525,8 @@
 
             $.post( "class.audiogram.php", ImgData)
                 .done(function( data ) {
-                       //console.log( "Data Loaded: " + data );
-                });
+                    console.log( "Data Loaded: " + data );
+            });
         });
         $('#saveAudiogram').on('click', function(event) {
              $.post( "class.audiogram.php", SaveData)
@@ -526,6 +547,11 @@
             return "Are you sure you want to navigate away?";
         };
     }
+     $("#audiogramTitleID").chosen({
+        disable_search_threshold: 10,
+        no_results_text: "Oops, nothing found!",
+        width: "95%"
+      });
     </script>      
   </body>
 </html>
