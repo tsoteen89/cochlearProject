@@ -1,0 +1,100 @@
+
+<div class ="row">
+
+    <button ng-click="export()" class="btn btn-info ">
+        Export To Spreadsheet
+    </button> <br> <br>
+</div>
+
+<div id="facReport"> <!--ID used to identify exportable html-->
+
+    <table style="table-layout: fixed;" >
+        <thead>
+                <tr> <td ng-repeat= "phase in faciltyReport.Phases" style="background-color:#cae5f0; width:200px"> phase.Name</td></tr>
+            </thead>
+        <table ng-repeat="patient in facilityReport.Patients">
+            <thead></thead>
+            <tbody ng-repeat="careTeam in patient.CareTeams">
+                <tr > 
+                    <td>{{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} </td>
+                    <td > 
+                        <table> 
+                            <tr> <td > Azbio </td> 
+                                
+                                <td>  
+                                    <table >
+                                        <tr  ng-repeat="field in audioQuestions.Tests[0].AudioTestInput" style="width:100%">
+                                            <td><b> {{field.Name}}</b></td> 
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr> 
+                            <tr> <td > CNC </td>
+                                <td>  
+                                    <table >
+                                        <tr  ng-repeat="field in audioQuestions.Tests[1].AudioTestInput" style="width:100%">
+                                            <td><b> {{field.Name}}</b></td> 
+                                        </tr>
+                                    </table>
+                                </td>
+
+                            </tr> 
+                            <tr> <td > BKB-SIN</td>
+                                <td>  
+                                    <table >
+                                        <tr  ng-repeat="field in audioQuestions.Tests[0].AudioTestInput" style="width:100%">
+                                            <td><b> {{field.Name}}</b></td> 
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr> 
+                        </table>
+           
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </table>
+    <!--TAKEN FROM COMPLETED PHASE
+    <div class="row" ng-if="condition.Results">
+        {{getMaxNumOfTest(condition.Results)}}
+        <table class="table table-hover table-responsive" >
+             
+            <table >
+                <tr align= "center" >
+                  <td colspan=2 style="background-color:#cae5f0"><h3><b>Testing Conditions</b></h3></td>
+                </tr>  
+                <tr>
+                    <td style="width:50%"><b> Left Ear Condition:</b> {{condition.LeftAidCondition}} </td>
+                    <td  style="width:50%"><b> Right Ear Condition:</b>{{condition.RightAidCondition}} </td>  
+                </tr>
+                <tr align= "center">
+                  <td colspan=2 style="background-color:#cae5f0"><h3><b>Results</b></h3></td>
+                </tr>
+            </table>
+            
+            <table class="table table-hover table-responsive" style="table-layout: fixed;">
+            <tbody ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]">
+                <tr >       
+                  <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
+                </tr> 
+                <!--
+                <tr align= "center">  
+                    <td>  </td>
+                    <td ng-repeat="result in condition.Results[test.AudioTestName]" > <b> {{$index+1}} </b> </td> 
+                </tr>  
+-->
+    <!--
+                <tr  ng-repeat="field in test.AudioTestInput" style="width:100%">
+                    <td><b> {{field.Name}}</b></td> 
+                    <td ng-repeat="result in condition.Results[test.AudioTestName]" >{{result[field.Name]}}</td>
+                </tr>
+            </tbody>
+            </table>
+         </table>
+        
+    </div>
+-->
+</div>

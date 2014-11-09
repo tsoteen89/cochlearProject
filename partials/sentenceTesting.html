@@ -95,7 +95,7 @@
                                                         ng-change="updateWordsWith3()">
                                                     <label ng-if="type.Name == 'Words with 3 Phonemes Correct'"
                                                         class="control-label" for="{{type.Label}}"> 
-                                                    ({{answer.Results["CNC"]["Words with 3 Phonemes Correct"]}}/50 {{wordswith3}}% )
+                                                    ({{answer.Results["CNC"]["Words with 3 Phonemes Correct"]}}/50 {{wordswith3}}% ) 
                                                     </label>
                                                     <!-- end words with 3 phonemes-->
                                                     <!--phonemes correct-->
@@ -136,7 +136,8 @@
                           
                                     </form>
                                 
-                                <button type="button" class="btn btn-default btn-sm" ng-click="clearCurrentTest(test.AudioTestName)">
+                                <button type="button" class="btn btn-default btn-sm" 
+                                        ng-click="submitQuestions(test.AudioTestName)">
                                 <span class="glyphicon glyphicon-plus-sign"></span> Save Score
                                 </button>
                                 <hr style="height:1px;border:none;color:#333;background-color:#333;" />

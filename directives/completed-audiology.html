@@ -50,7 +50,7 @@
                 </tr>  
 -->
                 <tr  ng-repeat="field in test.AudioTestInput" style="width:100%">
-                    <td><b> {{field.Name}} ({{field.Unit}}) </b></td> 
+                    <td><b> {{field.Name}}</b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]" >{{result[field.Name]}}</td>
                 </tr>
             </tbody>

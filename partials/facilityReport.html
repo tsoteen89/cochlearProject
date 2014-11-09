@@ -14,6 +14,7 @@
     tr:hover{
         background: #97afc0;
     }
+    
 </style>
 <center>
 <div ng-controller="reportCtrl">
@@ -21,7 +22,44 @@
     <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
     <hr>
 
-    <div>
+    <div class="row">
+        <div class="form3D container col-md-6 col-md-offset-3" style=" background-color: #CAE5F0; margin-bottom:60px">
+            <h3> Please select below to export the desired report</h3>
+            <br>
+            <div class="container form3D"  style=" background-color: #CAE5F0; width:40%">
+                <div class="row">
+                    <label> <u> Choose one </u> </label>
+                    <div class="col-md-offset-2">
+                        <p ng-repeat="type in patientTypes" style="text-align:left">
+                            <input  type="Checkbox" ng-click="updateSelection($index, patientTypes); setPatientType(type.name)"
+                                ng-model="type.checked" >
+                            <span>{{type.name}} Patient</span> 
+                        </p>
+                    </div>
+                    <br>
+                </div>
+                <div class="row">
+                    <label> <u> Choose one </u> </label>
+                    <div class="col-md-offset-2">
+                        <p ng-repeat="type in reportTypes" style="text-align:left">
+                            <input  type="Checkbox" ng-click="updateSelection($index, reportTypes); setReportType(type.name)"
+                                ng-model="type.checked" >
+                            <span>{{type.name}} Data</span> 
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br> <br>
+                <button ng-click="generateReport()" class="btn btn-info ">
+                   Generate Report
+                </button> {{loadMessage}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+       <div  ng-if="reportType == 'Perioperative' && showReport">
+        
         <div class ="row">
             
             {{loadMessage}}
@@ -37,7 +75,7 @@
                 <thead>
                 <tr align="center">
                     <td style="background-color:#cae5f0; width:200px"></td>
-                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport">
+                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
                         <b>{{patient.First}} {{patient.Last}}</b></h3></td>
                 </tr>
                 <tr align="Center">
@@ -50,6 +88,7 @@
                 <tbody ng-repeat="(key, value) in questions">
                     <tr ng-repeat="(questionNumb, val) in value" align="left">
                        <!-- <td> phase = {{key}} QuestionNumb = {{questionNumb}} value = {{val}} answer == {{patient.CareTeams[0].Data[key][questionNumb]}} </td>-->
+    
                         <td ng-class="{bold:$first, plain:!$first}">{{val}}</td>
                         <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td>
                         <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
@@ -67,8 +106,9 @@
                 </tbody>
             </table>
         </div>
+</div>
+        <div ng-if="reportType == 'Audiometric' && showReport" ng-include src="'partials/audioFacilityReport.html'"> </div>
     </div>
-    
 
 </div>
 </center>

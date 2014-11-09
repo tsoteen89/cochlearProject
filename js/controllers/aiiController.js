@@ -815,6 +815,79 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.clickedPhase = null;
     
+    $scope.showDeviceOptions = function(provider, questionID){
+        console.log("in new function");
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            
+            $scope.answer = {};
+            $scope.answer.Answers = {};
+            $scope.answer.PhaseID = $cookieStore.get('PhaseID');
+            $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
+            $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
+            //Grab all previously answered questions
+            getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+                $scope.patientSummaryAnswers = data.records;            
+            }).then(function(){
+                for(var answerID in $scope.patientSummaryAnswers.Answers) {
+                    $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+                };
+            });
+            if(questionID == 202){
+                $scope.implantQuestion = 204;
+                $scope.electrodeQuestion = 205;
+                $scope.processorQuestion = 206;
+            }else if(questionID == 212){
+                $scope.implantQuestion = 214;
+                $scope.electrodeQuestion = 215;
+                $scope.processorQuestion = 216;
+            }
+            $scope.provider = provider;
+            
+            getData.get("http://killzombieswith.us/aii-api/v1/deviceProviders/" + $scope.provider ).success(function(data) {
+                $scope.implants = data.records.Implants;
+                $scope.electrodes = data.records.Electrodes;
+                $scope.processors = data.records.Processors;
+            });
+            
+            $scope.saveDevice = function(){
+                /*
+                $scope.deviceDetails = {'DeviceDetails': provider + ', ' + $scope.answer.Answers[$scope.implantQuestion]  + ', ' +
+                                        $scope.answer.Answers[$scope.electrodeQuestion] + ', ' + $scope.answer.Answers[$scope.processorQuestion]}
+                putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.deviceDetails);
+                
+                if(!$scope.answer.Answers[$scope.implantQuestion]){
+                    $scope.answer.Answers[$scope.implantQuestion] = "N/A";
+                }
+                if(!$scope.answer.Answers[$scope.electrodeQuestion]){
+                    $scope.answer.Answers[$scope.electrodeQuestion] = "N/A";
+                }
+                if(!$scope.answer.Answers[$scope.processorQuestion]){
+                    $scope.answer.Answers[$scope.processorQuestion] = "N/A";
+                }
+                */
+                
+                postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.answer);
+                
+                
+                $scope.ok();
+            }
+            $scope.ok = function () {
+                $modalInstance.close();
+                
+            };
+            
+        };
+
+        var modalInstance = $modal.open({
+          templateUrl: 'device.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg'
+
+
+        });
+
+    };
+
     if($scope.phaseName == 'Initial Surgical Consultation'){
         $scope.finalPage = 4;
     }else if($scope.phaseName == 'Preoperative Visit'){
@@ -830,6 +903,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     };
     
     
+
     $scope.isArray = function(check){
         return angular.isArray(check);
     }
@@ -1292,6 +1366,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     //**********************Copied from questionsControllerr****/
 
+    
+
+    
     //Grab all previously answered questions
     getData.get($scope.answersURL).success(function(data) {
         $scope.summaryAnswers = data.records;            
@@ -1365,10 +1442,16 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $scope.answer.CareTeamID
         $scope.singleAnswer.Results = {};
+        
         $scope.singleAnswer.Results[test]= $scope.answer.Results[test];
         $scope.singleAnswer.ConditionsID =$scope.answer.ConditionsID;
-        
-        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults/'+ cookieSessionID ,$scope.singleAnswer).then(function(){
+        postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults/'+ cookieSessionID ,$scope.singleAnswer).success(function(data) {
+            if(data.records != 'Success'){
+                alert(data.records);
+            }else{
+                clearCurrentTest(test);
+            }
+        }).then(function(){
             //Grab all previously answered questions
             getData.get($scope.answersURL).success(function(data) {
                 $scope.summaryAnswers = data.records;            
@@ -1417,7 +1500,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     }
     
     //clears ONE test (or in case of aided audiogram (3 tests), so more results can be entered under the same ear conditions
-    $scope.clearCurrentTest = function(data){
+    var clearCurrentTest = function(data){
         console.log("clearCurrentTest Called");
         console.log(data);
         if(data == "Aided Audiogram"){

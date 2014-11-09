@@ -32,6 +32,44 @@
                                 </div>
                             
                             </div>
+                                <!--device questions-->
+                                <div ng-if="question.isDevice" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)"  ng-click="showDeviceOptions(values, question.QuestionID)" >
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                 <!-- Modal used for writing a message to the Administrator -->
+                                  <script type="text/ng-template" id="device.html">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span>
+                                        <span class="sr-only">Close</span>         
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                        {{provider}} Devices 
+                                        </h4>
+                                        
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                        <label ng-if="implants"> Please select an implant: </label>
+                                        <div class="controls" ng-repeat="implant in implants">
+                                            <input type="radio" name="implant" ng-model="answer.Answers[implantQuestion]" value="{{implant.ImplantName}}"> {{implant.ImplantName}}<br>
+                                        </div>
+                                        <label ng-if="electrodes"> Please select an electrode: </label>
+                                        <div class="controls" ng-repeat="electrode in electrodes">
+                                            <input type="radio" name="electrode" ng-model="answer.Answers[electrodeQuestion]" value="{{electrode.ElectrodeName}}"> {{electrode.ElectrodeName}}<br>
+                                        </div>
+                                        <label ng-if="processors"> Please select a processor: </label>
+                                        <div class="controls" ng-repeat="processor in processors">
+                                            <input type="radio" name="processor" ng-model="answer.Answers[processorQuestion]" value="{{processor.ProcessorName}}"> {{processor.ProcessorName}}<br>
+                                        </div>
+                                        
+                                        <br><br>
+                                        <button class="btn btn-primary" ng-click="saveDevice()">Save Device</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" ng-click="ok()"> Close </button>
+                                    </div>
+                                </script>
                                 <!-- Else Display only the single Input field -->
                                 <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
@@ -44,7 +82,7 @@
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
-                                <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                <div ng-if="question.Input.Type == 'Radio' && !question.isDevice" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                     <label class="choice" >{{values}}</label>
