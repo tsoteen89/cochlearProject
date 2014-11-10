@@ -1,7 +1,5 @@
-
-        <div class ="row">
+<div class ="row">
             
-            {{loadMessage}}
             <button ng-click="export()" class="btn btn-info ">
                 Export To Spreadsheet
             </button> <br> <br>
@@ -14,7 +12,7 @@
                 <thead>
                 <tr align="center">
                     <td style="background-color:#cae5f0; width:200px"></td>
-                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport">
+                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
                         <b>{{patient.First}} {{patient.Last}}</b></h3></td>
                 </tr>
                 <tr align="Center">

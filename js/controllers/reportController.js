@@ -44,21 +44,21 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         if (position != index) 
           type.checked = false;
         });
+        $scope.showReport = false;
+        $scope.facilityReport = null;
+        $scope.careTeams = [];
+        $scope.clearMessage();
 
     }
     $scope.patientType = null;
     $scope.setPatientType = function(type) {
-        $scope.showReport = false;
-        $scope.patientType =type;
-        
+        $scope.patientType =type;  
     }
-
+    $scope.reportType =null;
     $scope.setReportType = function(type) {
-        $scope.showReport = false;
         $scope.reportType =type;
     }
 
-    
     
     //Functions to test whether answers are in arrays or objects, so formating can be done
     //for ng repeat
@@ -86,29 +86,31 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
     
         
     $scope.generateReport = function() {
-        $scope.showReport = true;
-         $scope.loadMessage = "Please wait for report to load...";
-         var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' +  $scope.reportType + '/' + cookieSessionID;
         
-        getData.get(fullFacilityURL).success(function(data) {
-            $scope.facilityReport = data.records;
-        }).then(function(){
-            //push just all the patients' events into an array - needed to make ng-repeat easier, since careTeams are nested
-            //so deep in the facilityReport
-            for(var patient in $scope.facilityReport.Patients){
-                if($scope.isArray($scope.facilityReport.Patients[patient].CareTeams)){
-                        for(var careTeam in $scope.facilityReport.Patients[patient].CareTeams){
-                            $scope.careTeams.push($scope.facilityReport.Patients[patient].CareTeams[careTeam]);
-                        }
-                   }
-                else{
-                    $scope.careTeams.push($scope.facilityReport[patient].CareTeams);
-                }
-            }       
-        }).then(function(){
-            //get the number of events
-            $scope.eventNum = Object.keys($scope.careTeams).length;
-        });
+            $scope.showReport = true;
+             $scope.loadMessage = "Please wait for report to load...";
+             var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' +  $scope.reportType + '/' + cookieSessionID;
+//var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/Inactive/Audiometric/' + cookieSessionID;
+            getData.get(fullFacilityURL).success(function(data) {
+                $scope.facilityReport = data.records;
+            }).then(function(){
+                //push just all the patients' events into an array - needed to make ng-repeat easier, since careTeams are nested
+                //so deep in the facilityReport
+                for(var patient in $scope.facilityReport.Patients){
+                    if($scope.isArray($scope.facilityReport.Patients[patient].CareTeams)){
+                            for(var careTeam in $scope.facilityReport.Patients[patient].CareTeams){
+                                $scope.careTeams.push($scope.facilityReport.Patients[patient].CareTeams[careTeam]);
+                            }
+                       }
+                    else{
+                        $scope.careTeams.push($scope.facilityReport[patient].CareTeams);
+                    }
+                }       
+            }).then(function(){
+                //get the number of events
+                $scope.eventNum = Object.keys($scope.careTeams).length;
+            });
+        
     }
     
     //Export to spreadsheet function
