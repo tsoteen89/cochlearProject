@@ -1674,6 +1674,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
  */
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
     //hmm 
+    var modalCounter = 1;
     $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
@@ -1815,7 +1816,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     
     $scope.activity = function(patient){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            
+            modalCounter++;
             $scope.modalPatient = patient;
             
             getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data){
@@ -1824,8 +1825,17 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
 
             $scope.ok = function () {
                 $modalInstance.close();
-                document.getElementById(patient.First).className = "switchtwo";
+                $scope.undoSwitch();
                 
+            };
+            
+            $scope.undoSwitch = function(){
+                if(modalCounter%2 == 0){
+                    document.getElementById(patient.First).className = "switchoff";
+                }
+                else{
+                    document.getElementById(patient.First).className = "switch";
+                }
             };
             
             $scope.setReasonID = function(reasonID) {
@@ -1846,11 +1856,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
                     },0).then(function(){
                         $scope.ok();
-                        document.getElementById(patient.First).className = "switchtwo";
                     });
                 },0);
-
-
             };
             
         };
@@ -1858,19 +1865,30 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         var modalInstance = $modal.open({
           templateUrl: 'active.html',
           controller: ModalInstanceCtrl,
-          size: 'lg'
-
+          size: 'lg',
+          backdrop: 'static'
         });
+        
     } 
     
     $scope.inactivity = function(patient){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
-            
+            modalCounter++;
             $scope.modalPatient = patient;
 
             $scope.ok = function () {
                 $modalInstance.close();
-                document.getElementById(patient.First).className = "switch";
+                $scope.undoSwitch();
+                
+            };
+            
+            $scope.undoSwitch = function(){
+                if(modalCounter%2 == 0){
+                    document.getElementById(patient.First).className = "switch";
+                }
+                else{
+                    document.getElementById(patient.First).className = "switchoff";
+                }
             };
             
             $scope.modalPatient.reason = 10;
@@ -1887,7 +1905,6 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID,modalPatient);
                     },0).then(function(){
                         $scope.ok();
-                        document.getElementById(patient.First).className = "switch";
                     });
                 },0);
 
@@ -1899,7 +1916,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         var modalInstance = $modal.open({
           templateUrl: 'inactive.html',
           controller: ModalInstanceCtrl,
-          size: 'lg'
+          size: 'lg',
+          backdrop: 'static'
 
         });
     }    
