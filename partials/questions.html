@@ -49,14 +49,14 @@
                                         
                                     </div>
                                     <div class="modal-body">
-                                        
+                                        <form name="deviceForm" ng-submit="saveDevice(deviceForm.$valid)" novalidate>
                                         <label ng-if="implants"> Please select an implant: </label>
                                         <div class="controls" ng-repeat="implant in implants">
-                                            <input type="radio" name="implant" ng-model="answer.Answers[implantQuestion]" value="{{implant.ImplantName}}"> {{implant.ImplantName}}<br>
+                                            <input type="radio" name="implant" ng-model="answer.Answers[implantQuestion]" value="{{implant.ImplantName}}" required> {{implant.ImplantName}}<br>
                                         </div>
                                         <label ng-if="electrodes"> Please select an electrode: </label>
                                         <div class="controls" ng-repeat="electrode in electrodes">
-                                            <input type="radio" name="electrode" ng-model="answer.Answers[electrodeQuestion]" value="{{electrode.ElectrodeName}}"> {{electrode.ElectrodeName}}<br>
+                                            <input type="radio" name="electrode" ng-model="answer.Answers[electrodeQuestion]" value="{{electrode.ElectrodeName}}" required> {{electrode.ElectrodeName}}<br>
                                         </div>
                                         <label ng-if="processors"> Please select a processor: </label>
                                         <div class="controls" ng-repeat="processor in processors">
@@ -64,7 +64,8 @@
                                         </div>
                                         
                                         <br><br>
-                                        <button class="btn btn-primary" ng-click="saveDevice()">Save Device</button>
+                                        <button class="btn btn-primary" type="submit" ng-disabled="deviceForm.$invalid">Save Device</button>
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-primary" ng-click="ok()"> Close </button>

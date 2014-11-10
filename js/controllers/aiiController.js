@@ -849,7 +849,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 $scope.processors = data.records.Processors;
             });
             
-            $scope.saveDevice = function(){
+            $scope.saveDevice = function(isValid){
                 /*
                 $scope.deviceDetails = {'DeviceDetails': provider + ', ' + $scope.answer.Answers[$scope.implantQuestion]  + ', ' +
                                         $scope.answer.Answers[$scope.electrodeQuestion] + ', ' + $scope.answer.Answers[$scope.processorQuestion]}
@@ -865,11 +865,14 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                     $scope.answer.Answers[$scope.processorQuestion] = "N/A";
                 }
                 */
+                if (isValid) {
+                    postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.answer);
+                    $scope.ok();
+                }else{
+                    alert("Please select an option for each category");
+                }
                 
-                postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.answer);
                 
-                
-                $scope.ok();
             }
             $scope.ok = function () {
                 $modalInstance.close();
