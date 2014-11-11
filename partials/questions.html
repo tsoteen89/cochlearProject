@@ -52,15 +52,18 @@
                                         <form name="deviceForm" ng-submit="saveDevice(deviceForm.$valid)" novalidate>
                                         <label ng-if="implants"> Please select an implant: </label>
                                         <div class="controls" ng-repeat="implant in implants">
-                                            <input type="radio" name="implant" ng-model="answer.Answers[implantQuestion]" value="{{implant.ImplantName}}" required> {{implant.ImplantName}}<br>
+                                            <input type="radio" name="implant" ng-model="answer.Answers[implantQuestion]" 
+                                            value="{{implant.ImplantName}}" required> {{implant.ImplantName}}<br>
                                         </div>
                                         <label ng-if="electrodes"> Please select an electrode: </label>
                                         <div class="controls" ng-repeat="electrode in electrodes">
-                                            <input type="radio" name="electrode" ng-model="answer.Answers[electrodeQuestion]" value="{{electrode.ElectrodeName}}" required> {{electrode.ElectrodeName}}<br>
+                                            <input type="radio" name="electrode" ng-model="answer.Answers[electrodeQuestion]" 
+                                            value="{{electrode.ElectrodeName}}" required> {{electrode.ElectrodeName}}<br>
                                         </div>
                                         <label ng-if="processors"> Please select a processor: </label>
                                         <div class="controls" ng-repeat="processor in processors">
-                                            <input type="radio" name="processor" ng-model="answer.Answers[processorQuestion]" value="{{processor.ProcessorName}}"> {{processor.ProcessorName}}<br>
+                                            <input type="radio" name="processor" ng-model="answer.Answers[processorQuestion]" 
+                                            value="{{processor.ProcessorName}}" required> {{processor.ProcessorName}}<br>
                                         </div>
                                         
                                         <br><br>
