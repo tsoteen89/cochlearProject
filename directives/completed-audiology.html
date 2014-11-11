@@ -54,22 +54,7 @@
                     <td ng-repeat="result in condition.Results[test.AudioTestName]" >{{result[field.Name]}}</td>
                 </tr>
             </tbody>
-            <!--
-          <tbody ng-repeat="(test, results) in condition.Results">
-            <tr>       
-              <td colspan ={{max}} ><h4><b>{{test}}</b></h4> </td> 
-            </tr>  
-            <tr align= "center">  
-                <td>  </td>
-                <td ng-repeat="result in results" > <b> {{$index+1}} </b> </td> 
-            </tr>  
-            <tr ng-repeat="(field, value) in results[0]">
-                <td><b> {{field}} </b></td> 
-                <td ng-repeat="result in results">{{result[field]}}</td>
-            </tr>
-            
-          </tbody> -->
-        </table>
+            </table>
          </table>
         
     </div>

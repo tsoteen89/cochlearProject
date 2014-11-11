@@ -13,6 +13,7 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
     console.log(cookieSessionID);
     $scope.facilityName = $cookieStore.get('FacilityName');
     
+    
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 2 + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
@@ -84,13 +85,38 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
         return Object.keys(object).length;
     }
     
+    $scope.getMaxNumOfTest = function(resultSet){
+        $scope.max =2;
+        for(var key in resultSet){
+            if(resultSet[key].length+1 > $scope.max){
+                $scope.max = resultSet[key].length +1;
+            }
+        }
+    }
+    
+    $scope.getMaxNumOfConditionSets = function(phaseNum){
+        $scope.max =1;
+        for (var patient in $scope.facilityReport.Patients){
+            //console.log(patient);
+            //console.log($scope.facilityReport.Patients[patient]['CareTeams']);
+            for(var event in $scope.facilityReport.Patients[patient]['CareTeams']){
+                if($scope.getCareTeamLength($scope.facilityReport.Patients[patient]['CareTeams'][event]['Data'][phaseNum].DetailedAnswers) 
+                   > $scope.max){
+                    $scope.max =
+                        $scope.getCareTeamLength($scope.facilityReport.Patients[patient]['CareTeams'][event]['Data'][phaseNum].DetailedAnswers);
+                    console.log('max = ' + $scope.max);   
+                }
+            }
+        }
+        return $scope.max;
         
+    }
     $scope.generateReport = function() {
         
             $scope.showReport = true;
              $scope.loadMessage = "Please wait for report to load...";
-             var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' +  $scope.reportType + '/' + cookieSessionID;
-//var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/Inactive/Audiometric/' + cookieSessionID;
+            var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' +  $scope.reportType + '/' + cookieSessionID;
+// for debug purposes var fullFacilityURL = 'http://killzombieswith.us/aii-api/v1/reports/fullFacility/Inactive/Audiometric/' + cookieSessionID;
             getData.get(fullFacilityURL).success(function(data) {
                 $scope.facilityReport = data.records;
             }).then(function(){
@@ -109,6 +135,7 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
             }).then(function(){
                 //get the number of events
                 $scope.eventNum = Object.keys($scope.careTeams).length;
+                $scope.getMaxNumOfConditionSets('02');
             });
         
     }
