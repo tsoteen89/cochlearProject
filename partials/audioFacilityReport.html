@@ -19,11 +19,12 @@
    font-weight:normal;
    background-color:#cae5f0
    }
+    
 </style>
     <table class="form3D " style="table-layout:fixed" >
         <thead ng-if="showReport">
             <tr style="background-color:#cae5f0;" align="center"> 
-                <td style="width:200px"> <h4> Patient </h4></td> 
+                <td style="width:200px;"> <h4> Patient </h4></td> 
                 <td style="width:100px"><h4>  Test </h4></td> 
                 <td style="width:240px"> <h4> Measure </h4> </td> 
                 <td colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" style="width:{{getMaxNumOfConditionSets(phase.PhaseID)*303}}px" ng-repeat= "phase in facilityReport.Phases"><h4>  {{phase.Name}}</h4> </td>
@@ -32,22 +33,28 @@
         <tbody ng-repeat="patient in facilityReport.Patients" >
             <tr ng-repeat="careTeam in patient.CareTeams">
                 <!--Patient Name and Event Details -->
-                <td align="center">
-                    {{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} 
+                <td align="center"  style="width:200px;">
+                    <b> {{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} </b>
                 </td>
                 <!--AzBio, CNC, BKB-SIN-->
                 <td > 
                     <table style="width:100%">
-                        <tr><td style="height:43px;"></td></tr>
-                        <tr ng-repeat="test in audioQuestions.Tests"  align="center">
-                            <td style="height:{{test.AudioTestInput.length*24}}px;border-width:2px 1px 2px 1px"> {{test.AudioTestName}} </td> 
+                        <tr><td style="height:66px;"></td></tr>
+                        <tr>
+                            <td>
+                                <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
+                                    <tr style="height:{{test.AudioTestInput.length*23}}px">
+                                        <td><b> {{test.AudioTestName}}</b></td> 
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
                 </td>
                 <!-- List, SNR, etc; specific to the test-->
                 <td >
                     <table style="width:100%">
-                        <tr><td style="height:43px"></td></tr>
+                        <tr><td style="height:66px"></td></tr>
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
@@ -64,7 +71,8 @@
                     <table style="width:100%" >
                         <tr>
                             <td ng-repeat="conditionSet in careTeam.Data[phase.PhaseID].DetailedAnswers" style="width:300px">
-                                <table style="width:300px">  
+                                <table style="width:300px"> 
+                                    <tr><td colspan="2" align="center"><b> Testing Conditions </b></td></tr>
                                     <tr>
                                         <td style="width:50%;height:43px" ><b> Left Ear:</b> {{conditionSet.LeftAidCondition}} </td>
                                         <td  style="width:50%;height:43px"><b> Right Ear:</b>
