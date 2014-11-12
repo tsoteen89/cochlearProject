@@ -88,7 +88,7 @@
                         <div class="row">
                         <!-- DOTS!!!-->
                         <div class="bs-wizard" >
-                              <!--Regular Completed Phases-->
+                              <!--Completed Phases-->
                             <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1"
                                  ng-if="careTeam.CurrentPhaseID != 20 && careTeam.CurrentPhaseID != 21 && careTeam.CurrentPhaseID != 22">
                               <div class="text-center bs-wizard-stepnum">
@@ -105,9 +105,8 @@
                               </div>
                             </div>
                             
-                            <!-- opening phase 1 if on phase 2 or 3 or both---->
-                            <div class="col-xs-1 bs-wizard-step complete" 
-                                 ng-if="careTeam.CurrentPhaseID == 20 || careTeam.CurrentPhaseID == 21 || careTeam.CurrentPhaseID == 22">
+                            <!--dealing with opening both phase 2 and 3-- not ideal yet-->
+                            <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 20 || careTeam.CurrentPhaseID == 21 || careTeam.CurrentPhaseID == 22">
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
                               </div>
@@ -124,6 +123,7 @@
 
                               <!--Current Phase-->
                             <!--opening both phase 2 and 3-- case 20-->
+
                             <div class="col-xs-1 bs-wizard-step "  ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}" ng-if="careTeam.CurrentPhaseID ==20" ng-repeat="phase in phases.slice(1,3)" >
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
@@ -142,7 +142,6 @@
                                 {{phase.Name}}
                               </div>
                             </div>
-                            <!--END OF case 20-->
                             
                             <!--2 is completed, 3 is open (case 21)-->
                             <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 21">
@@ -152,6 +151,8 @@
                               <div class="progress" >
                                 <div class="progress-bar">
                                 </div>
+                                  <div class="progress-bar">
+                                </div>
                               </div>
                               <a href="#/completedAudiology" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
                                  title={{phases[1].Name}}></a>
@@ -160,16 +161,13 @@
                               </div>
                             </div>
                             
-                            <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 21"
-                                 ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
+                            <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID == 21">
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
                               </div>
                               <div class="progress" >
                                 <div class="progress-bar">
                                 </div>
-                                 <div class="progress-bar">
-                                </div>  
                               </div>
                               <a href="#/questions" ng-click="goToQuestions(careTeam, phases[2], patient)" class="bs-wizard-dot"
                                  title={{phases[2].Name}}></a>
@@ -177,27 +175,9 @@
                                 {{phases[2].Name}}
                               </div>
                             </div>
-                            <!--END of (case 21)-->
+                            
                             
                             <!--3 is completed, 2 is open (case 22)-->
-                            <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 22"
-                                 ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                  <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="#/audioQuestions" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
-                                 title={{phases[1].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[1].Name}}
-                              </div>
-                            </div>
-                            
                             <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 22">
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
@@ -212,7 +192,22 @@
                                 {{phases[2].Name}}
                               </div>
                             </div>
-                            <!--END of 3 is completed, 2 is open (case 22)-->
+                            
+                            <div class="col-xs-1 bs-wizard-step active" ng-if="careTeam.CurrentPhaseID == 22">
+                              <div class="text-center bs-wizard-stepnum">
+                                &nbsp;
+                              </div>
+                              <div class="progress" >
+                                <div class="progress-bar">
+                                </div>
+                              </div>
+                              <a href="#/audioQuestions" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
+                                 title={{phases[1].Name}}></a>
+                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                {{phases[1].Name}}
+                              </div>
+                            </div>
+                            
 
 
                             <!--REGULAR ACTIVE DOTS(JUST ONE)---->
@@ -222,8 +217,6 @@
                               </div>
                               <div class="progress">
                                 <div class="progress-bar">
-                                </div>
-                                  <div class="progress-bar">
                                 </div>
                               </div>
                               <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}" ng-if="patient.InactiveStatus == 10"
@@ -239,7 +232,7 @@
                               </div>
                             </div>
 
-                              <!--Future Phases for events on phase 2, 3, or both-->
+                              <!--Future Phases-->
                             <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(3, 11)" ng-if="careTeam.CurrentPhaseID >=20" >
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;
@@ -254,7 +247,6 @@
                               </div>
                             </div>
                             
-                             <!--Future Phases for  normal phases-->
                             <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)" ng-if="careTeam.CurrentPhaseID <20" >
                               <div class="text-center bs-wizard-stepnum">
                                 &nbsp;

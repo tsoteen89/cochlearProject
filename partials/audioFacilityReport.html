@@ -19,15 +19,6 @@
    font-weight:normal;
    background-color:#cae5f0
    }
-    .table-sticky {
-        position: relative;
-        padding-left: 540px;
-    }
-    .table-sticky-d {
-        position: absolute;
-        left: 0;
-    }
-    
     
 </style>
     <table class="form3D " style="table-layout:fixed" >
@@ -39,7 +30,7 @@
                 <td colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" style="width:{{getMaxNumOfConditionSets(phase.PhaseID)*303}}px" ng-repeat= "phase in facilityReport.Phases"><h4>  {{phase.Name}}</h4> </td>
             </tr>
         </thead>
-        <tbody ng-repeat="patient in facilityReport.Patients"  >
+        <tbody ng-repeat="patient in facilityReport.Patients" >
             <tr ng-repeat="careTeam in patient.CareTeams">
                 <!--Patient Name and Event Details -->
                 <td align="center"  style="width:200px;">

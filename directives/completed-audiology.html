@@ -38,15 +38,22 @@
                 </tr>
             </table>
             
-            <table ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]" style="table-layout: fixed;width:100%">
+            <table class="table table-hover table-responsive" style="table-layout: fixed;">
+            <tbody ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]">
                 <tr >       
                   <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
                 </tr> 
+                <!--
+                <tr align= "center">  
+                    <td>  </td>
+                    <td ng-repeat="result in condition.Results[test.AudioTestName]" > <b> {{$index+1}} </b> </td> 
+                </tr>  
+-->
                 <tr  ng-repeat="field in test.AudioTestInput" style="width:100%">
                     <td><b> {{field.Name}}</b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]" >{{result[field.Name]}}</td>
                 </tr>
-           
+            </tbody>
             </table>
          </table>
         
