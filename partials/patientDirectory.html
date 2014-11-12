@@ -71,8 +71,12 @@
                             <a href=""><span class="fa " ng-click="editDescrip = !editDescrip; submitDescriptionInfo(careTeam)" ng-class="{'fa-pencil-square-o':!editDescrip, 'fa-floppy-o':editDescrip}" ></span></a> <br>
                                                 
 
-                            <em>Current Phase: </em> <span ng-if="careTeam.CurrentPhaseID == 3" > Candidacy Testing / </span>           
-                                                    {{phases[careTeam.CurrentPhaseID-1].Name}}<br> 
+                            <em>Current Phase: </em> 
+                                <span ng-if="careTeam.CurrentPhaseID == 20" > Candidacy Testing / Initial Surgical Consultation</span>           
+                                <span ng-if="careTeam.CurrentPhaseID == 21" > Initial Surgical Consultation</span>           
+                                <span ng-if="careTeam.CurrentPhaseID == 22" > Candidacy Testing</span>           
+                                <span ng-if="careTeam.CurrentPhaseID !=20 && careTeam.CurrentPhaseID !=21 && careTeam.CurrentPhaseID !=22" >
+                                    {{phases[careTeam.CurrentPhaseID-1].Name}}</span><br> 
                             <em>Device Details: </em> {{careTeam.ImplantType}} <br>
                             
                         </div>
