@@ -7,17 +7,20 @@
             
         <div id="facReport"> <!--ID used to identify exportable html-->
 <style>
-   table, th, td, tbody, tr {
-   border: 1px solid #164a5e;
-   }
-   .bold{
-   font-weight: bold;
-   background-color: #97afd4;
-   }
-   .plain{
-   font-weight:normal;
-   background-color:#cae5f0
-   }
+    table, th, td, tbody, tr {
+    border: 1px solid #164a5e;
+    }
+    .bold{
+    font-weight: bold;
+    background-color: #97afd4;
+    }
+    .plain{
+    font-weight:normal;
+    background-color:#cae5f0
+    }
+    tbody tr:hover {
+      background: #97afd4;
+    }
 </style>
             <table class="table table-condensed table-responsive form3D" style="table-layout:fixed" >
                 
@@ -36,13 +39,12 @@
                 </thead>
                 <tbody ng-repeat="(key, value) in questions">
                     <tr ng-repeat="(questionNumb, val) in value" align="left">
-                       <!-- <td> phase = {{key}} QuestionNumb = {{questionNumb}} value = {{val}} answer == {{patient.CareTeams[0].Data[key][questionNumb]}} </td>-->
-    
                         <td ng-class="{bold:$first, plain:!$first}">{{val}}</td>
                         <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td>
                         <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
                             <span ng-if="!isArray(careTeams[$index].Data[key][questionNumb])
-                                && !isObject(careTeams[$index].Data[key][questionNumb])"> {{careTeams[$index].Data[key][questionNumb]}} <span ng-if="$last" >{{clearMessage()}}  
+                                && !isObject(careTeams[$index].Data[key][questionNumb])"> 
+                                {{careTeams[$index].Data[key][questionNumb]}} <span ng-if="$last" >{{clearMessage()}}  
                                 </span> </span>
                             <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb != 085" 
                                   ng-repeat="answer in careTeams[$parent.$index].Data[key][questionNumb] track by $index" > {{answer}},</span>
