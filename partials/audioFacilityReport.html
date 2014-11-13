@@ -19,7 +19,9 @@
    font-weight:normal;
    background-color:#cae5f0
    }
-    
+    tbody tr:hover {
+      background: #97afd4;
+    } 
 </style>
     <table class="form3D " style="table-layout:fixed" >
         <thead ng-if="showReport">
@@ -80,11 +82,11 @@
                                     </tr>
                                 </table>
 
-                               <table ng-repeat="test in audioQuestions.Tests" style="width:300px;">
+                               <table ng-repeat="test in audioQuestions.Tests" style="width:300px;" >
                                     <tr  ng-repeat="field in test.AudioTestInput">
                                         <td ng-if="!conditionSet.Results[test.AudioTestName]" style="height:23px"> </td>
                                         <td ng-if="conditionSet.Results[test.AudioTestName]"
-                                            ng-repeat="result in conditionSet.Results[test.AudioTestName]" >
+                                            ng-repeat="result in conditionSet.Results[test.AudioTestName]"align="left" >
                                             {{result[field.Name]}}
                                             <span ng-if="$last" >{{clearMessage()}}
                                         </td>

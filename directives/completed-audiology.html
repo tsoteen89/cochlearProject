@@ -1,13 +1,16 @@
-<style>
+
+<div class="form3D" ng-controller="audioQuestionsController">
+    <style>
     table, th, td, tbody {
        border: 1px solid #164a5e;
     }
     table{
         width:100%;
     }
+    tbody tr:hover {
+      background: #97afd4;
+    }
 </style>
-<div class="form3D" ng-controller="audioQuestionsController">
-
     <div class="row">
         <div class="col-md-4">
             <img src="images/facilityLogo.png" ng-if="FacilityImage == null"/> 
@@ -38,26 +41,18 @@
                 </tr>
             </table>
             
-            <table class="table table-hover table-responsive" style="table-layout: fixed;">
-            <tbody ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]">
+            <table ng-repeat="test in audioQuestions.Tests" ng-if="condition.Results[test.AudioTestName]" style="table-layout: fixed;width:100%">
                 <tr >       
                   <td colspan ={{max}} ><h4><b>{{test.AudioTestName}}</b></h4> </td> 
                 </tr> 
-                <!--
-                <tr align= "center">  
-                    <td>  </td>
-                    <td ng-repeat="result in condition.Results[test.AudioTestName]" > <b> {{$index+1}} </b> </td> 
-                </tr>  
--->
                 <tr  ng-repeat="field in test.AudioTestInput" style="width:100%">
                     <td><b> {{field.Name}}</b></td> 
                     <td ng-repeat="result in condition.Results[test.AudioTestName]" >{{result[field.Name]}}</td>
                 </tr>
-            </tbody>
+           
             </table>
          </table>
         
     </div>
 </div>
 <br>
-    
