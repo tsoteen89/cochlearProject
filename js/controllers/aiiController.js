@@ -808,12 +808,15 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     $scope.patientDOB = $cookieStore.get('PatientDOB');
     $scope.facilityName = $cookieStore.get('FacilityName');
     $scope.facilityImage = $cookieStore.get('FacilityImage');
+    $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID');
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
     $scope.patientSummaryAnswers = {};
     $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
     $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.clickedPhase = null;
+    
+    
     
     $scope.showDeviceOptions = function(provider, questionID){
         console.log("in new function");
@@ -1159,21 +1162,24 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     //Progresses the CareTeam phase to the Next Phase
     $scope.completePhase = function(){
         
+        
         //if on phase 1, skip phase number to 3(phase2 and 3 are active at same time, handled in the phase dots in patient directory)
-        if($scope.answer.PhaseID=="1"){
-            $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 2);
+        if($scope.answer.PhaseID=="2" && $scope.patientPhaseID=="20"){
+            $scope.nextPhase = 21;
         }
         //might not be used (nobody should have a current phase of 2 technically
-        else if($scope.answer.PhaseID=='2'){
-            $location.path('patientDirectory');
-            return;
+        else if($scope.answer.PhaseID=='3' && $scope.patientPhaseID=="20"){
+            $scope.nextPhase = 22;
+        }
+        else if($scope.patientPhaseID=="21" || $scope.patientPhaseID=="22"){
+            $scope.nextPhase = 4;
         }
         else{
             $scope.nextPhase = (parseInt($scope.answer.PhaseID) + 1);
         }
         
         //Update Current phase number in database
-        if($scope.answer.PhaseID != '2' && $scope.answer.PhaseID != '11'){
+        if($scope.answer.PhaseID != '11'){
             $scope.newPhase = {"CurrentPhaseID":$scope.nextPhase};
             // Post the changed currentPhaseID here
             putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.newPhase).then(function(){
@@ -1809,6 +1815,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         persistData.setDirAnchor(patient.Last);
         $cookieStore.put('PatientDOB', patient.DOB);
         $cookieStore.put('PatientSex', patient.Sex);
+        $cookieStore.put('CurrentPhaseID', careTeam.CurrentPhaseID);
         $cookieStore.put('PatientInactiveStatus', patient.InactiveStatus);
         
     };
