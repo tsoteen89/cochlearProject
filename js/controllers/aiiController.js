@@ -1991,7 +1991,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             
         var ModalInstanceCtrl = function ($scope, $modalInstance, patient) {
             var cookieSessionID = $cookieStore.get('SessionID');
-            $scope.newEvent={"Description":null, "OriginalFacilityID": 100, "CurrentPhaseID":3, "CreatedOn": new Date(), "PatientID": patient.PatientID};
+            $scope.newEvent={"Description":null, "OriginalFacilityID": 100, "CurrentPhaseID":20, "CreatedOn": new Date(), "PatientID": patient.PatientID};
             $scope.patient = patient;
             
             $scope.ok = function () {
