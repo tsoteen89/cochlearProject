@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<svg width="75" height="75" xmlns="http://www.w3.org/2000/svg">
+ <metadata id="metadata1">image/svg+xml</metadata>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g id="g1">
+   <polygon stroke="#111111" stroke-width="5" stroke-linejoin="round" fill="#111111" points="39.389,13.769 22.235,28.606 6,28.606 6,47.699 21.989,47.699 39.389,62.75 39.389,13.769" id="polygon1"/>
+   <path fill="none" stroke="#111111" stroke-width="5" stroke-linecap="round" d="m48.127998,49.029999c1.929001,-3.095997 3.062,-6.738998 3.062,-10.653c0,-3.978001 -1.163998,-7.674 -3.146999,-10.799999" id="path1"/>
+   <path fill="none" stroke="#111111" stroke-width="5" stroke-linecap="round" d="m55.082001,20.537001c3.695,4.986 5.883999,11.157 5.883999,17.839998c0,6.621002 -2.151001,12.738003 -5.787998,17.699001" id="path2"/>
+   <path fill="none" stroke="#111111" stroke-width="5" stroke-linecap="round" d="m61.709999,62.611c5.266998,-6.666 8.417999,-15.080002 8.417999,-24.233002c0,-9.216999 -3.192001,-17.681999 -8.518997,-24.367998" id="path1"/>
+  </g>
+  <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="2" x2="72" y1="68" x1="5" stroke-width="7" stroke="#000" fill="none"/>
+ </g>
+</svg>
