@@ -1,9 +1,6 @@
 <style>
-	.info{
-		color: red;
-	}
 	.error{
-		color: blue;
+		color: red;
 	}
 </style>
 
@@ -46,9 +43,9 @@
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" ng-model="registration.confirmPassword"/>
                 
                <!-- {{registration}}-->
-                <input type="submit" id="submit" class="submit action-button" value="Register" ng-click="registerUser()" ng-disabled="disableRegister == 'true'"/> 
-				<br>
-				<span name="errorMessage">{{message}}</span>
+			    <button class="btn btn-primary" id="submit" class="submit action-button" value="Register" ng-click="registerUser()" ng-disabled="disableRegister">{{button}}</button> 
+				<br><br>
+				<span name="errorMessage" ng-class="{'error':messageIsError}">{{message}}</span>
             </fieldset>
             
         </form>
@@ -78,8 +75,8 @@
        $scope.registration = {}; //Registration information
 	   $scope.message = ""; //Info message displayed to the user
 	   $scope.messageIsError = false; //Determines the style of the message
-	   $scope.disableRegister = 'false'; //Disables the register button
-	   $scope.button = document.getElementById("submit"); //Register button
+	   $scope.disableRegister = false; //Disables the register button
+	   $scope.button = "Register"; //Register button content
 	   
 	    //Validates the form data and sends a user registration request to the API
         $scope.registerUser = function() {
@@ -87,40 +84,52 @@
 			//Grab token from the URL - DEBUG
 			$scope.registration.Token = (document.URL).split("?")[1];
 		
-            $http({
-               method  : 'POST',
-               url     : 'http://killzombieswith.us/aii-api/v1/users',
-               //url     : '../aii-api/v1/users',
-               data    : $scope.registration,  // pass in data as strings
-               headers : { 'Content-Type': 'application/json' } 
-            })
-            .success(function(data) {
-			    
-				//Determine the message to display based on the response
-			    if(data.records["response"] == 1000){
-					$scope.message = "Registration Successful!";
-					$scope.messageIsError = false;
-				}
-				if(data.records["response"] == 1010){
-					$scope.message = "Username has already been taken.";
-					$scope.messageIsError = true;
-				}
-				if(data.records["response"] == 1020){
-					$scope.message = "Invalid invitation. This invitation may have already been used. Re-visit the invitation link provided by email and try again. If the invitation is still invalid, request another invitation from your facility administrator.";
-					$scope.messageIsError = true;
-				}
-				if(data.records["response"] == 1030){
-					$scope.message = "Server error. Please try again in a few minutes. If this error persists, contact a server administrator at admin@aii-hermes.org";
-					$scope.messageIsError = true;
-				}
-				//Re-enable the register button
-			   $scope.disableRegister = 'false';
-			   $scope.button.value = "Register";
-            });
-		   
-		    //Before the API responds, disable the register button
-		    $scope.disableRegister = 'true';
-		    $scope.button.value = "Registering...";
+			//TODO - form validation
+			//	insure valid username (no spaces, adequate length)
+			//	insure valid password (adequate length, valid characters)
+		
+			//Insure password fields match before sending request
+			if($scope.registration.Password === $scope.registration.confirmPassword){
+				$http({
+				   method  : 'POST',
+				   url     : 'http://killzombieswith.us/aii-api/v1/users',
+				   //url     : '../aii-api/v1/users',
+				   data    : $scope.registration,  // pass in data as strings
+				   headers : { 'Content-Type': 'application/json' } 
+				})
+				.success(function(data) {
+					
+					//Determine the message to display based on the response
+					if(data.records["response"] == 1000){
+						$scope.message = "Registration Successful!";
+						$scope.messageIsError = false;
+					}
+					if(data.records["response"] == 1010){
+						$scope.message = "Username has already been taken.";
+						$scope.messageIsError = true;
+					}
+					if(data.records["response"] == 1020){
+						$scope.message = "Invalid invitation. This invitation may have already been used. Re-visit the invitation link provided by email and try again. If the invitation is still invalid, request another invitation from your facility administrator.";
+						$scope.messageIsError = true;
+					}
+					if(data.records["response"] == 1030){
+						$scope.message = "Server error. Please try again in a few minutes. If this error persists, contact a server administrator at admin@aii-hermes.org";
+						$scope.messageIsError = true;
+					}
+					//Re-enable the register button
+				   $scope.disableRegister = false;
+				   $scope.button = "Register";
+				});
+			   
+				//Before the API responds, disable the register button
+				$scope.disableRegister = true;
+				$scope.button = "Registering...";
+			}
+			//If the password and confirmation do not match, inform the user
+			else{
+				$scope.message = "Password fields do not match.";
+				$scope.messageIsError = true;
+			}
         }
        
        
