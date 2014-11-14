@@ -1022,6 +1022,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     };
     
     $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : $cookieStore.get('CareTeamID')};
+    
     //Post a surgery History. 
     $scope.postSurgery = function() {
         $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
@@ -1029,17 +1030,21 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         //initialize surgery object
         //user will fill in date, other(if necessary), side, and type via ng-model
         
-        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery);
+        
+        postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery).success(function(){
+            $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
+            $scope.surgery["Other"] = null;
+            $scope.surgery["Type of Surgery?"] = null;
+            $scope.surgery["Side?"] = null;
+        });
     };
 
-    //Clear surgeryHistory object so user can add another history
-    $scope.clearSurgeryHistory = function(){
-        this.surgery["Date"] = null;
-        this.surgery["Other"] = null;
-        this.surgery["Type of Surgery?"] = null;
-        this.surgery["Side?"] = null;
+    $scope.clearOther=function(){
+        if($scope.surgery["Type of Surgery"] != "Other"){
+            $scope.surgery["Other"] = null;
+        }
     }
-    
+  
     //Display the next set of questions for a phase
     $scope.nextPage = function(){
         $scope.page = $scope.page + 1;
