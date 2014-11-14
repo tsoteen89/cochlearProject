@@ -46,7 +46,7 @@
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" ng-model="registration.confirmPassword"/>
                 
                <!-- {{registration}}-->
-                <input type="submit" id="submit" class="submit action-button" value="Register" ng-click="registerUser()" ng-disabled="disableRegister"/> 
+                <input type="submit" id="submit" class="submit action-button" value="Register" ng-click="registerUser()" ng-disabled="disableRegister == 'true'"/> 
 				<br>
 				<span name="errorMessage">{{message}}</span>
             </fieldset>
@@ -78,21 +78,23 @@
        $scope.registration = {}; //Registration information
 	   $scope.message = ""; //Info message displayed to the user
 	   $scope.messageIsError = false; //Determines the style of the message
-	   $scope.disableRegister = false; //Disables the register button
+	   $scope.disableRegister = 'false'; //Disables the register button
 	   $scope.button = document.getElementById("submit"); //Register button
 	   
-	   //Validates the form data and sends a user registration request to the API
-       $scope.registerUser = function() {
-           $http({
+	    //Validates the form data and sends a user registration request to the API
+        $scope.registerUser = function() {
+	   
+			//Grab token from the URL - DEBUG
+			$scope.registration.Token = (document.URL).split("?")[1];
+		
+            $http({
                method  : 'POST',
-               //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
-               url     : '../aii-api/v1/users',
+               url     : 'http://killzombieswith.us/aii-api/v1/users',
+               //url     : '../aii-api/v1/users',
                data    : $scope.registration,  // pass in data as strings
                headers : { 'Content-Type': 'application/json' } 
-           })
-           .success(function(data) {
-                //console.log(data.records["User Registration Response"]);
-                //alert(data.records["User Registration Response"]);
+            })
+            .success(function(data) {
 			    
 				//Determine the message to display based on the response
 			    if(data.records["response"] == 1000){
@@ -112,14 +114,14 @@
 					$scope.messageIsError = true;
 				}
 				//Re-enable the register button
-			   $scope.disableRegister = false;
+			   $scope.disableRegister = 'false';
 			   $scope.button.value = "Register";
-           });
+            });
 		   
-		   //Before the API responds, disable the register button
-		   $scope.disableRegister = true;
-		   $scope.button.value = "Registering...";
-       }
+		    //Before the API responds, disable the register button
+		    $scope.disableRegister = 'true';
+		    $scope.button.value = "Registering...";
+        }
        
        
        
