@@ -1,3 +1,12 @@
+<style>
+	.info{
+		color: red;
+	}
+	.error{
+		color: blue;
+	}
+</style>
+
 <html ng-app="userRegApp" style="width:100%;height:100%;">
    <head>
       <title>AII User Registration</title>
@@ -29,18 +38,17 @@
             <fieldset>
                 <h3 class="fs-title">Register as a new user</h3>
                 <div class="row">
-                    <div class="col-md-5"><input type="text" name="first" placeholder="First Name" ng-model="registration.first_name"/> </div>
-                    <div class="col-md-5" ><input type="text" name="last" placeholder="Last Name" ng-model="registration.last_name"/> </div>
-                    <div class="col-md-2" ><select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles" ng-model="registration.TitleID">  </select></div>
+                    <div class="col-md-6"><input type="text" name="first" placeholder="First Name" ng-model="registration.First"/> </div>
+                    <div class="col-md-6" ><input type="text" name="last" placeholder="Last Name" ng-model="registration.Last"/> </div>
                 </div>
-                <input type="text" name="username" placeholder="Username" ng-model="registration.username"/>
-                <input type="password" name="password" placeholder="Password" ng-model="registration.password"/>
-                
-                <input type="text" name="email" placeholder="Email" ng-model="registration.email"/>
-                <input type="text" name="phone" placeholder="Phone Number" ng-model="registration.phone"/>
+                <input type="text" name="username" placeholder="Username" ng-model="registration.Username"/>
+                <input type="password" name="password" placeholder="Password" ng-model="registration.Password"/>
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" ng-model="registration.confirmPassword"/>
                 
                <!-- {{registration}}-->
-                <input type="submit" name="submit" class="submit action-button" value="Submit" ng-click="registerUser()"/> <br>(not yet functionally ready)
+                <input type="submit" id="submit" class="submit action-button" value="Register" ng-click="registerUser()" ng-disabled="disableRegister"/> 
+				<br>
+				<span name="errorMessage">{{message}}</span>
             </fieldset>
             
         </form>
@@ -66,11 +74,14 @@
    
    controllers.regCtrl =  function($scope, $http, getData) {
        
-       //need to grab facility id,-handle with api
-       $scope.registration = {};
-       getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
-           $scope.userTitles = data.records;
-       }); 
+	   //Scope variables
+       $scope.registration = {}; //Registration information
+	   $scope.message = ""; //Info message displayed to the user
+	   $scope.messageIsError = false; //Determines the style of the message
+	   $scope.disableRegister = false; //Disables the register button
+	   $scope.button = document.getElementById("submit"); //Register button
+	   
+	   //Validates the form data and sends a user registration request to the API
        $scope.registerUser = function() {
            $http({
                method  : 'POST',
@@ -80,11 +91,34 @@
                headers : { 'Content-Type': 'application/json' } 
            })
            .success(function(data) {
-               //console.log(data.records["User Registration Response"]);
-               alert(data.records["User Registration Response"]);
+                //console.log(data.records["User Registration Response"]);
+                //alert(data.records["User Registration Response"]);
+			    
+				//Determine the message to display based on the response
+			    if(data.records["response"] == 1000){
+					$scope.message = "Registration Successful!";
+					$scope.messageIsError = false;
+				}
+				if(data.records["response"] == 1010){
+					$scope.message = "Username has already been taken.";
+					$scope.messageIsError = true;
+				}
+				if(data.records["response"] == 1020){
+					$scope.message = "Invalid invitation. This invitation may have already been used. Re-visit the invitation link provided by email and try again. If the invitation is still invalid, request another invitation from your facility administrator.";
+					$scope.messageIsError = true;
+				}
+				if(data.records["response"] == 1030){
+					$scope.message = "Server error. Please try again in a few minutes. If this error persists, contact a server administrator at admin@aii-hermes.org";
+					$scope.messageIsError = true;
+				}
+				//Re-enable the register button
+			   $scope.disableRegister = false;
+			   $scope.button.value = "Register";
            });
-           
-           
+		   
+		   //Before the API responds, disable the register button
+		   $scope.disableRegister = true;
+		   $scope.button.value = "Registering...";
        }
        
        
