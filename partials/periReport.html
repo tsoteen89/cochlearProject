@@ -27,7 +27,7 @@
                 <thead>
                 <tr align="center">
                     <td style="background-color:#cae5f0; width:200px"></td>
-                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
+                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" ng-attr-style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
                         <b>{{patient.First}} {{patient.Last}}</b></h3></td>
                 </tr>
                 <tr align="Center">
@@ -38,7 +38,7 @@
 
                 </thead>
                 <tbody ng-repeat="(key, value) in questions">
-                    <tr ng-repeat="(questionNumb, val) in value" align="left">
+                    <tr ng-repeat="(questionNumb, val) in value" align="left" ng-class-odd="'odd'" ng-class-even="'even'">
                         <td ng-class="{bold:$first, plain:!$first}">{{val}}</td>
                         <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td>
                         <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
