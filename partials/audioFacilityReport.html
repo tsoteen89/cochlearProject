@@ -11,12 +11,10 @@
    table, th, td, tbody, tr {
    border: 1px solid #164a5e;
    }
-   .bold{
-   font-weight: bold;
-   background-color: #97afd4;
+   .purple{
+   background-color: #9ca0c4;
    }
-   .plain{
-   font-weight:normal;
+   .blue{
    background-color:#cae5f0
    }
     tbody tr:hover {
@@ -29,11 +27,11 @@
                 <td style="width:200px;"> <h4> Patient </h4></td> 
                 <td style="width:100px"><h4>  Test </h4></td> 
                 <td style="width:240px"> <h4> Measure </h4> </td> 
-                <td colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" style="width:{{getMaxNumOfConditionSets(phase.PhaseID)*303}}px" ng-repeat= "phase in facilityReport.Phases"><h4>  {{phase.Name}}</h4> </td>
+                <td colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" ng-attr-style="width:{{getMaxNumOfConditionSets(phase.PhaseID)*303}}px" ng-repeat= "phase in facilityReport.Phases"><h4>  {{phase.Name}}</h4> </td>
             </tr>
         </thead>
-        <tbody ng-repeat="patient in facilityReport.Patients" >
-            <tr ng-repeat="careTeam in patient.CareTeams">
+        <tbody ng-repeat="patient in facilityReport.Patients" ng-class-odd="'odd'" ng-class-even="'even'">
+            <tr ng-repeat="careTeam in patient.CareTeams" >
                 <!--Patient Name and Event Details -->
                 <td align="center"  style="width:200px;">
                     <b> {{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} </b>
@@ -45,7 +43,7 @@
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
-                                    <tr style="height:{{test.AudioTestInput.length*23}}px">
+                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*23}}px">
                                         <td><b> {{test.AudioTestName}}</b></td> 
                                     </tr>
                                 </table>
