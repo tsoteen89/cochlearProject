@@ -24,12 +24,19 @@
                             <br>
                             <div class="row">
                                 <hr>
+                                
                                 <div class="control-group col-md-4 col-md-offset-1" >
+                                    
                                     <label>DOB</label>
+                                    <hovercard hover-tmpl-url="js/dateHelp.html" style="margin-left:25%">
+                                        <p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle">
+                                        </p>
+                                    </hovercard>
                                     <div class="controls" >
-                                        <input type="date" class="form-control" name="DOB" ng-model="formData.dob" ng-required="true" placeholder="Enter Date of Birth" ng-blur="formatDate()">
+                                        <input type="date" class="form-control" name="DOB" ng-model="formData.dob" ng-required="true" placeholder="YYYY-MM-DD" ng-blur="formatDate()">
                                         <!--<p>{{formData.DOB}}</p>-->
                                     </div>
+
                                 </div>
                                 <div class="control-group col-md-4 col-md-offset-1" >
                                     <label>Race</label>
