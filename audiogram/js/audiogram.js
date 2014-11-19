@@ -972,6 +972,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
 }
 
 function GetMeasureData(measure,masked,side){
+    console.log(measure+","+masked+","+side);
     measureData = 
     {
         "AC": {
