@@ -2090,7 +2090,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
             });
 
             $scope.selectFac = function (fac) {
-				$scope.selectedFac = fac.Name;
+				$scope.selectedFac = fac;
                 $scope.patientProvider = {"PatientID": patient.PatientID, "FacilityID": fac.FacilityID};
 			}
             
