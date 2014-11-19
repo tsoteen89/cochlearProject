@@ -2103,7 +2103,11 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
                 $scope.postNotification.ReceiverFacilityID = $scope.selectedFac.FacilityID;
 
                 $scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
-                postData.post($scope.postNotificationURL, $scope.postNotification);
+                postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
+                    if(data.records == "Success")
+                        $modalInstance.close();
+                    
+                }); 
                 /*postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
                     $modalInstance.close();
                     $timeout(function(){
