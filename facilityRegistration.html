@@ -118,8 +118,7 @@
                 <input type="text" name="phone" placeholder="Phone Number" ng-model="administratorData.phone"/>
                 
                 <input type="button" name="previous" class="previous action-button" value="Previous" />
-                <input type="submit" name="submit" class="submit action-button" value="Submit" ng-click="registerFacility()"/>
-               
+			    <button id="submit" class="action-button" value="Submit" ng-click="registerFacility()" ng-disabled="disableRegister">{{button}}</button> 
             </fieldset>
         </form>
             </div>
@@ -231,15 +230,17 @@
             { name: 'WISCONSIN', abbreviation: 'WI'},
             { name: 'WYOMING', abbreviation: 'WY' }
         ];
-       
+       $scope.button = "Submit";
        $scope.registerFacility = function() {
+           
            //send in one object that contains both form information
            $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
-           
+           $scope.button = "Processing...";
+           $scope.disableRegister = true;
            $http({
                method  : 'POST',
                //url     : 'http://killzombieswith.us/aii-api/v1/facilities',
-               url     : '../aii-api/v1/facilities',
+               url     : 'http://killzombieswith.us/aii-api/v1/facilities',
                data    : $scope.registration,  // pass in data as strings
                headers : { 'Content-Type': 'application/json' } 
            })
@@ -247,19 +248,26 @@
                console.log(data.records);
                //if both are registered, let em know and redirect to sign in 
                if(data.records["Facility Admin Registration Response"] == "Success" && data.records["Facility Registration Response"] == "Success"){
-                   
+                  
                    alert("Your facility and administrator have been registered with AII!");
                    $window.location.href = "./";
                    
                }else if(data.records["Facility Registration Response"] == "Success"){ //else if only fac was successful, alert admin problems
-                   
-                   alert("You are missing necssary information for your adminstrator.\n\nPlease enter any missing information and press submit again.");
+                   $scope.button = "Submit";
+                   alert("You are missing necssary information for your adminstrator.\n\nPlease enter any missing information and press submit again.");        
+                   $scope.disableRegister = false;
                    $scope.facilityData.FacilityID = data.records['FacilityID'];
                    
                }else{
+                   $scope.button = "Submit";
+                   
                    alert("You are missing necessary information for both your facility and your facility administrator.\n\n" +
-                         "Please make sure to fill out facility and facility admin information.\nEnter any missing information and press submit again.");
+                         "Please make sure to fill out facility and facility admin information.\n"+
+                         "Enter any missing information and press submit again.");
+                   
+                   $scope.disableRegister = false;
                }
+              
            });
            
            
