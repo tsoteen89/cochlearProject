@@ -301,7 +301,11 @@
         padding: 1px 0;
         white-space: pre;
     }
-        
+    #audiogramTitleOther{
+        height:25px;
+        width:100%;
+        margin-left:-20px;
+    }
     
     hr{
         border-top: 1px solid #34383E;
@@ -372,12 +376,13 @@
                <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Title:</span>
               </div>
               <div class="col-xs-8 col-sm-8 underlined">
-                    <span class="patient-data">
+                    <span class="patient-data" id="audiogram-title-container">
                     <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." id="audiogramTitleID">
                         <option value=""></option>
                         <option>Pre Operative Audiogram</option>
                         <option>Aided Testing</option>
-                        <option>Residual Hearing</option>                                    
+                        <option>Residual Hearing</option>
+                        <option>Other</option>
                     </select>
                     </span>
               </div>
@@ -387,7 +392,7 @@
                <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date:</span>
               </div>
               <div class="col-xs-8 col-sm-8 underlined">
-               <span class="audiogram-date"><center><input type="date"></center></span>
+               <span class="audiogram-date"><center><input type="date" id="theDate"></center></span>
               </div>
             </div>
           </div>
@@ -397,14 +402,18 @@
               <div class="col-xs-3 col-sm-3">
                <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date/Title:</span>
               </div>
-              <div class="col-xs-8 col-sm-8 underlined">
+              <div class="col-xs-7 col-sm-7 underlined">
                     <span class="patient-data">
                     <select name="audiogramTitle" data-placeholder="Previous Audiograms">
                         <option value=""></option>
                         <option>Aided Testing 23 Jan 2013</option>                                   
                     </select>
+                  
                     </span>
-                  <i class="fa fa-line-chart"></i>
+
+              </div>
+              <div class="col-xs-2 col-sm-2">
+                <a href="#" class="btn btn-default btn-xs" style="margin-left:-10px;margin-top:8px"><i class="fa fa-download"></i> Load</a>
               </div>
             </div>
             <div class="row">
@@ -649,7 +658,7 @@
             canvass = $("#audiogram_left").find(".kineticjs-content").children();
             ImgData['left']['line'] = canvass[1].toDataURL("image/png");
             ImgData['left']['measures'] = canvass[2].toDataURL("image/png");            
-            //console.log(ImgData);
+            console.log(ImgData);
             //var img = ImgData['right']['line'].toDataURL("image/png");
             //$("#temp1").html('<img src="'+img+'"/>');
 
@@ -661,7 +670,7 @@
         $('#saveAudiogram').on('click', function(event) {
              $.post( "class.audiogram.php", SaveData)
                 .done(function( data ) {
-                       //console.log( "Data Loaded: " + data );
+                       console.log( "Data Loaded: " + data );
                 });           
         });
         $('#searchAudiogram').on('click', function(event) {
@@ -671,6 +680,13 @@
                 });           
         });
         window.onbeforeunload = enableBeforeUnload;
+        
+        $( "#audiogramTitleID").change(function () {
+            console.log($(this).val());
+            if ($(this).val() == 'Other'){
+                $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="audiogramTitleOther">');
+            }
+        });
         
         //Added for checkbox buttons
        $('.button-checkbox').each(function () {
@@ -749,7 +765,25 @@
             }
             init();
         });
+        
+        setTodaysDate();
+        
+        
     });
+        
+    function setTodaysDate(){
+        var date = new Date();
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        var today = year + "-" + month + "-" + day;       
+        $("#theDate").attr("value", today);
+    }
     function enableBeforeUnload() {
         window.onbeforeunload = function (e) {
             return "Are you sure you want to navigate away?";
