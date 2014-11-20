@@ -36,7 +36,9 @@
         
         /* tin #7E7E7E */
         /* gray #818181 */
-        
+        body{
+            color:#3C3F41;
+        }
         h2 {
             color:#414141;
             text-shadow: 2px 2px #808281;
@@ -256,10 +258,54 @@
     }
     .btn-masked.btn-default{
         color: #ffffff; 
-        background-color: #040008; 
-        border-color: #15C2D2;   
+        background-color: #040008;    
+    }
+    .input-label{
+        line-height: 2;
+        color:#3C3F41;
+    }
+    
+    .patient-data{
+        font-size:16px;
+        padding-left:20px;
+        padding-right:20px;
+        text-align:center;
+    }
+    .underlined{
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        border-bottom-color: #c0c0c0;
+        line-height: 35px;
+    }
+    /* Date field */
+     input[type="date"] {
+         -webkit-align-items: center;
+         display: -webkit-inline-flex;
+         overflow: hidden;
+         padding: 0;
+         -webkit-padding-start: 1px;
+         height:25px
+    }
+
+    input::-webkit-datetime-edit {
+        -webkit-flex: 1;
+        -webkit-user-modify: read-only !important;
+        display: inline-block;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    input::-webkit-datetime-edit-fields-wrapper {
+        -webkit-user-modify: read-only !important;
+        display: inline-block;
+        padding: 1px 0;
+        white-space: pre;
     }
         
+    
+    hr{
+        border-top: 1px solid #34383E;
+    }
     </style>
   </head>
   <body>
@@ -299,30 +345,79 @@
           </div><!-- /.navbar-collapse -->
         </nav>
         </div>
-        <div class="row">
-            <div class="col-md-12" style="padding-top:0px">
-                <div class="container-fluid well span6" style="padding:0px 0px 0px 5px;margins:5px 0px 0px 0px">
-                    <div class="row-fluid">
-                        <div class="col-xs-6">
-                           <label class="item item-input"  style="font-size:18px"> <span class="input-label" style="font-size:20px">Patient: </span> John Smith</label>
-                            <label class="item item-input" style="font-size:14px"> <span class="input-label" style="font-size:14px">Date of Birth: </span> 10 Oct 1950 </label>
- 
-                        </div>
-                        <div class="col-xs-6">
-                            <label class="item item-input"> <span class="input-label" style="font-size:16px">Title: </span> 
-                                <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." class="chosen-select-deselect" id="audiogramTitleID">
-                                    <option value=""></option>
-                                    <option>Pre Operative Audiogram</option>
-                                    <option>Aided Testing</option>
-                                    <option>Residual Hearing</option>                                    
-                                </select>
-                            </label>
-                            <label class="item item-input"> <span class="input-label" style="font-size:16px">Date: </span> <input type="date"></label>
-                        </div>
-                    </div>
-                </div>
-            </div>           
+        <div class="row" style="margin-top:-20px">
+          <div class="col-sm-4">
+            <span class="input-label" style="font-size:20px;font-weight:bold;text-align:right">Patient:</span>
+            <div class="row">
+              <div class="col-xs-3 col-sm-3 ">
+               <span class="input-label" style="font-size:16px;padding-left:20px;">Name:</span>
+              </div>
+              <div class="col-xs-6 col-sm-6 underlined">
+               <span class="input-label patient-data" > Joseph Smith</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3 col-sm-3">
+               <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">DOB:</span>
+              </div>
+              <div class="col-xs-6 col-sm-6 underlined">
+               <span class="input-label patient-data">10 Oct 1950</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <span class="input-label" style="font-size:20px;font-weight:bold">Current Audiogram:</span>
+            <div class="row">
+              <div class="col-xs-3 col-sm-3">
+               <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Title:</span>
+              </div>
+              <div class="col-xs-8 col-sm-8 underlined">
+                    <span class="patient-data">
+                    <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." id="audiogramTitleID">
+                        <option value=""></option>
+                        <option>Pre Operative Audiogram</option>
+                        <option>Aided Testing</option>
+                        <option>Residual Hearing</option>                                    
+                    </select>
+                    </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3 col-sm-3">
+               <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date:</span>
+              </div>
+              <div class="col-xs-8 col-sm-8 underlined">
+               <span class="audiogram-date"><center><input type="date"></center></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <span class="input-label" style="font-size:20px;font-weight:bold">Previous Audiograms:</span>
+            <div class="row">
+              <div class="col-xs-3 col-sm-3">
+               <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date/Title:</span>
+              </div>
+              <div class="col-xs-8 col-sm-8 underlined">
+                    <span class="patient-data">
+                    <select name="audiogramTitle" data-placeholder="Previous Audiograms">
+                        <option value=""></option>
+                        <option>Aided Testing 23 Jan 2013</option>                                   
+                    </select>
+                    </span>
+                  <i class="fa fa-line-chart"></i>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-2 col-sm-2">
+
+              </div>
+              <div class="col-xs-8 col-sm-8 ">
+
+              </div>
+            </div>              
+          </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-xs-5 title">
                 <h2>Right Ear</h2>
@@ -383,7 +478,7 @@
             <div>
                 <span class="button-checkbox">
                     <button type="button" class="btn btn-masked" id="mask-tool"> Masked</button>
-                    <input type="checkbox" class="hidden" checked />
+                    <input type="checkbox" class="hidden" />
                 </span>
             </div>
 
@@ -453,8 +548,9 @@
                   </table>
                 </div>
             </div>
-            <div class="col-xs-2"></div>
+            <div class="col-xs-2"><a class="btn btn-default" href="#" role="button" style="margin-top: 175px;margin-left: 70px;"><i class="fa fa-save"></i> Save</a></div>
         </div>
+              
     </div>
     </div> <!-- End Container --> 
     <script>
@@ -659,11 +755,6 @@
             return "Are you sure you want to navigate away?";
         };
     }
-     $("#audiogramTitleID").chosen({
-        disable_search_threshold: 10,
-        no_results_text: "Oops, nothing found!",
-        width: "95%"
-      });
     </script>      
   </body>
 </html>
