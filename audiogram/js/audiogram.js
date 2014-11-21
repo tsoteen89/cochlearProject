@@ -21,7 +21,6 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                              "textShadowColor": "#222222",
                              "strokeColor": "#000000"
                           },
-        dirtyBit        : false,                //Flag used to not add a measure if another one was clicked on
         margins         : {
                             "top":65,
                             "bottom":30,
@@ -125,9 +124,10 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         /**
         * Adds the context menu to the DOM. A right click method on a "measurement" on the 
         * canvas will fire off the "addContextMenu". 
+        * Requires context.js
         * @param {void}
         * @return {void}
-        * *************** Needs redone!!!
+        * *************** Needs redone!!! Fixed to pass in array of functions and labels to be "added" to menu
         */ 
         addContextMenus : function(){
             var self = this;
@@ -143,7 +143,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                      redoStack.push(currentStack[index]);
                      currentStack[index].destroy();
                      currentStack.splice(index,1);
-                     console.log("Deleted: "+index);
+                     //console.log("Deleted: "+index);
                      self.drawStack();
 		        },fa_icon:'fa-close'},
                 {text: 'Toggle Masked', href: '#',action: function(e){
@@ -172,14 +172,14 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 {text: 'Undo', href: '#', action: function(e){
 			        e.preventDefault();
                     self.undoMeasure();
-                    console.log("Undo");
+                    //console.log("Undo");
 		        },fa_icon:'fa-history'},
                 {text: 'Redo', href: '#',fa_icon:'fa-rotate-right'},
                 {divider: true},
                 {text: 'Clear Audiogram', href: '#', action: function(e){
 			        e.preventDefault();
                     self.clearStage();
-                    console.log("Clear");
+                    //console.log("Clear");
 		        },fa_icon:'fa-refresh'}
             ]);
         },
@@ -338,36 +338,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @param {null}
         * @return {null} 
         */ 
-        addMeasure: function(){
-            var snap = this.snapClick();
+        addMeasure: function(x,y){
             var index = false;
             
-            //Mainly right now, if you don't click on the canvas, you get no action
-            if(snap.error){
-                console.log(snap.type);
-                return;
-            }else{
-                //Not a new item, lets make adjustements, and by adustments I mean delete some stuff....
-                index = this.measureClicked(snap.x,snap.y);
-                //if you click in the same frequency, you snap the existing one to the new location
-                if(index !== false){
-                    this.showContextMenu();
-                    return;
-                }
-                
-                index = this.sameFrequency(snap);
-                console.log(":::"+typeof(index));
-                if(index !== false && currentStack[index].getAttr('measure') == this.measureType){
-                    redoStack.push(currentStack[index])
-                    currentStack[index].destroy();
-                    currentStack.splice(index,1);
-                    console.log(currentStack);
-                }
-            }
-            
-            //Get current adjusted x&y coords.
-            var x = snap.x;
-            var y = snap.y;
             
             //Get frequency and decibels assigned to the coordinate (x,y)
             var d = this.getDecibels(y);
@@ -469,7 +442,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             }
             
             currentStack.push(shape);
-            //actionStack.push({"action":"add","measureID":shape.get});
+            actionStack.push({"action":"add","measureID":shape.get});
 
             this.drawStack();
         },
@@ -545,9 +518,9 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {json} 
         */
         drawStack: function(){
-            console.log("drawStack");
-            console.log("Stack:");
-            console.log(currentStack);
+            //console.log("drawStack");
+            //console.log("Stack:");
+            //console.log(currentStack);
             
             var temp = [];
             var points = [];
@@ -556,7 +529,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             
             //Draw measures first
             layers['measures'].removeChildren();
-            console.log(layers['measures']);
+            //console.log(layers['measures']);
             for(var i=0;i<currentStack.length;i++){
                 layers['measures'].add(currentStack[i]);
 
@@ -575,7 +548,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                 shape = currentStack[i];
                 if(shape.getAttr('audioLine')){
                     var center = shape.getAttr('center'); 
-                    console.log(center);
+                    //console.log(center);
                     temp.push({'x':center.x,'y':center.y});
                 }
             }
@@ -622,15 +595,11 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {int} i - index of shape in stack
         */ 
         measureClicked : function(x,y){
-            console.log(currentStack);
+            //console.log(currentStack);
             if(typeof x == "undefined" && typeof y == "undefined"){
                 var snap = this.snapClick();
                 x = snap.x;
                 y = snap.y;
-            }else{
-                var snap = this.snapClick(x,y);
-                x = snap.x;
-                y = snap.y;                
             }
             
             var attr = null;
@@ -770,7 +739,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         * @return {void}
         */ 
         showContextMenu : function(){
-            console.log('showContextMenu: '+this.ctx_menu1_id);
+            //console.log('showContextMenu: '+this.ctx_menu1_id);
             var x1 = $("#audiogram_"+this.side).offset().left;
             var y1 = $("#audiogram_"+this.side).offset().top;
 
@@ -808,11 +777,11 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
         snapClick: function(inX,inY){
             //console.log('snapClick '+this.side);
 
-            var i;  //index
-            var d;  //difference
-            var cx; //closest x
-            var cy; //closest y
-            var min = stage.getWidth();   //Largest value that can be on this canvas
+            var i;          //index
+            var d;          //difference
+            var cx;         //closest x
+            var cy;         //closest y
+            var min = 0;    //Helping with boundaries and adjusting actual click location
             var x = 0;
             var y = 0;
             
@@ -827,8 +796,10 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
             }
             
             if(!this.inBounds(x,y)){
-                return {"x":-1,"y":-1,"error":1,"type":"Out of bounds"}
+                return {"x":null,"y":null,"error":true,"errorType":"Out of bounds","measureClicked":false,"frequency":false}
             }
+            
+            min = stage.getWidth();
             
             for(i=0;i<this.x_values.length;i++){
                 d = Math.abs(this.x_values[i].x - x);
@@ -846,26 +817,24 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
                     min = d;
                     cy = this.y_values[i].y;
                 }
-            }            
-            return {"x":cx,"y":cy,"error":0,"type":null};
+            }
+            return {"x":cx,"y":cy,"error":false,"measureClicked":this.measureClicked(cx,cy),"sameFrequency":this.sameFrequency(cx)};
+           
         },
         /**
-        * Checks to see if a measure is being added to the same frequency. 
-        * If it is, it removes the existing at that x, so the new one will
-        * appear to "snap" to the correct location.
-        * @param {coord} - x,y coords
-        * @return {bool} - returns true for remove, false for not
+        * Checks to see if a measure is being added to the same frequency (Air Conduction only) 
+        * @param {int} - x coord
+        * @return {bool} - returns true if one exists
+        * @return {int} - index of item that occupies frequency
         */ 
-        sameFrequency : function(snap){
-            var snap = this.snapClick();
-            var x = snap.x;
-            var y = snap.y;
-            var center = null;
+        sameFrequency : function(x){
             
+            var center = null;
+
             for(var i=0;i<currentStack.length;i++){
                 center = currentStack[i].getAttr('center');
-                console.log(center);
-                if(x == center.x){
+                //console.log(center);
+                if(x == center.x && currentStack[i].getAttr('measure') == this.measureType){
                     return i;
                 }
             }
@@ -924,42 +893,44 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
     
     private._init();
      
+    
+//{"x":cx,"y":cy,"error":false,"measureClicked":this.measureClicked(cx,cy),"sameFrequency":this.sameFrequency(cx)}
     //Create a click event for the "stage". Based on "current state", events
     //will be handled
     $(stage.getContent()).on('click', function(evt) {
-        if(private.dirtyBit){
-            private.dirtyBit = false;
-            return;
-        }
-
-        var shape = evt.target;
-        var name = null;
-        
-        try{
-            name = shape.getName();
-            console.log("clicked shape");
-        }catch(e){
-            console.log("clicked canvas");
-        }
+        var clickInfo = private.snapClick();
         
         setTimeout(function(){
+            //Remove any error messages from the canvas
             layers['error'].removeChildren();
+            
             stage.draw();
             setTimeout(function(){
-                private.addMeasure();
+                //If you clicked on the canvas
+                if(!clickInfo.error){
+                    //if you click in the same frequency, you snap the existing one to the new location
+                    if(clickInfo.measureClicked !== false){
+                        this.showContextMenu();
+                    }else if(clickInfo.sameFrequency !== false){
+                        //handle moving item on same frequency
+                        console.log("same frequency");
+                    }else{
+                        private.addMeasure(clickInfo.x,clickInfo.y);
+                    }
+                }
             },0);
 
         },0);
     });
     
-//    layers['measures'].on('click', function(evt) {
-//        private.dirtyBit = true;
-//        // get the shape that was clicked on
-//        var shape = evt.target;
-//        console.log('you clicked on \"' + shape.getName() + '\"');
-//        //private.showContextMenu(shape);
-//        //array.splice(5, 1);
-//    });
+//                //console.log(":::"+typeof(index));
+//                if(index !== false && currentStack[index].getAttr('measure') == this.measureType){
+//                    redoStack.push(currentStack[index])
+//                    currentStack[index].destroy();
+//                    currentStack.splice(index,1);
+//                    //console.log(currentStack);
+//                }
+    
 
     // Expose public API
     return {
@@ -999,7 +970,7 @@ var AudioGram = function(stage,audiogram_id,side,element_id) {
 }
 
 function GetMeasureData(measure,masked,side){
-    console.log(measure+","+masked+","+side);
+    //console.log(measure+","+masked+","+side);
     measureData = 
     {
         "AC": {

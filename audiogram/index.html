@@ -583,21 +583,10 @@
         //create both canvas' and add 'right-click' event handlers to each canvas
         //should be handled in audiogram.js
         //setTimeout(function(){
-            Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
-            Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
-            Stage['right'].bindContextMenu();
-            Stage['left'].bindContextMenu();       
-//            setTimeout(function(){
-//                document.getElementById('audiogram_right').addEventListener('contextmenu', function (event) {
-//                    event.preventDefault();
-//                    Stage['right'].showContextMenu(this);
-//                });
-//                document.getElementById('audiogram_left').addEventListener('contextmenu', function (event) {
-//                    event.preventDefault();
-//                    Stage['left'].showContextMenu(this);
-//                });
-//            },0);
-//        },0);
+        Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
+        Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
+        Stage['right'].bindContextMenu();
+        Stage['left'].bindContextMenu();       
 
 
         $( ".mea-btn" ).on( "click", function(event) {
