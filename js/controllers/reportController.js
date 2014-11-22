@@ -109,7 +109,7 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
                    > max){
                     max =
                         $scope.getCareTeamLength($scope.facilityReport.Patients[patient]['CareTeams'][event]['Data'][phaseNum].DetailedAnswers);
-                    console.log('max = ' + max);   
+                    //console.log('max = ' + max);   
                 }
             }
         }
