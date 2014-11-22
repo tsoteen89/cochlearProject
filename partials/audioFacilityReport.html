@@ -29,12 +29,8 @@
     #table-results tr:hover {
       background: #97afd4;<!--#55ccff;-->
     } 
-    .samples {
-   overflow: auto;
-   display:block;
-}
 </style>
-    <table class="form3D " style="table-layout:fixed;overflow:auto;display:block;" >
+    <table class="form3D " style="table-layout:fixed" >
         <thead ng-if="showReport">
             <tr style="background-color:#cae5f0;" align="center"> 
                 <td style="width:200px;"> <h4> Patient </h4></td> 
@@ -49,7 +45,7 @@
             <tr ng-repeat="careTeam in patient.CareTeams" >
                 <!--Patient Name and Event Details -->
                 <td align="center"  style="width:200px;" >
-                    <b> {{patient.First}} {{patient.Last}}: <br> {{careTeam.Description}} </b>
+                    <b> {{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} </b>
                 </td>
                 <!--AzBio, CNC, BKB-SIN-->
                 <td > 
@@ -79,7 +75,7 @@
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
                                     <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'">
-                                        <td style="white-space: nowrap"><b> {{field.Name}}</b></td> 
+                                        <td ><b> {{field.Name}}</b></td> 
                                     </tr>
                                 </table>
                             </td>
