@@ -17,7 +17,7 @@
     }
 }
 </style>
-    <table class="form3D" style="table-layout:fixed;width:35%; display: inline-block;height: 1472px;padding:0; margin:0" >
+    <table class="form3D" style="table-layout:fixed;width:35%; display: inline-block;padding:0 ; margin:0" >
         <thead ng-if="showReport">
             <tr style="background-color:#cae5f0;" align="center"> 
                 <td style="width:200px;"> <h4> Patient </h4></td> 
@@ -45,6 +45,7 @@
                                         <td style="border:none;background-color:#cae5f0;"></td> </tr>
                                 </table>
                             </td>
+                        </tr>
                     </table>
                 </td>
                 <!-- List, SNR, etc; specific to the test-->
@@ -65,9 +66,15 @@
                         </tr>         
                     </table>             
                 </td>
-                </tr>          
-        </tbody>
-      
+            </tr>
+            </tbody>
+            <tfoot>
+                <tr> 
+                    <td style="height:17px"> </td>
+                    <td style="height:17px"> </td>
+                    <td style="height:17px"> </td>
+                </tr>
+            </tfoot>
     </table>
             
     
@@ -173,12 +180,12 @@
                 <!--AzBio, CNC, BKB-SIN-->
                 <td > 
                     <table style="width:100%;">
-                        <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr>
+                        <tr style="border:none"><td style="height:34px;border:none" class="bold"></td></tr>
                         <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr>
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
-                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21+1}}px; background-color:#cae5f0; border-bottom:none">
+                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21+2}}px; background-color:#cae5f0; border-bottom:none">
                                         <td style="border-bottom:none"><b> {{test.AudioTestName}}</b></td> 
                                     </tr>
                                     <tr style="border:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first"> 
@@ -191,13 +198,13 @@
                 <td >
                     <table style="width:100%">
                         <!-- empty hidden rows to make excel look better-->
-                        <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr> 
+                        <tr style="border:none"><td style="height:34px;border:none" class="bold"></td></tr> 
                         <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr>
                         
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
-                                    <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'">
+                                    <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" >
                                         <td ><b> {{field.Name}}</b></td> 
                                     </tr>
                                 </table>
@@ -247,5 +254,11 @@
     </table>
 
 </div>
-
+<!--<tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" ng-if="$parent.$first" 
+                                        style="border-top:2px solid black">
+                                        <td ><b> {{field.Name}}</b></td> 
+                                    </tr>
+                                    <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" ng-if="!parent.$first" >
+                                        <td ><b> {{field.Name}}</b></td> 
+                                    </tr>-->
 
