@@ -38,7 +38,7 @@
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
-                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21+2}}px; background-color:#cae5f0; border-bottom:none">
+                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21+1}}px; background-color:#cae5f0; border-bottom:none">
                                         <td style="border-bottom:none;white-space: nowrap" ><b> {{test.AudioTestName}}</b></td> 
                                     </tr>
                                     <tr style="border:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first"> 
