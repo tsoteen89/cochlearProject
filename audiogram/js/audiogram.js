@@ -999,7 +999,21 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         }
         return false;
     }
-
+    
+    /**
+    * Rewturns the stack data (measures on the stack) as a json object. 
+    * @param {json} - sawr
+    * @return {bool} - returns true if saved succesfully
+    */
+    function getVisibleMeasures(){
+        var i = 0;
+        var stackData = [];
+        for (i = 0; i < currentStack.length; ++i) {
+            stackData.push(currentStack[i].getAttrs());
+        }
+        return stackData;
+    }
+    
     /**
     * Pops last item off the stack and removes it from the "stage"
     * @param {void}
@@ -1090,7 +1104,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         setMasked : setMasked,
         makeNoResponse : makeNoResponse,
         undo : undoMeasure,
-        redo : redoMeasure
+        redo : redoMeasure,
+        saveData : getVisibleMeasures
     };
 };
 

@@ -1,12 +1,11 @@
 <?php
 
-
 $pdf = new AudiogramPdf;
-
 
 if($_POST){
     $pdf->ConvertPostedSvgs($_POST);
     $pdf->CompositePngs();
+    $pdf->SaveAudiogramInfo($_POST);
 }
 
 /**
@@ -19,6 +18,7 @@ class AudiogramPdf{
     var $ImageArray;            //Holds each image that's part of the composite audiogram
     var $TempDirectory;         //Where to write each file. Should probably figure out how to 
                                 //do it all in memory, and not use disk as temp storage.
+    var $SaveDirectory;         //Where to save patient audiogram. Soon to be DB
     
     /**
      * Constructor builds ImageArray with a few hard coded "parts" of the audiogram
@@ -31,6 +31,7 @@ class AudiogramPdf{
             'left'=>['line'=>'','measures'=>'']
         ];
         $this->TempDirectory = './composite';
+        $this->SaveDirectory = './saved';
     }
     
     /**
@@ -66,6 +67,12 @@ class AudiogramPdf{
         $this->ImageArray['right']['measures'] = $this->SvgToPng($data['right']['measures'],"{$this->TempDirectory}/right-measures.png");
         $this->ImageArray['left']['measures'] = $this->SvgToPng($data['left']['measures'],"{$this->TempDirectory}/left-measures.png");
         return $this->ImageArray;
+    }
+    
+    public function SaveAudiogramInfo($data){
+        $data = json_encode($data);
+        file_put_contents('data'.time().'.json',$data);
+        return "Hello World";
     }
     
     /**

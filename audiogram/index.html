@@ -12,7 +12,7 @@
         <!--JavaScript -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.2.min.js"></script>
+        <script src="js/kinetic.js"></script>
         <script src="js/context.js"></script> 
         <script src="js/contextMenu.js"></script>
         <script src="js/chosen.jquery.js"></script> 
@@ -300,7 +300,7 @@
                 padding: 1px 0;
                 white-space: pre;
             }
-            #audiogramTitleOther{
+            #patient-audiogramTitle-new{
                 height:25px;
                 width:100%;
                 margin-left:-20px;
@@ -324,13 +324,13 @@
                     <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li><a href="#" id="searchAudiogram"><i class="fa fa-search"></i></a></li>
-                            <li><a href="#" id="saveAudiogram"><i class="fa fa-save"></i></a></li>
+                            <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i></a></li>
                             <li><a href="#" id="printAudiogram"><i class="fa fa-print"></i></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#"><i class="fa fa-search"></i> Search Audiogram</a></li>
-                                    <li><a href="#"><i class="fa fa-save"></i> Save Audiogram</a></li>
+                                    <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i> Save Audiogram</a></li>
                                     <li><a href="#"><i class="fa fa-print"></i> Print Audiogram</a></li>
                                     <li class="divider"></li>
                                     <li><a href="#">Separated link</a></li>
@@ -350,7 +350,7 @@
                             <span class="input-label" style="font-size:16px;padding-left:20px;">Name:</span>
                         </div>
                         <div class="col-xs-6 col-sm-6 underlined">
-                            <span class="input-label patient-data" > Joseph Smith</span>
+                            <span class="input-label patient-data" id="patient-name"> Joseph Smith</span>
                         </div>
                     </div>
                     <div class="row">
@@ -358,7 +358,7 @@
                             <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">DOB:</span>
                         </div>
                         <div class="col-xs-6 col-sm-6 underlined">
-                            <span class="input-label patient-data">10 Oct 1950</span>
+                            <span class="input-label patient-data" id="patient-dob">10 Oct 1950</span>
                         </div>
                     </div>
                 </div>
@@ -370,7 +370,7 @@
                         </div>
                         <div class="col-xs-8 col-sm-8 underlined">
                             <span class="patient-data" id="audiogram-title-container">
-                                <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." id="audiogramTitleID">
+                                <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." id="patient-audiogramTitle-new">
                                     <option value=""></option>
                                     <option>Pre Operative Audiogram</option>
                                     <option>Aided Testing</option>
@@ -385,7 +385,7 @@
                             <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date:</span>
                         </div>
                         <div class="col-xs-8 col-sm-8 underlined">
-                            <span class="audiogram-date"><center><input type="date" id="theDate"></center></span>
+                            <span class="audiogram-date"><center><input type="date" id="patient-audiogram-date"></center></span>
                         </div>
                     </div>
                 </div>
@@ -397,13 +397,11 @@
                         </div>
                         <div class="col-xs-7 col-sm-7 underlined">
                             <span class="patient-data">
-                                <select name="audiogramTitle" data-placeholder="Previous Audiograms">
+                                <select name="audiogramTitle" data-placeholder="Previous Audiograms" id="patient-audiogramTitle-prev">
                                     <option value=""></option>
                                     <option>Aided Testing 23 Jan 2013</option>                                   
                                 </select>
-
                             </span>
-
                         </div>
                         <div class="col-xs-2 col-sm-2">
                             <a href="#" class="btn btn-default btn-xs" style="margin-left:-10px;margin-top:8px"><i class="fa fa-download"></i> Load</a>
@@ -509,9 +507,9 @@
                         <!-- Table -->
                         <table class="table audioInputs-table">
                             <tr style="text-align:center"><th></th><th>SRT</th><th>Mask</th><th></th></tr>
-                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="spch_aud-srt-r"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="spch_aud-srt-l"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="spch_aud-srt-l"></td><td><input type="text" class="audioInputs"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="spch-aud-srt-r"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-r"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="spch-aud-srt-l"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-l"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="spch-aud-srt-b"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-b"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
                         </table>
                     </div>
                 </div>
@@ -522,13 +520,13 @@
                         <!-- Table -->
                         <table class="table audioInputs-table">
                             <tr style="text-align:center"><th></th><th>%</th><th>Stimulus</th><th>Mask</th><th>Noise</th></tr>
-                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
-                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
-                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td><td><input type="text" class="audioInputs"></td></tr>
+                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="word-rec-per-r"></td><td><input type="text" class="audioInputs" id="word-rec-stim-r"></td><td><input type="text" class="audioInputs" id="word-rec-mask-r"></td><td><input type="text" class="audioInputs" id="word-rec-noise-r"></td></tr>
+                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="word-rec-per-l"></td><td><input type="text" class="audioInputs" id="word-rec-stim-l"></td><td><input type="text" class="audioInputs" id="word-rec-mask-l"></td><td><input type="text" class="audioInputs" id="word-rec-noise-l"></td></tr>
+                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="word-rec-per-b"></td><td><input type="text" class="audioInputs" id="word-rec-stim-b"></td><td><input type="text" class="audioInputs" id="word-rec-mask-b"></td><td><input type="text" class="audioInputs" id="word-rec-noise-b"></td></tr>
                         </table>
                     </div>
                 </div>
-                <div class="col-xs-2"><a class="btn btn-default" href="#" role="button" style="margin-top: 175px;margin-left: 70px;"><i class="fa fa-save"></i> Save</a></div>
+                <div class="col-xs-2"><a class="btn btn-default saveAudiogram" href="#" role="button" style="margin-top: 175px;margin-left: 70px;"><i class="fa fa-save"></i> Save</a></div>
             </div>
 
         </div>
@@ -601,8 +599,6 @@
             });
             
             $('#printAudiogram').on('click', function(event) {
-                //Stage['right'].getAudiogram();
-                //Stage['left'].getAudiogram();
 
                 var ImgData = {};   //Json object image data to be posted back and combined.
                 ImgData['background'] = null;
@@ -628,24 +624,74 @@
                     console.log( "Data Loaded: " + data );
                 });
             });
-            $('#saveAudiogram').on('click', function(event) {
-                $.post( "class.audiogram.php", SaveData)
-                .done(function( data ) {
-                    console.log( "Data Loaded: " + data );
-                });           
+            
+            $('.saveAudiogram').on('click', function(event) {
+                var patient_data = {
+                    "patient-audiogram-date" : $("#patient-audiogram-date").attr("value"),
+                    "patient-name" : $('#patient-name').html(),
+                    "patient-dob" : $('#patient-dob').html(),
+                    "patient-audiogramTitle-new" : $('#patient-audiogramTitle-new').val(),
+                };
+                var sawr = {
+                    "spch-aud-srt-r":$('#spch-aud-srt-r').val(),
+                    "spch-aud-srt-l":$('#spch-aud-srt-l').val(),
+                    "spch-aud-srt-b":$('#spch-aud-srt-b').val(),
+                    "spch-aud-mask-r":$('#spch-aud-mask-r').val(),
+                    "spch-aud-mask-l":$('#spch-aud-mask-l').val(),
+                    "spch-aud-mask-b":$('#spch-aud-mask-b').val(),
+                    "word-rec-per-r":$('#word-rec-per-r').val(),
+                    "word-rec-per-l":$('#word-rec-per-l').val(),
+                    "word-rec-per-b":$('#word-rec-per-b').val(),
+                    "word-rec-stim-r":$('#word-rec-stim-r').val(),
+                    "word-rec-stim-l":$('#word-rec-stim-l').val(),
+                    "word-rec-stim-b":$('#word-rec-stim-b').val(),
+                    "word-rec-mask-r":$('#word-rec-mask-r').val(),
+                    "word-rec-mask-l":$('#word-rec-mask-l').val(),
+                    "word-rec-mask-b":$('#word-rec-mask-b').val(),
+                    "word-rec-noise-r":$('#word-rec-noise-r').val(),
+                    "word-rec-noise-l":$('#word-rec-noise-l').val(),
+                    "word-rec-noise-b":$('#word-rec-noise-b').val(),
+                };
+
+
+                
+                
+                
+                setTimeout( function (){
+                    var rightMeasures = Stage['right'].saveData();
+                    var leftMeasures = Stage['left'].saveData();
+                    
+                    setTimeout( function (){
+                         var audiogram = {
+                            "patient_data" : patient_data,
+                            "sawr" : sawr,
+                            "leftMeasures" : leftMeasures,
+                            "rightMeasures" : rightMeasures
+                        };
+                        console.log( audiogram );
+
+                        $.post("class.audiogram.php", audiogram)
+                        .done(function( data ) {
+                            console.log( "Data Loaded: " + data );
+                        });
+                    }, 0 );
+                }, 0 );
+                
+                
+
             });
+            
             $('#searchAudiogram').on('click', function(event) {
-                $.post( "class.audiogram.php", searchData)
+                $.post("class.audiogram.php", searchData)
                 .done(function( data ) {
                     //console.log( "Data Loaded: " + data );
                 });           
             });
-            window.onbeforeunload = enableBeforeUnload;
 
-            $( "#audiogramTitleID").change(function () {
+            $( "#patient-audiogramTitle-new").change(function () {
                 console.log($(this).val());
                 if ($(this).val() == 'Other'){
-                    $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="audiogramTitleOther">');
+                    $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="patient-audiogramTitle-new">');
                 }
             });
 
@@ -743,12 +789,7 @@
             if (day < 10) day = "0" + day;
 
             var today = year + "-" + month + "-" + day;       
-            $("#theDate").attr("value", today);
-        }
-        function enableBeforeUnload() {
-            window.onbeforeunload = function (e) {
-                return "Are you sure you want to navigate away?";
-            };
+            $("#patient-audiogram-date").attr("value", today);
         }
     </script>      
     </body>
