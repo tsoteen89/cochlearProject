@@ -752,7 +752,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     }
 
     function GetMeasureData() {
-        console.log(measureType+", "+Masked+", "+Side);
+        //console.log(measureType+", "+Masked+", "+Side);
         'use strict';
         var measureData =
             {
@@ -1064,6 +1064,11 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         }
     }
     
+    function dumpStack(){
+        console.log(Side + " Stack:");
+        console.log(currentStack);
+    }
+    
     initialize();
     
     //Create a click event for the "Stage". Based on "current state", events
@@ -1105,38 +1110,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         makeNoResponse : makeNoResponse,
         undo : undoMeasure,
         redo : redoMeasure,
-        saveData : getVisibleMeasures
+        getAudiogramMeasures : getVisibleMeasures,
+        dumpStack: dumpStack
     };
-};
-
-
-
-
-    //                //console.log(" : ::"+typeof(index));
-    //                if(index !== false && currentStack[index].getAttr('measure') == measureType) {
-    //                    redoStack.push(currentStack[index])
-    //                    currentStack[index].destroy();
-    //                    currentStack.splice(index,1);
-    //                    //console.log(currentStack);
-    //                }
-
-
-
-
-
-var confirmOnPageExit = function (e) {
-    'use strict';
-    // If we haven't been passed the event get the window.event
-    e = e || window.event;
-
-    var message = 'Are you sure you want to navigate away?';
-
-    // For IE6-8 and Firefox prior to version 4
-    if (e)
-    {
-        e.returnValue = message;
-    }
-
-    // For Chrome, Safari, IE8+ and Opera 12+
-    return message;
 };

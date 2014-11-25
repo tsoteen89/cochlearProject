@@ -269,6 +269,7 @@
                 padding-right:20px;
                 text-align:center;
                 color:#000000;
+                font-weight:bold;
             }
             .underlined{
                 border-bottom-width: 2px;
@@ -282,8 +283,8 @@
                 display: -webkit-inline-flex;
                 overflow: hidden;
                 padding: 0;
-                -webkit-padding-start: 1px;
-                height:25px
+                -webkit-padding-start: 10px;
+                height:35px
             }
 
             input::-webkit-datetime-edit {
@@ -300,15 +301,31 @@
                 padding: 1px 0;
                 white-space: pre;
             }
-            #patient-audiogramTitle-new{
-                height:25px;
-                width:100%;
-                margin-left:-20px;
-            }
 
             hr{
                 border-top: 1px solid #34383E;
             }
+            .panel-primary {
+                border-color: #aaa;
+                background-color: rgba(255, 255, 255, .7);
+            }
+            .panel-primary .panel-heading {
+              background-image: none;
+              color: RGBA(119, 119, 119, 1);
+              background-color: #ddd;
+              border-color: #ddd;
+              font-size:18px;
+              font-weight:bold;
+              margin-bottom:5px;
+            }
+            .aii-panel-row{
+                line-height:40px;
+            }
+            .aii-toggle{
+              color: RGBA(119, 119, 119, 1);
+              font-weight:bold;                
+            }
+            
         </style>
     </head>
     <body>
@@ -343,81 +360,93 @@
                 </nav>
             </div>
             <div class="row" style="margin-top:-20px">
-                <div class="col-sm-4">
-                    <span class="input-label" style="font-size:20px;font-weight:bold;text-align:right">Patient:</span>
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3 ">
-                            <span class="input-label" style="font-size:16px;padding-left:20px;">Name:</span>
+                <div class="col-sm-4" style="padding:0px">
+                    <div class="panel panel-primary" style="margin:3px;width:98%;padding-bottom:10px;height:150px">
+                        <div class="panel-heading">Patient:</div>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-3 ">
+                                <span class="input-label" style="font-size:16px;padding-left:20px;">Name:</span>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 underlined">
+                                <span class="input-label patient-data" id="patient-name"> Joseph Smith</span>
+                            </div>
                         </div>
-                        <div class="col-xs-6 col-sm-6 underlined">
-                            <span class="input-label patient-data" id="patient-name"> Joseph Smith</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3">
-                            <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">DOB:</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 underlined">
-                            <span class="input-label patient-data" id="patient-dob">10 Oct 1950</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <span class="input-label" style="font-size:20px;font-weight:bold">Current Audiogram:</span>
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3">
-                            <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Title:</span>
-                        </div>
-                        <div class="col-xs-8 col-sm-8 underlined">
-                            <span class="patient-data" id="audiogram-title-container">
-                                <select name="audiogramTitle" data-placeholder="Choose an Audiogram Title..." id="patient-audiogramTitle-new">
-                                    <option value=""></option>
-                                    <option>Pre Operative Audiogram</option>
-                                    <option>Aided Testing</option>
-                                    <option>Residual Hearing</option>
-                                    <option>Other</option>
-                                </select>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3">
-                            <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date:</span>
-                        </div>
-                        <div class="col-xs-8 col-sm-8 underlined">
-                            <span class="audiogram-date"><center><input type="date" id="patient-audiogram-date"></center></span>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-3">
+                                <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">DOB:</span>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 underlined">
+                                <span class="input-label patient-data" id="patient-dob">10 Oct 1950</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <span class="input-label" style="font-size:20px;font-weight:bold">Previous Audiograms:</span>
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3">
-                            <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">Date/Title:</span>
-                        </div>
-                        <div class="col-xs-7 col-sm-7 underlined">
-                            <span class="patient-data">
-                                <select name="audiogramTitle" data-placeholder="Previous Audiograms" id="patient-audiogramTitle-prev">
-                                    <option value=""></option>
-                                    <option>Aided Testing 23 Jan 2013</option>                                   
-                                </select>
-                            </span>
-                        </div>
-                        <div class="col-xs-2 col-sm-2">
-                            <a href="#" class="btn btn-default btn-xs" style="margin-left:-10px;margin-top:8px"><i class="fa fa-download"></i> Load</a>
-                        </div>
+                <div class="col-sm-4" style="padding:0px">
+                    <div class="panel panel-primary" style="margin:3px;;width:98%;padding-bottom:10px;height:150px">
+                        <div class="panel-heading">Current Audiogram:</div>
+                            <div class="row aii-panel-row">
+                                <div class="col-xs-1 col-sm-1"></div>
+                                <div class="col-xs-10 col-sm-10">
+                                    <div class="input-group">
+                                      <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false" id="aii-audiogramTitle-new">Title: <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu" id="aii-audiogram-title-ul">
+                                          <li><a href="#">Pre Operative Audiogram</a></li>
+                                          <li><a href="#">Aided Testing</a></li>
+                                          <li><a href="#">Residual Hearing</a></li>
+                                        </ul>
+                                      </div><!-- /btn-group -->
+                                      <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-1 col-sm-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-1 col-sm-1"></div>
+                                <div class="col-xs-10 col-sm-10">
+                                    <div class="input-group">
+                                      <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false">Date: <span class="caret"></span></button>
+                                      </div><!-- /btn-group -->
+                                      <input type="date" class="form-control" id="patient-audiogram-date">
+                                    </div>
+                                </div>
+                                <div class="col-xs-1 col-sm-1"></div>
+                            </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-2 col-sm-2">
+                </div>
+                <div class="col-sm-4" style="padding:0px">
+                    <div class="panel panel-primary" style="margin:3px;width:98%;padding-bottom:10px;height:150px">
+                        <div class="panel-heading">Previous Audiograms:</div>
+                            <div class="row">
+                                <div class="col-xs-1 col-sm-1"></div>
+                                <div class="col-xs-10 col-sm-10">
+                                    <div class="input-group">
+                                      <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false">Find: <span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu">
+                                          <li><a href="#">Pre Operative Audiogram</a></li>
+                                          <li><a href="#">Aided Testing</a></li>
+                                          <li><a href="#">Residual Hearing</a></li>
+                                        </ul>
+                                      </div><!-- /btn-group -->
+                                      <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-1 col-sm-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-2 col-sm-2">
 
-                        </div>
-                        <div class="col-xs-8 col-sm-8 ">
+                                </div>
+                                <div class="col-xs-8 col-sm-8 ">
 
-                        </div>
-                    </div>              
+                                </div>
+                            </div>   
+                    </div>
                 </div>
             </div>
-            <hr>
+<!--            <hr>-->
             <div class="row">
                 <div class="col-xs-5 title">
                     <h2>Right Ear</h2>
@@ -533,7 +562,7 @@
         </div> <!-- End Container --> 
     <script>
         $(function() {
-            //combine stuff later        
+            //combine stuff later
 
             var stage_right = new Kinetic.Stage({
                 container: 'audiogram_right',
@@ -626,74 +655,74 @@
             });
             
             $('.saveAudiogram').on('click', function(event) {
-                var patient_data = {
-                    "patient-audiogram-date" : $("#patient-audiogram-date").attr("value"),
-                    "patient-name" : $('#patient-name').html(),
-                    "patient-dob" : $('#patient-dob').html(),
-                    "patient-audiogramTitle-new" : $('#patient-audiogramTitle-new').val(),
+                
+
+                var title = $('#aii-audiogramTitle-new').val().trim();
+                if(title == ""){
+                    console.log("error");
+                }
+                            
+                var AudiogramData = {
+                    "patient_data" : {
+                        "patient-audiogram-date" : $("#patient-audiogram-date").attr("value"),
+                        "patient-name" : $('#patient-name').html(),
+                        "patient-dob" : $('#patient-dob').html(),
+                        "patient-audiogramTitle-new" : $('#aii-audiogramTitle-new').val()
+                    },
+                    "sawr" : {
+                        "spch-aud-srt-r":$('#spch-aud-srt-r').val(),
+                        "spch-aud-srt-l":$('#spch-aud-srt-l').val(),
+                        "spch-aud-srt-b":$('#spch-aud-srt-b').val(),
+                        "spch-aud-mask-r":$('#spch-aud-mask-r').val(),
+                        "spch-aud-mask-l":$('#spch-aud-mask-l').val(),
+                        "spch-aud-mask-b":$('#spch-aud-mask-b').val(),
+                        "word-rec-per-r":$('#word-rec-per-r').val(),
+                        "word-rec-per-l":$('#word-rec-per-l').val(),
+                        "word-rec-per-b":$('#word-rec-per-b').val(),
+                        "word-rec-stim-r":$('#word-rec-stim-r').val(),
+                        "word-rec-stim-l":$('#word-rec-stim-l').val(),
+                        "word-rec-stim-b":$('#word-rec-stim-b').val(),
+                        "word-rec-mask-r":$('#word-rec-mask-r').val(),
+                        "word-rec-mask-l":$('#word-rec-mask-l').val(),
+                        "word-rec-mask-b":$('#word-rec-mask-b').val(),
+                        "word-rec-noise-r":$('#word-rec-noise-r').val(),
+                        "word-rec-noise-l":$('#word-rec-noise-l').val(),
+                        "word-rec-noise-b":$('#word-rec-noise-b').val()
+                    },
+                    "leftMeasures" : Stage['left'].getAudiogramMeasures(),
+                    "rightMeasures" : Stage['right'].getAudiogramMeasures()
                 };
-                var sawr = {
-                    "spch-aud-srt-r":$('#spch-aud-srt-r').val(),
-                    "spch-aud-srt-l":$('#spch-aud-srt-l').val(),
-                    "spch-aud-srt-b":$('#spch-aud-srt-b').val(),
-                    "spch-aud-mask-r":$('#spch-aud-mask-r').val(),
-                    "spch-aud-mask-l":$('#spch-aud-mask-l').val(),
-                    "spch-aud-mask-b":$('#spch-aud-mask-b').val(),
-                    "word-rec-per-r":$('#word-rec-per-r').val(),
-                    "word-rec-per-l":$('#word-rec-per-l').val(),
-                    "word-rec-per-b":$('#word-rec-per-b').val(),
-                    "word-rec-stim-r":$('#word-rec-stim-r').val(),
-                    "word-rec-stim-l":$('#word-rec-stim-l').val(),
-                    "word-rec-stim-b":$('#word-rec-stim-b').val(),
-                    "word-rec-mask-r":$('#word-rec-mask-r').val(),
-                    "word-rec-mask-l":$('#word-rec-mask-l').val(),
-                    "word-rec-mask-b":$('#word-rec-mask-b').val(),
-                    "word-rec-noise-r":$('#word-rec-noise-r').val(),
-                    "word-rec-noise-l":$('#word-rec-noise-l').val(),
-                    "word-rec-noise-b":$('#word-rec-noise-b').val(),
-                };
-
-
                 
+                //OK! If I pass AudiogramData as the above object to my $.post, the kinetic canvas (Stage) literally
+                //gets destroyed ?!? I have no clue. Just by converting the "object" to a string so I 
+                //could analyze it better I noticed that it didn't destroy...
+                AudiogramData = JSON.stringify(AudiogramData);
+                AudiogramData = eval('(' + AudiogramData + ')');
                 
-                
-                setTimeout( function (){
-                    var rightMeasures = Stage['right'].saveData();
-                    var leftMeasures = Stage['left'].saveData();
-                    
-                    setTimeout( function (){
-                         var audiogram = {
-                            "patient_data" : patient_data,
-                            "sawr" : sawr,
-                            "leftMeasures" : leftMeasures,
-                            "rightMeasures" : rightMeasures
-                        };
-                        console.log( audiogram );
-
-                        $.post("class.audiogram.php", audiogram)
-                        .done(function( data ) {
-                            console.log( "Data Loaded: " + data );
-                        });
-                    }, 0 );
-                }, 0 );
-                
-                
-
+                $.post("class.audiogram.php", AudiogramData)
+                .done(function( data ) {
+                    console.log( data );
+                });
             });
             
             $('#searchAudiogram').on('click', function(event) {
                 $.post("class.audiogram.php", searchData)
                 .done(function( data ) {
-                    //console.log( "Data Loaded: " + data );
+                    console.log( "Data Loaded: " + data );
                 });           
             });
-
-            $( "#patient-audiogramTitle-new").change(function () {
-                console.log($(this).val());
-                if ($(this).val() == 'Other'){
-                    $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="patient-audiogramTitle-new">');
-                }
+            $('#aii-audiogram-title-ul li').on('click', function(event) {
+                var $this = $(this);
+                console.log($(this).text());
             });
+            //$('#aii-audiogram-title-ul').on('click',function (event) {
+            //    console.log($(this).text());
+
+                //if ($(this).val() == 'Other'){
+                //    $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="patient-audiogramTitle-new">');
+                //}
+                
+           // });
 
             //Added for checkbox buttons
             $('.button-checkbox').each(function () {

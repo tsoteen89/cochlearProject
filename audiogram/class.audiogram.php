@@ -1,5 +1,10 @@
 <?php
 
+print_r("Posted:");
+//print_r($_POST);
+print_r(array_keys($_POST));
+exit;
+
 $pdf = new AudiogramPdf;
 
 if($_POST){
@@ -70,8 +75,8 @@ class AudiogramPdf{
     }
     
     public function SaveAudiogramInfo($data){
-        $data = json_encode($data);
-        file_put_contents('data'.time().'.json',$data);
+        //$data = json_encode($data);
+        //file_put_contents('data'.time().'.json',$data);
         return "Hello World";
     }
     
