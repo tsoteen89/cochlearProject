@@ -481,7 +481,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
      *          @param object: a patient object
      */
     $scope.inviteNewFacility= function(){
-        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+        var ModalInstanceCtrl = function ($scope, $modalInstance, postData) {
             $scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
             $scope.addFacility = {};
@@ -500,8 +500,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             //Set selectedPatient to the selected patient
             //Used to show name on card right now- ****Need to implement add facility to patients provider list if the accept email request.***
             $scope.selectPatient = function (patient) {
-				$scope.selectedPatient = patient;
-				$scope.addUser['PatientID'] = patient['PatientID'];
+				$scope.addFacility['PatientID'] = patient['PatientID'];
 			};
 			
 			$scope.sendInvitation = function(){
