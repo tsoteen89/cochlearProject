@@ -230,7 +230,7 @@
                              <!-- Modal for Invite New Facility -->
                             <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
-                                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                                    <button type="button" class="close" ng-click="ok()"><span>&times;</span><span class="sr-only">Close</span></button>
                                     <h4 class="modal-title" id="myModalLabel">
                                         Invite a Non-AII member to join AII and/or a patient's Care Team
                                     </h4>
@@ -244,21 +244,34 @@
                                             <div class="control-group col-md-7 col-md-offset-1" >
                                               <label>Facility Name </label>
                                               <div class="controls" >
-                                                <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
+                                                <input type="text" class="form-control" name="facName" ng-model="addFacility.FacilityName" ng-required="true" 
                                                 placeholder="Enter Facility Name" alphabet>
                                               </div>                       
                                             </div>
 
                                         </div>
 
-                                        <!--Name of invitee form field-->
+                                        <!--First Name of invitee form field-->
                                         <div class="row">        
 
                                             <div class="control-group col-md-7 col-md-offset-1" >
-                                              <label>Name of Invitee </label>
+                                              <label>First Name of Invitee </label>
                                               <div class="controls" >
-                                                <input type="text" class="form-control" name="invitee" ng-model="addFac.Invitee" ng-required="true" 
-                                                placeholder="Enter name of a contact person at this facility" alphabet>
+                                                <input type="text" class="form-control" name="inviteeFirst" ng-model="addFacility.FirstName" ng-required="true" 
+                                                placeholder="First name of a contact person at this facility" alphabet>
+                                              </div>                       
+                                            </div>
+
+                                        </div> 
+										
+										<!--Last Name of invitee form field-->
+                                        <div class="row">        
+
+                                            <div class="control-group col-md-7 col-md-offset-1" >
+                                              <label>Last Name of Invitee </label>
+                                              <div class="controls" >
+                                                <input type="text" class="form-control" name="inviteeLast" ng-model="addFacility.LastName" ng-required="true" 
+                                                placeholder="Last name of a contact person at this facility" alphabet>
                                               </div>                       
                                             </div>
 
@@ -269,7 +282,7 @@
                                             <div class="control-group col-md-7 col-md-offset-1" >
                                               <label>Email</label>
                                               <div class="controls" >
-                                                <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
+                                                <input type="text" class="form-control" name="email" ng-model="addFacility.Email" ng-required="true" 
                                                 placeholder="Enter email of invitee at this facility">
                                               </div>
                                             </div>
@@ -302,7 +315,7 @@
                                         <br>
                                     </div> 
                                     <br>
-                                    <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit">
+                                    <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="inviteFacility()">
                                         <i class="fa fa-envelope-o"></i> Send Email
                                     </button>
                                     <br>
