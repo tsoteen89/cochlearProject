@@ -484,7 +484,9 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             $scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
-            
+            $scope.addFacility = {};
+			$scope.addFacility['PatientID'] = 0;
+			
             $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
             //Grab all Patients using patientURL 
             getData.get($scope.patientURL).success(function(data) {
@@ -499,6 +501,14 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             //Used to show name on card right now- ****Need to implement add facility to patients provider list if the accept email request.***
             $scope.selectPatient = function (patient) {
 				$scope.selectedPatient = patient;
+				$scope.addUser['PatientID'] = patient['PatientID'];
+			};
+			
+			$scope.sendInvitation = function(){
+				//Post a facility invitation
+				$scope.inviteFacilityURL = "http://killzombieswith.us/aii-api/v1/facilityInvites/" + $scope.sessionID;
+				postData.post($scope.inviteFacilityURL, $scope.addFacility);
+				$modalInstance.close();
 			};
             
             $scope.ok = function () {
