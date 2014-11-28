@@ -237,7 +237,7 @@
 		   $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
 		   
 			//Check for facility invitation token
-			if((document.url).indexOf("?") >= 0)
+			if((document.URL).indexOf("?") >= 0)
 				$scope.registration.Token = (document.URL).split("?")[1];
 			else
 				$scope.registration.Token = 0;
