@@ -2303,6 +2303,7 @@ controllers.addUserController = function($scope, $http, postData, getData){
 controllers.editUserController = function($scope, $http, getData, putData, persistData, userInfo){
     $scope.editUser = {};
     $scope.editFacility = {};
+    $scope.passwordChange = false;
 	
 	$scope.sessionID = userInfo.get().SessionID;
 	$scope.facilityID = userInfo.get().FacilityID;
@@ -2331,7 +2332,11 @@ controllers.editUserController = function($scope, $http, getData, putData, persi
     
     //Put changed User information into database
     $scope.editUserPut = function() {
-        putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records.UserID,$scope.editUser);
+        putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records.UserID,$scope.editUser).success(function(data){
+            if(data.records["User Edit Response"] == "Successfully edited a user"){
+                $scope.passwordChange = true;
+            }
+        })
     };
     
     //Put changed Facility information into database
