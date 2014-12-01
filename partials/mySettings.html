@@ -34,9 +34,9 @@
                         <button ng-click="changePassword = true">Change Password</button><br>
                         
                         <div ng-if="changePassword == true"><br>
-                            <label>Please Enter Current Password:</label> 
+                            <label>Please Enter Current Password:</label>
                             <input  type="password" style="width: 200px" class="form-control" name="currentPassword" ng-model="editUser.currentPassword" placeholder="Enter Current Password"><br>
-                            <input ng-if="editUser.currentPassword == userData.records.password"  type="password" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
+                            <input type="password" style="width: 200px" class="form-control" name="newPassword" ng-model="editUser.password" placeholder="Enter New Password"><br>
                             <input ng-click="passwordChanged = true" style="width: 100px" type="submit" id="submit" value="Submit">&nbsp
                             <label ng-if="passwordChanged == true">Password Changed!</label>
                         </div>
