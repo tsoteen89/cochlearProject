@@ -15,6 +15,7 @@ div.scroll{background-color:#EDF2FF;height:100px;overflow:auto}#cp_background-gr
     font-size: .65em;
     color: #325bbd;
     padding-left:2px;
+    padding-bottom: 30px;
 }
 #menu-toggle-tab{
     position:fixed;
