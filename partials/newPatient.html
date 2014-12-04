@@ -33,7 +33,7 @@
                                         </p>
                                     </hovercard>
                                     <div class="controls" >
-                                        <input type="date" class="form-control" name="DOB" ng-model="formData.dob" ng-required="true" placeholder="YYYY-MM-DD" ng-blur="formatDate()">
+                                        <input type="date" id="date" class="form-control" name="date" ng-model="formData.dob" ng-required="true" placeholder="YYYY-MM-DD" ng-blur="formatDate()">
                                         <!--<p>{{formData.DOB}}</p>-->
                                     </div>
 
@@ -85,3 +85,15 @@
         </div>
     </div>
 </div>
+ <script>
+     (function() {
+      var elem = document.createElement('input');
+      elem.setAttribute('type', 'date');
+ 
+      if ( elem.type === 'text' ) {
+         $('#date').datepicker({
+           dateFormat: 'yy-mm-dd'
+        });
+      }
+   })();
+</script>
