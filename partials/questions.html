@@ -87,11 +87,11 @@
                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postDateAnswers(question.QuestionID)" placeholder="YYYY-MM-DD" >
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
-                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}}  class="form-control medium"
                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
                                 <div ng-if="question.Input.Type == 'Radio' && !question.isDevice" ng-repeat="values in question.Input.Values" >
-                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}}
                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                     <label class="choice" >{{values}}</label>
                                 </div>
@@ -111,12 +111,12 @@
                                                    ng-if="subfield.Name !='Type of Surgery: Other'">{{subfield.Name}} </label>
                                             <div ng-if="subfield.Type == 'Date'" >
                                                 <input type="Date" name={{subfield.Name}} placeholder="YYYY-MM-DD"
-                                                       ng-model="surgery.Date" class="datebox">
+                                                       ng-model="surgery.Date" class="form-control medium datebox">
                                             </div>
                                             <div ng-if="subfield.Type == 'Text'" ng-hide="surgery['Type of Surgery?']!='Other'">
                                                 <label id="cp_textStyle" class="description" name={{subfield.Name}}>{{subfield.Name}} </label>
                                                 <input type="Text" name={{question.QuestionID}}
-                                                       ng-model="surgery['Other']" 
+                                                       ng-model="surgery['Other']" class="form-control medium"
                                                        placeholder="Other type of surgery:">
                                             </div>
                                             <div ng-if="subfield.Type == 'Radio'" ng-repeat="values in subfield.Values" >
