@@ -1001,7 +1001,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     }
     
     /**
-    * Rewturns the stack data (measures on the stack) as a json object. 
+    * Returns the stack data (measures on the stack) as a json object. 
     * @param {json} - sawr
     * @return {bool} - returns true if saved succesfully
     */
