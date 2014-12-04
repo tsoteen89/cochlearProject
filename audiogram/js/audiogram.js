@@ -333,6 +333,44 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             strokeWidth : 1,
             fill : Colors.backColor
         });
+        
+        //Combine into single funtion later....
+        var mild = new Kinetic.Rect({
+            x : graph_bounds.min.x,
+            y : graph_bounds.min.y+104,
+            width : graph_size.width,
+            height : 55,
+            stroke : Colors.lineColor,
+            strokeWidth : 1,
+            fill : '#F9F8DB'
+        });
+        var moderate = new Kinetic.Rect({
+            x : graph_bounds.min.x,
+            y : graph_bounds.min.y+104+55,
+            width : graph_size.width,
+            height : 86,
+            stroke : Colors.lineColor,
+            strokeWidth : 1,
+            fill : '#E0EEF9'
+        });
+        var severe = new Kinetic.Rect({
+            x : graph_bounds.min.x,
+            y : graph_bounds.min.y+104+55+86,
+            width : graph_size.width,
+            height : 55,
+            stroke : Colors.lineColor,
+            strokeWidth : 1,
+            fill : '#FDE2E1'
+        });
+        var profound = new Kinetic.Rect({
+            x : graph_bounds.min.x,
+            y : graph_bounds.min.y+104+55+86+55,
+            width : graph_size.width,
+            height : 105,
+            stroke : Colors.lineColor,
+            strokeWidth : 1,
+            fill : '#F9C2C4'
+        });        
 
         //Add x labels acress top
         y = graph_bounds.min.y - 20;
@@ -361,7 +399,11 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         }
 
         Layers.background.add(rect);
-
+        Layers.background.add(mild);
+        Layers.background.add(moderate);
+        Layers.background.add(severe);
+        Layers.background.add(profound);
+        
         for (i = 0; i < lines.length; ++i) {
             Layers.background.add(lines[i]);
         }

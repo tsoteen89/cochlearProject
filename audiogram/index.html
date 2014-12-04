@@ -224,6 +224,9 @@
             .audioInputs-table td{
                 text-align:center;
             }
+            .audioInputs-table input{
+                text-align:right;
+            }
             .navbar-xs { 
                 min-height:22px; 
                 border-radius:5px;
@@ -452,13 +455,19 @@
             </div>
 <!--            <hr>-->
             <div class="row">
-                <div class="col-xs-5 title">
+                <div class="col-xs-1">
+                    &nbsp;
+                </div>
+                <div class="col-xs-4 title" style="text-align:center">
                     <h2>Right Ear</h2>
                 </div>
                 <div class="col-xs-2">
                 </div>
-                <div class="col-xs-5 title">            
+                <div class="col-xs-4 title" style="text-align:center">            
                     <h2>Left Ear</h2>
+                </div>
+                <div class="col-xs-1">
+                    &nbsp;
                 </div>
             </div>
             <div class="row">
@@ -696,12 +705,14 @@
                     "rightMeasures" : Stage['right'].getAudiogramMeasures()
                 };
                 
+                console.log(AudiogramData);
+                
                 //OK! If I pass AudiogramData as the above object to my $.post, the kinetic canvas (Stage) literally
                 //gets destroyed ?!? I have no clue. Just by converting the "object" to a string so I 
                 //could analyze it better I noticed that it didn't destroy...
                 AudiogramData = JSON.stringify(AudiogramData);
                 AudiogramData = eval('(' + AudiogramData + ')');
-                
+                 console.log(AudiogramData);               
                 $.post("class.audiogram.php", AudiogramData)
                 .done(function( data ) {
                     console.log( data );
@@ -809,7 +820,7 @@
             });
 
             setTodaysDate();
-
+            loadSpeechWordData();
 
         });
 
@@ -825,6 +836,26 @@
 
             var today = year + "-" + month + "-" + day;       
             $("#patient-audiogram-date").attr("value", today);
+        }
+        function loadSpeechWordData(){
+            $('#spch-aud-srt-r').val('45');
+            $('#spch-aud-srt-l').val('50');
+            $('#spch-aud-srt-b').val('30');
+            $('#spch-aud-mask-r').val('30');
+            $('#spch-aud-mask-l').val('30');
+            $('#spch-aud-mask-b').val('None');
+            $('#word-rec-per-r').val('76');
+            $('#word-rec-per-l').val('80');
+            $('#word-rec-per-b').val('92');
+            $('#word-rec-stim-r').val('85');
+            $('#word-rec-stim-l').val('90');
+            $('#word-rec-stim-b').val('60');
+            $('#word-rec-mask-r').val('60');
+            $('#word-rec-mask-l').val('65');
+            $('#word-rec-mask-b').val('None');
+            $('#word-rec-noise-r').val('None');
+            $('#word-rec-noise-l').val('None');
+            $('#word-rec-noise-b').val('+10');          
         }
     </script>      
     </body>
