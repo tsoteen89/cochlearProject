@@ -18,12 +18,16 @@
 
                 <!-- Display All Questions -->
                 <ul>
+                    
                     <div id="cp_questionDivContainer">
+                        <!--
+            works here but not inside ng-repeat
+            <input class="form-control medium datebox" type="date" name=5
+                                           ng-model="answer.Answers[5]" ng-blur="postDateAnswers(5)">-->
                     <li ng-repeat= "question in finalQuestions">
                         <div ng-hide="question.IsChild">
-
                             <span id="cp_questionForm">
-                            <div class="row">
+                            <div class="row" > <!--style="margin-right:-5px"-->
                                 <div class="col-md-11">
                                     <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
                                 </div>
@@ -79,8 +83,8 @@
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </select>
                                 <div ng-if="question.Input.Type == 'Date'">
-                                    <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postDateAnswers(question.QuestionID)">
+                                    <input class="form-control medium datebox" type={{question.Input.Type}} name={{question.QuestionID}} 
+                                           ng-model="answer.Answers[question.QuestionID]" ng-blur="postDateAnswers(question.QuestionID)" placeholder="YYYY-MM-DD" >
                                 </div>
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
@@ -105,9 +109,9 @@
                                         <div>
                                             <label id="cp_textStyle" class="description" 
                                                    ng-if="subfield.Name !='Type of Surgery: Other'">{{subfield.Name}} </label>
-                                            <div ng-if="subfield.Type == 'Date'">
-                                                <input type="Date" name={{subfield.Name}} 
-                                                       ng-model="surgery.Date" >
+                                            <div ng-if="subfield.Type == 'Date'" >
+                                                <input type="Date" name={{subfield.Name}} placeholder="YYYY-MM-DD"
+                                                       ng-model="surgery.Date" class="datebox">
                                             </div>
                                             <div ng-if="subfield.Type == 'Text'" ng-hide="surgery['Type of Surgery?']!='Other'">
                                                 <label id="cp_textStyle" class="description" name={{subfield.Name}}>{{subfield.Name}} </label>
@@ -270,8 +274,20 @@
         </div>
 
         </script>
-
         </div>
     </div>
 </div>
+<script>
     
+     (function() {
+      var elem = document.createElement('input');
+      elem.setAttribute('type', 'date');
+ 
+         if ( elem.type === 'text' ) {
+             $('#date').datepicker({
+               dateFormat: 'yy-mm-dd'
+            });
+          }
+      
+   })();
+</script>
