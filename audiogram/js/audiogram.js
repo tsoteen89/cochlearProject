@@ -333,40 +333,47 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             strokeWidth : 1,
             fill : Colors.backColor
         });
+
+//        Normal hearing: -10-25dB
+//        Mild hearing loss: 26-45dB
+//        Moderate hearing loss: 46-70dB
+//        Severe hearing loss: 71-90dB
+//        Profound Hearing Loss: 91dB and up
         
         //Combine into single funtion later....
+        console.log("x=",row_height);
         var mild = new Kinetic.Rect({
             x : graph_bounds.min.x,
-            y : graph_bounds.min.y+104,
+            y : graph_bounds.min.y+row_height*3.5+20,
             width : graph_size.width,
-            height : 55,
+            height : row_height*2,
             stroke : Colors.lineColor,
             strokeWidth : 1,
             fill : '#F9F8DB'
         });
         var moderate = new Kinetic.Rect({
             x : graph_bounds.min.x,
-            y : graph_bounds.min.y+104+55,
+            y : graph_bounds.min.y+row_height*5.5+20,
             width : graph_size.width,
-            height : 86,
+            height : row_height*2.5,
             stroke : Colors.lineColor,
             strokeWidth : 1,
             fill : '#E0EEF9'
         });
         var severe = new Kinetic.Rect({
             x : graph_bounds.min.x,
-            y : graph_bounds.min.y+104+55+86,
+            y : graph_bounds.min.y+row_height*8+20,
             width : graph_size.width,
-            height : 55,
+            height : row_height*2,
             stroke : Colors.lineColor,
             strokeWidth : 1,
             fill : '#FDE2E1'
         });
         var profound = new Kinetic.Rect({
             x : graph_bounds.min.x,
-            y : graph_bounds.min.y+104+55+86+55,
+            y : graph_bounds.min.y+row_height*10+20,
             width : graph_size.width,
-            height : 105,
+            height : row_height*4-6,    /*-6 for some dumb reason*/
             stroke : Colors.lineColor,
             strokeWidth : 1,
             fill : '#F9C2C4'
