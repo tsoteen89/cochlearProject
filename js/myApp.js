@@ -1,7 +1,8 @@
 //Travis Osteen
 (function(){
 var myApp = angular.module('myApp', ['ngRoute','checklist-model','ui.bootstrap',
-                                     'aiiController','myApp.directives','ngClickSelect','yaru22.directives.hovercard', 'reports']);
+                                     'aiiController','myApp.directives','ngClickSelect',
+                                     'yaru22.directives.hovercard', 'reports']);
 
 
 myApp.config(function ($routeProvider) {
@@ -76,7 +77,7 @@ myApp.config(function ($routeProvider) {
   })
   .when('/audiogram',
   {
-      templateUrl: 'partials/audiogram/index.html'
+      templateUrl: 'partials/audiogram'
   })
   .when('/sentenceTesting',
   {
