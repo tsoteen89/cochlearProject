@@ -114,8 +114,8 @@ myApp.factory('getData', function($http, $window, $location, $cookieStore){
     return {
         get: function(url) { 
 			var data = $http.get(url).success(function(data) {
-				if(typeof data.records['error'] != 'undefined'){
-					if(data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token"){
+				if(typeof data === "object"){
+					if(typeof data.records['error'] === "function" && data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token"){
 						$cookieStore.remove('SessionID');
 						$cookieStore.remove('UserLevel');
                         if(data.records['error'] == 'Token Timeout'){
@@ -1408,9 +1408,11 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.checkboxTrigger = function(data){
         var other = false;
         
-        for(var i=0;i<data.length;i++){
-            if(data[i] == 'Other'){
-                other = true;
+        if(typeof data !== "undefined"){
+            for(var i=0;i<data.length;i++){
+                if(data[i] == 'Other'){
+                    other = true;
+                }
             }
         }
         return other;
@@ -2943,6 +2945,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 	
 	$scope.refreshDeleted = function(){
 		getData.get($scope.deletedURL).success(function(data) {
+        if(typeof data == 'object'){
 		//Combine First and Last into Name for each message and mark the user as either the sender or receiver
 			for(i = 0; i < data.records.length; i++)
 			{
@@ -2971,6 +2974,7 @@ controllers.messagingController = function ($scope, $http, $templateCache, $filt
 			if($scope.currentMessageType == 'deleted'){
 				$scope.currentMessages = $scope.deletedMessages;
 			}
+        }
 		});
 	}
 	
@@ -3085,38 +3089,42 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	$scope.markedAlerts = [];
 	
 	getData.get($scope.receivedURL).success(function(data) {
-		$scope.receivedAlerts = data;
-		for(i = 0; i < data.records.length; i++){
-			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-			}
-			data.records[i].ShortPatient = data.records[i].Patient;
-			if(data.records[i].Patient.length > 24){
-				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
-			}
-			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-		}
-		$scope.currentAlerts = $scope.receivedAlerts;
+        if(typeof data == 'object'){
+            $scope.receivedAlerts = data;
+            for(i = 0; i < data.records.length; i++){
+                data.records[i].ShortSubject = data.records[i].Subject;
+                if(data.records[i].Subject.length > 30){
+                    data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                }
+                data.records[i].ShortPatient = data.records[i].Patient;
+                if(data.records[i].Patient.length > 24){
+                    data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+                }
+                data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+            }
+            $scope.currentAlerts = $scope.receivedAlerts;
+        }
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
-		$scope.deletedAlerts = data;
-		for(i = 0; i < data.records.length; i++){
-			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-			}
-			data.records[i].ShortPatient = data.records[i].Patient;
-			if(data.records[i].Patient.length > 24){
-				data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
-			}
-			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-		}
+        if(typeof data == 'object'){
+            $scope.deletedAlerts = data;
+            for(i = 0; i < data.records.length; i++){
+                data.records[i].ShortSubject = data.records[i].Subject;
+                if(data.records[i].Subject.length > 30){
+                    data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                }
+                data.records[i].ShortPatient = data.records[i].Patient;
+                if(data.records[i].Patient.length > 24){
+                    data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+                }
+                data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+            }
+        }
     }); 
 	
 	$scope.setAlertType = function(alertType){
@@ -3192,45 +3200,49 @@ controllers.alertsController = function ($scope, $http, $templateCache, $filter,
 	
 	$scope.refreshReceived = function(){
 		getData.get($scope.receivedURL).success(function(data) {
-			$scope.receivedAlerts = data;
-			for(i = 0; i < data.records.length; i++){
-				data.records[i].ShortSubject = data.records[i].Subject;
-				if(data.records[i].Subject.length > 30){
-					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-				}
-				data.records[i].ShortPatient = data.records[i].Patient;
-				if(data.records[i].Patient.length > 24){
-					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
-				}
-				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-			}
-			if($scope.currentAlertType == 'received'){
-				$scope.currentAlerts = $scope.receivedAlerts;
-			}
+            if(typeof data == 'object'){
+                $scope.receivedAlerts = data;
+                for(i = 0; i < data.records.length; i++){
+                    data.records[i].ShortSubject = data.records[i].Subject;
+                    if(data.records[i].Subject.length > 30){
+                        data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                    }
+                    data.records[i].ShortPatient = data.records[i].Patient;
+                    if(data.records[i].Patient.length > 24){
+                        data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+                    }
+                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+                }
+                if($scope.currentAlertType == 'received'){
+                    $scope.currentAlerts = $scope.receivedAlerts;
+                }
+            }
 		});
 	}
 	
 	$scope.refreshDeleted = function(){
 		getData.get($scope.deletedURL).success(function(data) {
-			$scope.deletedAlerts = data;
-			for(i = 0; i < data.records.length; i++){
-				data.records[i].ShortSubject = data.records[i].Subject;
-				if(data.records[i].Subject.length > 30){
-					data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-				}
-				data.records[i].ShortPatient = data.records[i].Patient;
-				if(data.records[i].Patient.length > 24){
-					data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
-				}
-				data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-				data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-				data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-			}
-			if($scope.currentAlertType == 'deleted'){
-				$scope.currentAlerts = $scope.deletedAlerts;
-			}
+            if(typeof data == 'object'){
+                $scope.deletedAlerts = data;
+                for(i = 0; i < data.records.length; i++){
+                    data.records[i].ShortSubject = data.records[i].Subject;
+                    if(data.records[i].Subject.length > 30){
+                        data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                    }
+                    data.records[i].ShortPatient = data.records[i].Patient;
+                    if(data.records[i].Patient.length > 24){
+                        data.records[i].ShortPatient = data.records[i].Patient.substr(0,21) + "...";
+                    }
+                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+                }
+                if($scope.currentAlertType == 'deleted'){
+                    $scope.currentAlerts = $scope.deletedAlerts;
+                }
+            }
 		}); 
 	}
 	
@@ -3382,64 +3394,72 @@ controllers.notificationsController = function ($scope, $http, $templateCache, $
 	/* Initially executed functions */
 	getData.get($scope.receivedURL).success(function(data) {
 		//Generate the subject for every notification
-		for(i = 0; i < data.records.length; i++){
-			//If the notification was a request to join a care team...
-			if(data.records[i].IsRequest == '1'){
-				data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-			}
-			//Otherwise the notification is a response to a sent care team invitation
-			else{
-				if(data.records[i].Response == '1'){
-					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-				}
-				else if(data.records[i]['Response'] == '2'){
-					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-				}
-			}
-			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-			}
-			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-			if(data.records[i].SenderFacilityName.length > 17){
-				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
-			}
-			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-		}
+        if(typeof data == "object"){
+            for(i = 0; i < data.records.length; i++){
+                //If the notification was a request to join a care team...
+                if(data.records[i].IsRequest == '1'){
+                    data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
+                }
+                //Otherwise the notification is a response to a sent care team invitation
+                else{
+                    if(data.records[i].Response == '1'){
+                        data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+                    }
+                    else if(data.records[i]['Response'] == '2'){
+                        data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+                    }
+                }
+                data.records[i].ShortSubject = data.records[i].Subject;
+                if(data.records[i].Subject.length > 30){
+                    data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                }
+                data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+                if(data.records[i].SenderFacilityName.length > 17){
+                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
+                }
+                data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+            }
+        }else{
+            data = null;
+        }
 		$scope.receivedNotifications = data;
 		$scope.currentNotifications = $scope.receivedNotifications;
     });
 	
 	getData.get($scope.deletedURL).success(function(data) {
 		//Generate the subject for every notification
-		for(i = 0; i < data.records.length; i++){
-			//If the notification was a request to join a care team...
-			if(data.records[i].IsRequest == '1'){
-				data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-			}
-			//Otherwise the notification is a response to a sent care team invitation
-			else{
-				if(data.records[i].Response == '1'){
-					data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-				}
-				else if(data.records[i]['Response'] == '2'){
-					data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-				}
-			}
-			data.records[i].ShortSubject = data.records[i].Subject;
-			if(data.records[i].Subject.length > 30){
-				data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
-			}
-			data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-			if(data.records[i].SenderFacilityName.length > 17){
-				data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
-			}
-			data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
-			data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-			data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
-		}
+        if(typeof data == "object"){
+            for(i = 0; i < data.records.length; i++){
+                //If the notification was a request to join a care team...
+                if(data.records[i].IsRequest == '1'){
+                    data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
+                }
+                //Otherwise the notification is a response to a sent care team invitation
+                else{
+                    if(data.records[i].Response == '1'){
+                        data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
+                    }
+                    else if(data.records[i]['Response'] == '2'){
+                        data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
+                    }
+                }
+                data.records[i].ShortSubject = data.records[i].Subject;
+                if(data.records[i].Subject.length > 30){
+                    data.records[i].ShortSubject = data.records[i].Subject.substr(0,27) + "...";
+                }
+                data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
+                if(data.records[i].SenderFacilityName.length > 17){
+                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0,14) + "...";
+                }
+                data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4,2);
+                data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
+                data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0,4);
+            }
+        }else{
+            data = null;
+         }
 		$scope.deletedNotifications = data;
     });
 	
