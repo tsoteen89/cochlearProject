@@ -139,7 +139,6 @@ controllers.reportCtrl = function($scope, getData, $cookieStore) {
             }).then(function(){
                 //get the number of events
                 $scope.eventNum = Object.keys($scope.careTeams).length;
-                $scope.getMaxNumOfConditionSets('02');
             });
         
     }
