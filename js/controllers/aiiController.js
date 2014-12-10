@@ -828,20 +828,23 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     
     $scope.showDeviceOptions = function(provider, questionID){
-        console.log("in new function");
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             
-            $scope.answer = {};
-            $scope.answer.Answers = {};
-            $scope.answer.PhaseID = $cookieStore.get('PhaseID');
-            $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
+            $scope.device = {};
+            $scope.device.Answers = {};
+            $scope.device.PhaseID = $cookieStore.get('PhaseID');
+            $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
             $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
             //Grab all previously answered questions
             getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                 $scope.patientSummaryAnswers = data.records;            
             }).then(function(){
                 for(var answerID in $scope.patientSummaryAnswers.Answers) {
-                    $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+                    if(questionID == 202 && answerID>202 && answerID < 207){
+                        $scope.device.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+                    }else if(questionID == 212 && answerID >212 && answerID <217){
+                        $scope.device.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
+                    }
                 };
             });
             if(questionID == 202){
@@ -878,7 +881,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 }
                 */
                 if (isValid) {
-                    postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.answer);
+                    postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.device);
                     $scope.ok();
                 }else{
                     alert("Please select an option for each category");
