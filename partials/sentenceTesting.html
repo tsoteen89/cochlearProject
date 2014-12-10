@@ -1,7 +1,8 @@
+
 <div data-ng-controller="audioQuestionsController" class="form3D container" style="width:60%; background-color: #CAE5F0;">
-    <label style="font-size:2vw; color:#4B92AE" class="col-md-offset-4">{{phaseName}}</label> 
+    <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
     <div class="row">
-        <div class="col-md-3 col-md-offset-1">
+        <div class="col-md-4 col-md-offset-1">
             <label style="font-size: 16px">{{patientName}}</label><br>
             <label style="font-size: 16px">DOB: {{patientDOB}}</label>
         </div>
@@ -33,7 +34,7 @@
                     <label class="description">Right Ear </label>
                     <br>
                     <label style="font-size: 1.0vw; color:#4B92AE">Please Select Condition</label>
-                    <select ng-model="conditions.Right" ng-blur="updateResults();" class="large">
+                    <select ng-model="conditions.Right" ng-blur="getConditionsID();" class="large"> <!-- -->
                         <option ng-repeat="condition in audioQuestions.Conditions">{{condition.AidLabel}}</option>
                     </select>
                     <br> 

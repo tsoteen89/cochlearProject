@@ -19,9 +19,13 @@
         <div class="col-md-8 col-md-offset-2">
             <a href = "#/audiogram"> 
                 <button type="button" class="select-audio-tests btn btn-lg btn-block">  
-                    <h1> Audiograms </h1>
+                    <h1 style="display:inline-block"> Audiograms </h1>
                 </button>
             </a>
+            <!-- <span>
+                        <p style="color:#125bff; margin-bottom:5px" class="fa fa-exclamation-circle"></p>
+                    </span>
+-->
             <br><br><br>
             <a href = "#/sentenceTesting"> <button type="button" class="select-audio-tests btn btn-lg btn-block">  <h1> Sentence Testing </h1>  </button> </a>
         </div>
@@ -31,6 +35,16 @@
                     <div class="select-audio-tests" style="margin-bottom:5px">
                         <label class="description">Questions</label>
                         <ul class="list-unstyled">
+                            <li>
+                                <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="description" style="font-size: 1.2vw; color:#4B92AE" >
+                                            What is the patient's current "preferred listening condition" for each ear?</label> 
+                                    </div>
+                                </div>
+                                </div>
+                            </li>
                             <li ng-repeat= "question in audioQs">
                                 <div ng-hide="question.IsChild" class="container">
                                     <span>
@@ -44,7 +58,7 @@
 
                                         </div>
                                         <!-- Else Display only the single Input field -->
-                                        <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                        <select class="form-control large" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
                                             ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                         </select>
                                         <div ng-if="question.Input.Type == 'Date'">

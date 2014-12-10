@@ -1491,19 +1491,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         });
     }
     
-    //was used to get previous answers at one point....
-    $scope.updateResults = function(){
-        console.log("updateResults Called");
-        //$scope.buildResultsURL();
-        $scope.getConditionsID();
-        /*
-        getData.get($scope.resultsURL).success(function(data) {
-            $scope.results = data.records;
-        });
-        */
-    }
-    
-    //uses $scope.conditions object info to find ID of the two conditions set for the ears
+    //uses $scope.conditions object info (left and right ear conditions) to find ID of the two conditions set for the ears
     $scope.getConditionsID = function(){
         console.log("getConditionsID Called");
         getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/"+ this.conditions.Left +"/right/" + this.conditions.Right).success(function(data) {
