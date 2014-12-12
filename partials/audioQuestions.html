@@ -15,102 +15,106 @@
             </div>
         </div>
         <hr>
-
+        
         <div class="col-md-8 col-md-offset-2">
+            <!-- Audiograms Button -->
             <a href = "#/audiogram"> 
-                <button type="button" class="select-audio-tests btn btn-lg btn-block">  
-                    <h1 style="display:inline-block"> Audiograms </h1>
+                <button class="select-audio-tests btn-lg btn-block">  
+                    <h1 style="display:inline-block;"> Audiograms </h1> 
+                    <span>
+                        <hovercard hover-tmpl-url="hovercards/audiogramHelp.html"><p style="color:#125bff;" class="fa fa-exclamation-circle"></p></hovercard>
+                    </span>
                 </button>
             </a>
-            <!-- <span>
-                        <p style="color:#125bff; margin-bottom:5px" class="fa fa-exclamation-circle"></p>
-                    </span>
--->
             <br><br><br>
-            <a href = "#/sentenceTesting"> <button type="button" class="select-audio-tests btn btn-lg btn-block">  <h1> Sentence Testing </h1>  </button> </a>
-        </div>
-
-        <div class="col-md-8 col-md-offset-2">
+            <!-- Sentence Testing Button -->
+            <a href = "#/sentenceTesting"> <button class="select-audio-tests btn-lg btn-block">  <h1> Sentence Testing </h1>  </button> </a>
+    
             <!-----------------------Questions-------->
-                    <div class="select-audio-tests" style="margin-bottom:5px">
-                        <label class="description">Questions</label>
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="container">
+            <div class="select-audio-tests" style="margin-bottom:5px">
+                <label class="description">Questions</label>
+                <ul class="list-unstyled">
+                    <li>
+                        <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="description" style="font-size: 1.2vw; color:#4B92AE" >
+                                    What is the patient's current "preferred listening condition" for each ear?</label> 
+                            </div>
+                        </div>
+                        </div>
+                    </li>
+                    <li ng-repeat= "question in audioQs">
+                        <div ng-hide="question.IsChild" class="container">
+                            <span>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <label class="description" style="font-size: 1.2vw; color:#4B92AE" >
-                                            What is the patient's current "preferred listening condition" for each ear?</label> 
+                                    <div class="col-md-11">
+                                        <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
                                     </div>
-                                </div>
-                                </div>
-                            </li>
-                            <li ng-repeat= "question in audioQs">
-                                <div ng-hide="question.IsChild" class="container">
-                                    <span>
-                                        <div class="row">
-                                            <div class="col-md-11">
-                                                <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <hovercard hover-tmpl-url="js/hoverCardDetail.html"><p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle fa-2x"></p></hovercard>
-                                            </div>
+                                    <div class="col-md-1">
+                                        <hovercard hover-tmpl-url="hovercards/hoverCardDetail.html">
+                                            <p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle fa-2x"></p></hovercard>
+                                    </div>
 
-                                        </div>
-                                        <!-- Else Display only the single Input field -->
-                                        <select class="form-control large" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
-                                            ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                        </select>
-                                        <div ng-if="question.Input.Type == 'Date'">
-                                            <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
-                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                        </div>
-                                        <div ng-if="question.Input.Type == 'Text'">
-                                            <input type={{question.Input.Type}} name={{question.QuestionID}} 
-                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                        </div>
-                                        <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
-                                            <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                                ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                            <label class="choice" >{{values}}</label>
-                                        </div>
-                                        <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
-                                            <input type={{question.Input.Type}} checklist-value="values" 
-                                                checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
-                                            <label class="choice" >{{values}}</label>
-                                        </div>
-                                    </span>
                                 </div>
-                                <!-- Divs with logic used to display or hide children questions -->
-                                <div ng-if="question.Input.Type != 'Checkbox'">
-                                    <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
-                                        {{showChild(question.Children)}}
-                                    </div>
-                                    <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
-                                        {{hideChild(question.Children)}}
-                                    </div>
+                                <!-- Else Display only the single Input field -->
+                                <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                    ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                </select>
+                                <div ng-if="question.Input.Type == 'Date'">
+                                    <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
-                                <div ng-if="question.Input.Type == 'Checkbox'">
-                                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
-                                        {{showChild(question.Children)}}
-                                    </div>
-                                    <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
-                                        {{hideChild(question.Children)}}               
-                                    </div>
+                                <div ng-if="question.Input.Type == 'Text'">
+                                    <input type={{question.Input.Type}} name={{question.QuestionID}} 
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
-                            </li>
-                        </ul>
+                                <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
+                                        ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                                <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
+                                    <input type={{question.Input.Type}} checklist-value="values" 
+                                        checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
+                                    <label class="choice" >{{values}}</label>
+                                </div>
+                            </span>
+                            <hr>
+                        </div>
+                        <!-- Divs with logic used to display or hide children questions -->
+                        <div ng-if="question.Input.Type != 'Checkbox'">
+                            <div ng-if="question.Trigger == answer.Answers[question.QuestionID] && question.Trigger != null">
+                                {{showChild(question.Children)}}
+                            </div>
+                            <div ng-if="question.Trigger != answer.Answers[question.QuestionID] || question.Trigger == null">
+                                {{hideChild(question.Children)}}
+                            </div>
+                        </div>
+                        <div ng-if="question.Input.Type == 'Checkbox'">
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID])">
+                                {{showChild(question.Children)}}
+                            </div>
+                            <div ng-if="checkboxTrigger(answer.Answers[question.QuestionID]) == false">
+                                {{hideChild(question.Children)}}               
+                            </div>
+                        </div>
 
-                        <button ng-click="getDataSummary()" class="btn btn-default"
-                            popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
-                        Finished
-                        </button>
-                        <br> 
-                    </div>
+                    </li>
+                </ul>
+
+                <button ng-click="getDataSummary()" class="btn btn-default"
+                    popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" 
+                        popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
+                Finished
+                </button>
+                <br> 
+            </div>
             
         </div>
 
     </div>
+    <!-- Return to patient directory Button -->
     <div class="col-md-2" >
         <br>
         <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
@@ -121,7 +125,9 @@
 
     </div>
     
-</div>
+</div> <!-- End row div -->
+
+<!-- Modal to review answers -->
 <script type="text/ng-template" id="dataSummary.html">
 <div ng-controller="audioQuestionsController">
     <div class="modal-header">

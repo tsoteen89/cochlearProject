@@ -23,6 +23,7 @@
         </div>
     </div>
     
+    <!-- Make patient inactive modal -->
     <script type="text/ng-template" id="active.html">
         <div ng-contoller="apiPatientsController">
             <div class="modal-header">
@@ -30,13 +31,13 @@
                 <h4 class="modal-title" id="myModalLabel">Reason for {{modalPatient.First}} {{modalPatient.Last}} to be Inactive</h4>
             </div>
             <div class="modal-body">
-                    <div class="row">
+                    <div class="container">
                         <div ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
                             <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="setReason(reason.Reason); setReasonID(reason.ReasonID)"
                                    ng-model="patient.reason" > {{reason.Reason}}
                         </div>
                     <br>
-                    <a href="" ng-click="submitPatientInfo(modalPatient)" class="btn btn-primary col-md-3 col-md-offset-1">Submit</a>
+                    <a href="" ng-click="submitPatientInfo(modalPatient)" class="btn btn-primary col-md-3">Submit</a>
                     <br>
                     </div>
             </div>
