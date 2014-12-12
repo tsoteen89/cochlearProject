@@ -1551,6 +1551,22 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         return X;
     }
     
+    $scope.audiogramModal = function(){
+        var ModalInstanceCtrl = function ($scope, $modalInstance) {
+            $scope.ok = function () {
+                $modalInstance.close();
+                
+            };
+            
+        };
+
+        var modalInstance = $modal.open({
+          templateUrl: 'audiogramModal.html',
+          controller: ModalInstanceCtrl,
+          size: 'lg'
+        });
+    }
+    
     //Added by Travis/Anne
     //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
     /**
