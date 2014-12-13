@@ -109,16 +109,19 @@
                                         <div>
                                             <label id="cp_textStyle" class="description" 
                                                    ng-if="subfield.Name !='Type of Surgery: Other'">{{subfield.Name}} </label>
+                                            <!--Surgery Date field-->
                                             <div ng-if="subfield.Type == 'Date'" >
                                                 <input type="Date" name={{subfield.Name}} placeholder="YYYY-MM-DD"
                                                        ng-model="surgery.Date" class="form-control medium datebox">
                                             </div>
+                                            <!--Surgery: Other type of surgery field-->
                                             <div ng-if="subfield.Type == 'Text'" ng-hide="surgery['Type of Surgery?']!='Other'">
                                                 <label id="cp_textStyle" class="description" name={{subfield.Name}}>{{subfield.Name}} </label>
                                                 <input type="Text" name={{question.QuestionID}}
                                                        ng-model="surgery['Other']" class="form-control medium"
                                                        placeholder="Other type of surgery:">
                                             </div>
+                                            <!--Surgery Type field-->
                                             <div ng-if="subfield.Type == 'Radio'" ng-repeat="values in subfield.Values" >
                                                 <input type="Radio" value={{values}} name={{subfield.Name}} 
                                                        ng-model="surgery[subfield.Name]" ng-blur="clearOther()">

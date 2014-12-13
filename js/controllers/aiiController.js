@@ -234,6 +234,7 @@ myApp.factory('persistData', function ($cookieStore) {
 	var messageRecipient = -1;
 	
     return {
+        //most are being replaced by cookie function - not used
         setPatientID:function(data){
             PatientID = data;
             $cookieStore.put('PatientID', PatientID);
@@ -381,18 +382,18 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
     $scope.sessionID = userInfo.get().SessionID;
     
     //**********API URL's***********************/
-    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.sessionID;
-    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
+    $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.sessionID; //returns user's facility info
+    
     
     //Grab Facility info  using facilityURL
     getData.get($scope.facilityURL).success(function(data) {
         $scope.facData = data;
-        $cookieStore.put('FacilityName', $scope.facData.records.Name);
+        $cookieStore.put('FacilityName', $scope.facData.records.Name); //put facility name and image in cookie so it's grabbable anywhere
         $cookieStore.put('FacilityImage', $scope.facData.records.FacilityImage);
     });
     
-    
     //Grab All AII Facilities 
+    $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
     getData.get($scope.baseFacilityURL + "getAll/" + $scope.sessionID).success(function(data) {
         $scope.allFacs = data;
     });
@@ -437,9 +438,9 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         var ModalInstanceCtrl = function ($scope, $modalInstance, postData) {
             
 			$scope.sessionID = userInfo.get().SessionID;
-            $scope.addUser = {};
+            $scope.addUser = {}; //object to hold form data for adding user
 			
-			//Grab the user titles
+			//Grab the user titles to populate the form with user title options
 			getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
 			   $scope.userTitles = data.records;
 		   }); 
@@ -451,12 +452,14 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 				$modalInstance.close();
 			}
 			
+            //close the modal
             $scope.ok = function () {
                 $modalInstance.close();
             };
 
         };
         
+        //opens the model defined by the addUser.html script (inline in the code)
         var modalInstance = $modal.open({
           templateUrl: 'addUser.html',
           controller: ModalInstanceCtrl,
@@ -484,11 +487,12 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
         var ModalInstanceCtrl = function ($scope, $modalInstance, postData) {
             $scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
-            $scope.addFacility = {};
+            $scope.addFacility = {}; //object to hold form data for adding facility
 			$scope.addFacility['PatientID'] = 0;
 			
-            $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
+            
             //Grab all Patients using patientURL 
+            $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
             getData.get($scope.patientURL).success(function(data) {
                 //set name to concatenate first and last name so we can filter search on entire name
                 for(var i = 0; i < data.records.length; i++){
@@ -516,6 +520,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 
         };
         
+        //opens the model defined by the inviteNewFacility.html script (inline in the code)
         var modalInstance = $modal.open({
           templateUrl: 'inviteNewFacility.html',
           controller: ModalInstanceCtrl,
@@ -545,7 +550,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 			$scope.userFacilityID = userInfo.get().FacilityID;
 			$scope.sessionID = userInfo.get().SessionID;
             
-            //get the specific facility's information
+            //get the specific facility's (that was clicked) information
             getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/' + $scope.sessionID).success(function(data){
                 $scope.facCard = data;
             });
@@ -562,7 +567,8 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
             });     
             
             //get the all the patients for YOUR (user who's logged in) facility and exclude any patients the clicked facility already has
-            getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/excludingExisting/"+ fac.FacilityID + '/' + $scope.sessionID).success(function(data) {
+            getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/excludingExisting/"+ fac.FacilityID + '/' +
+                        $scope.sessionID).success(function(data) {
                 
                 for(var i = 0; i < data.records.length; i++){
 					data.records[i].Name = data.records[i].First + " " + data.records[i].Last;
@@ -624,6 +630,7 @@ controllers.dashboardController = function($scope, persistData, getData, postDat
 
         };
         
+        //opens the model defined by the myModalContent.html script (inline in the code)
         var modalInstance = $modal.open({
           templateUrl: 'myModalContent.html',
           controller: ModalInstanceCtrl,
@@ -798,55 +805,68 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
-    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //hmm, don't know why in questions controller
+    
+    //Travis's stuff limiting number of questions to a page
     $scope.limit = 5;
     $scope.offSet = 0;
     $scope.limitArray = new Array();
-    $scope.n = 0;
     $scope.finished = false;
     $scope.page = 1;
     $scope.finalPage = null;
     
-    $scope.answer = {};
+    $scope.answer = {}; //object to hold all the info neccesary to submit question answers (i.e PhaseID, eventID (aka CareTeamID)
     $scope.answer.Answers = {};
     $scope.answer.PhaseID = $cookieStore.get('PhaseID');
     $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
-    $scope.phaseName=$cookieStore.get('PhaseName');
+    
+    $scope.phaseName=$cookieStore.get('PhaseName'); //grab the name of the phase currently viewed 
+    
+    //Patient info display on top of question pages
     $scope.patientName= $cookieStore.get('PatientName');
     $scope.patientSex = $cookieStore.get('PatientSex');
     $scope.patientDOB = $cookieStore.get('PatientDOB');
+    
+    //Facility info (name and image) used in pdf report headers
     $scope.facilityName = $cookieStore.get('FacilityName');
     $scope.facilityImage = $cookieStore.get('FacilityImage');
-    $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID');
+    $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); //currents phase patient is in. used in logic to decide next phase
+    
+    //api urls to grab questions for the active phase
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
     $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit="+ $scope.limit;
-    $scope.patientSummaryAnswers = {};
-    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
-    $scope.dirAnchor = $cookieStore.get('dirAnchor');
+    
+    $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
+    $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
+        $scope.answer.PhaseID;
+    $scope.dirAnchor = $cookieStore.get('dirAnchor'); //anchor on patient directory page for patient, so can return/scroll back to patient status
     $scope.clickedPhase = null;
     
-    
-    
+    //Modal handler for different implant providers (Med El, Cochlear americas, )
     $scope.showDeviceOptions = function(provider, questionID){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             
-            $scope.device = {};
-            $scope.device.Answers = {};
+            $scope.device = {}; //object to hold device details and phase and event id's
+            $scope.device.Answers = {}; //object to hold device answers specifically
             $scope.device.PhaseID = $cookieStore.get('PhaseID');
             $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
+            
+            //url to grab previously entered device details
             $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
-            //Grab all previously answered questions
+            //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
             getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                 $scope.patientSummaryAnswers = data.records;            
             }).then(function(){
                 for(var answerID in $scope.patientSummaryAnswers.Answers) {
-                    if(questionID == 202 && answerID>202 && answerID < 207){
+                    if(questionID == 202 && answerID>202 && answerID < 207){ //left ear device details
                         $scope.device.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
-                    }else if(questionID == 212 && answerID >212 && answerID <217){
+                    }else if(questionID == 212 && answerID >212 && answerID <217){ //right ear device details
                         $scope.device.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers;
                     }
                 };
             });
+            
+            //set the question id's for the device details based on left or right ear data being entered
             if(questionID == 202){
                 $scope.implantQuestion = 204;
                 $scope.electrodeQuestion = 205;
@@ -856,7 +876,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                 $scope.electrodeQuestion = 215;
                 $scope.processorQuestion = 216;
             }
-            $scope.provider = provider;
+            $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
             
             getData.get("http://killzombieswith.us/aii-api/v1/deviceProviders/" + $scope.provider ).success(function(data) {
                 $scope.implants = data.records.Implants;
@@ -880,7 +900,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
                     $scope.answer.Answers[$scope.processorQuestion] = "N/A";
                 }
                 */
-                if (isValid) {
+                if (isValid) { //if all aspects of device details was saved- post them to database
                     postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID ,$scope.device);
                     $scope.ok();
                 }else{
@@ -896,16 +916,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
             
         };
 
+        //opens the modal defined by device.html script (in line)
         var modalInstance = $modal.open({
           templateUrl: 'device.html',
           controller: ModalInstanceCtrl,
           size: 'lg'
 
-
         });
 
     };
 
+    //Hard coded page limit numbers (im guessing-Anne) written by travis most likely 
     if($scope.phaseName == 'Initial Surgical Consultation'){
         $scope.finalPage = 4;
     }else if($scope.phaseName == 'Preoperative Visit'){
@@ -920,8 +941,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         $scope.finished = true;
     };
     
-    
-
+    //checking data types so ng-repeat can be used correctly to display
     $scope.isArray = function(check){
         return angular.isArray(check);
     }
@@ -930,22 +950,23 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         return angular.isObject(check);
     }
 
+    //get audiology results for the phase
     getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('PhaseID')).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             //console.log("first" + $scope.audioSummaryAnswers);
     });
     
+    //get maxiumum number of tests done for a particular audiology test (azbio, cnc) etc to display the table nicely
     $scope.getMaxNumOfTest = function(resultSet){
         $scope.max =2;
         for(var key in resultSet){
             if(resultSet[key].length+1 > $scope.max){
                 $scope.max = resultSet[key].length +1;
-            }
-        
-      }
-        
+            }    
+        }   
     }
-    //Grab all previously answered questions
+    
+    //Grab all previously answered questions (regular questions)
     getData.get($scope.patientSummaryAnswersURL).success(function(data) {
         $scope.patientSummaryAnswers = data.records;            
     }).then(function(){
@@ -1022,6 +1043,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     };
     
+    //post date type answers - cuts of time zones
     $scope.postDateAnswers = function(questionID) {
         
         $scope.singleAnswer = {};
@@ -1033,16 +1055,17 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     };
     
+    //object to hold surgery history data
+    //initialize surgery object
+        //user will fill in date, other(if necessary), side, and type via ng-model
     $scope.surgery = {"Date": null, "Other": null,"Side?":null, "Type of Surgery?": null, "CareTeamID" : $cookieStore.get('CareTeamID')};
     
     //Post a surgery History. 
     $scope.postSurgery = function() {
         $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
                                         //so upon "Next page", "Not answered" isn't saved and break the api
-        //initialize surgery object
-        //user will fill in date, other(if necessary), side, and type via ng-model
         
-        
+        //post the surgery and then clear the question fields so user may add another
         postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory',$scope.surgery).success(function(){
             $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
             $scope.surgery["Other"] = null;
@@ -1051,6 +1074,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         });
     };
 
+    //clear "other type of surgery" text box in case user finds their type and doesn't wish to free text it
     $scope.clearOther=function(){
         if($scope.surgery["Type of Surgery"] != "Other"){
             $scope.surgery["Other"] = null;
@@ -1178,8 +1202,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
     
     //Progresses the CareTeam phase to the Next Phase
     $scope.completePhase = function(){
-        
-        
+         
         //if on phase 1, skip phase number to 3(phase2 and 3 are active at same time, handled in the phase dots in patient directory)
         if($scope.answer.PhaseID=="2" && $scope.patientPhaseID=="20"){
             $scope.nextPhase = 21;
@@ -1207,6 +1230,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     }
     
+    //Complete all phases of care and make patient inactive
     $scope.completeCare = function(){
         var patID = $cookieStore.get('PatientID');
         var updateToInactive = {'InactiveStatus': 60}
@@ -1221,6 +1245,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
 
     }
     
+    /* not being used anymore - was the patient summary for any phase on the side of questions
     $scope.patientSummary = function(phaseNumber){
         this.clickedPhase = phaseNumber;
         
@@ -1246,6 +1271,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         }
         
     }
+    */
     
     
     //Added by ???
@@ -1294,6 +1320,7 @@ controllers.questionsController = function($scope, persistData, getData, postDat
         
     }
     
+    //Export phase answers to excel spreadsheet
     $scope.export = function(){
         var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
@@ -1351,31 +1378,33 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     //get the SessionID stored
 	var cookieSessionID = $cookieStore.get('SessionID');
     
+    //patient info to be displayed on top of audio pages
     $scope.patientName= $cookieStore.get('PatientName');
     $scope.patientSex = $cookieStore.get('PatientSex');
     $scope.patientDOB = $cookieStore.get('PatientDOB');
+    
+    //facility info to be displayed in report headers
     $scope.facilityName = $cookieStore.get('FacilityName');
     $scope.facilityImage = $cookieStore.get('FacilityImage');
+    
     $scope.dirAnchor = $cookieStore.get('dirAnchor');
     $scope.phaseID = $cookieStore.get('PhaseID');
-    //Get Audiology Phase fields and test 
+    $scope.phaseName= $cookieStore.get('PhaseName');
+    
+    //Get Audiology Phase fields and tests to populate the form 
     $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
     getData.get($scope.questionsURL).success(function(data) {
         $scope.audioQuestions = data.records;
         $scope.audioQs = data.records.Questions;
     });
     
-    $scope.three = "3";
-    $scope.isObject = function(check){
-        return angular.isObject(check);
-    }
+    
     $scope.loggedIn = persistData.getLoggedIn();
-    $scope.phaseName= $cookieStore.get('PhaseName');
     
     //Conditions object, will hold left and right ear conditions that are set
     $scope.conditions = {};
     
-    $scope.answer = {};
+    $scope.answer = {}; //object to hold all necessary info to save audiology results
     $scope.answer.PhaseID = $cookieStore.get('PhaseID');
     $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
     $scope.answer.Answers = {};
@@ -1386,14 +1415,10 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         "AzBio": {}, 
         "CNC": {}, 
         "BKB-SIN": {}};
-
     
     $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.    PhaseID;
     
     //**********************Copied from questionsControllerr****/
-
-    
-
     
     //Grab all previously answered questions
     getData.get($scope.answersURL).success(function(data) {
@@ -1404,6 +1429,9 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         };
     });
     
+    $scope.isObject = function(check){
+        return angular.isObject(check);
+    }
     $scope.isArray = function(check){
         return angular.isArray(check);
     }
@@ -1465,7 +1493,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     
     //Submit a complete audio test result.
     $scope.submitQuestions = function(test){
-        console.log("Submit Questions Called");
+        console.log("Submit audio Questions Called");
         $scope.singleAnswer = {};
         $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
         $scope.singleAnswer.CareTeamID = $scope.answer.CareTeamID
@@ -1502,10 +1530,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     //clears conditions set and any tests and results in the form so a new set up can be entereed
     $scope.setNewCondition = function(){
         $scope.conditions = {};
-        /*$scope.answer.Results["Aided Audiogram"]["Pure Tone Average"] = {};
-        $scope.answer.Results["Aided Audiogram"]["Speech Reception Threshold"] = {};
-        $scope.answer.Results["Aided Audiogram"]["Speech Discrimination Score"] = {};
-        */
         $scope.answer.Results["AzBio"] = {};
         $scope.answer.Results["CNC"] = {};
         $scope.wordswith3=0;
@@ -1536,7 +1560,6 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
             $scope.answer.Results["BKB-SIN"] = {};
         }
         
-        
     }
     
     $scope.notSorted = function(obj){
@@ -1551,6 +1574,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         return X;
     }
     
+    //Modal handler to display help for audiograms - incomplete - need Kimberly
     $scope.audiogramModal = function(){
         var ModalInstanceCtrl = function ($scope, $modalInstance) {
             $scope.ok = function () {
@@ -1617,6 +1641,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
         
     }
     
+    //Export audio phase report to excel spreadsheet
     $scope.export = function(){
         var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
@@ -1630,7 +1655,7 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
     $scope.answer.Results["CNC"]["Words with 3 Phonemes Correct"] =0;
     $scope.answer.Results["CNC"]["Phonemes Correct"] =0;
     
-    //update percentage numbers
+    //update percentage numbers to be displayed as user enters the data
     $scope.updateWordsWith3 = function(){
         $scope.wordswith3= parseInt(($scope.answer.Results["CNC"]["Words with 3 Phonemes Correct"]/50)*100);
     }
@@ -1704,11 +1729,13 @@ controllers.audioQuestionsController = function($scope, persistData, getData, po
 controllers.apiPatientsController = function ($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {   
     //hmm 
     var modalCounter = 1;
-    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus');
+    $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //?? dont know the usage here either
     $scope.userFacilityID = userInfo.get().FacilityID;
     $scope.userLevelID = userInfo.get().UserLevelID;
 	$scope.sessionID = userInfo.get().SessionID;
     $scope.dirAnchor = $cookieStore.get('dirAnchor');
+    
+    //Function to change patient to inactive or update patient info - like address
     $scope.submitPatientInfo = function(patient){
         $timeout(function(){
             if(patient.reason){
@@ -1728,6 +1755,8 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
         patient.InactiveStatus = 10;
     }
+    
+    //active in active tab stuff - not perfect - tab active style is broken upon search if tabs were clicked
     $scope.showActiveTab = true;
     $scope.showInactiveTab = false;
     $scope.showActivePatients = "10";
@@ -1745,7 +1774,7 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
         $scope.showActiveTab = true;
     };
     
-    $scope.editDescrip =false;
+    $scope.editDescrip =false; // used to show description as text - changed to true if user needs to edit - in which case, text becomes textbox
     $scope.setInactive = false;
     
     getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data){
@@ -1829,13 +1858,19 @@ controllers.apiPatientsController = function ($scope, $http, $templateCache, per
     
     //Set persistData so CareTeamID, PhaseID, phasename, patient name and anchor location in patient Directory are known in different partials.
     $scope.goToQuestions = function(careTeam, phase, patient){
-        
-        persistData.setCareTeamID(careTeam.CareTeamID);
-        persistData.setPhaseID(phase.PhaseID);
-        persistData.setPhaseName(phase.Name);
-        persistData.setPatientName(patient.First + " " + patient.Last);
-        persistData.setPatientID(patient.PatientID);
-        persistData.setDirAnchor(patient.Last);
+            
+        $cookieStore.put('PatientID', patient.PatientID);
+        $cookieStore.put('CareTeamID', careTeam.CareTeamID);
+        $cookieStore.put('PhaseID', phase.PhaseID);
+        $cookieStore.put('PhaseName', phase.Name);
+        $cookieStore.put('PatientName', patient.First + " " + patient.Last);
+        $cookieStore.put('dirAnchor', patient.Last);
+        //persistData.setCareTeamID(careTeam.CareTeamID);
+        //persistData.setPhaseID(phase.PhaseID);
+        //persistData.setPhaseName(phase.Name);
+        //persistData.setPatientName(patient.First + " " + patient.Last);
+        //persistData.setPatientID(patient.PatientID);
+        //persistData.setDirAnchor(patient.Last);
         $cookieStore.put('PatientDOB', patient.DOB);
         $cookieStore.put('PatientSex', patient.Sex);
         $cookieStore.put('CurrentPhaseID', careTeam.CurrentPhaseID);
