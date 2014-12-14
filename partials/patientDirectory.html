@@ -1,6 +1,5 @@
 <!-- apiPatientsController and collapseCtrl being used--------------------->
 <div ng-controller="apiPatientsController" style="margin-left:25px">
-        
     <a id="top"></a>
     <div class="container">
         <div class="row">
@@ -8,22 +7,23 @@
                 <label style="font-size:2vw; color:#4B92AE">Patient Directory</label>
             </div>
             <div class="col-md-4">
-                
             </div>
             <div class="col-md-5" >
                 <div class="input-group custom-search-form">
-                   <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
-                  <input type="text" class="form-control" placeholder="Search Patients" 
-                         typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" 
-                         ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last, $item.InactiveStatus)">
+                    <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
+                    <input type="text" class="form-control" placeholder="Search Patients" 
+                        typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" 
+                        ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last, $item.InactiveStatus)">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
+                    <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                    </button>
                     </span>
-                 </div><!-- /input-group -->
+                </div>
+                <!-- /input-group -->
             </div>
-        </div> <br>
+        </div>
+        <br>
         <div class="row">
             <!--{{showActivePatients}}-->
             <tabset style="cursor:pointer">
@@ -34,452 +34,423 @@
             </tabset>
         </div>
     </div>
-    
     <div id = "cp_patientDirectory" class="container">
-          <div class="row">
-              <!-- patient usable within this scope-->
+        <div class="row">
+            <!-- patient usable within this scope-->
             <div class="container cp_patientPhase col-md-12" ng-controller="collapseCtrl" 
-                 ng-mouseleave="isDataCollapsed = true;" 
-                 ng-repeat="patient in patientsData.records | filter: {'InactiveStatus':showActivePatients}">
-                
-            <div ng-controller="PatientPhaseCollapseCtrl" class="row">    
-                <!-- PATIENT BOX ON LEFT--------------------->
-                
-                <!--
-                <div style="margin-left:15%">
-                    <input type="checkbox" id="switch1" name="switch1" class="switch" />
-                    <label for="switch1">first switch</label>
-                </div>
--->
-                
-                <a id="{{patient.Last}}"></a>
-                <patient-info>
-                </patient-info>
-
-                    
-                <!-- END PATIENT BOX ON LEFT--------------------->
-
-                
-                <!-- Phase Progress BOX ON RIGHT--------------------->
-              <div class="container col-md-9" style="border-left:solid 1px #A0BFFF">
-                <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
-                    <!-- careTeam(event) info-->
-                    <div class="row">
-                        <div class="col-md-9">
-                            <b>Event Description: </b><span ng-if="!editDescrip"><b> {{careTeam.Description}} </b></span>
-                            <input ng-click-select type="text" ng-if="editDescrip" ng-model="careTeam.Description">
-                            <a href=""><span class="fa " ng-click="editDescrip = !editDescrip; submitDescriptionInfo(careTeam)" ng-class="{'fa-pencil-square-o':!editDescrip, 'fa-floppy-o':editDescrip}" ></span></a> <br>
-                                                
-
-                            <em>Current Phase: </em> 
-                                <span ng-if="careTeam.CurrentPhaseID == 20" > Candidacy Testing / Initial Surgical Consultation</span>           
-                                <span ng-if="careTeam.CurrentPhaseID == 21" > Initial Surgical Consultation</span>           
-                                <span ng-if="careTeam.CurrentPhaseID == 22" > Candidacy Testing</span>           
-                                <span ng-if="careTeam.CurrentPhaseID !=20 && careTeam.CurrentPhaseID !=21 && careTeam.CurrentPhaseID !=22" >
+                ng-mouseleave="isDataCollapsed = true;" 
+                ng-repeat="patient in patientsData.records | filter: {'InactiveStatus':showActivePatients}">
+                <div ng-controller="PatientPhaseCollapseCtrl" class="row">
+                    <!-- PATIENT BOX ON LEFT--------------------->
+                    <!--
+                        <div style="margin-left:15%">
+                            <input type="checkbox" id="switch1" name="switch1" class="switch" />
+                            <label for="switch1">first switch</label>
+                        </div>
+                        -->
+                    <a id="{{patient.Last}}"></a>
+                    <patient-info>
+                    </patient-info>
+                    <!-- END PATIENT BOX ON LEFT--------------------->
+                    <!-- Phase Progress BOX ON RIGHT--------------------->
+                    <div class="container col-md-9" style="border-left:solid 1px #A0BFFF">
+                        <div class = "cp_patientPhaseData" ng-repeat="careTeam in patient.CareTeams">
+                            <!-- careTeam(event) info-->
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <b>Event Description: </b><span ng-if="!editDescrip"><b> {{careTeam.Description}} </b></span>
+                                    <input ng-click-select type="text" ng-if="editDescrip" ng-model="careTeam.Description">
+                                    <a href=""><span class="fa " ng-click="editDescrip = !editDescrip; submitDescriptionInfo(careTeam)"
+                                                     ng-class="{'fa-pencil-square-o':!editDescrip, 'fa-floppy-o':editDescrip}" ></span>
+                                    </a> <br>
+                                    <em>Current Phase: </em> 
+                                    <span ng-if="careTeam.CurrentPhaseID == 20" > Candidacy Testing / Initial Surgical Consultation</span>           
+                                    <span ng-if="careTeam.CurrentPhaseID == 21" > Initial Surgical Consultation</span>           
+                                    <span ng-if="careTeam.CurrentPhaseID == 22" > Candidacy Testing</span>           
+                                    <span ng-if="careTeam.CurrentPhaseID !=20 && careTeam.CurrentPhaseID !=21 && careTeam.CurrentPhaseID !=22" >
                                     {{phases[careTeam.CurrentPhaseID-1].Name}}</span><br> 
-                            <em>Device Details: </em> {{careTeam.ImplantType}} <br>
-                            
+                                    <em>Device Details: </em> {{careTeam.ImplantType}} <br>
+                                </div>
+                                <div class="col-md-3">
+                                    <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
+                                        ng-if="careTeam== patient.CareTeams[0] && userLevelID < 11"> Add new event</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- DOTS!!!-->
+                                <div class="bs-wizard" >
+                                    <!--Regular Completed Phases-->
+                                    <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1"
+                                        ng-if="careTeam.CurrentPhaseID != 20 && careTeam.CurrentPhaseID != 21 && careTeam.CurrentPhaseID != 22">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="{{phase.CompletedPhaseHREF}}" ng-click="goToQuestions(careTeam, phase, patient)" 
+                                            class="bs-wizard-dot" title={{phase.Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phase.Name}}
+                                        </div>
+                                    </div>
+                                    <!-- opening phase 1 if on phase 2 or 3 or both---->
+                                    <div class="col-xs-1 bs-wizard-step complete" 
+                                        ng-if="careTeam.CurrentPhaseID == 20 || careTeam.CurrentPhaseID == 21 || careTeam.CurrentPhaseID == 22">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
+                                            title={{phases[0].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[0].Name}}
+                                        </div>
+                                    </div>
+                                    <!--Current Phase-->
+                                    <!--opening both phase 2 and 3-- case 20-->
+                                    <div class="col-xs-1 bs-wizard-step "  ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}" ng-if="careTeam.CurrentPhaseID ==20" ng-repeat="phase in phases.slice(1,3)" >
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="{{phase.ActivePhaseHREF}}" ng-if="patient.InactiveStatus == 10"
+                                            ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
+                                        <a href="{{phase.CompletedPhaseHREF}}" ng-if="patient.InactiveStatus != 10"
+                                            ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phase.Name}}
+                                        </div>
+                                    </div>
+                                    <!--END OF case 20-->
+                                    <!--2 is completed, 3 is open (case 21)-->
+                                    <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 21">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="#/completedAudiology" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
+                                            title={{phases[1].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[1].Name}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 21"
+                                        ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="#/questions" ng-click="goToQuestions(careTeam, phases[2], patient)" class="bs-wizard-dot"
+                                            title={{phases[2].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[2].Name}}
+                                        </div>
+                                    </div>
+                                    <!--END of (case 21)-->
+                                    <!--3 is completed, 2 is open (case 22)-->
+                                    <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 22"
+                                        ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="#/audioQuestions" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
+                                            title={{phases[1].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[1].Name}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 22">
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[2], patient)" class="bs-wizard-dot"
+                                            title={{phases[1].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[2].Name}}
+                                        </div>
+                                    </div>
+                                    <!--END of 3 is completed, 2 is open (case 22)-->
+                                    <!--REGULAR ACTIVE DOTS(JUST ONE)---->
+                                    <div class="col-xs-1 bs-wizard-step " ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}" 
+                                         ng-if="careTeam.CurrentPhaseID !=20 && careTeam.CurrentPhaseID !=21 && careTeam.CurrentPhaseID !=22 && 
+                                                careTeam.CurrentPhaseID !=12" >
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar">
+                                            </div>
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}" ng-if="patient.InactiveStatus == 10"
+                                            ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
+                                            ng-class="{'bs-wizard-dot-late':careTeam.isLateToVisit, 'bs-wizard-dot':!careTeam.isLateToVisit}"
+                                            title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
+                                        <a href="{{phases[careTeam.CurrentPhaseID-1].CompletedPhaseHREF}}" ng-if="patient.InactiveStatus != 10"
+                                            ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
+                                            ng-class="{'bs-wizard-dot-late':careTeam.isLateToVisit, 'bs-wizard-dot':!careTeam.isLateToVisit}"
+                                            title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phases[careTeam.CurrentPhaseID-1].Name}}
+                                        </div>
+                                    </div>
+                                    <!--Future Phases for events on phase 2, 3, or both-->
+                                    <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(3, 11)" 
+                                         ng-if="careTeam.CurrentPhaseID >=20" >
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" 
+                                           title={{phase.Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phase.Name}}
+                                        </div>
+                                    </div>
+                                    <!--Future Phases for  normal phases-->
+                                    <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)"
+                                         ng-if="careTeam.CurrentPhaseID <20" >
+                                        <div class="text-center bs-wizard-stepnum">
+                                            &nbsp;
+                                        </div>
+                                        <div class="progress" >
+                                            <div class="progress-bar">
+                                            </div>
+                                        </div>
+                                        <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" 
+                                           title={{phase.Name}}></a>
+                                        <div class="bs-wizard-info text-center" collapse="!isCollapsed">
+                                            {{phase.Name}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <a><span class="fa-2x fa " ng-click="isCollapsed = !isCollapsed" 
+                                    ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle ':isCollapsed}" style="margin-top:20px"></span></a>
+                            </div>
+                            <!--Phase info collapse button-->
                         </div>
-                        <div class="col-md-3">
-                            <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
-                                    ng-if="careTeam== patient.CareTeams[0] && userLevelID < 11"> Add new event</button>
-                        </div>
+                        <!-- End phaseProgress repeat for careTeams -->
+                        <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
+                            See Care Team Details 
+                            <!--anchor to identify patient-->
+                        </button>
                     </div>
-                        <div class="row">
-                        <!-- DOTS!!!-->
-                        <div class="bs-wizard" >
-                              <!--Regular Completed Phases-->
-                            <div class="col-xs-1 bs-wizard-step complete" ng-repeat="phase in phases|limitTo:careTeam.CurrentPhaseID-1"
-                                 ng-if="careTeam.CurrentPhaseID != 20 && careTeam.CurrentPhaseID != 21 && careTeam.CurrentPhaseID != 22">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="{{phase.CompletedPhaseHREF}}" ng-click="goToQuestions(careTeam, phase, patient)" 
-                                 class="bs-wizard-dot" title={{phase.Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phase.Name}}
-                              </div>
-                            </div>
-                            
-                            <!-- opening phase 1 if on phase 2 or 3 or both---->
-                            <div class="col-xs-1 bs-wizard-step complete" 
-                                 ng-if="careTeam.CurrentPhaseID == 20 || careTeam.CurrentPhaseID == 21 || careTeam.CurrentPhaseID == 22">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[0], patient)" class="bs-wizard-dot"
-                                 title={{phases[0].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[0].Name}}
-                              </div>
-                            </div>
-
-                              <!--Current Phase-->
-                            <!--opening both phase 2 and 3-- case 20-->
-                            <div class="col-xs-1 bs-wizard-step "  ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}" ng-if="careTeam.CurrentPhaseID ==20" ng-repeat="phase in phases.slice(1,3)" >
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                  <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="{{phase.ActivePhaseHREF}}" ng-if="patient.InactiveStatus == 10"
-                                 ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                            <a href="{{phase.CompletedPhaseHREF}}" ng-if="patient.InactiveStatus != 10"
-                                 ng-click="goToQuestions(careTeam, phase, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phase.Name}}
-                              </div>
-                            </div>
-                            <!--END OF case 20-->
-                            
-                            <!--2 is completed, 3 is open (case 21)-->
-                            <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 21">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="#/completedAudiology" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
-                                 title={{phases[1].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[1].Name}}
-                              </div>
-                            </div>
-                            
-                            <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 21"
-                                 ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                 <div class="progress-bar">
-                                </div>  
-                              </div>
-                              <a href="#/questions" ng-click="goToQuestions(careTeam, phases[2], patient)" class="bs-wizard-dot"
-                                 title={{phases[2].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[2].Name}}
-                              </div>
-                            </div>
-                            <!--END of (case 21)-->
-                            
-                            <!--3 is completed, 2 is open (case 22)-->
-                            <div class="col-xs-1 bs-wizard-step " ng-if="careTeam.CurrentPhaseID == 22"
-                                 ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                  <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="#/audioQuestions" ng-click="goToQuestions(careTeam, phases[1], patient)" class="bs-wizard-dot"
-                                 title={{phases[1].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[1].Name}}
-                              </div>
-                            </div>
-                            
-                            <div class="col-xs-1 bs-wizard-step complete" ng-if="careTeam.CurrentPhaseID == 22">
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="#/completedQuestions" ng-click="goToQuestions(careTeam, phases[2], patient)" class="bs-wizard-dot"
-                                 title={{phases[1].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[2].Name}}
-                              </div>
-                            </div>
-                            <!--END of 3 is completed, 2 is open (case 22)-->
-
-
-                            <!--REGULAR ACTIVE DOTS(JUST ONE)---->
-                            <div class="col-xs-1 bs-wizard-step " ng-class="{active: patient.InactiveStatus == 10, complete: patient.InactiveStatus != 10}" ng-if="careTeam.CurrentPhaseID !=20 && careTeam.CurrentPhaseID !=21 && careTeam.CurrentPhaseID !=22 && careTeam.CurrentPhaseID !=12" >
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                              <div class="progress">
-                                <div class="progress-bar">
-                                </div>
-                                  <div class="progress-bar">
-                                </div>
-                              </div>
-                              <a href="{{phases[careTeam.CurrentPhaseID-1].ActivePhaseHREF}}" ng-if="patient.InactiveStatus == 10"
-                              ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
-                                 ng-class="{'bs-wizard-dot-late':careTeam.isLateToVisit, 'bs-wizard-dot':!careTeam.isLateToVisit}"
-                                 title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
-                                <a href="{{phases[careTeam.CurrentPhaseID-1].CompletedPhaseHREF}}" ng-if="patient.InactiveStatus != 10"
-                              ng-click="goToQuestions(careTeam,phases[careTeam.CurrentPhaseID-1], patient)" 
-                                 ng-class="{'bs-wizard-dot-late':careTeam.isLateToVisit, 'bs-wizard-dot':!careTeam.isLateToVisit}"
-                                 title={{phases[careTeam.CurrentPhaseID-1].Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phases[careTeam.CurrentPhaseID-1].Name}}
-                              </div>
-                            </div>
-
-                              <!--Future Phases for events on phase 2, 3, or both-->
-                            <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(3, 11)" ng-if="careTeam.CurrentPhaseID >=20" >
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                                <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                </div>
-                              <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phase.Name}}
-                              </div>
-                            </div>
-                            
-                             <!--Future Phases for  normal phases-->
-                            <div class="col-xs-1 bs-wizard-step disabled" ng-repeat="phase in phases.slice(careTeam.CurrentPhaseID, 11)" ng-if="careTeam.CurrentPhaseID <20" >
-                              <div class="text-center bs-wizard-stepnum">
-                                &nbsp;
-                              </div>
-                                <div class="progress" >
-                                <div class="progress-bar">
-                                </div>
-                                </div>
-                              <a href="" ng-click="goToQuestions(careTeam, phase.PhaseID, patient)" class="bs-wizard-dot" title={{phase.Name}}></a>
-                              <div class="bs-wizard-info text-center" collapse="!isCollapsed">
-                                {{phase.Name}}
-                              </div>
-                            </div>
-                        </div>
-                    
-                            <a><span class="fa-2x fa " ng-click="isCollapsed = !isCollapsed" 
-                                     ng-class="{'fa-plus-circle':!isCollapsed, 'fa-minus-circle ':isCollapsed}" style="margin-top:20px"></span></a>
-                        </div>
-                            
-                    <!--Phase info collapse button-->
-                
-                    
-                </div> <!-- End phaseProgress repeat for careTeams -->
-                  
-                  <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
-                    See Care Team Details 
-                      <!--anchor to identify patient-->
-                  </button>
-                  
-                </div>
-                
-
-                  <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
-                  
-                
-                  <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
+                    <!--Collapse Patient CareTeam Details(patient providers and ....??)  under event(s) info-->
+                    <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
                     <div class="container" collapse="isDataCollapsed" >
-                        <br> <hr>
+                        <br> 
+                        <hr>
                         <div class="row">
                             <div class="col-md-4">
-                              <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
-                              <a href="" ng-repeat="facility in patient.Providers" ng-click="getFacCard(facility)"> 
-                                  <!--patient.Providers = all facilities ever involved with patient-->
-                                <span>{{facility.Name}}</span><br>
-                              </a>
+                                <span class = "cp_patientName">{{patient.First}} {{patient.Last}}'s</span><span> Implant Providers</span><br>
+                                <a href="" ng-repeat="facility in patient.Providers" ng-click="getFacCard(facility)">
+                                    <!--patient.Providers = all facilities ever involved with patient-->
+                                    <span>{{facility.Name}}</span><br>
+                                </a>
                             </div>
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-default btn-sm"  ng-click="inviteToCareTeam(patient)">
-                                    <span class="glyphicon glyphicon-plus-sign"></span> 
-                                    Invite Provider to CareTeam
+                                <span class="glyphicon glyphicon-plus-sign"></span> 
+                                Invite Provider to CareTeam
                                 </button>
                             </div>
                         </div>
-                <!-- END Phase Progress BOX ON RIGHT--------------------->
-                        
-                    <!-- Modal to Invite facility to specific patient's care team -->
-                         <script type="text/ng-template" id="inviteToCareTeam.html">
-				
-                        <div class="modal-header">
-                            <button type="button" class="close" ng-click="ok()">
-                            <span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Invite Facility to {{patient.First}} {{patient.Last}}'s CareTeam</h4>
-                        </div>
-                        <div class="modal-body">
-                            <!--Non aii person-->
-                            <div style="background-color:#EDF2FF">
-                                <label> Email non-AII member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
-                                <div class="row">        
-
-                                    <div class="control-group col-md-7 col-md-offset-1" >
-                                      <label>Facility Name </label>
-                                      <div class="controls" >
-                                        <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
-                                        placeholder="Enter Facility Name" alphabet>
-                                      </div>                       
-                                    </div>
-
-                                </div>
-
-                                <!--Name of invitee form field-->
-                                <div class="row">        
-
-                                    <div class="control-group col-md-7 col-md-offset-1" >
-                                      <label>Name of Invitee </label>
-                                      <div class="controls" >
-                                        <input type="text" class="form-control" name="invitee" ng-model="addFac.Invitee" ng-required="true" 
-                                        placeholder="Enter name of a contact person at this facility" alphabet>
-                                      </div>                       
-                                    </div>
-
-                                </div> 
-
-                                <!--Email of contact person form field-->
-                                <div class="row">
-                                    <div class="control-group col-md-7 col-md-offset-1" >
-                                      <label>Email</label>
-                                      <div class="controls" >
-                                        <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
-                                        placeholder="Enter email of invitee at this facility">
-                                      </div>
-                                    </div>
-                                </div><br>
+                        <!-- END Phase Progress BOX ON RIGHT--------------------->
+                        <!-- Modal to Invite facility to specific patient's care team -->
+                        <script type="text/ng-template" id="inviteToCareTeam.html">
+                            <div class="modal-header">
+                                <button type="button" class="close" ng-click="ok()">
+                                <span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Invite Facility to {{patient.First}} {{patient.Last}}'s CareTeam</h4>
                             </div>
-                            <br> 
-                            <button class="btn btn-primary" ng-click=""> <i class="fa fa-envelope-o"></i>Send Email</button>
-                        <!--End Non aii person-->
-                        <h4 style="text-align:center"> -- Or -- </h4>
-                        <div style="background-color:#EDF2FF">
-                            <label> Send request to an AII member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
-                            <ul > AII Providers </ul> 
-                        
-                            <div class="scroll" style="border:1px solid #CDD1DB">
-                                <ul>
-                                    <div ng-repeat="fac in allFacs.records">
-                                        <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
-                                    </div>
-                                </ul>
-                            </div>
-                        </div>
-                            <br>
-                            Inviting: <strong> {{selectedFac.Name}} </strong> <br>
-                            To join the care team for: <strong> {{patient.First}} {{patient.Last}} </strong>
-                            <br><br>
-                            <button class="btn btn-primary" ng-click="sendCareTeamRequest()">Invite Facility</button>
-                        </div>
-                        <div class="modal-footer">
+                            <div class="modal-body">
+                                <!--Non aii person-->
+                                <div style="background-color:#EDF2FF">
+                                    <label> Email non-AII member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
+                                    <div class="row">        
                             
-                            <button class="btn btn-primary" ng-click="ok()">Close</button>
-                        </div>
-
-                        </script>
-                        
-                     <!-- End Modal to Invite facility to specific patient's care team -->
+                                        <div class="control-group col-md-7 col-md-offset-1" >
+                                          <label>Facility Name </label>
+                                          <div class="controls" >
+                                            <input type="text" class="form-control" name="facName" ng-model="addFac.Name" ng-required="true" 
+                                placeholder="Enter Facility Name" alphabet>
+                                          </div>                       
+                                        </div>
+                            
+                                    </div>
+                            
+                                    <!--Name of invitee form field-->
+                                    <div class="row">        
+                            
+                                        <div class="control-group col-md-7 col-md-offset-1" >
+                                          <label>Name of Invitee </label>
+                                          <div class="controls" >
+                                            <input type="text" class="form-control" name="invitee" ng-model="addFac.Invitee" ng-required="true" 
+                                placeholder="Enter name of a contact person at this facility" alphabet>
+                                          </div>                       
+                                        </div>
+                            
+                                    </div> 
+                            
+                                    <!--Email of contact person form field-->
+                                    <div class="row">
+                                        <div class="control-group col-md-7 col-md-offset-1" >
+                                          <label>Email</label>
+                                          <div class="controls" >
+                                            <input type="text" class="form-control" name="email" ng-model="addFac.Email" ng-required="true" 
+                                placeholder="Enter email of invitee at this facility">
+                                          </div>
+                                        </div>
+                                    </div><br>
+                                </div>
+                                <br> 
+                                <button class="btn btn-primary" ng-click=""> <i class="fa fa-envelope-o"></i>Send Email</button>
+                            <!--End Non aii person-->
+                            <h4 style="text-align:center"> -- Or -- </h4>
+                            <div style="background-color:#EDF2FF">
+                                <label> Send request to an AII member to join {{patient.First}} {{patient.Last}}'s CareTeam </label>
+                                <ul > AII Providers </ul> 
+                            
+                                <div class="scroll" style="border:1px solid #CDD1DB">
+                                    <ul>
+                                        <div ng-repeat="fac in allFacs.records">
+                                            <input type="radio" ng-click="selectFac(fac)" name="selectedFac"> {{fac.Name}}
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                                <br>
+                                Inviting: <strong> {{selectedFac.Name}} </strong> <br>
+                                To join the care team for: <strong> {{patient.First}} {{patient.Last}} </strong>
+                                <br><br>
+                                <button class="btn btn-primary" ng-click="sendCareTeamRequest()">Invite Facility</button>
                     </div>
+                    <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="ok()">Close</button>
+                    </div>
+                    </script>
+                    <!-- End Modal to Invite facility to specific patient's care team -->
+                </div>
             </div>
-            </div>
-            
-  </div>
+        </div>
+    </div>
 </div>
-
-   <!-- Modal for each different facility clicked -->
-            <script type="text/ng-template" id="myModalContent.html">
-                <div class="modal-header">
-                    <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">{{facCard.records.Name}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">  
-                        <div class="col-md-4">
-                            <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
-                        </div>
-                        <div class="col-md-8">
-                          <b> {{facCard.records.Name}} </b> <br>
-                          <b> Address: </b> <br>
-                          {{facCard.records.Address1}} <br>
-                          Facility Admin: <a> ADMIN NAME</a> <br>
-                        </div> 
+<!-- Modal for each different facility clicked -->
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">{{facCard.records.Name}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">  
+            <div class="col-md-4">
+                <img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
+            </div>
+            <div class="col-md-8">
+              <b> {{facCard.records.Name}} </b> <br>
+              <b> Address: </b> <br>
+              {{facCard.records.Address1}} <br>
+              Facility Admin: <a> ADMIN NAME</a> <br>
+            </div> 
+        </div>
+        <p> Users @ {{facCard.records.Name}}</p>    
+        <div class="scroll">
+            <ul class="list-unstyled">
+                <li ng-repeat="user in facCardUsers.records"> 
+                    <div ng-class-odd="'odd'" ng-class-even="'even'">
+                        <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a>
                     </div>
-                    <p> Users @ {{facCard.records.Name}}</p>    
-                    <div class="scroll">
-                        <ul class="list-unstyled">
-                            <li ng-repeat="user in facCardUsers.records"> 
-                                <div ng-class-odd="'odd'" ng-class-even="'even'">
-                                    <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button>
-                </div>
-            </script>
-
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+    </div>
+</script>
 <!-- Modal for adding event clicked -->
-            <script type="text/ng-template" id="addNewEvent.html">
-                <div class="modal-header">
-                    <button type="button" class="close"><span ng-click="cancel()">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        Add new cochlear event for <b> {{patient.First |uppercase }} {{ patient.Last |uppercase}} </b>
-                    </h4>
+<script type="text/ng-template" id="addNewEvent.html">
+    <div class="modal-header">
+        <button type="button" class="close"><span ng-click="cancel()">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+            Add new cochlear event for <b> {{patient.First |uppercase }} {{ patient.Last |uppercase}} </b>
+        </h4>
+    </div>
+    <div class="modal-body">
+        <form name="addNewEvent" class="form form-vertical" novalidate>
+            <div class="row">        
+    
+                <div class="control-group col-md-4 col-md-offset-1" >
+                    <label>First Name</label>
+                    <div class="controls" >
+                        <input type="text" class="form-control" name="firstName" ng-model="patient.First" disabled>
+                    </div>                       
                 </div>
-                <div class="modal-body">
-                    <form name="addNewEvent" class="form form-vertical" novalidate>
-                        <div class="row">        
-
-                            <div class="control-group col-md-4 col-md-offset-1" >
-                                <label>First Name</label>
-                                <div class="controls" >
-                                    <input type="text" class="form-control" name="firstName" ng-model="patient.First" disabled>
-                                </div>                       
-                            </div>
-
-                            <div class="control-group col-md-4" >
-                                <label>Last Name</label>
-                                <div class="controls" >
-                                    <input type="text" class="form-control" name="lastName" ng-model="patient.Last" disabled>
-                                </div>                       
-                            </div>
-
-                        </div><br>
-
-                        <div class="row">
-                            <div class="control-group col-md-4 col-md-offset-1" >
-                                <label>Date</label>
-                                <div class="controls" >
-                                    <input type="date" class="form-control" name="date" ng-model="newEvent.CreatedOn" disabled>
-                                </div>
-                            </div>
-                        </div> <br>
-                        <div class="row">
-                            <div class="control-group col-md-8 col-md-offset-1" >
-                                <label>Provide description of event if known</label>
-                                <div class="controls" >
-                                    <input type="text" class="form-control" name="description" ng-model="newEvent.Description"
-                                        placeholder="Enter description of event if known (i.e. left ear cochlear implant)" >
-                                </div>
-                            </div>
-                        </div><br>
-
-                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="submitEvent()">Submit</button>
-                        <br>
-                    </form>
+    
+                <div class="control-group col-md-4" >
+                    <label>Last Name</label>
+                    <div class="controls" >
+                        <input type="text" class="form-control" name="lastName" ng-model="patient.Last" disabled>
+                    </div>                       
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="cancel()">Cancel</button> 
+    
+            </div><br>
+    
+            <div class="row">
+                <div class="control-group col-md-4 col-md-offset-1" >
+                    <label>Date</label>
+                    <div class="controls" >
+                        <input type="date" class="form-control" name="date" ng-model="newEvent.CreatedOn" disabled>
+                    </div>
                 </div>
-            </script>
+            </div> <br>
+            <div class="row">
+                <div class="control-group col-md-8 col-md-offset-1" >
+                    <label>Provide description of event if known</label>
+                    <div class="controls" >
+                        <input type="text" class="form-control" name="description" ng-model="newEvent.Description"
+                            placeholder="Enter description of event if known (i.e. left ear cochlear implant)" >
+                    </div>
+                </div>
+            </div><br>
+    
+            <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="submitEvent()">Submit</button>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button> <button class="btn btn-primary" ng-click="cancel()">Cancel</button> 
+    </div>
+</script>

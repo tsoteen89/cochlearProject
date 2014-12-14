@@ -1,61 +1,61 @@
+<style>
+    .login-feedback-box{
+        padding:15px;
+        border:3px solid #000;
+        box-shadow:0 0 20px 0 #787878;
+        border-radius:10px;
+        background-color:white;
+        font-weight:bold;
+        width:37%;
+    }
+</style>
+
 <body>
-    
-    
-    <div ng-if="invalidToken == true" class = "row">
-        <div class = "col-md-3 col-md-offset-3" style="padding:15px;border:3px solid #000;box-shadow:0 0 20px 0 #787878;border-radius:10px;background-color:white;font-weight:bold">
-            <center><h4 style="color: red;margin:auto;">You no longer have a valid session on this device. <br> User may be logged in on another device.</h4></center>
+    <div style="margin-left:30%">
+        <!--if token is invalid???- display this box-->
+        <div ng-if="invalidToken == true" class = "row">
+            <div class="login-feedbox-box">
+                <h4 style="color: red;margin:auto;">
+                    You no longer have a valid session on this device. <br> User may be logged in on another device.
+                </h4>
+            </div>
+        </div>
+        <!--if token expires- display this box-->
+        <div ng-if="tokenTimeout == true" class = "row">
+            <div class = "login-feedback-box">
+                <h4 style="color: red;margin:auto;">User Session Has Timed Out</h4>
+            </div>
         </div>
     </div>
-    
-    <div ng-if="tokenTimeout == true" class = "row">
-        <div class = "col-md-3 col-md-offset-4" style="padding:15px;border:3px solid #000;box-shadow:0 0 20px 0 #787878;border-radius:10px;background-color:white;font-weight:bold">
-            <center><h4 style="color: red;margin:auto;">User Session Has Timed Out</h4></center>
-        </div>
-    </div>
-    
+    <!--Login box -->
     <div id = "cp_loginContainer" ng-if = "!loggedIn">
-        
         <div class = "container">
-            
             <div class = "row">
                 <div class = "col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                   
                     <form role = "form" name = "loginForm" id = "loginForm" novalidate ng-submit = "submit()">
-                         <h4>Sign in</h4>
-                            <div ng-if="invalidLogin == true">
-                                <h5 style="color: red">Incorrect Username or Password </h3>
-                            </div>
-                         <hr>
+                        <h4>Sign in</h4>
+                        <div ng-if="invalidLogin == true">
+                            <h5 style="color: red">
+                            Incorrect Username or Password </h3>
+                        </div>
+                        <hr>
                         <div class = "form-group">
                             <label for = "inputUsername" class = "cp_loginLabel">Username</label>
-                            <input class = "form-control cp_loginInput" type = "text" name = "username" placeholder = "Enter Username" ng-model = "userlogin.username">
+                            <input class = "form-control cp_loginInput" type = "text" name = "username" placeholder = "Enter Username" 
+                                   ng-model = "userlogin.username">
                         </div>
                         <div class = "form-group">
                             <label for = "inputPassword" class = "cp_loginLabel">Password</label>
-                            <input class="form-control cp_loginInput" type = "password" name = "password" placeholder = "Enter Password" ng-model= "userlogin.password">
+                            <input class="form-control cp_loginInput" type = "password" name = "password" placeholder = "Enter Password" 
+                                   ng-model= "userlogin.password">
                         </div>
-                        
-                        <div class = "form-group">  
+                        <div class = "form-group">
                             <p><a class="cp_forgotPasswordLink" href="route.html">Forgot Password</a></p>
-
                             <button type="submit" class = "btn btn-primary" form="loginForm" ng-click="makeTrue()">Login</button>
                         </div>
-   
-                    </form>            
-                </div>
-                
-            </div>
-        </div>
-    </div>
-    <div class = "container cp_tempLogout" ng-if = "!loggedIn" style = "margin-top: 10px;">
-        <div class = "row">
-            <div class = "col-md-12" style = "text-align:center;">
-                <div>
-                    <p style = "margin-right: 5px;">Logout button for testing purposes only!</p><button class = "btn btn-primary" ng-click = "logout()">logout</button>
-
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 </body>

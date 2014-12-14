@@ -4,10 +4,12 @@
     min-max:30px;
     }
 </style>
-
 <div class="row">
-    <div class="form3D container col-md-8 col-md-offset-2" style="width:60%; background-color: #CAE5F0; margin-bottom:60px" ng-controller="audioQuestionsController">
+    <div class="form3D container col-md-8 col-md-offset-2" style="width:60%; background-color: #CAE5F0; margin-bottom:60px"
+         ng-controller="audioQuestionsController">
+        <!--Phase name at the top of the active audio phase-->
         <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
+        <!--Patient info (name, dob) at the top of the page-->
         <div class="row">
             <div class="col-md-3 col-md-offset-1">
                 <label style="font-size: 16px">{{patientName}}</label><br>
@@ -15,65 +17,80 @@
             </div>
         </div>
         <hr>
-        
+        <!--Buttons container-->
         <div class="col-md-8 col-md-offset-2">
             <!-- Audiograms Button -->
-            <a href = "#/audiogram"> 
-                <button class="select-audio-tests btn-lg btn-block">  
-                    <h1 style="display:inline-block;"> Audiograms </h1> 
+            <a href = "#/audiogram">
+                <button class="select-audio-tests btn-lg btn-block">
+                    <h1 style="display:inline-block;"> Audiograms </h1>
+                    <!-- Hoverable help exclamation next to audiograms that contains a link that opens informative modal-->
                     <span>
-                        <hovercard hover-tmpl-url="hovercards/audiogramHelp.html"><p style="color:#125bff;" class="fa fa-exclamation-circle"></p></hovercard>
+                        <hovercard hover-tmpl-url="hovercards/audiogramHelp.html">
+                            <p style="color:#125bff;" class="fa fa-exclamation-circle"></p>
+                        </hovercard>
                     </span>
                 </button>
             </a>
             <br><br><br>
             <!-- Sentence Testing Button -->
-            <a href = "#/sentenceTesting"> <button class="select-audio-tests btn-lg btn-block">  <h1> Sentence Testing </h1>  </button> </a>
-    
+            <a href = "#/sentenceTesting">
+                <button class="select-audio-tests btn-lg btn-block">
+                    <h1> Sentence Testing </h1>
+                </button>
+            </a>
             <!-----------------------Questions-------->
             <div class="select-audio-tests" style="margin-bottom:5px">
                 <label class="description">Questions</label>
                 <ul class="list-unstyled">
+                    <!--Hard Coded the first question that clues in the following two questions (preferred listening condition)-->
                     <li>
                         <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="description" style="font-size: 1.2vw; color:#4B92AE" >
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="description" style="font-size: 1.2vw; color:#4B92AE" >
                                     What is the patient's current "preferred listening condition" for each ear?</label> 
+                                </div>
                             </div>
                         </div>
-                        </div>
                     </li>
+                    <!--Dynamically populate all the audio questions-->
                     <li ng-repeat= "question in audioQs">
                         <div ng-hide="question.IsChild" class="container">
                             <span>
                                 <div class="row">
+                                    <!--Question Text-->
                                     <div class="col-md-11">
                                         <label class="description" style="font-size: 1.2vw; color:#4B92AE" >{{question.QuestionText}} </label>
                                     </div>
+                                    <!--Hoverable help question mark next to question text that includes further relevant information about the ?-->
                                     <div class="col-md-1">
                                         <hovercard hover-tmpl-url="hovercards/hoverCardDetail.html">
-                                            <p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle fa-2x"></p></hovercard>
+                                            <p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle fa-2x"></p>
+                                        </hovercard>
                                     </div>
-
                                 </div>
-                                <!-- Else Display only the single Input field -->
-                                <select class="form-control medium" ng-if="question.Input.Type == 'Select'" ng-options="values for values in question.Input.Values"
+                                <!--Select (drop down questions)-->
+                                <select class="form-control medium" ng-if="question.Input.Type == 'Select'" 
+                                        ng-options="values for values in question.Input.Values"
                                     ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </select>
+                                <!--Date questions-->
                                 <div ng-if="question.Input.Type == 'Date'">
                                     <input class="form-control medium" type={{question.Input.Type}} name={{question.QuestionID}} 
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
+                                <!--Textbox questions-->
                                 <div ng-if="question.Input.Type == 'Text'">
                                     <input type={{question.Input.Type}} name={{question.QuestionID}} 
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                 </div>
+                                <!--Radio button questions-->
                                 <div ng-if="question.Input.Type == 'Radio'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
                                         ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
                                     <label class="choice" >{{values}}</label>
                                 </div>
+                                <!--Checkbox questions-->
                                 <div ng-if="question.Input.Type == 'Checkbox'" ng-repeat="values in question.Input.Values" >
                                     <input type={{question.Input.Type}} checklist-value="values" 
                                         checklist-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)">
@@ -99,98 +116,95 @@
                                 {{hideChild(question.Children)}}               
                             </div>
                         </div>
-
+                        <!-- END Divs with logic used to display or hide children questions -->
                     </li>
                 </ul>
-
+                <!-- Opens modal with all entered data and all questions for user to confirm before advancing the phase -->
                 <button ng-click="getDataSummary()" class="btn btn-default"
                     popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom" 
-                        popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
+                    popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
                 Finished
                 </button>
                 <br> 
             </div>
-            
         </div>
-
     </div>
     <!-- Return to patient directory Button -->
     <div class="col-md-2" >
         <br>
         <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
-            <button class="btn btn-info">
-                Patient Directory
-            </button>
+        <button class="btn btn-info">
+        Patient Directory
+        </button>
         </a> 
-
-    </div>
-    
-</div> <!-- End row div -->
-
-<!-- Modal to review answers -->
-<script type="text/ng-template" id="dataSummary.html">
-<div ng-controller="audioQuestionsController">
-    <div class="modal-header">
-        <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
-    </div>
-    <div id="divtoprint">
-        <div class="modal-body">
-            <div ng-repeat="condition in patientSummaryAnswers">
-
-                <completed-audiology></completed-audiology>
-
-            </div>
-            <div ng-controller="audioQuestionsController">
-                 <style>
-                    table, th, td {
-                           border: 1px solid #164a5e;
-                        }
-                </style>
-
-                <table class="table table-condensed">
-                    <caption></caption>
-                    <thead>
-                    <tr align="Center">
-                      <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Question</b></h3></td>
-                      <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Answer</b></h3></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="answer in summaryAnswers.Answers">
-                      <td width="60%"><b>{{answer.Question}}</b></td>
-                      <td width="40%"ng-if="!isArray(answer.Answers) && !isObject(answer.Answers)" >{{answer.Answers}}</td>
-            <td width="40%"ng-if="isArray(answer.Answers)"><span ng-repeat="answer in answer.Answers"> {{answer}},</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer" ng-controller="questionsController">
-    
-        <button ng-click="ok()" class="btn btn-default"
-                 style="float:left">
-            Back
-        </button>
-        
-        <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:15%">
-            Print
-        </button>
-        
-        <button ng-click="export()" class="btn btn-default" style="margin-right:10%">
-            Export & Save
-        </button>
-        
-        <button ng-if="phaseName != '24 Month Visit'" ng-click="completePhase(); ok()" class="btn btn-default"
-                popover="Click to complete data entry for this phase and conclude this visit" popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
-            Confirm
-        </button>
-        
-        <button ng-if="phaseName == '24 Month Visit'" ng-click="completeCare(); ok()" class="btn btn-default"
-                popover="Click to complete data entry for this phase and complete this patient's care. The patient will be considered 'inactive' at this point." popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
-            Confirm
-        </button>
     </div>
 </div>
+<!-- End row div -->
+<!-- Modal to review answers -->
+<script type="text/ng-template" id="dataSummary.html">
+    <div ng-controller="audioQuestionsController">
+        <div class="modal-header">
+            <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Review Data entered</h4>
+        </div>
+        <div id="divtoprint">
+            <div class="modal-body">
+                <div ng-repeat="condition in patientSummaryAnswers">
+    
+                    <completed-audiology></completed-audiology>
+    
+                </div>
+                <div ng-controller="audioQuestionsController">
+                     <style>
+                        table, th, td {
+                               border: 1px solid #164a5e;
+                            }
+                    </style>
+    
+                    <table class="table table-condensed">
+                        <caption></caption>
+                        <thead>
+                        <tr align="Center">
+                          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Question</b></h3></td>
+                          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Answer</b></h3></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="answer in summaryAnswers.Answers">
+                          <td width="60%"><b>{{answer.Question}}</b></td>
+                          <td width="40%"ng-if="!isArray(answer.Answers) && !isObject(answer.Answers)" >{{answer.Answers}}</td>
+                <td width="40%"ng-if="isArray(answer.Answers)"><span ng-repeat="answer in answer.Answers"> {{answer}},</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" ng-controller="questionsController">
+        
+            <button ng-click="ok()" class="btn btn-default"
+                     style="float:left">
+                Back
+            </button>
+            
+            <button ng-click="PrintContent()" class="btn btn-default" style="margin-right:15%">
+                Print
+            </button>
+            
+            <button ng-click="export()" class="btn btn-default" style="margin-right:10%">
+                Export & Save
+            </button>
+            
+            <button ng-if="phaseName != '24 Month Visit'" ng-click="completePhase(); ok()" class="btn btn-default"
+                    popover="Click to complete data entry for this phase and conclude this visit" 
+                    popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
+                Confirm
+            </button>
+            
+            <button ng-if="phaseName == '24 Month Visit'" ng-click="completeCare(); ok()" class="btn btn-default"
+                    popover="Click to complete data entry for this phase and complete this patient's care. The patient will be considered 'inactive' at this point." popover-trigger="mouseenter" popover-placement="bottom" style="float:right">
+                Confirm
+            </button>
+        </div>
+    </div>
 </script>

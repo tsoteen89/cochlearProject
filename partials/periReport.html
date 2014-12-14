@@ -1,59 +1,65 @@
-<div class ="row">
-            
-            <button ng-click="export()" class="btn btn-info ">
-                Export To Spreadsheet
-            </button> <br> <br>
-        </div>
-            
-        <div id="facReport"> <!--ID used to identify exportable html-->
-<style>
-    table, th, td, tbody, tr {
-    border: 1px solid #164a5e;
-    }
-    .bold{
-    font-weight: bold;
-    background-color: #97afd4;
-    }
-    .plain{
-    font-weight:normal;
-    background-color:#cae5f0
-    }
-    tbody tr:hover {
-      background: #97afd4;
-    }
-</style>
-            <table class="table table-condensed table-responsive form3D" style="table-layout:fixed" >
-                
-                <thead>
-                <tr align="center">
-                    <td style="background-color:#cae5f0; width:200px"></td>
-                    <td colspan="{{getCareTeamLength(patient.CareTeams)}}" ng-attr-style="background-color:#cae5f0; width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
-                        <b>{{patient.First}} {{patient.Last}}</b></h3></td>
-                </tr>
-                <tr align="Center">
-                    <td colspan="1" style="background-color:#cae5f0"><h4><b>Data Element</b></h4></td>
-                    <td colspan="1" style="background-color:#cae5f0" ng-repeat="careTeam in careTeams">
-                        <b>{{careTeam.Description}}</b></h3></td>
-                </tr>
-
-                </thead>
-                <tbody ng-repeat="(key, value) in questions">
-                    <tr ng-repeat="(questionNumb, val) in value" align="left" ng-class-odd="'odd'" ng-class-even="'even'">
-                        <td ng-class="{bold:$first, plain:!$first}">{{val}}</td>
-                        <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td>
-                        <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
-                            <span ng-if="!isArray(careTeams[$index].Data[key][questionNumb])
-                                && !isObject(careTeams[$index].Data[key][questionNumb])"> 
-                                {{careTeams[$index].Data[key][questionNumb]}} <span ng-if="$last" >{{clearMessage()}}  
-                                </span> </span>
-                            <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb != 085" 
-                                  ng-repeat="answer in careTeams[$parent.$index].Data[key][questionNumb] track by $index" > {{answer}},</span>
-                            <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb == 085"
-                                  ng-repeat="surgery in careTeams[$parent.$index].Data[key][questionNumb] track by $index"> <span >{{$index +1}}. </span> 
-                                <span ng-repeat="(surgeryInfo, value) in surgery track by $index"> <b> {{surgeryInfo}}</b>: <br>  {{value}} <br> </span> <hr>
-                            </span>
-                        </td> 
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<!---Perioperative facility report table----->
+<div id="facReport">
+    <!--ID used to identify exportable html-->
+    <style>
+        table, th, td, tbody, tr {
+        border: 1px solid #164a5e;
+        }
+        .bold{
+        font-weight: bold;
+        background-color: #97afd4;
+        }
+        .plain{
+        font-weight:normal;
+        background-color:#cae5f0
+        }
+        tbody tr:hover {
+        background: #97afd4;
+        }
+    </style>
+    <table class="table table-condensed table-responsive form3D" style="table-layout:fixed" >
+        <thead>
+            <!---First row of patient names----->
+            <tr align="center">
+                <td style="background-color:#cae5f0; width:200px"></td>
+                <td colspan="{{getCareTeamLength(patient.CareTeams)}}" ng-attr-style="background-color:#cae5f0;
+                    width:{{getCareTeamLength(patient.CareTeams)*105}}px" ng-repeat="patient in facilityReport.Patients">
+                    <b>{{patient.First}} {{patient.Last}}</b></h3>
+                </td>
+            </tr>
+            <!---END First row of patient names----->
+            <!---Second row of patient's events----->
+            <tr align="Center">
+                <td colspan="1" style="background-color:#cae5f0">
+                    <h4><b>Data Element</b></h4>
+                </td>
+                <td colspan="1" style="background-color:#cae5f0" ng-repeat="careTeam in careTeams">
+                    <b>{{careTeam.Description}}</b></h3>
+                </td>
+            </tr>
+            <!---Second row of patient's events----->
+        </thead>
+        <!---All the perioperative questions and the answers for each patient----->
+        <tbody ng-repeat="(key, value) in questions"> <!---- key = phase number - value = object w/ phase name and the questions for that phase---->
+            <tr ng-repeat="(questionNumb, val) in value" align="left" ng-class-odd="'odd'" ng-class-even="'even'"> 
+                <td ng-class="{bold:$first, plain:!$first}">{{val}}</td> <!-- val = phase name/question text-->
+                <td ng-if="$first" colspan="{{eventNum}}" style="background-color:#97afd4"></td> <!--Empty row after phase name-->
+                 <!--All the answers for the question number-->
+                <td ng-repeat="count in careTeams track by $index" ng-if="questionNumb != 0">
+                    <span ng-if="!isArray(careTeams[$index].Data[key][questionNumb])
+                        && !isObject(careTeams[$index].Data[key][questionNumb])"> 
+                    {{careTeams[$index].Data[key][questionNumb]}} <span ng-if="$last" >{{clearMessage()}}  
+                    </span> </span>
+                    <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb != 085" 
+                        ng-repeat="answer in careTeams[$parent.$index].Data[key][questionNumb] track by $index" > {{answer}},</span>
+                    <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb == 085"
+                        ng-repeat="surgery in careTeams[$parent.$index].Data[key][questionNumb] track by $index">
+                        <span >{{$index +1}}. </span> 
+                        <span ng-repeat="(surgeryInfo, value) in surgery track by $index"> <b> {{surgeryInfo}}</b>: <br>  {{value}} <br> </span> 
+                        <hr>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

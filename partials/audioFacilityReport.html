@@ -1,46 +1,48 @@
-<div class ="row">
-
-    <button ng-click="export()" class="btn btn-info ">
-        Export To Spreadsheet
-    </button> <br> <br>
-</div>
-
-<!--------------------------------------------------->
-<div id="facReport"> <!--ID used to identify exportable html-->
-  <!--<span ng-repeat="test in audioQuestions.Tests">{{test}}</span>-->
-<style>
-   table, th, td, tbody, tr {
-   border: 1px solid #164a5e;
-   }
-    .bold{
-    background-color: #97afd4;
-    }
-    .plain{
-    background-color:#cae5f0
-    }
-    .light{
+<!---Audiometric facility report table----->
+<div id="facReport">
+    <!--ID used to identify exportable html-->
+    <style>
+        table, th, td, tbody, tr {
+        border: 1px solid #164a5e;
+        }
+        .bold{
+        background-color: #97afd4;
+        }
+        .plain{
+        background-color:#cae5f0
+        }
+        .light{
         background-color:#aae5f0
-    }
-    .dark{
+        }
+        .dark{
         background-color:#97afff
-    }
-    .table-results{
-
-    }
-    #table-results tr:hover {
-      background: #97afd4;<!--#55ccff;-->
-    } 
-</style>
+        }
+        .table-results{
+        }
+        #table-results tr:hover {
+        background: #97afd4;<!--#55ccff;-->
+        } 
+    </style>
     <table class="form3D " style="table-layout:fixed" >
         <thead ng-if="showReport">
-            <tr style="background-color:#cae5f0;" align="center"> 
-                <td style="width:200px;"> <h4> Patient </h4></td> 
-                <td style="width:100px"><h4>  Test </h4></td> 
-                <td style="width:240px"> <h4> Measure </h4> </td> 
+            <!-- First row, column headers-->
+            <tr style="background-color:#cae5f0;" align="center">
+                <td style="width:200px;">
+                    <h4> Patient </h4>
+                </td>
+                <td style="width:100px">
+                    <h4>  Test </h4>
+                </td>
+                <td style="width:240px">
+                    <h4> Measure </h4>
+                </td>
                 <!-- repeat the audio phases - setting colspan based on max number of different conditions tested for any patients-->
                 <td colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" ng-attr-style="width:{{getMaxNumOfConditionSets(phase.PhaseID)*303}}px" 
-                    ng-repeat= "phase in facilityReport.Phases"><h4>  {{phase.Name}}</h4> </td>
+                    ng-repeat= "phase in facilityReport.Phases">
+                    <h4>  {{phase.Name}}</h4>
+                </td>
             </tr>
+            <!-- END First row, column headers-->
         </thead>
         <tbody ng-repeat="patient in facilityReport.Patients" ng-class-odd="'dark'" ng-class-even="'light'">
             <tr ng-repeat="careTeam in patient.CareTeams" >
@@ -49,18 +51,23 @@
                     <b> {{patient.First}} {{patient.Last}} <br> {{careTeam.Description}} </b>
                 </td>
                 <!--AzBio, CNC, BKB-SIN-->
-                <td > 
+                <td >
                     <table style="width:100%;">
-                        <tr style="border:none"><td style="height:34px;border:none" class="bold"></td></tr>
-                        <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr>
+                        <tr style="border:none">
+                            <td style="height:34px;border:none" class="bold"></td>
+                        </tr>
+                        <tr style="border:none">
+                            <td style="height:33px;border:none" class="bold"></td>
+                        </tr>
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
                                     <tr ng-attr-style="height:{{test.AudioTestInput.length*21+1.5}}px; background-color:#cae5f0; border-bottom:none">
-                                        <td style="border-bottom:none"><b> {{test.AudioTestName}}</b></td> 
+                                        <td style="border-bottom:none"><b> {{test.AudioTestName}}</b></td>
                                     </tr>
-                                    <tr style="border:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first"> 
-                                        <td style="border:none;background-color:#cae5f0;"></td> </tr>
+                                    <tr style="border:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first">
+                                        <td style="border:none;background-color:#cae5f0;"></td>
+                                    </tr>
                                 </table>
                             </td>
                     </table>
@@ -69,40 +76,43 @@
                 <td >
                     <table style="width:100%">
                         <!-- empty hidden rows to make excel look better-->
-                        <tr style="border:none"><td style="height:34px;border:none" class="bold"></td></tr> 
-                        <tr style="border:none"><td style="height:33px;border:none" class="bold"></td></tr>
-                        
+                        <tr style="border:none">
+                            <td style="height:34px;border:none" class="bold"></td>
+                        </tr>
+                        <tr style="border:none">
+                            <td style="height:33px;border:none" class="bold"></td>
+                        </tr>
                         <tr>
                             <td>
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
                                     <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" >
-                                        <td ><b> {{field.Name}}</b></td> 
+                                        <td ><b> {{field.Name}}</b></td>
                                     </tr>
                                 </table>
                             </td>
-                        </tr>         
-                    </table>             
+                        </tr>
+                    </table>
                 </td>
-                <!-- Results for each test and field AND PHASE- wah wah--> 
+                <!-- Results for each test and field AND PHASE---> 
                 <td ng-repeat="phase in facilityReport.Phases" colspan="{{getMaxNumOfConditionSets(phase.PhaseID)}}" >
                     <table style="width:100%" >
                         <tr>
-                            
                             <td ng-repeat="conditionSet in careTeam.Data[phase.PhaseID].DetailedAnswers" style="width:300px">
                                 {{getMaxNumOfTest(conditionSet.Results)}}
-                                <table style="width:300px" class="bold"> 
-                                    <tr><td colspan="{{max}}" align="center"><b> Testing Conditions </b></td></tr>
+                                <table style="width:300px" class="bold">
+                                    <tr>
+                                        <td colspan="{{max}}" align="center"><b> Testing Conditions </b></td>
+                                    </tr>
                                     <tr>
                                         <td colspan="{{max/2}}"  style="height:43px" >
                                             <b> Left Ear:</b> {{conditionSet.LeftAidCondition}} 
                                         </td>
                                         <td colspan="{{max/2}}" style="height:43px">
                                             <b> Right Ear:</b> {{conditionSet.RightAidCondition}}
-                                        </td>  
+                                        </td>
                                     </tr>
                                 </table>
-
-                               <table  id="table-results" ng-repeat="test in audioQuestions.Tests" style="width:300px;" >
+                                <table  id="table-results" ng-repeat="test in audioQuestions.Tests" style="width:300px;" >
                                     <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'">
                                         <td ng-if="!conditionSet.Results[test.AudioTestName]" style="height:23px" colspan="{{max}}"> </td>
                                         <td ng-if="conditionSet.Results[test.AudioTestName]" 
@@ -112,24 +122,19 @@
                                             <span ng-if="$last" >{{clearMessage()}}
                                         </td>
                                     </tr>
-                                </table> 
-
+                                </table>
                             </td>
                         </tr>
                     </table>
                 </td>
-                      
-            </tr>          
+            </tr>
         </tbody>
-      
     </table>
-
 </div>
 <!--<tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" ng-if="$parent.$first" 
-                                        style="border-top:2px solid black">
-                                        <td ><b> {{field.Name}}</b></td> 
-                                    </tr>
-                                    <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" ng-if="!parent.$first" >
-                                        <td ><b> {{field.Name}}</b></td> 
-                                    </tr>-->
-
+    style="border-top:2px solid black">
+    <td ><b> {{field.Name}}</b></td> 
+    </tr>
+    <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'" ng-if="!parent.$first" >
+    <td ><b> {{field.Name}}</b></td> 
+    </tr>-->

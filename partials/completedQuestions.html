@@ -1,26 +1,26 @@
 <div data-ng-controller="questionsController">
-    
+    <!--Phase name at the top of the completed phases-->
     <div class="row">
         <div class="col-md-offset-4">
             <label style="font-size:2vw; color:#4B92AE" >{{phaseName}}</label>
         </div>
-        
     </div>
     <hr>
     <div class="row">
+        <!--The table with the answers for that phase-->
         <div class="col-md-7 col-md-offset-2">
             <div id="divtoprint">
                 <completed-questions></completed-questions>
             </div>
             <hr>
         </div>
-        
+        <!--Buttons to return back to patient directory, print or export as pdf(i think)-->
         <div class="col-md-1">
-            <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
-                <button class="btn btn-primary">
-                    Patient Directory
-                </button>
-            </a> <br> <br>
+            <button class="btn btn-primary" ng-controller="apiPatientsController" 
+                    ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
+                Patient Directory
+            </button>
+            <br> <br>
             
             <button ng-click="PrintContent()" style="position:fixed"  class="btn btn-default">
                 Print
@@ -29,11 +29,6 @@
             <button ng-click="export()" style="position:fixed"  class="btn btn-default">
                 Export & Save
             </button>
-            
         </div>
-        
     </div>
-    
-    
-    
 </div>
