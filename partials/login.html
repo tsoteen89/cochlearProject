@@ -5,12 +5,13 @@
         box-shadow:0 0 20px 0 #787878;
         border-radius:10px;
         background-color:white;
-        font-weight:bold"
+        font-weight:bold;
+        width:37%;
     }
 </style>
 
 <body>
-    <center>
+    <div style="margin-left:30%">
         <!--if token is invalid???- display this box-->
         <div ng-if="invalidToken == true" class = "row">
             <div class="login-feedbox-box">
@@ -25,7 +26,7 @@
                 <h4 style="color: red;margin:auto;">User Session Has Timed Out</h4>
             </div>
         </div>
-    </center>
+    </div>
     <!--Login box -->
     <div id = "cp_loginContainer" ng-if = "!loggedIn">
         <div class = "container">
