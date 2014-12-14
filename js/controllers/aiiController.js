@@ -123,10 +123,11 @@
             get: function(url) {
                 var data = $http.get(url).success(function(data) {
                     if (typeof data === "object") {
-                        if (typeof data.records['error'] === "function" && data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token") {
+                        if (data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token") {
                             $cookieStore.remove('SessionID');
                             $cookieStore.remove('UserLevel');
                             if (data.records['error'] == 'Token Timeout') {
+                                console.log("timeout");
                                 $cookieStore.put('BadToken', 'Token Timeout');
                             }
                             if (data.records['error'] == "Invalid Token") {
@@ -3844,6 +3845,7 @@
         var cookieSessionID = $cookieStore.get('SessionID');
         //If SessionID is stored...
         if (cookieSessionID) {
+            console.log("got cookie");
             //Check if this token is valid
             var userTokenURL = "http://killzombieswith.us/aii-api/v1/users/one/" + cookieSessionID;
             getData.get(userTokenURL).success(function(data) {
@@ -3864,7 +3866,6 @@
                     info.Title = data.records.Title;
                     $scope.name = data.records.first_name + " " + data.records.last_name;
                     $scope.title = $cookieStore.get('Title');
-                    console.log("in here"+userInfo.get().Title);
                     info.UserLevelID = data.records.UserLevelID;
                     $scope.userLevel = data.records.UserLevelID;
                     userInfo.set(info);
@@ -3973,6 +3974,7 @@
             $cookieStore.remove('dirAnchor');
             $cookieStore.remove('PatientID');
             $cookieStore.remove('PatientSex');
+            $cookieStore.remove('Title');
         }
     }
 
