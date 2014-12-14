@@ -114,7 +114,7 @@
                                 </table>
                                 <table  id="table-results" ng-repeat="test in audioQuestions.Tests" style="width:300px;" >
                                     <tr  ng-repeat="field in test.AudioTestInput" ng-class-odd="'odd'" ng-class-even="'even'">
-                                        <td ng-if="!conditionSet.Results[test.AudioTestName]" style="height:23px" colspan="{{max}}"> </td>
+                                        <td ng-if="!conditionSet.Results[test.AudioTestName]" colspan="{{max}}"> N/A </td>
                                         <td ng-if="conditionSet.Results[test.AudioTestName]" 
                                             colspan="{{max/conditionSet.Results[test.AudioTestName].length}}"
                                             ng-repeat="result in conditionSet.Results[test.AudioTestName]"align="left" >
