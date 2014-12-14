@@ -1,5 +1,5 @@
 <center>
-    <div ng-controller="reportCtrl">
+    <div ng-controller="reportCtrl" class="container">
         <!-- Page Header -->
         <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
         <hr>
@@ -47,16 +47,19 @@
                 </form> <!-- End options form -->
             </div>
         </div>
-        <!-- Export to spreadsheet button-->
-        <div class ="row" ng-if="showReport">
-            <button ng-click="export()" class="btn btn-info ">
-            Export To Spreadsheet
-            </button> <br> <br>
-        </div>
-        <div class="row">
-            <!-- Include appropriate html doc depending on type of ddata selected (audio or perioperative) -->
-            <div ng-if="reportType == 'Perioperative' && showReport" ng-include src="'partials/periReport.html'"></div>
-            <div ng-if="reportType == 'Audiometric' && showReport" ng-include src="'partials/audioFacilityReport.html'"> </div>
+        <div class="container">
+            <!-- Export to spreadsheet button-->
+            <div class ="row" ng-if="showReport">
+                <button ng-click="export()" class="btn btn-info ">
+                Export To Spreadsheet
+                </button> <br> <br>
+            </div>
+            <div class="row">
+                <!-- Include appropriate html doc depending on type of ddata selected (audio or perioperative) -->
+                <div ng-if="reportType == 'Perioperative' && showReport" ng-include src="'partials/periReport.html'"></div>
+                <div ng-if="reportType == 'Audiometric' && showReport" ng-include src="'partials/audioFacilityReport.html'"> </div>
+            </div>
+            <br> <br>
         </div>
     </div>
 </center>
