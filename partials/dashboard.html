@@ -1,236 +1,254 @@
 <style>
-
     .custom-search-form{
-        
-        margin-top:5px;
+    margin-top:5px;
     }
     .bold{
-		font-weight: bold;
-	}
+    font-weight: bold;
+    }
 </style>
-
 <div class="container" ng-controller="apiPatientsController">
-	<div class="row">
+    <!-- Dashboard header and patient search bar-->
+    <div class="row">
         <div class="col-lg-7">
             <label style="font-size:2vw; color:#4B92AE">Dashboard</label>
         </div>
-		<div class="col-lg-5" >
+        <!-- Patient Search Bar-->
+        <div class="col-lg-5" >
             <div class="input-group custom-search-form">
-               <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
-              <input type="text" class="form-control" placeholder="Search Patients" typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last, $item.InactiveStatus)">
-              <span class="input-group-btn">
-              <button class="btn btn-default" type="button">
-              <span class="glyphicon glyphicon-search"></span>
-             </button>
-             </span>
-             </div><!-- /input-group -->
+                <!-- <pre> Selected Patient {{selectedPatient| json}}</pre> -->
+                <input type="text" class="form-control" placeholder="Search Patients" 
+                       typeahead="patient as patient.First + ' ' + patient.Last for patient in patientsData.records | filter:$viewValue" 
+                       ng-model ="selectedPatient" typeahead-on-select="goToPatDir($item.Last, $item.InactiveStatus)">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                <span class="glyphicon glyphicon-search"></span>
+                </button>
+                </span>
+            </div>
+            <!-- /input-group -->
         </div>
-	</div>
+    </div>
 </div>
-
 <br>
 <div class="container" ng-controller="dashboardController">
-<container class = "cp_fixedbgStyle">
-<!--FIRST ROW------------------------------->
-    <div class="row">
-        <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
-        <div class="col-xs-6 col-md-4">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">My Facility</h3>
-              </div>
-              <div class="panel-body">
-                <div class="row">  
-                    <div class="col-md-4">
-                        <img src="images/facilityLogo.png" style="width:140%;" ng-if="facData.records.FacilityImage == null"/> 
-                        <img src="images/facilityImages/{{facData.records.FacilityImage}}" ng-if = "facData.records.FacilityImage !=null" width ="120%"/>
+    <container class = "cp_fixedbgStyle">
+        <!--FIRST ROW---My Facility, Messaging and Aii directory cards---------------------------->
+        <div class="row">
+            <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
+            <div class="col-xs-6 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">My Facility</h3>
                     </div>
-                    <div class="col-md-8">
-                      <b> {{facData.records.Name}}</b> <br>  
-                      <b> Address: </b> <br>
-                      {{facData.records.Address1}} <br>
-                      <b> Phone: </b> ({{facData.records.Phone.slice(0,3)}}){{facData.records.Phone.slice(3,6)}}-{{facData.records.Phone.slice(6)}} <br>
-                      <b>Facility Admin:  </b><a href="#/messages" ng-click="sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}} </a> <br>
-                      <button type="button" class="btn btn-default btn-sm" ng-if="userLevel < 11"> <a style="color:black; text-decoration:none;" href="#/mySettings/"><span class="fa fa-building"></span> Facility Settings </a></button> 
-                    </div> 
-                </div>
-                
-                <p> Users @ {{facData.records.Name}}</p>    
-                <div class="scroll">
-                    <ul class="list-unstyled">
-                        <li ng-repeat="user in facUsers.records" style="margin-left:5px" > 
-                            <div ng-class-odd="'odd'" ng-class-even="'even'" >
-                                <a href="#/messages" ng-click="sendMessageToUser(user)"> {{user.full_name}} </a> 
-                            </div>
-                        </li>
-                            
-                    </ul>
-                </div>
-                  <br>
-                <div ng-if="userLevel < 11" class= "container">
-                  <div class="row">
-                    <button type="button" class="btn btn-default btn-sm" ng-click="addUser()">
-                      <span class="glyphicon glyphicon-plus-sign"></span> Add User
-                    </button>
-                  </div>
-                </div>    
-            <!-- Modal for add user -->
-            <script type="text/ng-template" id="addUser.html">
-                <div class="modal-header">
-                    <button type="button" class="close" ng-click="ok()"><span>&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add User by email invitation</h4>
-                </div>
-                <div class="modal-body">
-                    <form name="addUserForm" ng-submit="processForm()" class="form form-vertical" novalidate>
-                    
+                    <div class="panel-body">
                         <div class="row">
-
-                            <div class="control-group col-md-4 col-md-offset-1" >
-                              <label>First Name</label>
-                              <div class="controls" >
-                                <input type="text" class="form-control" name="firstName" ng-model="addUser.First" ng-required="true" 
-                                placeholder="Enter First Name" alphabet>
-							  </div>                       
+                            <!-- Facility Logo - default is soome dummy one, if admin uploaded one, use that one-->
+                            <div class="col-md-4">
+                                <img src="images/facilityLogo.png" style="width:140%;" ng-if="facData.records.FacilityImage == null"/> 
+                                <img src="images/facilityImages/{{facData.records.FacilityImage}}"
+                                     ng-if = "facData.records.FacilityImage !=null" width ="120%"/>
                             </div>
-
-                            <div class="control-group col-md-4" >
-                              <label>Last Name</label>
-                              <div class="controls" >
-                                <input type="text" class="form-control" name="lastName" ng-model="addUser.Last" ng-required="true" 
-                                placeholder="Enter Last Name" alphabet>
-							  </div>
+                            <!-- Facility Details (Name, Address, Phone, Admin(link to message them), Settings button-->
+                            <div class="col-md-8">
+                                <b> {{facData.records.Name}}</b> <br>  
+                                <b> Address: </b> <br>
+                                {{facData.records.Address1}} <br>
+                                <b> Phone: </b> 
+                                ({{facData.records.Phone.slice(0,3)}}){{facData.records.Phone.slice(3,6)}}-{{facData.records.Phone.slice(6)}} <br>
+                                <b>Facility Admin: </b>
+                                <a href="#/messages" ng-click="sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}} </a> <br>
+                                <button type="button" class="btn btn-default btn-sm" ng-if="userLevel < 11"> 
+                                    <a style="color:black; text-decoration:none;" href="#/mySettings/"><span class="fa fa-building"></span> 
+                                        Facility Settings 
+                                    </a>
+                                </button> 
                             </div>
-
-							<div class="control-group col-md-2" >
-							  <label>Title</label>
-                              <select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles" ng-model="addUser.TitleID">  </select>
-							</div>
+                            <!-- END FACILITY DETAILS-->
                         </div>
-
+                        <!--Users at the facility -->
+                        <p> Users @ {{facData.records.Name}}</p>
+                        <div class="scroll">
+                            <ul class="list-unstyled">
+                                <li ng-repeat="user in facUsers.records" style="margin-left:5px" >
+                                    <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                        <a href="#/messages" ng-click="sendMessageToUser(user)"> {{user.full_name}} </a> 
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--END users at the facility -->
                         <br>
-
-                        <div class="row">
-                            <div class="control-group col-md-10 col-md-offset-1" >
-                              <label>Email</label>
-                              <div class="controls" >
-                                <input type="text" class="form-control" name="email" ng-model="addUser.Email" ng-required="true" 
-                                placeholder="Enter email of user to be invited">
-                              </div>
+                        <!-- Add user button for thoses with that privilege-->
+                        <div ng-if="userLevel < 11" class= "container">
+                            <div class="row">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="addUser()">
+                                <span class="glyphicon glyphicon-plus-sign"></span> Add User
+                                </button>
                             </div>
-                        </div><br>
-
-                        <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" ng-click="sendInvitation()">Submit</button>
+                        </div>
+                        <!-- Modal for add user -->
+                        <script type="text/ng-template" id="addUser.html">
+                        <div class="modal-header">
+                            <button type="button" class="close" ng-click="ok()"><span>&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Add User by email invitation</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Invite user form -->
+                            <form name="addUserForm" ng-submit="processForm()" class="form form-vertical" novalidate>
+                                <div class="row">
+                                    <div class="control-group col-md-4 col-md-offset-1" >
+                                        <label>First Name</label>
+                                        <div class="controls" >
+                                            <input type="text" class="form-control" name="firstName" ng-model="addUser.First" ng-required="true" 
+                                                placeholder="Enter First Name" alphabet>
+                                        </div>
+                                    </div>
+                                    <div class="control-group col-md-4" >
+                                        <label>Last Name</label>
+                                        <div class="controls" >
+                                            <input type="text" class="form-control" name="lastName" ng-model="addUser.Last" ng-required="true" 
+                                                placeholder="Enter Last Name" alphabet>
+                                        </div>
+                                    </div>
+                                    <div class="control-group col-md-2" >
+                                        <label>Title</label>
+                                        <select id="titles" class="form-control" name="title"
+                                            ng-options="title.TitleID as title.Abbreviation for title in userTitles" 
+                                            ng-model="addUser.TitleID">  </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="control-group col-md-10 col-md-offset-1" >
+                                        <label>Email</label>
+                                        <div class="controls" >
+                                            <input type="text" class="form-control" name="email" ng-model="addUser.Email" ng-required="true" 
+                                                placeholder="Enter email of user to be invited">
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" 
+                                    ng-click="sendInvitation()">Submit</button>
+                                <br>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="ok()">Close</button>
+                        </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
+            <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
+            <div class="col-xs-6 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Messaging</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Messaging tabs - inbox, alerts, notification (appropriate for user level) -->
+                        <tabset style="cursor:default">
+                            <tab heading="Inbox" ng-controller="messagingController" style="cursor:pointer">
+                                <table class="table table-hover">
+                                    <tr ng-if="inboxMessages._meta.count != 0">
+                                        <th>From</th>
+                                        <th>Subject</th>
+                                    </tr>
+                                    <tr ng-repeat="message in inboxMessages.records" style="cursor:pointer" 
+                                        ng-class="{'bold':message.IsRead == '0'}" ng-click="redirectToMessages()">
+                                        <td>{{message.SenderName}}</td>
+                                        <td>{{message.ShortSubject}}</td>
+                                    </tr>
+                                    <tr ng-if="inboxMessages._meta.count == 0">
+                                        <br>
+                                        <td class="bold">No New Messages</td>
+                                    </tr>
+                                </table>
+                            </tab>
+                            <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11">
+                                <table class="table table-hover">
+                                    <tr ng-if="receivedAlerts._meta.count != 0">
+                                        <th>Patient</th>
+                                        <th>Subject</th>
+                                    </tr>
+                                    <tr ng-repeat="alert in receivedAlerts.records" style="cursor:pointer" 
+                                        ng-class="{'bold':alert.IsRead == '0'}" ng-click="redirectToMessages()">
+                                        <td>{{alert.ShortPatient}}</td>
+                                        <td>{{alert.ShortSubject}}</td>
+                                    </tr>
+                                    <tr ng-if="receivedAlerts._meta.count == 0">
+                                        <br>
+                                        <td class="bold">No New Alerts</td>
+                                    </tr>
+                                </table>
+                            </tab>
+                            <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11">
+                                <table class="table table-hover">
+                                    <tr ng-if="receivedNotifications._meta.count != 0">
+                                        <th>From</th>
+                                        <th>Subject</th>
+                                    </tr>
+                                    <tr ng-repeat="notification in receivedNotifications.records" style="cursor:pointer" 
+                                        ng-class="{'bold':notification.IsRead == '0'}" ng-click="redirectToMessages()">
+                                        <td>{{notification.ShortSenderFacilityName}}</td>
+                                        <td>{{notification.ShortSubject}}</td>
+                                    </tr>
+                                    <tr ng-if="receivedNotifications._meta.count == 0">
+                                        <br>
+                                        <td class="bold">No New Notifications</td>
+                                    </tr>
+                                </table>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+            <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
+            <!---------------------------------------------Aii directory------------------------------------------------------------------->
+            <div class="col-xs-6 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Aii directory</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <!-- Search bar for aii directory-->
+                            <div class="col-lg-12" >
+                                <div class="input-group custom-search-form">
+                                    <input type="text" class="form-control" placeholder="Search Aii Members" 
+                                           typeahead="facility as facility.Name for facility in allFacs.records | filter:{Name:$viewValue}" 
+                                           ng-model ="selectedFacility" typeahead-on-select="getFacCard($item)" >
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Aii directory list-->
+                        <div class="scroll" style="height:300px;margin-top:10px">
+                            <ul class="list-unstyled">
+                                <li style="margin-left:5px" ng-repeat="fac in allFacs.records">
+                                    <div ng-class-odd="'odd'" ng-class-even="'even'"><a href="" ng-click = getFacCard(fac)> {{fac.Name}} </a> </div>
+                                </li>
+                            </ul>
+                        </div>
                         <br>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="ok()">Close</button>
-                </div>
-            </script>
-                
-              </div>
-            </div>
-        </div>
-        <!---------------------------------------------MY FACILITY CARD------------------------------------------------------------------->
-        <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
-        <div class="col-xs-6 col-md-4">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Messaging</h3>
-              </div>
-              <div class="panel-body">
-                  
-                  
-                  <tabset style="cursor:default">
-                    <tab heading="Inbox" ng-controller="messagingController" style="cursor:pointer">
-                      <table class="table table-hover">
-                        <tr ng-if="inboxMessages._meta.count != 0">
-                          <th>From</th>
-                          <th>Subject</th>
-                        </tr>
-                        <tr ng-repeat="message in inboxMessages.records" style="cursor:pointer" ng-class="{'bold':message.IsRead == '0'}" ng-click="redirectToMessages()">
-                          <td>{{message.SenderName}}</td>
-                          <td>{{message.ShortSubject}}</td>
-                        </tr>
-						<tr ng-if="inboxMessages._meta.count == 0">
-						  <br>
-						  <td class="bold">No New Messages</td>
-						</tr>
-                      </table>
-                    </tab>
-                    <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11">
-                      <table class="table table-hover">
-                        <tr ng-if="receivedAlerts._meta.count != 0">
-                          <th>Patient</th>
-                          <th>Subject</th>
-                        </tr>
-                        <tr ng-repeat="alert in receivedAlerts.records" style="cursor:pointer" ng-class="{'bold':alert.IsRead == '0'}" ng-click="redirectToMessages()">
-                          <td>{{alert.ShortPatient}}</td>
-						  <td>{{alert.ShortSubject}}</td>
-                        </tr>
-						<tr ng-if="receivedAlerts._meta.count == 0">
-						  <br>
-						  <td class="bold">No New Alerts</td>
-						</tr>
-                      </table>
-                    </tab>
-                    <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11">
-                      <table class="table table-hover">
-                        <tr ng-if="receivedNotifications._meta.count != 0">
-                          <th>From</th>
-                          <th>Subject</th>
-                        </tr>
-                        <tr ng-repeat="notification in receivedNotifications.records" style="cursor:pointer" ng-class="{'bold':notification.IsRead == '0'}" ng-click="redirectToMessages()">
-						  <td>{{notification.ShortSenderFacilityName}}</td>
-						  <td>{{notification.ShortSubject}}</td>
-                        </tr>
-						<tr ng-if="receivedNotifications._meta.count == 0">
-						  <br>
-						  <td class="bold">No New Notifications</td>
-						</tr>
-                      </table>
-                    </tab>  
-                  </tabset>
-              </div>
-            </div>
-        </div>
-        <!---------------------------------------------Messaging CARD------------------------------------------------------------------->
-        <!---------------------------------------------Aii directory------------------------------------------------------------------->
-        <div class="col-xs-6 col-md-4">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Aii directory</h3>
-              </div>
-              <div class="panel-body">
-                  <div class="row">
-                    <div class="col-lg-12" >
-                        <div class="input-group custom-search-form">
-                          <input type="text" class="form-control" placeholder="Search Aii Members" typeahead="facility as facility.Name for facility in allFacs.records | filter:{Name:$viewValue}" ng-model ="selectedFacility" typeahead-on-select="getFacCard($item)" >
-                          <span class="input-group-btn">
-                          <button class="btn btn-default" type="button">
-                          <span class="glyphicon glyphicon-search"></span>
-                         </button>
-                         </span>
-                         </div><!-- /input-group -->
-                    </div>
-                   </div>
-                    <div class="scroll" style="height:300px;margin-top:10px">
-                        <ul class="list-unstyled">
-                            <li style="margin-left:5px" ng-repeat="fac in allFacs.records">
-                                <div ng-class-odd="'odd'" ng-class-even="'even'"><a href="" ng-click = getFacCard(fac)> {{fac.Name}} </a> </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="inviteNewFacility()">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <!-- Invite new facility button-->
+                                <button type="button" class="btn btn-default btn-sm" ng-click="inviteNewFacility()">
                                 <span class="glyphicon glyphicon-plus-sign"></span> Invite New Facility
-                            </button>
-                             <!-- Modal for Invite New Facility -->
-                            <script type="text/ng-template" id="inviteNewFacility.html">
+                                </button>
+                                <!-- Modal for Invite New Facility -->
+                                <script type="text/ng-template" id="inviteNewFacility.html">
                                 <div class="modal-header">
-                                    <button type="button" class="close" ng-click="ok()"><span>&times;</span><span class="sr-only">Close</span></button>
+                                    <button type="button" class="close" ng-click="ok()">
+                                        <span>&times;</span><span class="sr-only">Close</span>
+                                    </button>
                                     <h4 class="modal-title" id="myModalLabel">
                                         Invite a Non-AII member to join AII and/or a patient's Care Team
                                     </h4>
@@ -239,59 +257,55 @@
                                     <div style="background-color:#EDF2FF">
                                         <label>Please fill out the following information to email and invite a new facility to AII </label>
                                         <!--Facility Name form field-->
-                                        <div class="row">        
-
+                                        <div class="row">
                                             <div class="control-group col-md-7 col-md-offset-1" >
-                                              <label>Facility Name </label>
-                                              <div class="controls" >
-                                                <input type="text" class="form-control" name="facName" ng-model="addFacility.FacilityName" ng-required="true" 
-                                                placeholder="Enter Facility Name" alphabet>
-                                              </div>                       
+                                                <label>Facility Name </label>
+                                                <div class="controls" >
+                                                    <input type="text" class="form-control" name="facName" ng-model="addFacility.FacilityName" 
+                                                        ng-required="true" 
+                                                        placeholder="Enter Facility Name" alphabet>
+                                                </div>
                                             </div>
-
                                         </div>
-
                                         <!--First Name of invitee form field-->
-                                        <div class="row">        
-
+                                        <div class="row">
                                             <div class="control-group col-md-7 col-md-offset-1" >
-                                              <label>First Name of Invitee </label>
-                                              <div class="controls" >
-                                                <input type="text" class="form-control" name="inviteeFirst" ng-model="addFacility.FirstName" ng-required="true" 
-                                                placeholder="First name of a contact person at this facility" alphabet>
-                                              </div>                       
+                                                <label>First Name of Invitee </label>
+                                                <div class="controls" >
+                                                    <input type="text" class="form-control" name="inviteeFirst" ng-model="addFacility.FirstName" 
+                                                        ng-required="true" 
+                                                        placeholder="First name of a contact person at this facility" alphabet>
+                                                </div>
                                             </div>
-
-                                        </div> 
-										
-										<!--Last Name of invitee form field-->
-                                        <div class="row">        
-
+                                        </div>
+                                        <!--Last Name of invitee form field-->
+                                        <div class="row">
                                             <div class="control-group col-md-7 col-md-offset-1" >
-                                              <label>Last Name of Invitee </label>
-                                              <div class="controls" >
-                                                <input type="text" class="form-control" name="inviteeLast" ng-model="addFacility.LastName" ng-required="true" 
-                                                placeholder="Last name of a contact person at this facility" alphabet>
-                                              </div>                       
+                                                <label>Last Name of Invitee </label>
+                                                <div class="controls" >
+                                                    <input type="text" class="form-control" name="inviteeLast" ng-model="addFacility.LastName" 
+                                                        ng-required="true" 
+                                                        placeholder="Last name of a contact person at this facility" alphabet>
+                                                </div>
                                             </div>
-
-                                        </div> 
-
+                                        </div>
                                         <!--Email of contact person form field-->
                                         <div class="row">
                                             <div class="control-group col-md-7 col-md-offset-1" >
-                                              <label>Email</label>
-                                              <div class="controls" >
-                                                <input type="text" class="form-control" name="email" ng-model="addFacility.Email" ng-required="true" 
-                                                placeholder="Enter email of invitee at this facility">
-                                              </div>
+                                                <label>Email</label>
+                                                <div class="controls" >
+                                                    <input type="text" class="form-control" name="email" ng-model="addFacility.Email"
+                                                        ng-required="true" 
+                                                        placeholder="Enter email of invitee at this facility">
+                                                </div>
                                             </div>
-                                        </div><br>
-                                    
-                                    </div> <br>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <br>
                                     <div style="background-color:#EDF2FF">
                                         <label>
-                                            If you would like to invite this facility to join a patient's CareTeam, please select the appropriate patient.
+                                        If you would like to invite this facility to join a patient's CareTeam, please select the appropriate patient.
                                         </label>
                                         <div class="row">
                                             <div class="control-group col-md-10 col-md-offset-1 form-inline" >
@@ -299,193 +313,198 @@
                                                 <input class="form-control" style="width:40%" type="search" placeholder="Search Patients..." 
                                                     ng-model="searchPatients.Name" alphabet>
                                             </div>
-                                        </div><br>
-                                        
+                                        </div>
+                                        <br>
                                         <div class="scroll" style="border:1px solid #CDD1DB">
                                             <ul>
                                                 <div ng-repeat="patient in patientsData.records 
-                                                | filter:searchPatients" for="{{patient}}"> 
+                                                    | filter:searchPatients" for="{{patient}}"> 
                                                     <input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> 
                                                     {{patient.Name}} ({{patient.DOB}})
                                                 </div>
                                             </ul>
                                         </div>
-                                        
-						                <span ng-if="selectedPatient"> <strong> You selected {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
+                                        <span ng-if="selectedPatient">
+                                            <strong> You selected {{selectedPatient.First}} {{selectedPatient.Last}} </strong> 
+                                        </span>
                                         <br>
-                                    </div> 
+                                    </div>
                                     <br>
                                     <button class="btn btn-primary col-md-3 col-md-offset-1" ng-click="sendInvitation()">
-                                        <i class="fa fa-envelope-o"></i> Send Email
+                                    <i class="fa fa-envelope-o"></i> Send Email
                                     </button>
                                     <br>
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-primary" ng-click="ok()">Close</button>
                                 </div>
-                            </script>
+                                </script>
+                            </div>
                         </div>
-                    </div>    
-              </div>
-            </div>
-    
+                    </div>
+                </div>
                 <!-- Modal for each different facility clicked -->
-            <script type="text/ng-template" id="myModalContent.html">
-				<div class="facility-info" ng-show="displayInfo">
-					<div class="modal-header">
-						<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">{{facCard.records.Name}}</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">  
-							<div class="col-md-4">
-								<img src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" style="width:100%;"/> 
-							</div>
-							<div class="col-md-8">
-							  <b> {{facCard.records.Name}} </b> <br> <br>
-							  <b> Address: </b>
-							  {{facCard.records.Address1}} <br>
-                              <b> Phone: </b> ({{facCard.records.Phone.slice(0,3)}}){{facCard.records.Phone.slice(3,6)}}-{{facCard.records.Phone.slice(6)}} <br>
-							  <b> Facility Admin: </b> <a href="#/messages" ng-click="ok(); sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}} </a> <br>
-							</div> 
-						</div>
-						<p> Users @ {{facCard.records.Name}}</p>    
-						<div class="scroll">
-                            <ul class="list-unstyled">
-                            
-				                <li ng-repeat="user in facCardUsers.records" style="margin-left:5px" > 
-                                   <div ng-class-odd="'odd'" ng-class-even="'even'" >
-                                        <a href="#/messages" ng-click="ok(); sendMessageToUser(user)"> {{user.full_name}} </a>
+                <script type="text/ng-template" id="myModalContent.html">
+                    <div class="facility-info" ng-show="displayInfo">
+                        <div class="modal-header">
+                            <button type="button" class="close" ng-click="ok()">
+                            <span ng-click="ok()">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">{{facCard.records.Name}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img 
+                                        src="http://img1.123freevectors.com/wp-content/uploads/new/signs-symbols/021_medical-symbol-free-vector-l.png" 
+                                        style="width:100%;"/> 
+                                </div>
+                                <!-- Facility Details (Name, Address, Phone, Admin(link to message them)-->
+                                <div class="col-md-8">
+                                    <b> {{facCard.records.Name}} </b> <br> <br>
+                                    <b> Address: </b>
+                                    {{facCard.records.Address1}} <br>
+                                    <b> Phone: </b> 
+                                        ({{facCard.records.Phone.slice(0,3)}}){{facCard.records.Phone.slice(3,6)}}-{{facCard.records.Phone.slice(6)}}
+                                        <br>
+                                    <b> Facility Admin: </b> 
+                                        <a href="#/messages" ng-click="ok(); sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}} </a> <br>
+                                </div>
+                            </div>
+                            <!-- Users at the clicked facility -->
+                            <p> Users @ {{facCard.records.Name}}</p>
+                            <div class="scroll">
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="user in facCardUsers.records" style="margin-left:5px" >
+                                        <div ng-class-odd="'odd'" ng-class-even="'even'" >
+                                            <a href="#/messages" ng-click="ok(); sendMessageToUser(user)"> {{user.full_name}} </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="setDisplayInfo(0)" ng-hide="hideInviteButton">
+                                Invite Facility to Care Team</button>
+                            <button class="btn btn-primary" ng-click="ok()">Close</button>
+                        </div>
+                    </div>
+                    <!-- Care Team Invitation Modal -->
+                    <div id="care-team-invitation" ng-hide="displayInfo">
+                        <div class="modal-header">
+                            <button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records.Name}} to join a care team</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="form-inline"> 
+                                Your Facility's Patients &nbsp;
+                                <input class="form-control" style="width:40%" type="search" placeholder="Search Patients..." 
+                                    ng-model="searchPatients.Name" alphabet>
+                            </p>
+                            <div class="scroll">
+                                <ul>
+                                    <div ng-repeat="patient in facCardNonPatients | filter:searchPatients" for="{{patient}}"> 
+                                        <input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> {{patient.Name}} ({{patient.DOB}})
                                     </div>
-                                </li>
-                            </ul>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary" ng-click="setDisplayInfo(0)" ng-hide="hideInviteButton">Invite Facility to Care Team</button>
-						<button class="btn btn-primary" ng-click="ok()">Close</button>
-					</div>
-				</div>
-				
-				<!-- Care Team Invitation Modal -->
-				<div id="care-team-invitation" ng-hide="displayInfo">
-					<div class="modal-header">
-						<button type="button" class="close"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-						<h4 class="modal-title" id="myModalLabel">Inviting {{facCard.records.Name}} to join a care team</h4>
-					</div>
-					<div class="modal-body">
-						<p class="form-inline"> 
-							Your Facility's Patients &nbsp;
-							<input class="form-control" style="width:40%" type="search" placeholder="Search Patients..." ng-model="searchPatients.Name"
-                                alphabet>
-						</p>    
-						<div class="scroll">
-							<ul>
-								<div ng-repeat="patient in facCardNonPatients | filter:searchPatients" for="{{patient}}"> 
-									<input type="radio" ng-click="selectPatient(patient)" name="selectedPat"> {{patient.Name}} ({{patient.DOB}})
-								</div>
-							</ul>
-						</div>
-						<br>
-						Inviting: <strong> {{facCard.records.Name}} </strong> <br>
-						To join the care team for: 
-						<span ng-if="selectedPatient"> <strong> {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
-						<span ng-hide="selectedPatient"> <strong> (No Patient Selected) </strong> </span>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary" ng-click="setDisplayInfo(1)">Back</button>
-						<button class="btn btn-primary" ng-click="sendInvite()" ng-disabled="hideSendInvitationButton"> {{sendButtonText}} </button>
-						<button class="btn btn-primary" ng-click="ok()">Close</button>
-					</div>
-				</div>
-            </script>
-        </div>
-        <!---------------------------------------------Aii directory CARD------------------------------------------------------------------->
-    </div>
-    
-    <!--SECOND ROW------------------------------->
-    <div class="row">
-     <!---------------------------------------------Quick Reports CARD------------------------------------------------------------------->
-        <div class="col-xs-6 col-md-4">
-           <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Quick Reports</h3>
-              </div>
-              <div class="panel-body">
-                <!--<a href="" > Single Patient Reports </a> <br> <br>
-                <a href="" > Facility Aggregate vs AII Aggregate Report </a> <br> <br>-->
-                <a href="#/facilityReport" > Export Facility Data </a> 
-              </div>
+                                </ul>
+                            </div>
+                            <br>
+                            Inviting: <strong> {{facCard.records.Name}} </strong> <br>
+                            To join the care team for: 
+                            <span ng-if="selectedPatient"> <strong> {{selectedPatient.First}} {{selectedPatient.Last}} </strong> </span>
+                            <span ng-hide="selectedPatient"> <strong> (No Patient Selected) </strong> </span>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" ng-click="setDisplayInfo(1)">Back</button>
+                            <button class="btn btn-primary" ng-click="sendInvite()" ng-disabled="hideSendInvitationButton"> 
+                                {{sendButtonText}} 
+                            </button>
+                            <button class="btn btn-primary" ng-click="ok()">Close</button>
+                        </div>
+                    </div>
+                </script>
             </div>
-        </div>
-        
-		<!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
+<!---------------------------------------------Aii directory CARD------------------------------------------------------------------->
+        </div> <!-- End first row of cards -->
+<!--SECOND ROW------------------------------->
+    <div class="row">
+    <!---------------------------------------------Quick Reports CARD------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
             <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Feedback</h3>
-              </div>
-              <div class="panel-body">
-                <a href="" ng-click="getContactCard('report')"> Report a problem </a> <br> <br>
-                <a href="" ng-click="getContactCard('suggest')"> Suggest a measure </a> <br> <br>
-				<a href="" ng-click="getContactCard('contactAdmin')"> Contact Administrator </a>
-              </div>
-			  <!-- Modal used for writing a message to the Administrator -->
-			  <script type="text/ng-template" id="contactUs.html">
-				<div class="modal-header">
-					<button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="myModalLabel">
-						<span ng-if="isProblemReport"> Report a Problem </span>
-						<span ng-if="isSuggestion"> Make a Suggestion </span>
-						<span ng-if="isContactAdmin"> Contact the Administrator </span>
-					</h4>
-				</div>
-				<div class="modal-body">
-					<div id="problem-report-header" ng-if="isProblemReport">
-						<p> 
-							Notify the site administrator about any issues concerning the site's usability.
-							This issue will be sent directly to the administrator and dealt with in a 
-							timely manner.
-						</p>
-						<h4> Problem Description: </h4>
-					</div>
-					<div id="suggestion-header" ng-if="isSuggestion">
-						<p> 
-							Is there a measure or data element that you feel would improve the value of the site? Please list any suggestions here and they will be submitted for timely consideration to the appropriate measures committee. <br> <br> If you would like to be involved in joining a measures committee, let us know here and you will be contacted.
-						</p>
-						<h4> Suggestion: </h4>
-					</div>
-					<div id="suggestion-header" ng-if="isContactAdmin">
-						<p> 
-							Contact the administrator directly with any issues or inquiries
-							you may have. Your message will be sent immediately to the Administrator 
-							for timely consideration.
-						</p>
-						<h4> Message: </h4>
-					</div>
-					<form name="messageForm">
-						<textarea rows="10" cols="75" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required></textarea>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<input class="btn btn-primary" ng-disabled="messageForm.messageContent.$error.required" ng-click="sendMessage()" value="Send Message"></input>
-					<button class="btn btn-primary" ng-click="ok()"> Close </button>
-				</div>
-            </script>
-			  
+                <div class="panel-heading">
+                <h3 class="panel-title">Quick Reports</h3>
+                </div>
+                <div class="panel-body">
+                <!--<a href="" > Single Patient Reports </a> <br> <br>
+                    <a href="" > Facility Aggregate vs AII Aggregate Report </a> <br> <br>-->
+                <a href="#/facilityReport" > Export Facility Data </a> 
+                </div>
             </div>
         </div>
-		<!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
-        
+    <!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
         <div class="col-xs-6 col-md-4">
-            
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Feedback</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="" ng-click="getContactCard('report')"> Report a problem </a> <br> <br>
+                    <a href="" ng-click="getContactCard('suggest')"> Suggest a measure </a> <br> <br>
+                    <a href="" ng-click="getContactCard('contactAdmin')"> Contact Administrator </a>
+                </div>
+                <!-- Modal used for writing a message to the Administrator -->
+                <script type="text/ng-template" id="contactUs.html">
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="ok()">
+                            <span ng-click="ok()">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <span ng-if="isProblemReport"> Report a Problem </span>
+                            <span ng-if="isSuggestion"> Make a Suggestion </span>
+                            <span ng-if="isContactAdmin"> Contact the Administrator </span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="problem-report-header" ng-if="isProblemReport">
+                            <p> 
+                                Notify the site administrator about any issues concerning the site's usability.
+                                This issue will be sent directly to the administrator and dealt with in a 
+                                timely manner.
+                            </p>
+                            <h4> Problem Description: </h4>
+                        </div>
+                        <div id="suggestion-header" ng-if="isSuggestion">
+                            <p> 
+                                Is there a measure or data element that you feel would improve the value of the site? Please list any suggestions here and they will be submitted for timely consideration to the appropriate measures committee. <br> <br> If you would like to be involved in joining a measures committee, let us know here and you will be contacted.
+                            </p>
+                            <h4> Suggestion: </h4>
+                        </div>
+                        <div id="suggestion-header" ng-if="isContactAdmin">
+                            <p> 
+                                Contact the administrator directly with any issues or inquiries
+                                you may have. Your message will be sent immediately to the Administrator 
+                                for timely consideration.
+                            </p>
+                            <h4> Message: </h4>
+                        </div>
+                        <form name="messageForm">
+                            <textarea rows="10" cols="75" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required>
+                            </textarea>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" ng-disabled="messageForm.messageContent.$error.required" ng-click="sendMessage()" 
+                            value="Send Message"></input>
+                        <button class="btn btn-primary" ng-click="ok()"> Close </button>
+                    </div>
+
+                </script>
+            </div>
+        </div>
+    <!---------------------------------------------Contact Us CARD------------------------------------------------------------------->
+        <!--potential third card on second row -->
+        <div class="col-xs-6 col-md-4">
         </div>
     </div>
-   
-</container>
-    
+    </container>
 </div>
-
-
-
-

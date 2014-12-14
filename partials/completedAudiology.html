@@ -1,11 +1,11 @@
 <div ng-controller="questionsController">
-
+    <!--Phase name at the top of the completed phases-->
     <div class="row">
-         <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
+        <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
         <hr>
     </div>
-    
     <div class="row">
+        <!-- Table with all results and answers for the audio phase-->
         <div class="col-md-7 col-md-offset-2">
             <div id="divtoprint">
                 <div ng-repeat="condition in audioSummaryAnswers">
@@ -13,14 +13,13 @@
                 </div>
             </div>
         </div>
-        
+        <!--Buttons to return back to patient directory, print or export as pdf(i think)-->
         <div class="col-md-2" >
-            <a href="" ng-controller="apiPatientsController" ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed" >
-                <button class="btn btn-primary">
-                    Patient Directory
-                </button>
-            </a> <br> <br>
-        
+            <button class="btn btn-primary" ng-controller="apiPatientsController" 
+                    ng-click="goToPatDir(dirAnchor, patientInactiveStatus)" style="position:fixed">
+                Patient Directory
+            </button><br> <br>
+            
             <button ng-click="PrintContent()" style="position:fixed"  class="btn btn-default">
                 Print
             </button><br><br>

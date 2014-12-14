@@ -1,57 +1,62 @@
 <center>
-   <div ng-controller="reportCtrl">
-      <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
-      <hr>
-      <div class="row">
-         <div class="form3D container col-md-6 col-md-offset-3" style=" background-color: #CAE5F0; margin-bottom:60px">
-            <h3> Please select below to export the desired report</h3>
-            <br>
-            <form name="report" ng-submit="generateReport()" novalidate>
-            <div class="container form3D"  style=" background-color: #CAE5F0; width:40%">
-               
-                  <div class="row">
-                     <label> <u> Choose one </u> </label>
-                     <div class="col-md-offset-3">
-                        <p ng-repeat="type in patientTypes" style="text-align:left">
-                           <input  type="Checkbox" ng-click="updateSelection($index, patientTypes); setPatientType(type.name)"
-                              ng-model="type.checked" >
-                           <span>{{type.name}} Patients</span> 
-                        </p>
-                     </div>
-                     <br>
-                  </div>
-                  <div class="row">
-                     <label> <u> Choose one </u> </label>
-                     <div class="col-md-offset-3">
-                        <p ng-repeat="type in reportTypes" style="text-align:left">
-                           <input  type="Checkbox" ng-click="updateSelection($index, reportTypes); setReportType(type.name)"
-                              ng-model="type.checked" >
-                           <span>{{type.name}} Data</span> 
-                        </p>
-                     </div>
-                  </div>
+    <div ng-controller="reportCtrl">
+        <!-- Page Header -->
+        <label style="font-size:2vw; color:#4B92AE" >Facility Report</label>
+        <hr>
+        <!-- Build report box -->
+        <div class="row">
+            <!-- Choose Report options box -->
+            <div class="form3D container col-md-6 col-md-offset-3" style=" background-color: #CAE5F0; margin-bottom:60px">
+                <h3> Please select below to export the desired report</h3>
+                <br>
+                
+                <form name="report" ng-submit="generateReport()" novalidate>
+                    <div class="container form3D"  style=" background-color: #CAE5F0; width:40%">
+                        <!-- Choose type of patients-options -->
+                        <div class="row">
+                            <label> <u> Choose one </u> </label>
+                            <div class="col-md-offset-3">
+                                <p ng-repeat="type in patientTypes" style="text-align:left">
+                                    <input  type="Checkbox" ng-click="updateSelection($index, patientTypes); setPatientType(type.name)"
+                                        ng-model="type.checked" >
+                                    <span>{{type.name}} Patients</span> 
+                                </p>
+                            </div>
+                            <br>
+                        </div>
+                        <!-- END Choose type of patients-options -->
+                        <!-- Choose type of data options -->
+                        <div class="row">
+                            <label> <u> Choose one </u> </label>
+                            <div class="col-md-offset-3">
+                                <p ng-repeat="type in reportTypes" style="text-align:left">
+                                    <input  type="Checkbox" ng-click="updateSelection($index, reportTypes); setReportType(type.name)"
+                                        ng-model="type.checked" >
+                                    <span>{{type.name}} Data</span> 
+                                </p>
+                            </div>
+                        </div>
+                        <!-- END Choose type of patients-options -->
+                    </div>
+                    <div class="row">
+                        <br> <br>
+                        <button class="btn btn-info " type="submit" ng-disabled="!(reportType && patientType)">
+                        Generate Report
+                        </button> {{loadMessage}}
+                    </div>
+                </form> <!-- End options form -->
             </div>
-            <div class="row">
-            <br> <br>
-            
-            <button class="btn btn-info " type="submit" ng-disabled="!(reportType && patientType)">
-            Generate Report
-            </button> {{loadMessage}}
-
-                <!--code mode for annes report work 
-                <button class="btn btn-info " type="submit">
-            Generate Report
-            </button> 
-                -->
-            </div>
-            </form>
-         </div>
-      </div>
-      <div class="row">
-         <div ng-if="reportType == 'Perioperative' && showReport" ng-include src="'partials/periReport.html'"></div>
-         <div ng-if="reportType == 'Audiometric' && showReport" ng-include src="'partials/audioFacilityReport.html'"> </div>
-         <!-- <div ng-include src="'partials/audioFacilityReport.html'"> </div>-->
-         
-      </div>
-   </div>
+        </div>
+        <!-- Export to spreadsheet button-->
+        <div class ="row" ng-if="showReport">
+            <button ng-click="export()" class="btn btn-info ">
+            Export To Spreadsheet
+            </button> <br> <br>
+        </div>
+        <div class="row">
+            <!-- Include appropriate html doc depending on type of ddata selected (audio or perioperative) -->
+            <div ng-if="reportType == 'Perioperative' && showReport" ng-include src="'partials/periReport.html'"></div>
+            <div ng-if="reportType == 'Audiometric' && showReport" ng-include src="'partials/audioFacilityReport.html'"> </div>
+        </div>
+    </div>
 </center>
