@@ -233,15 +233,15 @@
 	    $scope.button = "Submit";
 	    $scope.registerFacility = function() {
 		   
+		   //Check for facility invitation token
+			if((document.URL).indexOf("?") >= 0)
+				this.facilityData.Token = (document.URL).split("?")[1];
+			else
+				this.facilityData.Token = 0;
+		   
 		   //send in one object that contains both form information
 		   $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
-		   
-			//Check for facility invitation token
-			if((document.URL).indexOf("?") >= 0)
-				$scope.registration.Token = (document.URL).split("?")[1];
-			else
-				$scope.registration.Token = 0;
-			
+		   			
 		    $scope.button = "Processing...";
 		    $scope.disableRegister = true;
 		    $http({
