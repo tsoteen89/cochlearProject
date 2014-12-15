@@ -674,7 +674,7 @@
 
                 $scope.userID = userInfo.get().userID;
 
-                $scope.message = [];
+                $scope.message = {};
                 $scope.message['userID'] = $scope.userID;
 
                 if (contactType == 'report') {
@@ -701,10 +701,9 @@
                 $scope.sendMessage = function() {
 
                     //POST a ContactUs message to the API
+					$scope.message.IsReport = 0;
                     if ($scope.isProblemReport) {
-                        $scope.message.IsReport = true;
-                    } else {
-                        $scope.message.IsReport = false;
+                        $scope.message.IsReport = 1;
                     }
                     postData.post("http://killzombieswith.us/aii-api/v1/adminAlerts/", $scope.message);
 
