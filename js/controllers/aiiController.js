@@ -126,6 +126,8 @@
                         if (data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token") {
                             $cookieStore.remove('SessionID');
                             $cookieStore.remove('UserLevel');
+                           // console.log(data.records['error']);
+                            
                             if (data.records['error'] == 'Token Timeout') {
                                 console.log("timeout");
                                 $cookieStore.put('BadToken', 'Token Timeout');
@@ -135,6 +137,7 @@
                             }
                             $window.location.href = "#";
                             location.reload();
+                            
                         }
                     }
                 });
@@ -1880,6 +1883,11 @@
         getData.get("http://killzombieswith.us/aii-api/v1/phases/" + $scope.sessionID).success(function(data) {
             $scope.phases = data.records;
         });
+        
+        //Get all the current phase cases info!! - used to make the dots
+        getData.get("http://killzombieswith.us/aii-api/v1/phases/phaseStatuses").success(function(data) {
+            $scope.phaseCases = data.records;
+        });
 
         //Set persistData so CareTeamID, PhaseID, phasename, patient name and anchor location in patient Directory are known in different partials.
         $scope.goToQuestions = function(careTeam, phase, patient) {
@@ -1887,7 +1895,7 @@
             $cookieStore.put('PatientID', patient.PatientID);
             $cookieStore.put('CareTeamID', careTeam.CareTeamID);
             $cookieStore.put('PhaseID', phase.PhaseID);
-            $cookieStore.put('PhaseName', phase.Name);
+            $cookieStore.put('PhaseName', phase.PhaseName);
             $cookieStore.put('PatientName', patient.First + " " + patient.Last);
             $cookieStore.put('dirAnchor', patient.Last);
             //persistData.setCareTeamID(careTeam.CareTeamID);
