@@ -459,33 +459,15 @@
                             <span ng-click="ok()">&times;</span><span class="sr-only">Close</span>
                     </button>
                         <h4 class="modal-title" id="myModalLabel">
-                            <span ng-if="isProblemReport"> Report a Problem </span>
-                            <span ng-if="isSuggestion"> Make a Suggestion </span>
-                            <span ng-if="isContactAdmin"> Contact the Administrator </span>
+							<span> {{title}} </span>
                         </h4>
                     </div>
                     <div class="modal-body">
-                        <div id="problem-report-header" ng-if="isProblemReport">
-                            <p> 
-                                Notify the site administrator about any issues concerning the site's usability.
-                                This issue will be sent directly to the administrator and dealt with in a 
-                                timely manner.
-                            </p>
-                            <h4> Problem Description: </h4>
-                        </div>
-                        <div id="suggestion-header" ng-if="isSuggestion">
-                            <p> 
-                                Is there a measure or data element that you feel would improve the value of the site? Please list any suggestions here and they will be submitted for timely consideration to the appropriate measures committee. <br> <br> If you would like to be involved in joining a measures committee, let us know here and you will be contacted.
-                            </p>
-                            <h4> Suggestion: </h4>
-                        </div>
-                        <div id="suggestion-header" ng-if="isContactAdmin">
-                            <p> 
-                                Contact the administrator directly with any issues or inquiries
-                                you may have. Your message will be sent immediately to the Administrator 
-                                for timely consideration.
-                            </p>
-                            <h4> Message: </h4>
+						<div id="problem-report-header">
+                            <p style="white-space: pre-line">
+								{{content}}
+							</p>
+                            <h4> {{boxHeader}} </h4>
                         </div>
                         <form name="messageForm">
                             <textarea rows="10" cols="75" style="margin-bottom: 10px;" name="messageContent" ng-model="message.Content" required>

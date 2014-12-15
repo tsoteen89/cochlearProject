@@ -674,30 +674,36 @@
 
                 $scope.userID = userInfo.get().userID;
 
-                $scope.message = [];
+                $scope.message = {};
                 $scope.message['userID'] = $scope.userID;
 
                 if (contactType == 'report') {
-                    $scope.isProblemReport = true;
-                    $scope.isSuggestion = false;
-                    $scope.isContactAdmin = false;
+					$scope.title = "Report a Problem";
+					$scope.content = "Notify the site administrator about any issues concerning the site's usability. " +
+                                "This issue will be sent directly to the administrator and dealt with in a " +
+                                "timely manner.";
+					$scope.boxHeader = "Problem Description:";
                 } else if (contactType == 'suggest') {
-                    $scope.isProblemReport = false;
-                    $scope.isSuggestion = true;
-                    $scope.isContactAdmin = false;
+					$scope.title = "Make a Suggestion";
+					$scope.content = "Is there a measure or data element that you feel would improve the value of the " +
+								"site? Please list any suggestions here and they will be submitted for timely " + 
+								"consideration to the appropriate measures committee. \n\nIf you would like to be involved " +
+								"in joining a measures committee, let us know here and you will be contacted.";
+					$scope.boxHeader = "Suggestion:";
                 } else if (contactType == 'contactAdmin') {
-                    $scope.isProblemReport = false;
-                    $scope.isSuggestion = false;
-                    $scope.isContactAdmin = true;
+					$scope.title = "Contact the Administrator";
+					$scope.content = "Contact the administrator directly with any issues or inquiries " +
+                                "you may have. Your message will be sent immediately to the Administrator " +
+                                "for timely consideration.";
+					$scope.boxHeader = "Message:";
                 }
 
                 $scope.sendMessage = function() {
 
                     //POST a ContactUs message to the API
+					$scope.message.IsReport = 0;
                     if ($scope.isProblemReport) {
-                        $scope.message.IsReport = true;
-                    } else {
-                        $scope.message.IsReport = false;
+                        $scope.message.IsReport = 1;
                     }
                     postData.post("http://killzombieswith.us/aii-api/v1/adminAlerts/", $scope.message);
 
