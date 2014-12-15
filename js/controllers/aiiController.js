@@ -672,10 +672,9 @@
 
             var ModalInstanceCtrl = function($scope, $modalInstance, contactType, postData) {
 
-                $scope.userID = userInfo.get().userID;
+                $scope.sessionID = userInfo.get().SessionID;
 
                 $scope.message = {};
-                $scope.message['userID'] = $scope.userID;
 
                 if (contactType == 'report') {
 					$scope.title = "Report a Problem";
@@ -705,7 +704,8 @@
                     if ($scope.isProblemReport) {
                         $scope.message.IsReport = 1;
                     }
-                    postData.post("http://killzombieswith.us/aii-api/v1/adminAlerts/", $scope.message);
+					$scope.contactAdminURL = "http://killzombieswith.us/aii-api/v1/adminAlerts/" + $scope.sessionID;
+                    postData.post($scope.contactAdminURL, $scope.message);
 
                     $modalInstance.close();
                 }
