@@ -6,7 +6,7 @@
     .tab-pane .list-group input[type="checkbox"]{ margin-top: 2px; }
     .tab-pane .list-group .glyphicon { margin-right:5px; }
     .tab-pane .list-group .glyphicon:hover { color:#FFBC00; }
-    a.list-group-item.read { color: #222;background-color: #F3F3F3; }
+    .list-group-item.read { color: #222;background-color: #F3F3F3; }
     hr { margin-top: 5px;margin-bottom: 10px; }
     .nav-pills>li>a {padding: 5px 10px;}
 
@@ -20,6 +20,8 @@
 </style>
 
 <div class="container" ng-controller="messagingController">
+<div class="container" ng-controller="alertsController" >
+<div class="container" ng-controller="notificationsController" >
     <div class="row">
         <div class="col-lg-6">
             <label style="font-size:2vw; color:#4B92AE">Messages</label><br><br>
@@ -138,27 +140,26 @@
                     <a href="" ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()">Deleted</a></li>
             </ul>
             <!-- buttons for alerts -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')" ng-controller="alertsController" 
-                ng-init="setAlertType('received')" >
-                <li ng-class="{active:isTypeSelected('received') }">
+            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')">
+                <li ng-class="{active:isAlertTypeSelected('received') }">
                     <a href ng-click="setAlertType('received'); hidePopup(); clearMarkedAlerts()">
                         <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
                     </a>
                 </li>
-                <li ng-class="{active:isTypeSelected('deleted') }">
+                <li ng-class="{active:isAlertTypeSelected('deleted') }">
                     <a href ng-click="setAlertType('deleted'); hidePopup(); clearMarkedAlerts()">
                         <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
                     </a>
                 </li>
             </ul>
             <!-- buttons for notifications -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" ng-controller="notificationsController" >
-                <li ng-class="{active:isTypeSelected('received') }">
+            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" >
+                <li ng-class="{active:isNotiTypeSelected('received') }">
                     <a href ng-click="setNotificationType('received'); hidePopup(); clearMarkedMessages()">
                         <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
                     </a>
                 </li>
-                <li ng-class="{active:isTypeSelected('deleted') }">
+                <li ng-class="{active:isNotiTypeSelected('deleted') }">
                   <a href ng-click="setNotificationType('deleted'); hidePopup(); clearMarkedMessages()">
                       <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
                   </a>
@@ -177,7 +178,7 @@
                             <span class="list-group-item" 
                                ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse"
                                ng-click="togglePopup(message)" style="cursor:pointer" 
-                               ng-class="{'bold':(message.IsRead == '0') && isTypeSelected('inbox')}">
+                               ng-class="{'read bold':(message.IsRead == '0') && isTypeSelected('inbox')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> 
@@ -258,7 +259,7 @@
                     </div>
                 </tab>
                 <!-- ALERTS TAB---------------------------->
-                <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11" 
+                <tab  heading="Alerts" style="cursor:pointer" ng-show="userLevel < 11" 
                      ng-click="selectTab('alerts')" >
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
@@ -266,7 +267,7 @@
                             <span class="list-group-item" 
                                 ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" 
                                   ng-click="togglePopup(alert)" style="cursor:pointer" 
-                                  ng-class="{'bold':alert.IsRead == '0' && isTypeSelected('received')}">
+                                  ng-class="{'read bold':alert.IsRead == '0' && isTypeSelected('received')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="alertCheckbox" checklist-value="alert" checklist-model="markedAlerts"> 
@@ -310,7 +311,7 @@
                 </tab>
 
                 <!-- NOTIFICATIONS TAB---------------------------->
-                <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11" 
+                <tab  heading="Notifications" style="cursor:pointer" ng-show="userLevel < 11" 
                      ng-click="selectTab('notifications')">
                      <div class="tab-pane fade in active" id="home">
                          <!-- notification list-->
@@ -318,7 +319,7 @@
                             <span class="list-group-item" 
                                 ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse"
                                 ng-click="togglePopup(notification)" style="cursor:pointer"
-                                ng-class="{'bold':notification.IsRead == '0' && isTypeSelected('received')}">
+                                ng-class="{'read bold':notification.IsRead == '0' && isTypeSelected('received')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="notificationCheckbox" checklist-value="notification" 
@@ -367,6 +368,8 @@
             </tabset>
         </div>
     </div>
+</div>
+</div>
 </div>
 
                         

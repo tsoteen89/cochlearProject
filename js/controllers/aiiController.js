@@ -2531,7 +2531,7 @@
         $scope.markedMessages = [];
 
         //The type of message currently being displayed - inbox, sent, drafts, deleted
-        $scope.currentMessageType;
+        $scope.currentMessageType = 'inbox';
         $scope.currentMessages;
 
         $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/inbox/" + $scope.sessionID;
@@ -3262,6 +3262,7 @@
             }
         });
 
+        $scope.currentAlertType = 'received';
         $scope.setAlertType = function(alertType) {
             $scope.currentAlertType = alertType;
 
@@ -3287,7 +3288,7 @@
             }
         }
 
-        $scope.isTypeSelected = function(alertType) {
+        $scope.isAlertTypeSelected = function(alertType) {
             if (alertType == $scope.currentAlertType) {
                 return true;
             }
@@ -3617,7 +3618,7 @@
             }
         }
 
-        $scope.isTypeSelected = function(notificationType) {
+        $scope.isNotiTypeSelected = function(notificationType) {
             if (notificationType == $scope.currentNotificationType) {
                 return true;
             }
