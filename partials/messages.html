@@ -20,7 +20,7 @@
 		  <span class="glyphicon glyphicon-search"></span>
 		 </button>
 		 </span>
-		 </div><!-- /input-group -->
+		 </div>
 	</div>
 	
 	<br>
@@ -43,6 +43,7 @@
 		</button>
 	  </div>
 	  
+        <!-- Side buttons- inbox, sent, drafts, deleted-->
 	  <div class="col-xs-3">
 		<ul class="nav nav-pills nav-stacked">
 		  <hr>
@@ -73,6 +74,7 @@
 	  </div>
 	
 	  <div class="col-xs-7 message-display" ng-show="displayMessages">
+          <!-- message options tool bar, delete, mark as read, etc-->
 		<div class="messageToolbar"> 
 			<span class="col-xs-3" ng-show="showDelete"><button class="btn btn-default" ng-click="putMarkedMessages('deleted',1)"><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</button></span>
 			<span class="col-xs-3" ng-show="showFullDelete"><button class="btn btn-default" ng-click="putMarkedMessages('deleted',2)"><i class="glyphicon glyphicon-remove" style="margin-right:5px"></i>Delete</button></span>
