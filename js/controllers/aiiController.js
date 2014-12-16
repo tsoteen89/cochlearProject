@@ -2531,7 +2531,7 @@
         $scope.markedMessages = [];
 
         //The type of message currently being displayed - inbox, sent, drafts, deleted
-        $scope.currentMessageType;
+        $scope.currentMessageType = 'inbox';
         $scope.currentMessages;
 
         $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/inbox/" + $scope.sessionID;
@@ -2739,14 +2739,17 @@
 
         $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
         
-        //get unread message count
+        //get each unread message count
         getData.get($scope.unreadMessageURL).success(function(data) {
             $scope.messageCount = data.records['messageCount'];
+            $scope.alertCount = data.records['alertCount'];
+            $scope.notificationCount = data.records['notificationCount'];
+            $scope.totalUnreadCount = data.records['totalUnreadCount'];
             //console.log("count"+$scope.messageCount);
         });
         
         //Toggles visibility of the message content display
-        $scope.togglePopup = function(message) {
+        $scope.messagesTogglePopup = function(message) {
             if ($scope.selectedMessage == message || message == null) {
                 $scope.isPopupVisible = false;
                 $scope.selectedMessage = null;
@@ -2765,10 +2768,11 @@
                     }).then(function() {
                         
                         getData.get($scope.unreadMessageURL).success(function(data) {
+                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
                             $scope.messageCount = data.records['messageCount'];
                             //console.log("count"+$scope.messageCount);
                         }).then(function() {
-                            messageCount.prepForBroadcast($scope.messageCount);
+                            messageCount.prepForBroadcast($scope.totalUnreadCount);
                         });
                     });
                 }
@@ -2975,10 +2979,11 @@
                         $scope.refreshMessages();
                     }).then(function(){
                         getData.get($scope.unreadMessageURL).success(function(data) {
+                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
                             $scope.messageCount = data.records['messageCount'];
-                           // console.log("count"+$scope.messageCount);
+                            console.log("count"+$scope.messageCount);
                         }).then(function() {
-                            messageCount.prepForBroadcast($scope.messageCount);
+                            messageCount.prepForBroadcast($scope.totalUnreadCount);
                         });
                     });
                 }
@@ -3262,6 +3267,7 @@
             }
         });
 
+        $scope.currentAlertType = 'received';
         $scope.setAlertType = function(alertType) {
             $scope.currentAlertType = alertType;
 
@@ -3287,14 +3293,14 @@
             }
         }
 
-        $scope.isTypeSelected = function(alertType) {
+        $scope.isAlertTypeSelected = function(alertType) {
             if (alertType == $scope.currentAlertType) {
                 return true;
             }
             return false;
         }
 
-        $scope.togglePopup = function(alert) {
+        $scope.alertTogglePopup = function(alert) {
             if ($scope.showPopup) {
                 $scope.selectedAlert = [];
             } else {
@@ -3305,13 +3311,19 @@
                     $scope.selectedAlert.IsRead = 1;
                     putData.put(putAlertURL, $scope.selectedAlert).success(function(data) {
                         $scope.refreshAlerts();
+                    }).then(function(){
+                        //get each unread notification count
+                        var unreadAlertURL = "http://killzombieswith.us/aii-api/v1/facilities/unreadAlertsCount/" + $scope.sessionID;
+                        getData.get(unreadAlertURL).success(function(data) {
+                            $scope.alertCount = data.records['alertCount'];
+                        });
                     });
                 }
             }
             $scope.showPopup = !$scope.showPopup;
         }
 
-        $scope.hidePopup = function() {
+        $scope.alertHidePopup = function() {
             $scope.showPopup = false;
             $scope.selectedAlert = [];
         }
@@ -3617,14 +3629,15 @@
             }
         }
 
-        $scope.isTypeSelected = function(notificationType) {
+        $scope.isNotiTypeSelected = function(notificationType) {
             if (notificationType == $scope.currentNotificationType) {
                 return true;
             }
             return false;
         }
 
-        $scope.togglePopup = function(notification) {
+        $scope.notifTogglePopup = function(notification) {
+            //console.log("notiftogglePop");
             if ($scope.showPopup) {
                 $scope.selectedNotification = [];
             } else {
@@ -3635,13 +3648,19 @@
                     $scope.selectedNotification.IsRead = 1;
                     putData.put(putNotificationURL, $scope.selectedNotification).success(function(data) {
                         $scope.refreshNotifications();
+                    }).then(function(){
+                        //get each unread notification count
+                        var unreadNotifcationURL = "http://killzombieswith.us/aii-api/v1/facilities/unreadNotificationsCount/" + $scope.sessionID;
+                        getData.get(unreadAlertURL).success(function(data) {
+                            $scope.notificationCount = data.records['notificationCount'];
+                        });
                     });
                 }
             }
             $scope.showPopup = !$scope.showPopup;
         }
 
-        $scope.hidePopup = function() {
+        $scope.notifHidePopup = function() {
             $scope.showPopup = false;
             $scope.selectedNotification = [];
         }
@@ -3831,6 +3850,7 @@
         }
 
         $scope.respondToRequest = function(status) {
+            //console.log("respond to request");
             putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
             $scope.selectedNotification.Response = status;
             $scope.selectedNotification.IsArchived = 2;
@@ -4133,15 +4153,16 @@
 
         $scope.sessionID = userInfo.get().SessionID;
         $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
-
-
+        
+        
+        
         getData.get($scope.unreadMessageURL).success(function(data) {
-            $scope.messageCount = data.records.messageCount;
+            $scope.messageCount = data.records.totalUnreadCount;
             $scope.icon = {
                 "count": $scope.messageCount
             };
         });
-
+        
         $scope.$on('handleBroadcast', function() {
             $scope.icon.count = messageCount.number;
         });
