@@ -123,6 +123,7 @@
             <a href="" class="btn btn-danger btn-sm btn-block" role="button" 
                ng-click="setMessageType('composeMessage');clearComposedMessage()">COMPOSE</a> 
             <hr />
+            <!-- buttons for messages -->
             <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('messages')">
                 <li ng-class="{active:isTypeSelected('inbox') }">
                     <a href="" ng-click="setMessageType('inbox'); togglePopup(); clearMarkedMessages()">
@@ -136,8 +137,9 @@
                 <li ng-class="{active:isTypeSelected('deleted') } ">
                     <a href="" ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()">Deleted</a></li>
             </ul>
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')" ng-controller="alertsController" >
-                {{showPopup}}
+            <!-- buttons for alerts -->
+            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')" ng-controller="alertsController" 
+                ng-init="setAlertType('received')" >
                 <li ng-class="{active:isTypeSelected('received') }">
                     <a href ng-click="setAlertType('received'); hidePopup(); clearMarkedAlerts()">
                         <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
@@ -149,6 +151,7 @@
                     </a>
                 </li>
             </ul>
+            <!-- buttons for notifications -->
             <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" ng-controller="notificationsController" >
                 <li ng-class="{active:isTypeSelected('received') }">
                     <a href ng-click="setNotificationType('received'); hidePopup(); clearMarkedMessages()">
@@ -256,7 +259,7 @@
                 </tab>
                 <!-- ALERTS TAB---------------------------->
                 <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11" 
-                     ng-click="selectTab('alerts')">
+                     ng-click="selectTab('alerts')" >
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
                         <div class="list-group">
