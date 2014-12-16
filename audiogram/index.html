@@ -779,17 +779,18 @@
                 });
                 
                 $('#toggle-patient-info').on('click', function () {
-                    if($('#toggle-patient-info').hasClass('hidden')){
+                    console.log( this);
+                    if($('#patient-info').hasClass('hidden')){
                         console.log('hidden');
                         $( "#patient-info" ).slideDown( "slow", function() {
                             $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
-                            $('#toggle-patient-info').removeClass('hidden');
+                            $('#patient-info').removeClass('hidden');
                         });
                     }else{
                         console.log('not hidden');
                         $( "#patient-info" ).slideUp( "slow", function() {
                             $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-down"></i> Show Patient Info');
-                            $('#toggle-patient-info').addClass('hidden');
+                            $('#patient-info').addClass('hidden');
                         });
                     }
                 });
