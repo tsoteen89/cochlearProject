@@ -36,7 +36,7 @@ myApp.config(function ($routeProvider) {
   })
   .when('/messages',
   {
-      templateUrl: 'partials/messages.html'
+      templateUrl: 'partials/inbox.html'
   })
   .when('/invites',
   {

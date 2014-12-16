@@ -80,6 +80,7 @@
                 //Set the persistent user info
                 SessionID = info.SessionID;
                 UserID = info.UserID;
+                $cookieStore.put("UserID", UserID);
                 Username = info.Username;
                 FacilityID = info.FacilityID;
                 Name = info.First + " " + info.Last;
@@ -2513,10 +2514,12 @@
      *      @returns - NULL
      *
      */
-    controllers.messagingController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount) {
+    controllers.messagingController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount, $cookieStore) {
 
+        $scope.isAllChecked = false;
         //User's ID (will be retrieved using session data)
         $scope.userID = userInfo.get().UserID;
+        //console.log("yserid" + $scope.userID);
         $scope.userLevelID = userInfo.get().UserLevelID;
         $scope.sessionID = userInfo.get().SessionID;
         //Controls the message display popup
@@ -2624,14 +2627,14 @@
             }
             $scope.deletedMessages = data;
         });
-
-        this.tab = -1;
+        
+        $scope.tab = 'messages';
 
         $scope.selectTab = function(selectedTab) {
-            this.tab = selectedTab;
+            $scope.tab = selectedTab;
         }
         $scope.isSelectedTab = function(checkTab) {
-            return this.tab === checkTab;
+            return $scope.tab === checkTab;
         }
 
         //Sets the current message type. This updates the current messages and
@@ -2734,6 +2737,14 @@
             persistData.setMessageRecipient(-1);
         }
 
+        $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
+        
+        //get unread message count
+        getData.get($scope.unreadMessageURL).success(function(data) {
+            $scope.messageCount = data.records['messageCount'];
+            //console.log("count"+$scope.messageCount);
+        });
+        
         //Toggles visibility of the message content display
         $scope.togglePopup = function(message) {
             if ($scope.selectedMessage == message || message == null) {
@@ -2752,9 +2763,10 @@
                     putData.put(messageURL, message).success(function(data) {
                         $scope.refreshMessages();
                     }).then(function() {
-                        $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
+                        
                         getData.get($scope.unreadMessageURL).success(function(data) {
                             $scope.messageCount = data.records['messageCount'];
+                            //console.log("count"+$scope.messageCount);
                         }).then(function() {
                             messageCount.prepForBroadcast($scope.messageCount);
                         });
@@ -2801,11 +2813,12 @@
             //the subject, and the message content.
 
             //Define the SenderID as the current user
-            message.SenderID = $scope.userID;
+            message.SenderID = $cookieStore.get('UserID'); //$scope.userID
             message.Sent = 1;
             message.SenderDeleted = 0;
             message.ReceiverDeleted = 0;
 
+            //console.log("message object" + message);
             //If this message is an edited draft, PUT the message instead of POSTing
             if (message.isDraft) {
                 putData.put($scope.messageURL + message.MessageID, message).success(function(data) {
@@ -2960,6 +2973,13 @@
                     //PUT the message using the message URL
                     putData.put(putMessageURL, $scope.markedMessages[i]).success(function(data) {
                         $scope.refreshMessages();
+                    }).then(function(){
+                        getData.get($scope.unreadMessageURL).success(function(data) {
+                            $scope.messageCount = data.records['messageCount'];
+                           // console.log("count"+$scope.messageCount);
+                        }).then(function() {
+                            messageCount.prepForBroadcast($scope.messageCount);
+                        });
                     });
                 }
             } else if (property == 'deleted') {
@@ -2977,9 +2997,14 @@
                         console.log("PUT complete - About to get messages");
                         $scope.refreshMessages();
                         console.log("Got messages");
+                        $scope.displayMessages = false;
                     });
                 }
+                
             }
+            
+            $scope.isAllChecked = false;
+            
             //$scope.refreshCurrentMessages();
         }
 
