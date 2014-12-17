@@ -3,14 +3,39 @@
 print_r("Posted:");
 //print_r($_POST);
 print_r(array_keys($_POST));
-exit;
 
 $pdf = new AudiogramPdf;
 
 if($_POST){
     $pdf->ConvertPostedSvgs($_POST);
     $pdf->CompositePngs();
-    $pdf->SaveAudiogramInfo($_POST);
+    //$pdf->SaveAudiogramInfo($_POST);
+}
+
+class Audiogram{
+    var $Token;
+    var $FirstName;
+    var $LastName;
+    var $Dob;
+    var $PrevAudiograms;
+    
+    function __construct(){
+        $this->Token = null;
+        $this->FirstName = null;
+        $this->LastName = null;
+        $this->Dob = null;
+        $this->PrevAudiograms = null;        
+    }
+    
+    public function SetToken($token){
+        $this->Token = $token;
+    }
+    
+    public function SaveAudiogramInfo($data){
+        //$data = json_encode($data);
+        //file_put_contents('data'.time().'.json',$data);
+        return "Hello World";
+    }
 }
 
 /**
@@ -74,11 +99,7 @@ class AudiogramPdf{
         return $this->ImageArray;
     }
     
-    public function SaveAudiogramInfo($data){
-        //$data = json_encode($data);
-        //file_put_contents('data'.time().'.json',$data);
-        return "Hello World";
-    }
+
     
     /**
      * A helper method that manipulates the SVG data and then converts it to base 64 before returning it.

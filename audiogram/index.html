@@ -16,8 +16,11 @@
         <script src="js/context.js"></script> 
         <script src="js/contextMenu.js"></script>
         <script src="js/chosen.jquery.js"></script> 
-        <script src="js/audiogram.js"></script>  
+        <script src="js/audiogram.js"></script>
         
+        <!-- https://github.com/js-coder/cookie.js -->
+        <script src="js/cookie.min.js"></script>
+
         <style>
             /* scheme 1 */
             /* turquiose #64D4F9 */
@@ -45,7 +48,12 @@
             }
 
             .container{
+                maring-top:-40px;
                 background-color: #E5E7E6;
+                -moz-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+                -webkit-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+                box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+                padding: 5px 25px 25px 25px;
             }
 
             .mea-btn {
