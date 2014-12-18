@@ -70,6 +70,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     var y_values = [];
     var column_width = 0;
     var row_height = 0;
+    var cookies = null;
+    var SessionID = null;
 
     /**
     * Initializes the audiogram graph
@@ -83,7 +85,12 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         var x = 0;
         var y = 0;
         var Label = "";
+        
+        cookies = cookie.all();
+        console.log(cookies);
 
+        SessionID = cookies['SessionID'].replace(/['"]+/g, '');
+        
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -156,6 +163,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             y_values.push({"value" : i, "y" : y});
         }
         addBackgroundLayer();
+    
+        
     }
 
     /**

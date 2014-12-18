@@ -6,7 +6,7 @@
     .tab-pane .list-group input[type="checkbox"]{ margin-top: 2px; }
     .tab-pane .list-group .glyphicon { margin-right:5px; }
     .tab-pane .list-group .glyphicon:hover { color:#FFBC00; }
-    a.list-group-item.read { color: #222;background-color: #F3F3F3; }
+    .list-group-item.read { color: #222;background-color: #F3F3F3; }
     hr { margin-top: 5px;margin-bottom: 10px; }
     .nav-pills>li>a {padding: 5px 10px;}
 
@@ -20,6 +20,8 @@
 </style>
 
 <div class="container" ng-controller="messagingController">
+<div class="container" ng-controller="alertsController" >
+<div class="container" ng-controller="notificationsController" >
     <div class="row">
         <div class="col-lg-6">
             <label style="font-size:2vw; color:#4B92AE">Messages</label><br><br>
@@ -104,7 +106,16 @@
                 </ul>
             </div>
             <div class="pull-right">
-                <span class="text-muted"><b>1</b>–<b>{{currentMessages._meta.count}}</b> of <b>{{currentMessages._meta.count}}</b></span>
+                <!-- message counts-->
+                <span class="text-muted" ng-show="isSelectedTab('messages')">
+                    <b>1</b>–<b>{{currentMessages._meta.count}}</b> of <b>{{currentMessages._meta.count}}</b></span>
+                <!-- alert counts-->
+                <span class="text-muted" ng-show="isSelectedTab('alerts')">
+                    <b>1</b>–<b>{{currentAlerts._meta.count}}</b> of <b>{{currentAlerts._meta.count}}</b></span>
+                <!-- notification counts-->
+                <span class="text-muted" ng-show="isSelectedTab('notifications')">
+                    <b>1</b>–<b>{{currentNotifications._meta.count}}</b> of <b>{{currentNotifications._meta.count}}</b></span>
+                <!--left and right buttons to navigate messages perhaps, not implemented yet -->
                 <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-default">
                         <span class="glyphicon glyphicon-chevron-left"></span>
@@ -126,40 +137,41 @@
             <!-- buttons for messages -->
             <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('messages')">
                 <li ng-class="{active:isTypeSelected('inbox') }">
-                    <a href="" ng-click="setMessageType('inbox'); togglePopup(); clearMarkedMessages()">
+                    <a href="" ng-click="setMessageType('inbox'); messagesTogglePopup(); clearMarkedMessages()">
                     <span class="badge pull-right">{{messageCount}}</span> Inbox </a>
                 </li>
                 <li ng-class="{active:isTypeSelected('sent') }">
-                    <a href="" ng-click="setMessageType('sent'); togglePopup(); clearMarkedMessages()">Sent Mail</a></li>
+                    <a href="" ng-click="setMessageType('sent'); messagesTogglePopup(); clearMarkedMessages()">Sent Mail</a></li>
                 <li ng-class="{active:isTypeSelected('drafts') } ">
-                    <a href="" ng-click="setMessageType('drafts'); togglePopup(); clearMarkedMessages()">
+                    <a href="" ng-click="setMessageType('drafts'); messagesTogglePopup(); clearMarkedMessages()">
                     <span class="badge pull-right"><!--PUT DRAFT COUNT HERE--></span>Drafts</a></li>
                 <li ng-class="{active:isTypeSelected('deleted') } ">
-                    <a href="" ng-click="setMessageType('deleted'); togglePopup(); clearMarkedMessages()">Deleted</a></li>
+                    <a href="" ng-click="setMessageType('deleted'); messagesTogglePopup(); clearMarkedMessages()">Deleted</a></li>
             </ul>
             <!-- buttons for alerts -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')" ng-controller="alertsController" 
-                ng-init="setAlertType('received')" >
-                <li ng-class="{active:isTypeSelected('received') }">
-                    <a href ng-click="setAlertType('received'); hidePopup(); clearMarkedAlerts()">
+            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')">
+                <li ng-class="{active:isAlertTypeSelected('received') }">
+                    <a href ng-click="setAlertType('received'); alertHidePopup(); clearMarkedAlerts()">
+                        <span class="badge pull-right">{{alertCount}}</span>
                         <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
                     </a>
                 </li>
-                <li ng-class="{active:isTypeSelected('deleted') }">
-                    <a href ng-click="setAlertType('deleted'); hidePopup(); clearMarkedAlerts()">
+                <li ng-class="{active:isAlertTypeSelected('deleted') }">
+                    <a href ng-click="setAlertType('deleted'); alertHidePopup(); clearMarkedAlerts()">
                         <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
                     </a>
                 </li>
             </ul>
             <!-- buttons for notifications -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" ng-controller="notificationsController" >
-                <li ng-class="{active:isTypeSelected('received') }">
-                    <a href ng-click="setNotificationType('received'); hidePopup(); clearMarkedMessages()">
+            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" >
+                <li ng-class="{active:isNotiTypeSelected('received') }">
+                    <a href ng-click="setNotificationType('received'); notifHidePopup(); clearMarkedMessages()">
+                        <span class="badge pull-right">{{notificationCount}}</span>
                         <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
                     </a>
                 </li>
-                <li ng-class="{active:isTypeSelected('deleted') }">
-                  <a href ng-click="setNotificationType('deleted'); hidePopup(); clearMarkedMessages()">
+                <li ng-class="{active:isNotiTypeSelected('deleted') }">
+                  <a href ng-click="setNotificationType('deleted'); notifHidePopup(); clearMarkedMessages()">
                       <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
                   </a>
                 </li>
@@ -176,8 +188,8 @@
                         <div class="list-group">
                             <span class="list-group-item" 
                                ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse"
-                               ng-click="togglePopup(message)" style="cursor:pointer" 
-                               ng-class="{'bold':(message.IsRead == '0') && isTypeSelected('inbox')}">
+                               ng-click="messagesTogglePopup(message)" style="cursor:pointer" 
+                               ng-class="{'read bold':(message.IsRead == '0') && isTypeSelected('inbox')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> 
@@ -252,21 +264,21 @@
                                 <a class="btn btn-primary" ng-if="showRestore" ng-click="restoreSelectedMessage()">Restore</a>
                                 <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedMessage()">Delete</a>
                                 <a class="btn btn-primary" ng-if="showFullDelete" ng-click="fullyDeleteSelectedMessage()">Delete</a>
-                                <a class="btn btn-primary" ng-click="togglePopup()">Close</a>
+                                <a class="btn btn-primary" ng-click="messagesTogglePopup()">Close</a>
                             </div>
                         </div>
                     </div>
                 </tab>
                 <!-- ALERTS TAB---------------------------->
-                <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11" 
+                <tab  heading="Alerts" style="cursor:pointer" ng-show="userLevel < 11" 
                      ng-click="selectTab('alerts')" >
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
                         <div class="list-group">
                             <span class="list-group-item" 
                                 ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" 
-                                  ng-click="togglePopup(alert)" style="cursor:pointer" 
-                                  ng-class="{'bold':alert.IsRead == '0' && isTypeSelected('received')}">
+                                  ng-click="alertTogglePopup(alert)" style="cursor:pointer" 
+                                  ng-class="{'read bold':(alert.IsRead == '0') && isAlertTypeSelected('received')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="alertCheckbox" checklist-value="alert" checklist-model="markedAlerts"> 
@@ -301,24 +313,24 @@
                             </p>
                         </div>
                         <div class="modal-footer">
-                            <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedAlert(0); hidePopup()">Restore</a>
-                            <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedAlert(1); hidePopup()">Delete</a>
-                            <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedAlert(2); hidePopup()">Delete</a>
-                            <a class="btn btn-primary" ng-click="togglePopup()">Close</a>
+                            <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedAlert(0); alertHidePopup()">Restore</a>
+                            <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedAlert(1); alertHidePopup()">Delete</a>
+                            <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedAlert(2); alertHidePopup()">Delete</a>
+                            <a class="btn btn-primary" ng-click="alertTogglePopup()">Close</a>
                         </div>
                       </div>
                 </tab>
 
                 <!-- NOTIFICATIONS TAB---------------------------->
-                <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11" 
+                <tab  heading="Notifications" style="cursor:pointer" ng-show="userLevel < 11" 
                      ng-click="selectTab('notifications')">
                      <div class="tab-pane fade in active" id="home">
                          <!-- notification list-->
                         <div class="list-group">
                             <span class="list-group-item" 
                                 ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse"
-                                ng-click="togglePopup(notification)" style="cursor:pointer"
-                                ng-class="{'bold':notification.IsRead == '0' && isTypeSelected('received')}">
+                                ng-click="notifTogglePopup(notification)" style="cursor:pointer"
+                                ng-class="{'read bold':(notification.IsRead == '0') && isNotiTypeSelected('received')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="notificationCheckbox" checklist-value="notification" 
@@ -355,18 +367,20 @@
                                 </p>
                             </div>
                             <div class="modal-footer">
-                                <a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); hidePopup()">Accept</a>
-                                <a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); hidePopup()">Reject</a>
-                                <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); hidePopup()">Restore</a>
-                                <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); hidePopup()">Delete</a>
-                                <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); hidePopup()">Delete</a>
-                                <a class="btn btn-primary" ng-click="togglePopup()">Close</a>
+                                <a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); notifHidePopup()">Accept</a>
+                                <a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); notifHidePopup()">Reject</a>
+                                <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); notifHidePopup()">Restore</a>
+                                <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); notifHidePopup()">Delete</a>
+                                <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); notifHidePopup()">Delete</a>
+                                <a class="btn btn-primary" ng-click="notifTogglePopup()">Close</a>
                             </div>
                           </div>
                 </tab>
             </tabset>
         </div>
     </div>
+</div>
+</div>
 </div>
 
                         
