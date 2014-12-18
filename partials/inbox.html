@@ -241,7 +241,7 @@
                                 <div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                                 <div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                                 </br>
-                                <p>
+                                <p style="white-space: pre-line">
                                     {{selectedMessage.Content}}
                                 </p>
                             </div>
@@ -296,7 +296,7 @@
                             <div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                             <div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                             </br>
-                            <p>
+                            <p style="white-space: pre-line">
                                 {{selectedAlert.Content}}
                             </p>
                         </div>
@@ -350,7 +350,7 @@
                                 <div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                                 <div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                                 </br>
-                                <p>
+                                <p style="white-space: pre-line">
                                     {{selectedNotification.Content}}
                                 </p>
                             </div>
