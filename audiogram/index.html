@@ -969,17 +969,19 @@
         }        
         
         /**
-        * Trims extra double quotes and single quotes off of strings
+        * Trims extra double quotes and single quotes off of strings. I used a locally created
+        * object because of some funny behavior I couldnt track down quickly.
         * @param {void}
-        * @return {void}
+        * @return {object} cookies object
         */ 
         function cleanCookies(c){
+            var obj = {};
             for (var key in c) {
               if (c.hasOwnProperty(key)) {
-                c[key] = c[key].replace(/['"]+/g, '');
+                obj[key] = c[key].replace(/['"]+/g, '');
               }
             }
-            return c;
+            return obj;
         }
         
         /**

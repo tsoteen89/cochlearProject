@@ -3,7 +3,6 @@
 //print_r("Posted:");
 print_r($_POST);
 //print_r(array_keys($_POST));
-echo "hello";
 
 //$pdf = new PdfManager;
 $Audiogram = new AudiogramManager();
@@ -117,7 +116,7 @@ class AudiogramManager{
     }
     
     private function ReturnResponse($data){
-        header('Content-Type: application/json');
+        //header('Content-Type: application/json');
         return json_encode($data);
         exit;
     }
@@ -209,10 +208,10 @@ class AudErrors{
     
     function __construct(){
         $this->ErrorArray = array();
-        $this->ErrorArray[0] = array('error'=>false,'number'=>'0');
-        $this->ErrorArray[10] = array('error'=>true,'number'=>10,'message'=>"Action must be set! (e.g. 'GetPatientInfo, SaveAudiogram, etc.)");
-        $this->ErrorArray[20] = array('error'=>true,'number'=>20,'message'=>"Token is not set! Api needs access token.");
-        $this->ErrorArray[30] = array('error'=>true,'number'=>30,'message'=>"Token is not valid.");
+        $this->ErrorArray[0] = array('error'=>0,'number'=>'0');
+        $this->ErrorArray[10] = array('error'=>1,'number'=>10,'message'=>"Action must be set! (e.g. 'GetPatientInfo, SaveAudiogram, etc.)");
+        $this->ErrorArray[20] = array('error'=>1,'number'=>20,'message'=>"Token is not set! Api needs access token.");
+        $this->ErrorArray[30] = array('error'=>1,'number'=>30,'message'=>"Token is not valid.");
     }
     
     function SendMessage($i){
