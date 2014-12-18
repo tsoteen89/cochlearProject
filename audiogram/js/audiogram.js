@@ -86,11 +86,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         var y = 0;
         var Label = "";
         
-        cookies = cookie.all();
-        console.log(cookies);
-
-        SessionID = cookies['SessionID'].replace(/['"]+/g, '');
-        
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -350,7 +345,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 //        Profound Hearing Loss: 91dB and up
         
         //Combine into single funtion later....
-        console.log("x=",row_height);
+        //console.log("x=",row_height);
         var mild = new Kinetic.Rect({
             x : graph_bounds.min.x,
             y : graph_bounds.min.y+row_height*3.5+20,

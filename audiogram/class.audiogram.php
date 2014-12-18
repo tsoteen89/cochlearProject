@@ -1,30 +1,78 @@
 <?php
 
-print_r("Posted:");
-//print_r($_POST);
-print_r(array_keys($_POST));
+//print_r("Posted:");
+print_r($_POST);
+//print_r(array_keys($_POST));
 
-$pdf = new AudiogramPdf;
+exit;
+
+//$pdf = new PdfManager;
+$Audiogram = new AudiogramManager();
+$Errors = new AudErrors();
 
 if($_POST){
-    $pdf->ConvertPostedSvgs($_POST);
-    $pdf->CompositePngs();
+    //$pdf->ConvertPostedSvgs($_POST);
+    //$pdf->CompositePngs();
     //$pdf->SaveAudiogramInfo($_POST);
+    if(!isset($_POST['Action'])){
+        echo $Errors->GetError(10);
+        exit;
+    }
+    switch($_POST['Action']){
+        case 'getConditions':
+            if(!isset($_POST['Token'])){
+                echo $Errors->GetError(20);
+                exit;
+            }else{
+                $Audiogram->getConditions();
+            }           
+        break;
+        case 'GetPatientInfo':
+            if(!isset($_POST['Token'])){
+                echo $Errors->GetError(20);
+                exit;
+            }else{
+                $Audiogram->getPatientInfo($_POST);
+            }
+        break;
+    }
 }
 
-class Audiogram{
+class AudiogramManager{
     var $Token;
     var $FirstName;
     var $LastName;
     var $Dob;
     var $PrevAudiograms;
     
-    function __construct(){
+    function __construct($data=null){
         $this->Token = null;
         $this->FirstName = null;
         $this->LastName = null;
         $this->Dob = null;
         $this->PrevAudiograms = null;        
+    }
+    
+    public function getConditions(){
+        $json =  file_get_contents('http://aii-hermes.org/aii-api/v1/audioConditions');
+        $i=0;
+        foreach($json as $condition){
+            echo "$i".$condition;
+            $i++;
+        }
+        print_r($json);
+    }
+    
+    /**
+     * Gets information from a single patient if PatientID is provided, otherwise all
+     * active patients are returned
+     */
+    public function getPatientInfo($data){
+        if($data['PatientID'])
+            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['PatientID']}/{$_POST['Token']}");            
+        else
+            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['Token']}");
+        exit;
     }
     
     public function SetToken($token){
@@ -43,7 +91,7 @@ class Audiogram{
  * png to then be thrown in a pdf .... whew!! Probably should be broken up into a couple
  * of classes, but not right now.
  */
-class AudiogramPdf{
+class PdfManager{
     
     var $ImageArray;            //Holds each image that's part of the composite audiogram
     var $TempDirectory;         //Where to write each file. Should probably figure out how to 
@@ -116,5 +164,21 @@ class AudiogramPdf{
             return $file_name;
         else
             return false;
+    }
+}
+
+class AudErrors{
+    var $ErrorArray;
+    
+    function __construct(){
+        $this->ErrorArray = array(
+            '10' => "Action must be set! (e.g. 'GetPatientInfo, SaveAudiogram, etc.)",
+            '20' => "Token is not set! Api needs access token.",
+            
+        );
+    }
+    
+    function GetError($i){
+        return "ERROR: ".$this->ErrorArray[$i];
     }
 }
