@@ -916,24 +916,26 @@
 
                 // Initialization
                 function init() {
+
                     cookieData = getCookieData();
+
                     console.log(cookieData);
-                    
+
                     //If session timed out, then go back home. 
-                    if(cookies['BadToken'] == 'Token Timeout')
+                    if(cookieData['BadToken'] == 'Token Timeout'){
                         window.location.href = '/cochlearProject/';
-                    
+                    }
+
                     updateDisplay();
 
                     // Inject the icon if applicable
                     if ($button.find('.state-icon').length == 0) {
                         $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
                     }
-                    
+                                      
 
                     populateConditionChoices(cookieData,'left-condition-opts');
                     //loadPatientData(cookieData);
-                    
                     
                 }
                 init();
@@ -952,9 +954,16 @@
         * @return {void}
         */ 
         function populateConditionChoices(cookie_data,id){
-            $.post("class.audiogram.php", {'Action':"getConditions","Token":cookie_data.SessionID})
+
+            var obj = {
+                "Token" : cookie_data.SessionID,
+                "Action" : "getConditions"
+            };
+            
+            $.post("class.audiogram.php", obj)
             .done(function( data ) {
-                data = jQuery.parseJSON(data);
+                console.log("im back");
+                //data = jQuery.parseJSON(data);
                 console.log( data );
             });
         }        
@@ -979,9 +988,8 @@
         * @return {void}
         */ 
         function getCookieData(){
-            cookies = cookie.all();
+            var cookies = cookie.all();
             cookies = cleanCookies(cookies);
-            console.log(cookies);
             return cookies;
         }
         

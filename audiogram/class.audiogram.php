@@ -3,39 +3,32 @@
 //print_r("Posted:");
 print_r($_POST);
 //print_r(array_keys($_POST));
-
-exit;
+echo "hello";
 
 //$pdf = new PdfManager;
 $Audiogram = new AudiogramManager();
 $Errors = new AudErrors();
 
 if($_POST){
+
+    //A little error checking 
+    if(!isset($_POST['Action'])){
+        $Errors->SendMessage(10);
+    }else if(isset($_POST['Token'])){
+        if(!$Audiogram->tokenGood($_POST['Token'])){
+            $Errors->SendMessage(20); 
+        }
+    }
+    
+    switch($_POST['Action']){
+        case 'getConditions':   $Audiogram->getConditions();        break;
+        case 'GetPatientInfo':  $Audiogram->getPatientInfo($_POST); break;
+        default: break;
+    }
+    
     //$pdf->ConvertPostedSvgs($_POST);
     //$pdf->CompositePngs();
     //$pdf->SaveAudiogramInfo($_POST);
-    if(!isset($_POST['Action'])){
-        echo $Errors->GetError(10);
-        exit;
-    }
-    switch($_POST['Action']){
-        case 'getConditions':
-            if(!isset($_POST['Token'])){
-                echo $Errors->GetError(20);
-                exit;
-            }else{
-                $Audiogram->getConditions();
-            }           
-        break;
-        case 'GetPatientInfo':
-            if(!isset($_POST['Token'])){
-                echo $Errors->GetError(20);
-                exit;
-            }else{
-                $Audiogram->getPatientInfo($_POST);
-            }
-        break;
-    }
 }
 
 class AudiogramManager{
@@ -44,23 +37,57 @@ class AudiogramManager{
     var $LastName;
     var $Dob;
     var $PrevAudiograms;
-    
+    var $Json;
+
+    /**
+     * Ummm. Constructor
+     */    
     function __construct($data=null){
         $this->Token = null;
         $this->FirstName = null;
         $this->LastName = null;
         $this->Dob = null;
-        $this->PrevAudiograms = null;        
+        $this->PrevAudiograms = null;     
+        $this->Json = null;
     }
     
-    public function getConditions(){
-        $json =  file_get_contents('http://aii-hermes.org/aii-api/v1/audioConditions');
-        $i=0;
-        foreach($json as $condition){
-            echo "$i".$condition;
-            $i++;
+    /**
+     * Checks for a valid token. Rendundant.
+     */    
+    function tokenGood($token=null){
+        global $Errors;
+        if(!isset($token)){
+            $Errors->SendMessage(20);
+        }else if(strlen($token) != strlen('61bcf6efc824a576b4a75d82f56e38638786185bf6c97265cd2915cb7e4e127a') ){
+            $Errors->SendMessage(30);
+        }else{
+            return 1;
         }
+    }
+    
+    /**
+     * Gets all the conditions that each ear could be configured with. 
+     */    
+    public function getConditions(){
+        //Api Call
+        $json =  file_get_contents('http://aii-hermes.org/aii-api/v1/audioConditions');
+        
+        //Put huge response in a temp array to be trimmed down
+        $temp = json_decode($json);
+        
+        //Empty out the original json array
+        $json = array();
+        
+        //Load it back up with unique values
+        for($i=0;$i<sizeof($temp->records);$i++){
+            $json[$temp->records[$i]->LeftAidCondition] = $temp->records[$i]->ConditionsID;
+            $json[$temp->records[$i]->RightAidCondition] = $temp->records[$i]->ConditionsID;           
+        }
+        
         print_r($json);
+        
+        //Send it off to be returned
+        $this->ReturnResponse($json);
     }
     
     /**
@@ -83,6 +110,16 @@ class AudiogramManager{
         //$data = json_encode($data);
         //file_put_contents('data'.time().'.json',$data);
         return "Hello World";
+    }
+    
+    private function isAjax() {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+    
+    private function ReturnResponse($data){
+        header('Content-Type: application/json');
+        return json_encode($data);
+        exit;
     }
 }
 
@@ -171,14 +208,19 @@ class AudErrors{
     var $ErrorArray;
     
     function __construct(){
-        $this->ErrorArray = array(
-            '10' => "Action must be set! (e.g. 'GetPatientInfo, SaveAudiogram, etc.)",
-            '20' => "Token is not set! Api needs access token.",
-            
-        );
+        $this->ErrorArray = array();
+        $this->ErrorArray[0] = array('error'=>false,'number'=>'0');
+        $this->ErrorArray[10] = array('error'=>true,'number'=>10,'message'=>"Action must be set! (e.g. 'GetPatientInfo, SaveAudiogram, etc.)");
+        $this->ErrorArray[20] = array('error'=>true,'number'=>20,'message'=>"Token is not set! Api needs access token.");
+        $this->ErrorArray[30] = array('error'=>true,'number'=>30,'message'=>"Token is not valid.");
     }
     
-    function GetError($i){
-        return "ERROR: ".$this->ErrorArray[$i];
+    function SendMessage($i){
+        if(array_key_exists($i,$this->ErrorArray))
+            echo json_encode($this->ErrorArray[$i]);
+        else
+            echo json_encode(array('error'=>true,'number'=>-1,'message'=>"ERROR: Unkown!."));
+        exit;
     }
+    
 }
