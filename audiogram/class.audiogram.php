@@ -1,7 +1,7 @@
 <?php
 
 //print_r("Posted:");
-print_r($_POST);
+//print_r($_POST);
 //print_r(array_keys($_POST));
 
 //$pdf = new PdfManager;
@@ -20,8 +20,10 @@ if($_POST){
     }
     
     switch($_POST['Action']){
+        case 'getAudiogramList':$Audiogram->getAudiogramList();     break;
         case 'getConditions':   $Audiogram->getConditions();        break;
-        case 'GetPatientInfo':  $Audiogram->getPatientInfo($_POST); break;
+        case 'getPatientInfo':  $Audiogram->getPatientInfo($_POST); break;
+        case 'saveAudiogram':   $Audiogram->saveAudiogram($_POST);  break;
         default: break;
     }
     
@@ -51,13 +53,13 @@ class AudiogramManager{
     }
     
     /**
-     * Checks for a valid token. Rendundant.
+     * Checks for a valid token. Redundant.
      */    
     function tokenGood($token=null){
         global $Errors;
         if(!isset($token)){
             $Errors->SendMessage(20);
-        }else if(strlen($token) != strlen('61bcf6efc824a576b4a75d82f56e38638786185bf6c97265cd2915cb7e4e127a') ){
+        }else if(strlen($token) != 64 ){
             $Errors->SendMessage(30);
         }else{
             return 1;
@@ -83,10 +85,16 @@ class AudiogramManager{
             $json[$temp->records[$i]->RightAidCondition] = $temp->records[$i]->ConditionsID;           
         }
         
-        print_r($json);
+        //Send it off 
+        echo json_encode($json);
+        exit;
+    }
+ 
+    /**
+     * Gets all Audiograms for the given patient.
+     */
+    public function getAudiogramList($data){
         
-        //Send it off to be returned
-        $this->ReturnResponse($json);
     }
     
     /**
@@ -94,32 +102,27 @@ class AudiogramManager{
      * active patients are returned
      */
     public function getPatientInfo($data){
-        if($data['PatientID'])
-            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['PatientID']}/{$_POST['Token']}");            
-        else
+        if($data['PatientID']){
+            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['PatientID']}/{$_POST['Token']}");
+            exit;
+        }else{
             echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['Token']}");
-        exit;
+            exit;
+        }
+    }
+    
+    public function saveAudiogram($data){
+        print_r($data);
     }
     
     public function SetToken($token){
         $this->Token = $token;
     }
     
-    public function SaveAudiogramInfo($data){
-        //$data = json_encode($data);
-        //file_put_contents('data'.time().'.json',$data);
-        return "Hello World";
-    }
-    
     private function isAjax() {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
     
-    private function ReturnResponse($data){
-        //header('Content-Type: application/json');
-        return json_encode($data);
-        exit;
-    }
 }
 
 /**

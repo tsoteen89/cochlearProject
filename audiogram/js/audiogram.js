@@ -25,7 +25,6 @@ function bubbleSort(points) {
 }
 
 
-
 var AudioGram = function (stage, audiogram_id, side, element_id) {
     'use strict';
     var Stage = stage;                          //The whole kinetic stage!
