@@ -539,7 +539,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
-
+        
         drawStack();
     }
 
@@ -1131,8 +1131,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         setTimeout(function () {
             //Remove any error messages from the canvas
             Layers.error.removeChildren ();
-
             Stage.draw();
+            
             setTimeout(function () {
                 //If you clicked on the canvas
                 if(!clickInfo.error) {
@@ -1142,6 +1142,9 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                     }else if(clickInfo.sameFrequency !== false) {
                         //handle moving item on same frequency
                         console.log(clickInfo.sameFrequency);
+                        currentStack.slice(clickInfo.sameFrequency,clickInfo.sameFrequency);
+                        console.log(currentStack);
+                        addMeasure(clickInfo.x,clickInfo.y);                       
                     }else{
                         addMeasure(clickInfo.x,clickInfo.y);
                     }
