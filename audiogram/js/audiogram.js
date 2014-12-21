@@ -1142,8 +1142,9 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                     }else if(clickInfo.sameFrequency !== false) {
                         //handle moving item on same frequency
                         console.log(clickInfo.sameFrequency);
-                        currentStack.slice(clickInfo.sameFrequency,clickInfo.sameFrequency);
+                        currentStack.slice(clickInfo.sameFrequency,clickInfo.sameFrequency+1);
                         console.log(currentStack);
+                        console.log("hello");
                         addMeasure(clickInfo.x,clickInfo.y);                       
                     }else{
                         addMeasure(clickInfo.x,clickInfo.y);
