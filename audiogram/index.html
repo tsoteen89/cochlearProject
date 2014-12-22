@@ -344,7 +344,7 @@
                 </div>
                 <div class="col-xs-2 aii-center-menu">
                     <!-- Auditory measure buttons -->
-                    <div class="list-group aii-center-group" id="measure-buttons" >
+                    <div class="list-group aii-center-groupaii-center-group" id="measure-buttons" >
                         <a href="#" class="list-group-item aii-mea-btn" id="AC">
                             <span class="aii-mea-btn left" id="ACR"><i class="fa fa-circle-o"></i></span><span class="aii-mea-btn mid">AC</span><span class="aii-mea-btn right" id="ACL">&#10005;</span>
                         </a>
@@ -436,7 +436,10 @@
         
         $(function() {
             //combine stuff later
-
+            $( "a" ).click(function( event ) {
+              event.preventDefault();
+            });
+            
             var stage_right = new Kinetic.Stage({
                 container: 'audiogram_right',
                 width: 500,
