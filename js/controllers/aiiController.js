@@ -2043,7 +2043,17 @@
                 //Get clicked facilities users
                 getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                     $scope.facCardUsers = data;
+                    for (i = 0; i < data.records.length; i++) {
+                            if (data.records[i].Level == 'Coordinator') {
+                                $scope.facilityAdmin = data.records[i];
+                                i = data.records.length;
+                            }
+                        }
                 });
+                
+                 $scope.sendMessageToUser = function(user) {
+                    persistData.setMessageRecipient(user);
+                }
 
                 $scope.ok = function() {
                     $modalInstance.close();
@@ -2084,12 +2094,11 @@
             var ModalInstanceCtrl = function($scope, $modalInstance, patient) {
                 var cookieSessionID = $cookieStore.get('SessionID');
 
+                $scope.currentDate = new Date();
                 //object to hold information for patients new event
                 $scope.newEvent = {
                     "Description": null,
-                    "OriginalFacilityID": 100,
                     "CurrentPhaseID": 20,
-                    "CreatedOn": new Date(),
                     "PatientID": patient.PatientID
                 };
                 $scope.patient = patient;
@@ -2110,7 +2119,7 @@
                 //function to save new event
                 $scope.submitEvent = function() {
                     if ($scope.newEvent.Description == null) {
-                        $scope.newEvent.Description = "Edit Event Description";
+                        $scope.newEvent.Description = "N/A";
                     }
                     $scope.answer = {};
                     $scope.answer.Answers = {};
@@ -2124,7 +2133,7 @@
                     $scope.answer.Answers[46] = patient.Weight;
 
                     //create new event for that patient...
-                    postData.post('http://killzombieswith.us/aii-api/v1/careTeams', $scope.newEvent).success(function(data) {
+                    postData.post('http://killzombieswith.us/aii-api/v1/careTeams/'+cookieSessionID, $scope.newEvent).success(function(data) {
                         $scope.answer.CareTeamID = data.records;
                     }).then(function() {
                         //post known demo answers to that event 
