@@ -2043,7 +2043,17 @@
                 //Get clicked facilities users
                 getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                     $scope.facCardUsers = data;
+                    for (i = 0; i < data.records.length; i++) {
+                            if (data.records[i].Level == 'Coordinator') {
+                                $scope.facilityAdmin = data.records[i];
+                                i = data.records.length;
+                            }
+                        }
                 });
+                
+                 $scope.sendMessageToUser = function(user) {
+                    persistData.setMessageRecipient(user);
+                }
 
                 $scope.ok = function() {
                     $modalInstance.close();
