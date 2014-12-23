@@ -6,6 +6,7 @@
 
 //$pdf = new PdfManager;
 $Audiogram = new AudiogramManager();
+$PatientInfo = new AiiPatientInfo();
 $Errors = new AudErrors();
 
 if($_POST){
@@ -22,7 +23,7 @@ if($_POST){
     switch($_POST['Action']){
         case 'getAudiogramList':$Audiogram->getAudiogramList();     break;
         case 'getConditions':   $Audiogram->getConditions();        break;
-        case 'getPatientInfo':  $Audiogram->getPatientInfo($_POST); break;
+        case 'getPatientInfo':  $PatientInfo->getPatientInfo($_POST); break;
         case 'saveAudiogram':   $Audiogram->saveAudiogram($_POST);  break;
         default: break;
     }
@@ -32,6 +33,26 @@ if($_POST){
     //$pdf->SaveAudiogramInfo($_POST);
 }
 
+class AiiPatientInfo{
+    
+    function __construct(){
+        //Nada
+    }
+    /**
+     * Gets information from a single patient if PatientID is provided, otherwise all
+     * active patients are returned
+     */
+    public function getPatientInfo($data){
+        if($data['PatientID']){
+            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['PatientID']}/{$_POST['Token']}");
+            exit;
+        }else{
+            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['Token']}");
+            exit;
+        }
+    }
+}
+
 class AudiogramManager{
     var $Token;
     var $FirstName;
@@ -39,6 +60,8 @@ class AudiogramManager{
     var $Dob;
     var $PrevAudiograms;
     var $Json;
+    var $PatientInfo;
+    var $Conn;
 
     /**
      * Ummm. Constructor
@@ -50,6 +73,8 @@ class AudiogramManager{
         $this->Dob = null;
         $this->PrevAudiograms = null;     
         $this->Json = null;
+        //$this->Conn = mysqli_connect("localhost","audiogram_user","Rugger99!123456789","aii") or die("Error " . mysqli_error($this->Conn));
+        $this->PatientInfo = new AiiPatientInfo();
     }
     
     /**
@@ -97,22 +122,27 @@ class AudiogramManager{
         
     }
     
-    /**
-     * Gets information from a single patient if PatientID is provided, otherwise all
-     * active patients are returned
-     */
-    public function getPatientInfo($data){
-        if($data['PatientID']){
-            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['PatientID']}/{$_POST['Token']}");
-            exit;
-        }else{
-            echo file_get_contents("http://aii-hermes.org/aii-api/v1/patients/{$_POST['Token']}");
-            exit;
-        }
-    }
-    
     public function saveAudiogram($data){
         print_r($data);
+        /*
+        $link = mysqli_connect("localhost","audiogram_user","hUGMftrUAxv2BTMu","aii") or die("Error " . mysqli_error($link));
+        */
+        
+        $pid = $data['patient_data']['PatientID'];
+        $data = time();
+        $phase = $data['patient_data']['CurrentPhaseID'];
+        //$eid = $this->GetEventId();
+        
+        
+        $sql = 
+        "INSERT INTO `aii`.`audiograms` (`patient_id`, `event_id`, `audiogram_id`, `date`, `title`, `phase_id`, `right_measures`, 
+        `left_measures`, `spch_aud_srt_r`, `spch_aud_srt_l`, `spch_aud_srt_b`, `spch_aud_mask_r`, `spch_aud_mask_l`, `spch_aud_mask_b`, 
+        `word_rec_per_r`, `word_rec_per_l`, `word_rec_per_b`, `word_rec_stim_r`, `word_rec_stim_l`, `word_rec_stim_b`, `word_rec_mask_r`, 
+        `word_rec_mask_l`, `word_rec_mask_b`, `word_rec_noise_r`, `word_rec_noise_l`, `word_rec_noise_b`) 
+        VALUES ('{$pid}', '{$eid}', '1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');";
+        
+        echo $sql;
+        
     }
     
     public function SetToken($token){

@@ -148,7 +148,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             if (i == 1) {
                 x += column_width / 2;
             }
-            x_values[i].x = x;
+            x_values[i].x = x+4; //+4 because of ??? needs deeper fix.
         }
 
         //Load Y possible values because we want more possibilities than just the labels
@@ -312,7 +312,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             }));
         }
 
-        //Add dashed lines
+        //Add dashed lines (+4 because something wasn't right in determining borders buffers etc. needs deeper fix)
         for (i = 0; i < x_values.length; i = i + 1) {
             points  =  [x_values[i].x, graph_bounds.min.y, x_values[i].x, graph_bounds.max.y];
 
