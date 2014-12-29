@@ -25,7 +25,6 @@ function bubbleSort(points) {
 }
 
 
-
 var AudioGram = function (stage, audiogram_id, side, element_id) {
     'use strict';
     var Stage = stage;                          //The whole kinetic stage!
@@ -70,6 +69,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     var y_values = [];
     var column_width = 0;
     var row_height = 0;
+    var cookies = null;
+    var SessionID = null;
 
     /**
     * Initializes the audiogram graph
@@ -83,7 +84,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         var x = 0;
         var y = 0;
         var Label = "";
-
+        
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -147,7 +148,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             if (i == 1) {
                 x += column_width / 2;
             }
-            x_values[i].x = x;
+            x_values[i].x = x+4; //+4 because of ??? needs deeper fix.
         }
 
         //Load Y possible values because we want more possibilities than just the labels
@@ -156,6 +157,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             y_values.push({"value" : i, "y" : y});
         }
         addBackgroundLayer();
+    
+        
     }
 
     /**
@@ -309,7 +312,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             }));
         }
 
-        //Add dashed lines
+        //Add dashed lines (+4 because something wasn't right in determining borders buffers etc. needs deeper fix)
         for (i = 0; i < x_values.length; i = i + 1) {
             points  =  [x_values[i].x, graph_bounds.min.y, x_values[i].x, graph_bounds.max.y];
 
@@ -341,7 +344,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 //        Profound Hearing Loss: 91dB and up
         
         //Combine into single funtion later....
-        console.log("x=",row_height);
+        //console.log("x=",row_height);
         var mild = new Kinetic.Rect({
             x : graph_bounds.min.x,
             y : graph_bounds.min.y+row_height*3.5+20,
@@ -536,7 +539,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
-
+        
         drawStack();
     }
 
@@ -1128,8 +1131,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         setTimeout(function () {
             //Remove any error messages from the canvas
             Layers.error.removeChildren ();
-
             Stage.draw();
+            
             setTimeout(function () {
                 //If you clicked on the canvas
                 if(!clickInfo.error) {
@@ -1139,6 +1142,10 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                     }else if(clickInfo.sameFrequency !== false) {
                         //handle moving item on same frequency
                         console.log(clickInfo.sameFrequency);
+                        currentStack.slice(clickInfo.sameFrequency,clickInfo.sameFrequency+1);
+                        console.log(currentStack);
+                        console.log("hello");
+                        addMeasure(clickInfo.x,clickInfo.y);                       
                     }else{
                         addMeasure(clickInfo.x,clickInfo.y);
                     }

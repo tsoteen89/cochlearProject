@@ -109,9 +109,11 @@
                         </div>
                         <!-- End phaseProgress repeat for careTeams -->
                         <!--See care team button - shows all care team members listed in well underneath patient box -->
-                        <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
-                            See Care Team Details 
-                        </button>
+                        <div class="col-md-offset-9">
+                            <button id = "cp_patientPhaseDetails" ng-click="toggleDataCollapse()" type="button" class="btn btn-info">
+                                See Care Team Details 
+                            </button>
+                        </div>
                     </div>
                 
                     <!--CareTeam Details Well that collapses on click of "See Care Team Details" -->
@@ -125,13 +127,15 @@
                                     <!--patient.Providers = all facilities ever involved with patient-->
                                     <span>{{facility.Name}}</span><br>
                                 </a>
+                                <br>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-offset-9">
                                 <button type="button" class="btn btn-default btn-sm"  ng-click="inviteToCareTeam(patient)">
                                 <span class="glyphicon glyphicon-plus-sign"></span> 
                                 Invite Provider to CareTeam
                                 </button>
                             </div>
+                            
                         </div>
                         <!-- END Phase Progress BOX ON RIGHT--------------------->
                         <!-- Modal to Invite facility to specific patient's care team -->
@@ -229,7 +233,7 @@
                   <b> {{facCard.records.Name}} </b> <br>
                   <b> Address: </b> <br>
                   {{facCard.records.Address1}} <br>
-                  Facility Admin: <a> ADMIN NAME</a> <br>
+                  Facility Admin: <a href="#/messages" ng-click="ok(); sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}}</a> <br>
                 </div> 
             </div>
             <p> Users @ {{facCard.records.Name}}</p>    
@@ -237,7 +241,7 @@
                 <ul class="list-unstyled">
                     <li ng-repeat="user in facCardUsers.records"> 
                         <div ng-class-odd="'odd'" ng-class-even="'even'">
-                            <a href="mailto:{{user.email}}"> {{user.first_name}}  {{user.last_name}}</a>
+                            <a href="#/messages" ng-click="ok(); sendMessageToUser(user)"> {{user.first_name}}  {{user.last_name}}</a>
                         </div>
                     </li>
                 </ul>
@@ -279,7 +283,7 @@
                     <div class="control-group col-md-4 col-md-offset-1" >
                         <label>Date</label>
                         <div class="controls" >
-                            <input type="date" class="form-control" name="date" ng-model="newEvent.CreatedOn" disabled>
+                            <input type="date" class="form-control" name="date" ng-model="currentDate" disabled>
                         </div>
                     </div>
                 </div> <br>

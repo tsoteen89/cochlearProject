@@ -399,7 +399,7 @@
         $scope.sessionID = userInfo.get().SessionID;
 
         //**********API URL's***********************/
-        $scope.facilityURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.sessionID; //returns user's facility info
+        $scope.facilityURL = "http://aii-hermes.org/aii-api/v1/facilities/" + $scope.sessionID; //returns user's facility info
 
 
         //Grab Facility info  using facilityURL
@@ -410,13 +410,13 @@
         });
 
         //Grab All AII Facilities 
-        $scope.baseFacilityURL = "http://killzombieswith.us/aii-api/v1/facilities/";
+        $scope.baseFacilityURL = "http://aii-hermes.org/aii-api/v1/facilities/";
         getData.get($scope.baseFacilityURL + "getAll/" + $scope.sessionID).success(function(data) {
             $scope.allFacs = data;
         });
 
         //Grab Facilities Users
-        getData.get("http://killzombieswith.us/aii-api/v1/facilities/users/" + $scope.sessionID).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/facilities/users/" + $scope.sessionID).success(function(data) {
             $scope.facUsers = data;
             for (i = 0; i < data.records.length; i++) {
                 if (data.records[i].Level == 'Coordinator') {
@@ -458,13 +458,13 @@
                     $scope.addUser = {}; //object to hold form data for adding user
 
                     //Grab the user titles to populate the form with user title options
-                    getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data) {
+                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles').success(function(data) {
                         $scope.userTitles = data.records;
                     });
 
                     //Send invitation to the potential user
                     $scope.sendInvitation = function() {
-                        $scope.inviteUserURL = "http://killzombieswith.us/aii-api/v1/userInvites/" + $scope.sessionID;
+                        $scope.inviteUserURL = "http://aii-hermes.org/aii-api/v1/userInvites/" + $scope.sessionID;
                         postData.post($scope.inviteUserURL, $scope.addUser);
                         $modalInstance.close();
                     }
@@ -509,7 +509,7 @@
 
 
                     //Grab all Patients using patientURL 
-                    $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
+                    $scope.patientURL = "http://aii-hermes.org/aii-api/v1/facilities/patients/" + $scope.sessionID;
                     getData.get($scope.patientURL).success(function(data) {
                         //set name to concatenate first and last name so we can filter search on entire name
                         for (var i = 0; i < data.records.length; i++) {
@@ -526,7 +526,7 @@
 
                     $scope.sendInvitation = function() {
                         //Post a facility invitation
-                        $scope.inviteFacilityURL = "http://killzombieswith.us/aii-api/v1/facilityInvites/" + $scope.sessionID;
+                        $scope.inviteFacilityURL = "http://aii-hermes.org/aii-api/v1/facilityInvites/" + $scope.sessionID;
                         postData.post($scope.inviteFacilityURL, $scope.addFacility);
                         $modalInstance.close();
                     };
@@ -568,12 +568,12 @@
                     $scope.sessionID = userInfo.get().SessionID;
 
                     //get the specific facility's (that was clicked) information
-                    getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/' + $scope.sessionID).success(function(data) {
+                    getData.get("http://aii-hermes.org/aii-api/v1/facilities/" + fac.FacilityID + '/' + $scope.sessionID).success(function(data) {
                         $scope.facCard = data;
                     });
 
                     //get the specific facility's users
-                    getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
+                    getData.get("http://aii-hermes.org/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                         $scope.facCardUsers = data;
                         for (i = 0; i < data.records.length; i++) {
                             if (data.records[i].Level == 'Coordinator') {
@@ -584,7 +584,7 @@
                     });
 
                     //get the all the patients for YOUR (user who's logged in) facility and exclude any patients the clicked facility already has
-                    getData.get("http://killzombieswith.us/aii-api/v1/facilities/patients/excludingExisting/" + fac.FacilityID + '/' +
+                    getData.get("http://aii-hermes.org/aii-api/v1/facilities/patients/excludingExisting/" + fac.FacilityID + '/' +
                         $scope.sessionID).success(function(data) {
 
                         for (var i = 0; i < data.records.length; i++) {
@@ -631,7 +631,7 @@
                         $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
                         $scope.postNotification.ReceiverFacilityID = fac.FacilityID;
 
-                        $scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+                        $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
                         postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
                             $scope.sendButtonText = "Invitation Sent!";
                         });
@@ -708,7 +708,7 @@
                     if ($scope.isProblemReport) {
                         $scope.message.IsReport = 1;
                     }
-					$scope.contactAdminURL = "http://killzombieswith.us/aii-api/v1/adminAlerts/" + $scope.sessionID;
+					$scope.contactAdminURL = "http://aii-hermes.org/aii-api/v1/adminAlerts/" + $scope.sessionID;
                     postData.post($scope.contactAdminURL, $scope.message);
 
                     $modalInstance.close();
@@ -852,11 +852,11 @@
         $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); //currents phase patient is in. used in logic to decide next phase
 
         //api urls to grab questions for the active phase
-        $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
 
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
-        $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
+        $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
             $scope.answer.PhaseID;
         $scope.dirAnchor = $cookieStore.get('dirAnchor'); //anchor on patient directory page for patient, so can return/scroll back to patient status
         $scope.clickedPhase = null;
@@ -871,7 +871,7 @@
                 $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
 
                 //url to grab previously entered device details
-                $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
                 //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
@@ -897,7 +897,7 @@
                 }
                 $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
 
-                getData.get("http://killzombieswith.us/aii-api/v1/deviceProviders/" + $scope.provider).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/deviceProviders/" + $scope.provider).success(function(data) {
                     $scope.implants = data.records.Implants;
                     $scope.electrodes = data.records.Electrodes;
                     $scope.processors = data.records.Processors;
@@ -907,7 +907,7 @@
                     /*
                     $scope.deviceDetails = {'DeviceDetails': provider + ', ' + $scope.answer.Answers[$scope.implantQuestion]  + ', ' +
                                             $scope.answer.Answers[$scope.electrodeQuestion] + ', ' + $scope.answer.Answers[$scope.processorQuestion]}
-                    putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.deviceDetails);
+                    putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.deviceDetails);
                 
                     if(!$scope.answer.Answers[$scope.implantQuestion]){
                         $scope.answer.Answers[$scope.implantQuestion] = "N/A";
@@ -920,7 +920,7 @@
                     }
                     */
                     if (isValid) { //if all aspects of device details was saved- post them to database
-                        postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID, $scope.device);
+                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device);
                         $scope.ok();
                     } else {
                         alert("Please select an option for each category");
@@ -970,7 +970,7 @@
         }
 
         //get audiology results for the phase
-        getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             //console.log("first" + $scope.audioSummaryAnswers);
         });
@@ -1058,7 +1058,7 @@
                     }
                 }
             }
-            postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
+            postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
 
         };
 
@@ -1070,7 +1070,7 @@
             $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
             $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
             $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID].toISOString().slice(0, 10);
-            postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
+            postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
 
         };
 
@@ -1091,7 +1091,7 @@
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
-            postData.post('http://killzombieswith.us/aii-api/v1/surgeryHistory', $scope.surgery).success(function() {
+            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory', $scope.surgery).success(function() {
                 $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                 $scope.surgery["Other"] = null;
                 $scope.surgery["Type of Surgery?"] = null;
@@ -1247,7 +1247,7 @@
                     "CurrentPhaseID": $scope.nextPhase
                 };
                 // Post the changed currentPhaseID here
-                putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
                     $location.path('patientDirectory')
                 });
 
@@ -1261,14 +1261,14 @@
             var updateToInactive = {
                 'InactiveStatus': 60
             }
-            putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patID, updateToInactive);
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID, updateToInactive);
             //Update Current phase number in database
 
             $scope.newPhase = {
                 "CurrentPhaseID": 12
             };
             // Post the changed currentPhaseID here
-            putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
                 $location.path('patientDirectory')
             });
 
@@ -1280,14 +1280,14 @@
             
             if(phaseNumber == 2 || phaseNumber > 6){
             
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('CareTeamID')).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('CareTeamID')).success(function(data) {
                         $scope.patientSummaryAnswers = data.records.DetailedAnswers;
                         console.log("first" + $scope.audioSummaryAnswers);
                 });
             }
             
             if(phaseNumber == 1 || phaseNumber > 2 && phaseNumber < 7){
-                $scope.patientSummaryAnswersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + phaseNumber; 
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + phaseNumber; 
 
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;          
@@ -1318,7 +1318,7 @@
 
             var ModalInstanceCtrl = function($scope, $modalInstance) {
 
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
                 });
                 $scope.ok = function() {
@@ -1421,7 +1421,7 @@
         $scope.phaseName = $cookieStore.get('PhaseName');
 
         //Get Audiology Phase fields and tests to populate the form 
-        $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
         getData.get($scope.questionsURL).success(function(data) {
             $scope.audioQuestions = data.records;
             $scope.audioQs = data.records.Questions;
@@ -1446,7 +1446,7 @@
             "BKB-SIN": {}
         };
 
-        $scope.answersURL = "http://killzombieswith.us/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+        $scope.answersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
 
         //**********************Copied from questionsControllerr****/
 
@@ -1515,7 +1515,7 @@
             $scope.singleAnswer.PhaseID = $scope.answer.PhaseID;
             $scope.singleAnswer.CareTeamID = $cookieStore.get('CareTeamID');
             $scope.singleAnswer.Answers[questionID] = $scope.answer.Answers[questionID];
-            postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
+            postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.singleAnswer);
 
         };
         //**********************Copied from questionsControllerr****/
@@ -1531,7 +1531,7 @@
 
             $scope.singleAnswer.Results[test] = $scope.answer.Results[test];
             $scope.singleAnswer.ConditionsID = $scope.answer.ConditionsID;
-            postData.post('http://killzombieswith.us/aii-api/v1/audioTestResults/' + cookieSessionID, $scope.singleAnswer).success(function(data) {
+            postData.post('http://aii-hermes.org/aii-api/v1/audioTestResults/' + cookieSessionID, $scope.singleAnswer).success(function(data) {
                 if (data.records != 'Success') {
                     alert(data.records);
                 } else {
@@ -1552,7 +1552,7 @@
         //uses $scope.conditions object info (left and right ear conditions) to find ID of the two conditions set for the ears
         $scope.getConditionsID = function() {
             console.log("getConditionsID Called");
-            getData.get("http://killzombieswith.us/aii-api/v1/audioConditions/left/" + this.conditions.Left + "/right/" + this.conditions.Right).success(function(data) {
+            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/left/" + this.conditions.Left + "/right/" + this.conditions.Right).success(function(data) {
                 $scope.answer.ConditionsID = data.records.ConditionsID;
             });
         }
@@ -1631,7 +1631,7 @@
          */
         $scope.getDataSummary = function(patientSummaryAnswers) {
             var ModalInstanceCtrl = function($scope, $modalInstance) {
-                getData.get("http://killzombieswith.us/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
                     $scope.patientSummaryAnswers = data.records.DetailedAnswers;
                 });
                 $scope.ok = function() {
@@ -1770,7 +1770,7 @@
                     patient.reason = null;
                 }
                 $timeout(function() {
-                    putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, patient);
+                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, patient);
                 }, 0);
             }, 0);
 
@@ -1781,7 +1781,7 @@
             var updateToActive = {
                 'InactiveStatus': 10
             };
-            putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
             patient.InactiveStatus = 10;
         }
 
@@ -1807,11 +1807,11 @@
         $scope.editDescrip = false; // used to show description as text - changed to true if user needs to edit - in which case, text becomes textbox
 
         $scope.submitDescriptionInfo = function(careTeam) {
-            putData.put('http://killzombieswith.us/aii-api/v1/careTeams/' + careTeam.CareTeamID, careTeam);
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID, careTeam);
         };
 
         //Get all the possible reasons to become inactive
-        getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons").success(function(data) {
             $scope.inactiveReasons = data.records;
         });
 
@@ -1874,19 +1874,19 @@
         };
 
         //Grab all Patients for users facility using patientURL 
-        $scope.patientURL = "http://killzombieswith.us/aii-api/v1/facilities/patients/" + $scope.sessionID;
+        $scope.patientURL = "http://aii-hermes.org/aii-api/v1/facilities/patients/" + $scope.sessionID;
         getData.get($scope.patientURL).success(function(data) {
             $scope.patientsData = data;
         })
 
 
         //Get all the phases info!!
-        getData.get("http://killzombieswith.us/aii-api/v1/phases/" + $scope.sessionID).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/phases/" + $scope.sessionID).success(function(data) {
             $scope.phases = data.records;
         });
         
         //Get all the current phase cases info!! - used to make the dots
-        getData.get("http://killzombieswith.us/aii-api/v1/phases/phaseStatuses").success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/phases/phaseStatuses").success(function(data) {
             $scope.phaseCases = data.records;
         });
 
@@ -1918,7 +1918,7 @@
                 modalCounter++;
                 $scope.modalPatient = patient;
 
-                getData.get("http://killzombieswith.us/aii-api/v1/inactiveReasons").success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons").success(function(data) {
                     $scope.inactiveReasons = data.records;
                 });
 
@@ -1951,7 +1951,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -1999,7 +1999,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://killzombieswith.us/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2037,13 +2037,23 @@
                 $scope.sessionID = userInfo.get().SessionID;
                 //console.log(fac.FacilityID);
                 //Get clicked facilities info
-                getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + "/" + $scope.sessionID).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/facilities/" + fac.FacilityID + "/" + $scope.sessionID).success(function(data) {
                     $scope.facCard = data;
                 });
                 //Get clicked facilities users
-                getData.get("http://killzombieswith.us/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/facilities/" + fac.FacilityID + '/users/' + $scope.sessionID).success(function(data) {
                     $scope.facCardUsers = data;
+                    for (i = 0; i < data.records.length; i++) {
+                            if (data.records[i].Level == 'Coordinator') {
+                                $scope.facilityAdmin = data.records[i];
+                                i = data.records.length;
+                            }
+                        }
                 });
+                
+                 $scope.sendMessageToUser = function(user) {
+                    persistData.setMessageRecipient(user);
+                }
 
                 $scope.ok = function() {
                     $modalInstance.close();
@@ -2084,12 +2094,11 @@
             var ModalInstanceCtrl = function($scope, $modalInstance, patient) {
                 var cookieSessionID = $cookieStore.get('SessionID');
 
+                $scope.currentDate = new Date();
                 //object to hold information for patients new event
                 $scope.newEvent = {
                     "Description": null,
-                    "OriginalFacilityID": 100,
                     "CurrentPhaseID": 20,
-                    "CreatedOn": new Date(),
                     "PatientID": patient.PatientID
                 };
                 $scope.patient = patient;
@@ -2110,7 +2119,7 @@
                 //function to save new event
                 $scope.submitEvent = function() {
                     if ($scope.newEvent.Description == null) {
-                        $scope.newEvent.Description = "Edit Event Description";
+                        $scope.newEvent.Description = "N/A";
                     }
                     $scope.answer = {};
                     $scope.answer.Answers = {};
@@ -2124,16 +2133,16 @@
                     $scope.answer.Answers[46] = patient.Weight;
 
                     //create new event for that patient...
-                    postData.post('http://killzombieswith.us/aii-api/v1/careTeams', $scope.newEvent).success(function(data) {
+                    postData.post('http://aii-hermes.org/aii-api/v1/careTeams/'+cookieSessionID, $scope.newEvent).success(function(data) {
                         $scope.answer.CareTeamID = data.records;
                     }).then(function() {
                         //post known demo answers to that event 
-                        postData.post('http://killzombieswith.us/aii-api/v1/answers/' + cookieSessionID, $scope.answer).success(function() {
+                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.answer).success(function() {
                             //if patient was inactive, new event re-activates them.
                             var updateToActive = {
                                 'InactiveStatus': 10
                             };
-                            putData.put('http://killzombieswith.us/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
                             patient.InactiveStatus = 10;
                         });
 
@@ -2182,7 +2191,7 @@
                 $scope.patient = patient;
                 $scope.selectedFac = "(No facility selected)";
                 //Grab AII Facilities that are NOT already associated with the patient
-                getData.get("http://killzombieswith.us/aii-api/v1/facilities/new/" + patient.PatientID).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/facilities/new/" + patient.PatientID).success(function(data) {
                     $scope.allFacs = data;
                 });
 
@@ -2202,13 +2211,13 @@
                     $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
                     $scope.postNotification.ReceiverFacilityID = $scope.selectedFac.FacilityID;
 
-                    $scope.postNotificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+                    $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
                     postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
                         if (data.records == "Success")
                             $modalInstance.close();
 
                     });
-                    /*postData.post('http://killzombieswith.us/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
+                    /*postData.post('http://aii-hermes.org/aii-api/v1/patientProviders',$scope.patientProvider).success(function(data) {
                         $modalInstance.close();
                         $timeout(function(){
                             $route.reload();
@@ -2271,7 +2280,7 @@
 
         // Post function to add a new Patient to the system
         $scope.addPatient = function() {
-            postData.post('http://killzombieswith.us/aii-api/v1/patients/' + sessionID, $scope.formData).success(function(data) {
+            postData.post('http://aii-hermes.org/aii-api/v1/patients/' + sessionID, $scope.formData).success(function(data) {
                 alert(data.records);
 
                 if (data.records == "Successfully added a patient") {
@@ -2400,8 +2409,8 @@
         // create a blank object to hold form information
         $scope.formData = {};
         //getting the userlevels from the api and posting it to the form
-        $scope.UserLevelsURL = 'http://killzombieswith.us/aii-api/v1/userLevels';
-        $scope.UserTitlesURL = 'http://killzombieswith.us/aii-api/v1/userTitles';
+        $scope.UserLevelsURL = 'http://aii-hermes.org/aii-api/v1/userLevels';
+        $scope.UserTitlesURL = 'http://aii-hermes.org/aii-api/v1/userTitles';
         getData.get($scope.UserLevelsURL).success(function(data) {
             $scope.formData.UserLevels = data;
             //console.log($scope.formData.UserLevels);
@@ -2413,7 +2422,7 @@
 
         // Post function to add a new User to the system
         $scope.processForm = function() {
-            postData.post('http://killzombieswith.us/aii-api/v1/users', $scope.formData);
+            postData.post('http://aii-hermes.org/aii-api/v1/users', $scope.formData);
         };
 
     }
@@ -2455,8 +2464,8 @@
         $scope.facilityID = userInfo.get().FacilityID;
 
         //url to get signed in users info
-        $scope.userURL = "http://killzombieswith.us/aii-api/v1/users/one/" + $scope.sessionID;
-        $scope.faciltyURL = "http://killzombieswith.us/aii-api/v1/facilities/" + $scope.facilityID + '/' + $scope.sessionID;
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
+        $scope.faciltyURL = "http://aii-hermes.org/aii-api/v1/facilities/" + $scope.facilityID + '/' + $scope.sessionID;
         $scope.userLevel = persistData.getUserLevel();
 
         //Grab single User by ID and then bind email and phone details to the editUser scope variable
@@ -2475,7 +2484,7 @@
 
         //Put changed User information into database
         $scope.editUserPut = function() {
-            putData.put('http://killzombieswith.us/aii-api/v1/users/' + this.userData.records.UserID, $scope.editUser).success(function(data) {
+            putData.put('http://aii-hermes.org/aii-api/v1/users/' + this.userData.records.UserID, $scope.editUser).success(function(data) {
                 if (data.records["User Edit Response"] == "Successfully edited a user") {
                     $scope.passwordChange = true;
                 }
@@ -2484,7 +2493,7 @@
 
         //Put changed Facility information into database
         $scope.editFacilityPut = function() {
-            putData.put('http://killzombieswith.us/aii-api/v1/facilities/' + this.userData.records.FacilityID, $scope.editFacility);
+            putData.put('http://aii-hermes.org/aii-api/v1/facilities/' + this.userData.records.FacilityID, $scope.editFacility);
         };
 
     }
@@ -2531,14 +2540,14 @@
         $scope.markedMessages = [];
 
         //The type of message currently being displayed - inbox, sent, drafts, deleted
-        $scope.currentMessageType;
+        $scope.currentMessageType = 'inbox';
         $scope.currentMessages;
 
-        $scope.inboxURL = "http://killzombieswith.us/aii-api/v1/users/inbox/" + $scope.sessionID;
-        $scope.sentURL = "http://killzombieswith.us/aii-api/v1/users/sent/" + $scope.sessionID;
-        $scope.draftsURL = "http://killzombieswith.us/aii-api/v1/users/drafts/" + $scope.sessionID;
-        $scope.deletedURL = "http://killzombieswith.us/aii-api/v1/users/deleted/" + $scope.sessionID;
-        $scope.messageURL = "http://killzombieswith.us/aii-api/v1/messages/";
+        $scope.inboxURL = "http://aii-hermes.org/aii-api/v1/users/inbox/" + $scope.sessionID;
+        $scope.sentURL = "http://aii-hermes.org/aii-api/v1/users/sent/" + $scope.sessionID;
+        $scope.draftsURL = "http://aii-hermes.org/aii-api/v1/users/drafts/" + $scope.sessionID;
+        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/users/deleted/" + $scope.sessionID;
+        $scope.messageURL = "http://aii-hermes.org/aii-api/v1/messages/";
 
 
 
@@ -2737,16 +2746,19 @@
             persistData.setMessageRecipient(-1);
         }
 
-        $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
+        $scope.unreadMessageURL = "http://aii-hermes.org/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
         
-        //get unread message count
+        //get each unread message count
         getData.get($scope.unreadMessageURL).success(function(data) {
             $scope.messageCount = data.records['messageCount'];
+            $scope.alertCount = data.records['alertCount'];
+            $scope.notificationCount = data.records['notificationCount'];
+            $scope.totalUnreadCount = data.records['totalUnreadCount'];
             //console.log("count"+$scope.messageCount);
         });
         
         //Toggles visibility of the message content display
-        $scope.togglePopup = function(message) {
+        $scope.messagesTogglePopup = function(message) {
             if ($scope.selectedMessage == message || message == null) {
                 $scope.isPopupVisible = false;
                 $scope.selectedMessage = null;
@@ -2756,7 +2768,7 @@
                 $scope.selectedMessage = message;
                 //If the message is a user received message and has not already been marked as read, mark it
                 if ($scope.selectedMessage.ReceiverName == 'Me' && $scope.selectedMessage.IsRead == 0) {
-                    messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+                    messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
                     //Change the message's Read attribute to true
                     $scope.selectedMessage.IsRead = 1;
                     //PUT the message using the message URL
@@ -2765,10 +2777,11 @@
                     }).then(function() {
                         
                         getData.get($scope.unreadMessageURL).success(function(data) {
+                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
                             $scope.messageCount = data.records['messageCount'];
                             //console.log("count"+$scope.messageCount);
                         }).then(function() {
-                            messageCount.prepForBroadcast($scope.messageCount);
+                            messageCount.prepForBroadcast($scope.totalUnreadCount);
                         });
                     });
                 }
@@ -2975,10 +2988,11 @@
                         $scope.refreshMessages();
                     }).then(function(){
                         getData.get($scope.unreadMessageURL).success(function(data) {
+                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
                             $scope.messageCount = data.records['messageCount'];
-                           // console.log("count"+$scope.messageCount);
+                            console.log("count"+$scope.messageCount);
                         }).then(function() {
-                            messageCount.prepForBroadcast($scope.messageCount);
+                            messageCount.prepForBroadcast($scope.totalUnreadCount);
                         });
                     });
                 }
@@ -3134,7 +3148,7 @@
         }
 
         $scope.deleteSelectedMessage = function() {
-            messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
             //Change the message's Deleted attribute to true
             if ($scope.selectedMessage.ReceiverName == "Me") {
                 $scope.selectedMessage.ReceiverDeleted = 1;
@@ -3150,7 +3164,7 @@
 
         //Marks the message as deleted, however the message will no longer appear in the Deleted messages.
         $scope.fullyDeleteSelectedMessage = function() {
-            messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
             //Change the message's Deleted attribute to true
             if ($scope.selectedMessage.ReceiverName == "Me") {
                 $scope.selectedMessage.ReceiverDeleted = 2;
@@ -3164,7 +3178,7 @@
         }
 
         $scope.restoreSelectedMessage = function() {
-            messageURL = "http://killzombieswith.us/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
+            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
             //Change the message's Deleted attribute to true
             if ($scope.selectedMessage.ReceiverName == "Me") {
                 $scope.selectedMessage.ReceiverDeleted = 0;
@@ -3209,10 +3223,10 @@
         $scope.userLevelID = userInfo.get().UserLevelID;
         $scope.sessionID = userInfo.get().SessionID;
 
-        $scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/alerts/" + $scope.sessionID;
-        $scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/deletedAlerts/" + $scope.sessionID;
+        $scope.receivedURL = "http://aii-hermes.org/aii-api/v1/facilities/alerts/" + $scope.sessionID;
+        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/facilities/deletedAlerts/" + $scope.sessionID;
 
-        $scope.alertURL = "http://killzombieswith.us/aii-api/v1/alerts/";
+        $scope.alertURL = "http://aii-hermes.org/aii-api/v1/alerts/";
 
         $scope.currentAlerts;
 
@@ -3262,6 +3276,7 @@
             }
         });
 
+        $scope.currentAlertType = 'received';
         $scope.setAlertType = function(alertType) {
             $scope.currentAlertType = alertType;
 
@@ -3287,14 +3302,14 @@
             }
         }
 
-        $scope.isTypeSelected = function(alertType) {
+        $scope.isAlertTypeSelected = function(alertType) {
             if (alertType == $scope.currentAlertType) {
                 return true;
             }
             return false;
         }
 
-        $scope.togglePopup = function(alert) {
+        $scope.alertTogglePopup = function(alert) {
             if ($scope.showPopup) {
                 $scope.selectedAlert = [];
             } else {
@@ -3305,19 +3320,25 @@
                     $scope.selectedAlert.IsRead = 1;
                     putData.put(putAlertURL, $scope.selectedAlert).success(function(data) {
                         $scope.refreshAlerts();
+                    }).then(function(){
+                        //get each unread notification count
+                        var unreadAlertURL = "http://aii-hermes.org/aii-api/v1/facilities/unreadAlertsCount/" + $scope.sessionID;
+                        getData.get(unreadAlertURL).success(function(data) {
+                            $scope.alertCount = data.records['alertCount'];
+                        });
                     });
                 }
             }
             $scope.showPopup = !$scope.showPopup;
         }
 
-        $scope.hidePopup = function() {
+        $scope.alertHidePopup = function() {
             $scope.showPopup = false;
             $scope.selectedAlert = [];
         }
 
         $scope.deleteSelectedAlert = function(deletedState) {
-            putAlertURL = "http://killzombieswith.us/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
+            putAlertURL = "http://aii-hermes.org/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
             //Change the alert's Deleted attribute to true
             $scope.selectedAlert.IsArchived = deletedState;
             //PUT the alert using the URL and then refresh the alerts
@@ -3509,10 +3530,10 @@
         $scope.userLevelID = userInfo.get().UserLevelID;
         $scope.sessionID = userInfo.get().SessionID;
 
-        $scope.receivedURL = "http://killzombieswith.us/aii-api/v1/facilities/notifications/" + $scope.sessionID;
-        $scope.deletedURL = "http://killzombieswith.us/aii-api/v1/facilities/deletedNotifications/" + $scope.sessionID;
+        $scope.receivedURL = "http://aii-hermes.org/aii-api/v1/facilities/notifications/" + $scope.sessionID;
+        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/facilities/deletedNotifications/" + $scope.sessionID;
 
-        $scope.notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/";
+        $scope.notificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
         $scope.currentNotificationType = 'received';
 
         /* Miscellaneous Variables */
@@ -3617,14 +3638,15 @@
             }
         }
 
-        $scope.isTypeSelected = function(notificationType) {
+        $scope.isNotiTypeSelected = function(notificationType) {
             if (notificationType == $scope.currentNotificationType) {
                 return true;
             }
             return false;
         }
 
-        $scope.togglePopup = function(notification) {
+        $scope.notifTogglePopup = function(notification) {
+            //console.log("notiftogglePop");
             if ($scope.showPopup) {
                 $scope.selectedNotification = [];
             } else {
@@ -3635,19 +3657,25 @@
                     $scope.selectedNotification.IsRead = 1;
                     putData.put(putNotificationURL, $scope.selectedNotification).success(function(data) {
                         $scope.refreshNotifications();
+                    }).then(function(){
+                        //get each unread notification count
+                        var unreadNotifcationURL = "http://aii-hermes.org/aii-api/v1/facilities/unreadNotificationsCount/" + $scope.sessionID;
+                        getData.get(unreadAlertURL).success(function(data) {
+                            $scope.notificationCount = data.records['notificationCount'];
+                        });
                     });
                 }
             }
             $scope.showPopup = !$scope.showPopup;
         }
 
-        $scope.hidePopup = function() {
+        $scope.notifHidePopup = function() {
             $scope.showPopup = false;
             $scope.selectedNotification = [];
         }
 
         $scope.deleteSelectedNotification = function(deletedState) {
-            notificationURL = "http://killzombieswith.us/aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
+            notificationURL = "http://aii-hermes.org/aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
             //Change the notification's Deleted attribute to true
             $scope.selectedNotification.IsArchived = deletedState;
             //PUT the notification using the URL and then refresh the notifications
@@ -3831,6 +3859,7 @@
         }
 
         $scope.respondToRequest = function(status) {
+            //console.log("respond to request");
             putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
             $scope.selectedNotification.Response = status;
             $scope.selectedNotification.IsArchived = 2;
@@ -3886,7 +3915,7 @@
         if (cookieSessionID) {
             console.log("got cookie");
             //Check if this token is valid
-            var userTokenURL = "http://killzombieswith.us/aii-api/v1/users/one/" + cookieSessionID;
+            var userTokenURL = "http://aii-hermes.org/aii-api/v1/users/one/" + cookieSessionID;
             getData.get(userTokenURL).success(function(data) {
                 //If SessionID is valid:
                 //		-store user information
@@ -3954,7 +3983,7 @@
 
             $http({
                     method: 'POST',
-                    url: 'http://killzombieswith.us/aii-api/v1/sessionLogs',
+                    url: 'http://aii-hermes.org/aii-api/v1/sessionLogs',
                     data: $scope.userlogin,
                     headers: {
                         'Content-Type': 'application/json'
@@ -3990,7 +4019,7 @@
             console.log("in logout function");
             $http({
                     method: "DELETE",
-                    url: "http://killzombieswith.us/aii-api/v1/sessionLogs/" + cookieSessionID,
+                    url: "http://aii-hermes.org/aii-api/v1/sessionLogs/" + cookieSessionID,
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -4049,7 +4078,7 @@
         $scope.messageForm = function() {
             $http({
                     method: 'POST',
-                    url: 'http://killzombieswith.us/aii-api/v1/messages',
+                    url: 'http://aii-hermes.org/aii-api/v1/messages',
                     data: $scope.composeObject, // do not put param
                     headers: {
                         'Content-Type': 'application/json'
@@ -4132,16 +4161,17 @@
     controllers.BadgeCtrl = function($scope, persistData, getData, userInfo, messageCount) {
 
         $scope.sessionID = userInfo.get().SessionID;
-        $scope.unreadMessageURL = "http://killzombieswith.us/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
-
-
+        $scope.unreadMessageURL = "http://aii-hermes.org/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
+        
+        
+        
         getData.get($scope.unreadMessageURL).success(function(data) {
-            $scope.messageCount = data.records.messageCount;
+            $scope.messageCount = data.records.totalUnreadCount;
             $scope.icon = {
                 "count": $scope.messageCount
             };
         });
-
+        
         $scope.$on('handleBroadcast', function() {
             $scope.icon.count = messageCount.number;
         });
