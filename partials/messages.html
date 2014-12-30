@@ -168,7 +168,7 @@
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(alert)" style="cursor:pointer" ng-class="{'bold':alert.IsRead == '0' && isTypeSelected('received')}">
+			<tr ng-repeat="alert in currentAlerts.records | filter:search | orderBy:orderFilter:reverse" ng-click="alertTogglePopup(alert)" style="cursor:pointer" ng-class="{'bold':alert.IsRead == '0' && isAlertTypeSelected('received')}">
 			  <td style="cursor:default"><input type="Checkbox" name="alertCheckbox" checklist-value="alert" checklist-model="markedAlerts"> </td>
 			  <td ng-if="showFrom">{{alert.ShortPatient}}</td>
 			  <td ng-if="showSubject">{{alert.ShortSubject}}</td>
@@ -194,9 +194,9 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedAlert(0); hidePopup()">Restore</a>
-				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedAlert(1); hidePopup()">Delete</a>
-				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedAlert(2); hidePopup()">Delete</a>
+				<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedAlert(0); alertHidePopup()">Restore</a>
+				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedAlert(1); alertHidePopup()">Delete</a>
+				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedAlert(2); alertHidePopup()">Delete</a>
 				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
 			</div>
 		  </div>
@@ -237,7 +237,7 @@
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Time</th>
 			  <th ng-click="order('Timestamp')" ng-if="showTimestamp">Date</th>
 			</tr>
-			<tr ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse" ng-click="togglePopup(notification)" style="cursor:pointer" ng-class="{'bold':notification.IsRead == '0' && isTypeSelected('received')}">
+			<tr ng-repeat="notification in currentNotifications.records | filter:search | orderBy:orderFilter:reverse" ng-click="notifTogglePopup(notification)" style="cursor:pointer" ng-class="{'bold':notification.IsRead == '0' && isNotiTypeSelected('received')}">
 			  <td style="cursor:default"><input type="Checkbox" name="notificationCheckbox" checklist-value="notification" checklist-model="markedNotifications"> </td>
 			  <td ng-if="showFrom">{{notification.ShortSenderFacilityName}}</td>
 			  <td ng-if="showSubject">{{notification.ShortSubject}}</td>
@@ -266,9 +266,9 @@
 			<div class="modal-footer">
 				<a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); hidePopup()">Accept</a>
 				<a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); hidePopup()">Reject</a>
-				<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); hidePopup()">Restore</a>
-				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); hidePopup()">Delete</a>
-				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); hidePopup()">Delete</a>
+				<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); notifHidePopup()">Restore</a>
+				<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); notifHidePopup()">Delete</a>
+				<a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); notifHidePopup()">Delete</a>
 				<a class="btn btn-primary" ng-click="togglePopup()">Close</a>
 			</div>
 		  </div>

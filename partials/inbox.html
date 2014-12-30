@@ -183,7 +183,8 @@
             <!-- Tab panes -->
             <tabset style="cursor:default">
                 <!-- MESSAGES TAB---------------------------->
-                <tab heading="Messages" style="cursor:pointer" ng-init="checkForRecipients()" ng-click="selectTab('messages')">
+                <tab  style="cursor:pointer" ng-init="checkForRecipients()" ng-click="selectTab('messages')">
+                    <tab-heading> Messages <span class="badge pull-right" style="margin-left:5px">{{messageCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <div class="list-group">
                             <span class="list-group-item" 
@@ -288,8 +289,8 @@
                     </div>
                 </tab>
                 <!-- ALERTS TAB---------------------------->
-                <tab  heading="Alerts" style="cursor:pointer" ng-show="userLevel < 11" 
-                     ng-click="selectTab('alerts')" >
+                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('alerts')" >
+                    <tab-heading> Alerts <span class="badge pull-right" style="margin-left:5px">{{alertCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
                         <div class="list-group">
@@ -340,8 +341,8 @@
                 </tab>
 
                 <!-- NOTIFICATIONS TAB---------------------------->
-                <tab  heading="Notifications" style="cursor:pointer" ng-show="userLevel < 11" 
-                     ng-click="selectTab('notifications')">
+                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('notifications')">
+                    <tab-heading> Notifications <span class="badge pull-right" style="margin-left:5px">{{notificationCount}}</span> </tab-heading>
                      <div class="tab-pane fade in active" id="home">
                          <!-- notification list-->
                         <div class="list-group">
@@ -385,8 +386,8 @@
                                 </p>
                             </div>
                             <div class="modal-footer">
-                                <a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); notifHidePopup()">Accept</a>
-                                <a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); notifHidePopup()">Reject</a>
+                                <a class="btn btn-success" ng-show="isNotiTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); notifHidePopup()">Accept</a>
+                                <a class="btn btn-danger" ng-show="isNotiTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); notifHidePopup()">Reject</a>
                                 <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); notifHidePopup()">Restore</a>
                                 <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); notifHidePopup()">Delete</a>
                                 <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); notifHidePopup()">Delete</a>

@@ -40,6 +40,7 @@
     <div id = "cp_patientDirectory" class="container">
         <div class="row">
             <!-- repeat for all patients-->
+            <div class="container" ng-if="patientsData._meta.count==0"> <h2> There are no patients currrently listed at your facility</h2> </div>
             <div class="container cp_patientPhase col-md-12" ng-controller="collapseCtrl" 
                 ng-mouseleave="isDataCollapsed = true;" 
                 ng-repeat="patient in patientsData.records | filter: {'InactiveStatus':showActivePatients}">
