@@ -4016,10 +4016,12 @@
         }
 
         $scope.logout = function() {
-            console.log("in logout function");
+			
+			//Delete the token in the database
+			var sessionID = userInfo.get().SessionID;
             $http({
                     method: "DELETE",
-                    url: "http://aii-hermes.org/aii-api/v1/sessionLogs/" + cookieSessionID,
+                    url: "http://aii-hermes.org/aii-api/v1/sessionLogs/" + sessionID,
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -4030,7 +4032,7 @@
                     $scope.userlogin.password = "";
                 });
 
-            //Remove the Session ID and User Level from the cookie
+            //Remove all information from the cookie
             $cookieStore.remove('SessionID');
             $cookieStore.remove('UserLevel');
             $cookieStore.remove('CareTeamID');
@@ -4043,6 +4045,21 @@
             $cookieStore.remove('PatientID');
             $cookieStore.remove('PatientSex');
             $cookieStore.remove('Title');
+			
+			//Remove all information from userInfo
+			var info = {};
+			info.SessionID = 0;
+			info.UserID = 0;
+			info.Username = "";
+			info.FacilityID = 0;
+			info.First = "";
+			info.Last = "";
+			info.Title = "";
+			$scope.name = "";
+			$scope.title = "";
+			info.UserLevelID = 0;
+			$scope.userLevel = 0;
+			userInfo.set(info);
         }
     }
 
