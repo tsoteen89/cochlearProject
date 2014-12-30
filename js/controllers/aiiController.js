@@ -834,10 +834,7 @@
         $scope.page = 1;
         $scope.finalPage = null;
 
-        $scope.answer = {}; //object to hold all the info neccesary to submit question answers (i.e PhaseID, eventID (aka CareTeamID)
-        $scope.answer.Answers = {};
-        $scope.answer.PhaseID = $cookieStore.get('PhaseID');
-        $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
+     
 
         $scope.phaseName = $cookieStore.get('PhaseName'); //grab the name of the phase currently viewed 
 
@@ -851,6 +848,10 @@
         $scope.facilityImage = $cookieStore.get('FacilityImage');
         $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); //currents phase patient is in. used in logic to decide next phase
 
+        $scope.answer = {}; //object to hold all the info neccesary to submit question answers (i.e PhaseID, eventID (aka CareTeamID)
+        $scope.answer.Answers = {};
+        $scope.answer.PhaseID = $cookieStore.get('PhaseID');
+        $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
         //api urls to grab questions for the active phase
         $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
@@ -970,7 +971,7 @@
         }
 
         //get audiology results for the phase
-        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $scope.answer.PhaseID).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             //console.log("first" + $scope.audioSummaryAnswers);
         });
