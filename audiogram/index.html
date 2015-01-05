@@ -50,6 +50,11 @@
             font-family: 'Play', sans-serif;
         }
         
+/*        .btn-warning{
+            background-image: linear-gradient(to bottom,#f74242 0,#f9a4a4 100%);
+        }
+*/
+        
         h2 {
             color:#414141;
             text-shadow: 2px 2px #808281;
@@ -528,7 +533,9 @@
             Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
             Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
             Stage['right'].bindContextMenu();
-            Stage['left'].bindContextMenu();       
+            Stage['left'].bindContextMenu();  
+            Stage['right'].bindKeyPress();
+            Stage['left'].bindKeyPress();
 
 
             $( ".aii-mea-btn" ).on( "click", function(e) {
@@ -651,8 +658,13 @@
                 //could analyze it better I noticed that it didn't destroy...
                 AudiogramData = JSON.stringify(AudiogramData);
                 AudiogramData = eval('(' + AudiogramData + ')');
-                console.log(AudiogramData);               
-                $.post("class.audiogram.php", AudiogramData)
+                //console.log(AudiogramData);               
+//                $.post("class.audiogram.php", AudiogramData)
+//                .done(function( data ) {
+//                    console.log( data );
+//                });
+                
+                $.post("http://aii-hermes.org/aii-api/v1/audiograms", AudiogramData)
                 .done(function( data ) {
                     console.log( data );
                 });
@@ -745,15 +757,16 @@
                                 
                 if(title == "" || title == null){
                     console.log("error-title");
-                    $ele.selectpicker('setStyle', 'btn-warning', 'add');
+                    $ele.selectpicker('setStyle', 'btn-danger', 'add');
                 }
                 
                 $ele.on('change',function(){
                     console.log("changed");
-                    $ele.selectpicker('setStyle', 'btn-warning', 'remove').selectpicker('refresh');;                  
+                    $ele.selectpicker('setStyle', 'btn-danger', 'remove').selectpicker('refresh');;                  
                 });
             }
             
+
             
             function updateConditionButtons() {
                 // Settings
@@ -844,6 +857,7 @@
                     }, 0 );
                 }, 0 );                                    
             }
+            
             init();
 
             setTodaysDate();
@@ -853,6 +867,7 @@
             
             //Library for bootstrap dropdowns.
             $('.selectpicker').selectpicker();
+            
         });
 
         /**
@@ -1004,6 +1019,8 @@
             $('#word-rec-noise-b').val('+10');          
         }
         
+
+
     </script>      
     </body>
 </html>
