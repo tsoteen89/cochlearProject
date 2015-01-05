@@ -853,7 +853,7 @@
         $scope.answer.PhaseID = $cookieStore.get('PhaseID');
         $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
         //api urls to grab questions for the active phase
-        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions";
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID;
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
 
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
@@ -898,7 +898,7 @@
                 }
                 $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
 
-                getData.get("http://aii-hermes.org/aii-api/v1/deviceProviders/" + $scope.provider).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/deviceProviders/provider/" + $scope.provider).success(function(data) {
                     $scope.implants = data.records.Implants;
                     $scope.electrodes = data.records.Electrodes;
                     $scope.processors = data.records.Processors;
@@ -1408,6 +1408,7 @@
         //get the SessionID stored
         var cookieSessionID = $cookieStore.get('SessionID');
 
+        
         //patient info to be displayed on top of audio pages
         $scope.patientName = $cookieStore.get('PatientName');
         $scope.patientSex = $cookieStore.get('PatientSex');
@@ -1422,12 +1423,11 @@
         $scope.phaseName = $cookieStore.get('PhaseName');
 
         //Get Audiology Phase fields and tests to populate the form 
-        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions";
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions/event/" + $cookieStore.get('CareTeamID');
         getData.get($scope.questionsURL).success(function(data) {
             $scope.audioQuestions = data.records;
             $scope.audioQs = data.records.Questions;
         });
-
 
         $scope.loggedIn = persistData.getLoggedIn();
 
