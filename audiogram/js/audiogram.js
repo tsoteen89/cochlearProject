@@ -557,8 +557,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     
     function bindKeyPress() {
         $('#' + ElementId)
-        // Add tab index to ensure the canvas retains focus
-        .attr("tabindex", "0")
         // Mouse down override to prevent default browser controls from appearing
         .mousedown(function(){ $(this).focus(); return false; }) 
         .keydown(function(){ console.log("keypress"); return false; });
