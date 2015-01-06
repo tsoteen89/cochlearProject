@@ -554,6 +554,13 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             showContextMenu();
         }));
     }
+    
+    function bindKeyPress() {
+        $('#' + ElementId)
+        // Mouse down override to prevent default browser controls from appearing
+        .mousedown(function(){ $(this).focus(); return false; }) 
+        .keydown(function(){ console.log("keypress"); return false; });
+    }
 
     /**
     * Removes all items from the stage, then redraws the clean stage.
@@ -706,6 +713,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             console.log(currentStack[i].getAttrs());
         }
     }
+    
+    
 
     /**
     * When stage is clicked, this function find the "object / measure" on the canvas that it would collide with.
@@ -1158,6 +1167,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     // Expose public API
     return {
         bindContextMenu : bindContextMenu,
+        bindKeyPress : bindKeyPress,
         clear : clearStage,
         showContextMenu : showContextMenu,
         getAudiogram : getAudiogram,

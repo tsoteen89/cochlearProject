@@ -21,10 +21,11 @@ if($_POST){
     }
     
     switch($_POST['Action']){
-        case 'getAudiogramList':$Audiogram->getAudiogramList();     break;
-        case 'getConditions':   $Audiogram->getConditions();        break;
-        case 'getPatientInfo':  $PatientInfo->getPatientInfo($_POST); break;
-        case 'saveAudiogram':   $Audiogram->saveAudiogram($_POST);  break;
+        case 'getAudiogramList'     :$Audiogram->getAudiogramList();        break;
+        case 'getConditions'        :$Audiogram->getConditions();           break;
+        case 'getPatientInfo'       :$PatientInfo->getPatientInfo($_POST);  break;
+        case 'getAudiogramTitles'   :$PatientInfo->getAudiogramTitles($_POST); break;
+        case 'saveAudiogram'        :$Audiogram->saveAudiogram($_POST);     break;
         default: break;
     }
     
