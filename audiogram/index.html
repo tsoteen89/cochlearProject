@@ -218,6 +218,7 @@
                     <div class="navbar-header">
                         <a class="navbar-brand" href="#"><b>Aii</b> Audiogram</a> 
                         <span class="navbar-brand subheading" id="facility-name">Facility Name</span>
+                        <span class="navbar-brand subheading" id="patient-phase">Phase Name</span>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-right" id="aii-navbar">
@@ -270,11 +271,11 @@
                 <div class="col-sm-4">
                     <div class="panel panel-default aii patient-info">
                         <div class="panel-heading aii">
-                            <h3 class="panel-title"id="patient-phase"></h3>
+                            <h3 class="panel-title">Audiogram Title / Date</h3>
                         </div>
                         <div class="row aii">
                             <div class="form-group">
-                                <label for="aii-audiogram-title" class="col-sm-2 control-label aii">Title: </label>
+                                <label for="aii-audiogram-title" class="col-sm-2 control-label">Title: </label>
                                 <div class="col-sm-8">
                                     <select class="selectpicker show-tick" id="aii-audiogram-title">
                                         <option value="" disabled selected>Choose title...</option>
@@ -296,25 +297,34 @@
                 <div class="col-sm-4">
                     <div class="panel panel-default aii patient-info" style="margin-right:15px">
                         <div class="panel-heading aii">
-                            <h3 class="panel-title">Search</h3>
+                            <h3 class="panel-title">Load Audiogram</h3>
                         </div>
                             <div class="row aii">
                                 <div class="form-group">
-                                    <label for="aii-audiogram-prev" class="col-sm-3 control-label aii">Previous: </label>
-                                    <div class="col-sm-7">
+                                    <label for="aii-audiogram-prev" class="col-sm-2 control-label">All: </label>
+                                    <div class="col-sm-10">
                                         <select class="selectpicker show-tick" id="aii-audiogram-prev">
                                             <option value="" disabled selected>Choose Audiogram...</option>
                                         </select>
+                                        <button class="btn btn-default" type="button"><i class="fa fa-pencil-square-o"></i></button>
                                     </div>
-                                    <div class="col-sm-2"></div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xs-2 col-sm-2">
+                            <div class="row aii">
+                                <div class="form-group">
+                                    <label for="aii-audiogram-latest" class="col-sm-2 control-label">Latest: </label>
+                                     <div class="col-sm-10">
+                                        <div class="input-group">
+                                          <input type="text" class="form-control" placeholder="Last Audiogram...">
+                                          <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button"><i class="fa fa-pencil-square-o"></i></button>
+                                          </span>
+                                        </div><!-- /input-group -->
+                                      </div><!-- /.col-lg-6 -->
+                                    
+                                    
                                 </div>
-                                <div class="col-xs-8 col-sm-8 ">
-                                </div>
-                            </div>   
+                            </div>  
                     </div>
                  </div>
             </div>
@@ -590,56 +600,85 @@
             
             $('.saveAudiogram').on('click', function(event) {
                 
-                checkSaveError($('#aii-audiogram-title'),'Title Needed...');
-                checkSaveError($('#right-condition-opts'),'Condition Needed...');
-                checkSaveError($('#left-condition-opts'),'Condition Needed...');
-                
-                var AudiogramData = {
-                        "date" : unixTime(),                
-                        "title" : $('#aii-audiogram-title option:selected').val(),
-                        "event_id": "1018",
-                        "phase_id": "7",
-                        "patient_id": "1018",
-                        "spch_aud_srt_r":$('#spch_aud_srt_r').val(),
-                        "spch_aud_srt_l":$('#spch_aud_srt_l').val(),
-                        "spch_aud_srt_b":$('#spch_aud_srt_b').val(),
-                        "spch_aud_mask_r":$('#spch_aud_mask_r').val(),
-                        "spch_aud_mask_l":$('#spch_aud_mask_l').val(),
-                        "spch_aud_mask_b":$('#spch_aud_mask_b').val(),
-                        "word_rec_per_r":$('#word_rec_per_r').val(),
-                        "word_rec_per_l":$('#word_rec_per_l').val(),
-                        "word_rec_per_b":$('#word_rec_per_b').val(),
-                        "word_rec_stim_r":$('#word_rec_stim_r').val(),
-                        "word_rec_stim_l":$('#word_rec_stim_l').val(),
-                        "word_rec_stim_b":$('#word_rec_stim_b').val(),
-                        "word_rec_mask_r":$('#word_rec_mask_r').val(),
-                        "word_rec_mask_l":$('#word_rec_mask_l').val(),
-                        "word_rec_mask_b":$('#word_rec_mask_b').val(),
-                        "word_rec_noise_r":$('#word_rec_noise_r').val(),
-                        "word_rec_noise_l":$('#word_rec_noise_l').val(),
-                        "word_rec_noise_b":$('#word_rec_noise_b').val(),
-                        "left_condition": $('#left-condition-opts option:selected').val(),
-                        "right_condition":$('#right-condition-opts option:selected').val(),
-                        "left_measures": Stage['left'].getAudiogramMeasures(),
-                        "right_measures": Stage['right'].getAudiogramMeasures()
-                };
-                
-            
-                var tmp = JSON.stringify(AudiogramData);
-                console.log(tmp);
-                $.ajax({
-                    type: 'POST',
-                    url: "http://aii-hermes.org/aii-api/v1/audiograms",
-                    data: tmp,
-                    contentType: "application/json; charset=utf-8",
-                    success: function(tmp) {
-                        console.log("Done");
-                        console.log(tmp);
-                    }
-                });
-                
-            
                 event.preventDefault();
+                var errors = 0;
+                var audiogram_id = 0;
+                
+                //Check for mandatory fields on audiogram page
+                errors += checkSaveError($('#aii-audiogram-title'),'Title Needed...');
+                errors += checkSaveError($('#right-condition-opts'),'Condition Needed...');
+                errors += checkSaveError($('#left-condition-opts'),'Condition Needed...');
+                
+                //If errors, then quit (handle later)
+                if(errors > 0){
+                    console.log("error on save");
+                    return;
+                }
+                
+                //Create the save function which builds the json package for the ajax request
+                var saveAudiogramData = function(id){
+                    console.log(id);
+                    var AudiogramData = {
+                            "date" : unixTime(),                
+                            "title" : $('#aii-audiogram-title option:selected').val(),
+                            "audiogram_id": id,
+                            "event_id": "1018",
+                            "phase_id": "7",
+                            "patient_id": "1018",
+                            "spch_aud_srt_r":$('#spch_aud_srt_r').val(),
+                            "spch_aud_srt_l":$('#spch_aud_srt_l').val(),
+                            "spch_aud_srt_b":$('#spch_aud_srt_b').val(),
+                            "spch_aud_mask_r":$('#spch_aud_mask_r').val(),
+                            "spch_aud_mask_l":$('#spch_aud_mask_l').val(),
+                            "spch_aud_mask_b":$('#spch_aud_mask_b').val(),
+                            "word_rec_per_r":$('#word_rec_per_r').val(),
+                            "word_rec_per_l":$('#word_rec_per_l').val(),
+                            "word_rec_per_b":$('#word_rec_per_b').val(),
+                            "word_rec_stim_r":$('#word_rec_stim_r').val(),
+                            "word_rec_stim_l":$('#word_rec_stim_l').val(),
+                            "word_rec_stim_b":$('#word_rec_stim_b').val(),
+                            "word_rec_mask_r":$('#word_rec_mask_r').val(),
+                            "word_rec_mask_l":$('#word_rec_mask_l').val(),
+                            "word_rec_mask_b":$('#word_rec_mask_b').val(),
+                            "word_rec_noise_r":$('#word_rec_noise_r').val(),
+                            "word_rec_noise_l":$('#word_rec_noise_l').val(),
+                            "word_rec_noise_b":$('#word_rec_noise_b').val(),
+                            "left_condition": $('#left-condition-opts option:selected').val(),
+                            "right_condition":$('#right-condition-opts option:selected').val(),
+                            "left_measures": Stage['left'].getAudiogramMeasures(),
+                            "right_measures": Stage['right'].getAudiogramMeasures()
+                    };
+
+                    //Perform ajax save
+                    var tmp = JSON.stringify(AudiogramData);
+                    console.log(tmp);
+                    $.ajax({
+                        type: 'POST',
+                        url: "http://aii-hermes.org/aii-api/v1/audiograms",
+                        data: tmp,
+                        contentType: "application/json; charset=utf-8",
+                        success: function(tmp) {
+                            console.log(tmp);
+                        }
+                    });
+                }
+                
+                //Create a function to get the max audiogram_id, then pass in the
+                //saveAudiogramData as a callback function so we get the max_id 
+                //before we try to save the audiogram. 
+                //Maybe should get the max id on the back end? Probably.
+                var getMaxAudiogramId = function(callback){
+                    $.get("http://aii-hermes.org/aii-api/v1/audiograms/getLatestAudiogramID")
+                    .done(function( data ) {
+                        var id = parseInt(data.records) + 1;
+                        if(typeof callback === "function") callback(id);
+                    });
+                }
+                
+                //Finally run the functions.
+                getMaxAudiogramId(saveAudiogramData);
+
+            
             });
             
             $('#searchAudiogram').on('click', function(event) {
@@ -707,21 +746,20 @@
             
             function checkSaveError(ele,message){
                 
-                console.log(ele);
                 var $ele = ele
                 var title = $ele.val();
-                
-                console.log("Title: "+title);
+                var error = 0;
                                 
                 if(title == "" || title == null){
-                    console.log("error-title");
+                    error = 1;
                     $ele.selectpicker('setStyle', 'btn-danger', 'add');
                 }
                 
                 $ele.on('change',function(){
-                    console.log("changed");
                     $ele.selectpicker('setStyle', 'btn-danger', 'remove').selectpicker('refresh');;                  
                 });
+                
+                return error;
             }
             
 
@@ -898,7 +936,7 @@
                     for( i=0; i<json.records.length; i++) {
                         console.log(json.records[i].date);
                         audiogram_date = moment.unix(json.records[i].date).format("MM/DD/YY");
-                        Html = Html + '<option value="'+json.records[i].audiogram_id+'">'+audiogram_date+' '+json.records[i].title+'</option>';
+                        Html = Html + '<option value="'+json.records[i].audiogram_id+'">'+audiogram_date+' - '+json.records[i].title+'</option>';
                     }
                 }else{
                     var Html = '<option value="" disabled selected>NO Previous Audiograms </option>';                    
