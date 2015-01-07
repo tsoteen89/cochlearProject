@@ -183,7 +183,8 @@
             <!-- Tab panes -->
             <tabset style="cursor:default">
                 <!-- MESSAGES TAB---------------------------->
-                <tab heading="Messages" style="cursor:pointer" ng-init="checkForRecipients()" ng-click="selectTab('messages')">
+                <tab  style="cursor:pointer" ng-init="checkForRecipients()" ng-click="selectTab('messages')">
+                    <tab-heading> Messages <span class="badge pull-right" style="margin-left:5px">{{messageCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <div class="list-group">
                             <span class="list-group-item" 
@@ -213,25 +214,43 @@
                     <div class="col-xs-12 message-wrapper" ng-show="isTypeSelected('composeMessage')" style="padding:0">
                         <hr>
                         <form name="compose_Message" class="form3D" style="width:100%; margin:0 0 20px 0">
-                          <span style="margin-right:5px">To (Username):</span> 
-                            <input class="send" type="text" style="width: 85%; margin-bottom: 5px;" ng-required="true"
-                                   ng-model="composeMessage.ReceiverUsername"> <br>
-                          <span style="margin-right:55px">Subject:</span> 
-                            <input class="subject" type="text" style="width: 85%; margin-bottom: 5px;" ng-required="true" 
-                                   ng-model="composeMessage.Subject"> <br>
+                            <!-- Message Box-->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span >To (Username):</span> 
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="send" type="text"  style="width: 100%;" ng-required="true"
+                                           ng-model="composeMessage.ReceiverUsername"> 
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span >Subject:</span>
+                                </div>
+                                <div class="col-md-10">
+                                    <input class="subject" type="text" style="width: 100%;" ng-required="true" ng-model="composeMessage.Subject">
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <span >Message:</span> 
+                                </div>
+                                <div class="col-md-10">
+                                    <textarea rows="10" style="width:100%; margin-bottom: 10px;border:1px solid black"
+                                              ng-required="true" ng-model="composeMessage.Content"></textarea><
+                                </div>
+                            </div><br>
 
-                            <!--message box-->
-                          <span style="margin-right:44px">Message:</span> 
-                            <textarea rows="10" cols="104" style="margin-bottom: 10px;" style="border:1px solid black" ng-required="true" 
-                                      ng-model="composeMessage.Content"></textarea><br>
-
+                            <div class="col-md-offset-8">
                             <!--message options -->
-                          <input class="btn btn-success" type="submit" name="submit" style="margin-left:600px;margin-right: 5px;" value="Send" 
-                                 ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
-                          <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft"
-                                 ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
-                          <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" 
-                                 ng-click="clearComposedMessage();setMessageType('inbox')"></input>
+                              <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" 
+                                     ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
+                              <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft"
+                                     ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
+                              <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" 
+                                     ng-click="clearComposedMessage();setMessageType('inbox')"></input>
+                            </div>
                         </form>
 
                         <hr>
@@ -253,7 +272,7 @@
                                 <div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                                 <div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                                 </br>
-                                <p>
+                                <p style="white-space: pre-line">
                                     {{selectedMessage.Content}}
                                 </p>
                             </div>
@@ -270,8 +289,8 @@
                     </div>
                 </tab>
                 <!-- ALERTS TAB---------------------------->
-                <tab  heading="Alerts" style="cursor:pointer" ng-show="userLevel < 11" 
-                     ng-click="selectTab('alerts')" >
+                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('alerts')" >
+                    <tab-heading> Alerts <span class="badge pull-right" style="margin-left:5px">{{alertCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
                         <div class="list-group">
@@ -308,7 +327,7 @@
                             <div><strong>Time:</strong> {{selectedAlert.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                             <div><strong>Date:</strong> {{selectedAlert.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                             </br>
-                            <p>
+                            <p style="white-space: pre-line">
                                 {{selectedAlert.Content}}
                             </p>
                         </div>
@@ -322,8 +341,8 @@
                 </tab>
 
                 <!-- NOTIFICATIONS TAB---------------------------->
-                <tab  heading="Notifications" style="cursor:pointer" ng-show="userLevel < 11" 
-                     ng-click="selectTab('notifications')">
+                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('notifications')">
+                    <tab-heading> Notifications <span class="badge pull-right" style="margin-left:5px">{{notificationCount}}</span> </tab-heading>
                      <div class="tab-pane fade in active" id="home">
                          <!-- notification list-->
                         <div class="list-group">
@@ -362,13 +381,13 @@
                                 <div><strong>Time:</strong> {{selectedNotification.Timestamp * 1000 | date:'h:mm a'}} </br></div>
                                 <div><strong>Date:</strong> {{selectedNotification.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
                                 </br>
-                                <p>
+                                <p style="white-space: pre-line">
                                     {{selectedNotification.Content}}
                                 </p>
                             </div>
                             <div class="modal-footer">
-                                <a class="btn btn-success" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); notifHidePopup()">Accept</a>
-                                <a class="btn btn-danger" ng-show="isTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); notifHidePopup()">Reject</a>
+                                <a class="btn btn-success" ng-show="isNotiTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(1); notifHidePopup()">Accept</a>
+                                <a class="btn btn-danger" ng-show="isNotiTypeSelected('received')" ng-if="selectedNotification.IsRequest" ng-click="respondToRequest(2); notifHidePopup()">Reject</a>
                                 <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteSelectedNotification(0); notifHidePopup()">Restore</a>
                                 <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedNotification(1); notifHidePopup()">Delete</a>
                                 <a class="btn btn-primary" ng-if="showFullDelete" ng-click="deleteSelectedNotification(2); notifHidePopup()">Delete</a>

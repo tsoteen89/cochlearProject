@@ -1,335 +1,363 @@
 <html ng-app="regApp" style="width:100%;height:100%;">
-   <head>
-      <title>AII Facility Registration</title>
+    <head>
+        <title>AII Facility Registration</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
         <link href="css/facReg.css" rel="stylesheet">
-   </head>
+        <script>
+        function HandleBrowseClick()
+        {
+            var fileinput = document.getElementById("browse");
+            fileinput.click();
+        }
+
+        function Handlechange()
+        {
+            var fileinput = document.getElementById("browse");
+            var textinput = document.getElementById("filename");
+            textinput.value = fileinput.value;
+        }
+        </script>
+    </head>
     <body >
         <div ng-controller="regCtrl" class="container-fluid">
-      <!-- Header/Nav Bar -->
-      <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:8%">
-         <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
-            <div class = "container-fluid">
-                <div class = "navbar-header">
-                    <a class="navbar-brand cp_navbar-brand" href="./">Auditory Implant Initiative</a>
-                </div>
-                <div class = "nav-items collapse navbar-collapse pull-right" id = "nav-responsive-collapse">
-                <a href = "./" class="navbar-btn pull-right"><button type="button" class="btn btn-default">Sign in</button></a>
-              </div>
-            </div>
-            </nav>
-        </div>
-            
-      <br>
-        
-        <!--Stolen form -->
-        <!-- multistep form -->
-        <form id="msform">
-            <!-- progressbar -->
-            <ul id="progressbar">
-                <li class="active">Facility Registration</li>
-                <li>Facility Administrator Registration</li>
-            </ul>
-            <!-- fieldsets -->
-            <!----Facility Registration -->
-            <fieldset>
-                <h3 class="fs-title">Step 1</h3>
-                <h3 class="fs-subtitle">Register your facility</h3>
-                
-                <input type="text" name="facName" placeholder="Facility Name" ng-model="facilityData.Name" />
-                <input type="text" name="address" placeholder="Address" ng-model="facilityData.Address1" />
-                <div class="row">
-                    <div class="col-md-6"><input type="text" name="city" placeholder="City" ng-model="facilityData.City"/></div>
-                    <div class="col-md-4">
-                        <select id="states" name="State" ng-options="states.name as states.name for states in usStates" ng-model="facilityData.State">                                                       </select>
+            <!-- Header/Nav Bar -->
+            <div style="background-color: white; box-shadow: 0 2px 10px -1px gray; width:100%; height:8%">
+                <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
+                    <div class = "container-fluid">
+                        <div class = "navbar-header">
+                            <a class="navbar-brand cp_navbar-brand" href="./">Auditory Implant Initiative</a>
+                        </div>
+                        <div class = "nav-items collapse navbar-collapse pull-right" id = "nav-responsive-collapse">
+                            <a href = "./" class="navbar-btn pull-right"><button type="button" class="btn btn-default">Sign in</button></a>
+                        </div>
                     </div>
-                    <div class="col-md-2"><input type="text" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" /></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="text" name="phone" placeholder="Phone (1234567890)" ng-model="facilityData.Phone"/> </div>
-                    <div class="col-md-6" ><input type="file" fileread="facilityData.image" accept="image/gif, image/jpeg, image/png"  title="Please upload your facility image"> </div>
-                </div>
-                <!---------------------------------- Facility Questions ------------------------>
-                <div class="row">
-                    <div class="col-md-6" >
-                        <div id="box" style="text-align:left">
-                            <label for="population"> Please list the approximate population of the city in which you practice</label>
-                            <select id="population" name="population" 
+                </nav>
+            </div>
+            <br>
+            <!--Stolen form -->
+            <!-- multistep form -->
+            <form id="msform">
+                <!-- progressbar -->
+                <ul id="progressbar">
+                    <li class="active">Facility Registration</li>
+                    <li>Facility Administrator Registration</li>
+                </ul>
+                <!-- fieldsets -->
+                <!----Facility Registration -->
+                <fieldset>
+                    <h3 class="fs-title">Step 1</h3>
+                    <h3 class="fs-subtitle">Register your facility</h3>
+                    <input type="text" class="box" class="box" name="facName" placeholder="Facility Name" ng-model="facilityData.Name" />
+                    <input type="text" class="box" name="address" placeholder="Address" ng-model="facilityData.Address1" />
+                    <div class="row">
+                        <div class="col-md-6"><input type="text" class="box" name="city" placeholder="City" ng-model="facilityData.City"/></div>
+                        <div class="col-md-4">
+                            <select id="states" name="State" ng-options="states.name as states.name for states in usStates" 
+                                    ng-model="facilityData.State"> 
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="box" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="box" style="height:56px" name="phone" placeholder="Phone (1234567890)" 
+                                   ng-model="facilityData.Phone"/> 
+                        </div>
+                        <div class="col-md-6" > 
+                            <div class="box" style="text-align:left">
+                                <input type="file" id="browse" name="fileupload" fileread="facilityData.image" 
+                                       accept="image/gif, image/jpeg, image/png"  
+                                    style="display: none" onChange="Handlechange();"/>
+                                <input type="button" class="btn btn-default btn-xs" value="Upload facility logo" id="fakeBrowse"
+                                       title="Please upload your facility image" onclick="HandleBrowseClick();"/>
+                                <input type="text" id="filename" readonly="true" value="No file chosen"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------- Facility Questions ------------------------>
+                    <div class="row">
+                        <div class="col-md-6" >
+                            <div class="box" style="text-align:left">
+                                <label for="population"> Please list the approximate population of the city in which you practice</label>
+                                <select id="population" name="population" 
                                     ng-options="population for population in populations"
                                     ng-model="facilityData.Population"> </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" >
-                        <div id="box" style="text-align:left">
-                            <label for="type"> Would you describe your facility as (select all that apply)</label>
-                            <div ng-repeat="description in facilityDescription">
-                                <input type="checkbox" checklist-value="description.name" checklist-model="facilityData.Type"> {{description.name}}<br>
+                        <div class="col-md-6" >
+                            <div class="box" style="text-align:left">
+                                <label for="type"> Would you describe your facility as (select all that apply)</label>
+                                <div ng-repeat="description in facilityDescription">
+                                    <input type="checkbox" checklist-value="description.name" checklist-model="facilityData.Type">
+                                    {{description.name}}<br>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-             
-                
-                <div class="row">
-                    <div class="col-md-6" >
-                        <div id="box" style="text-align:left">
-                            <label for="services"> Services provided at your facility (select all that apply)</label>
-                            <div ng-repeat="service in facilityServices">
-                                <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.Services.Predefined"> {{service.name}}<br>
-                            </div>
-                            Other
-                            <input type="text" ng-model="facilityData.Services.Other">
-                        </div>
-                    </div>
-                    <div class="col-md-6" >
-                        <div id="box" style="text-align:left">
-                            <label for="training"> If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons</label>
-                            <div ng-repeat="training in facilityCochlearTraining">
-                            <input type="checkbox" checklist-value="training.name" 
-                                   checklist-model="facilityData.Training"> {{training.name}}<br>
+                    <div class="row">
+                        <div class="col-md-6" >
+                            <div class="box" style="text-align:left">
+                                <label for="services"> Services provided at your facility (select all that apply)</label>
+                                <div ng-repeat="service in facilityServices">
+                                    <input type="checkbox" checklist-value="service.name" checklist-model="facilityData.Services.Predefined">
+                                    {{service.name}}<br>
+                                </div>
+                                Other Service(s): <br>(Please separate different services with a comma)
+                                <input type="text" class="box" ng-model="facilityData.Services.Other">
                             </div>
                         </div>
+                        <div class="col-md-6" >
+                            <div class="box" style="text-align:left">
+                                <label for="training"> 
+                                    If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons
+                                </label>
+                                <div ng-repeat="training in facilityCochlearTraining">
+                                    <input type="checkbox" checklist-value="training.name" 
+                                        checklist-model="facilityData.Training"> {{training.name}}<br>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!---------------------------------- End Facility Questions ------------------------>
-                
-                <input type="button" name="next" class="next action-button" value="Next" />
-                
-            </fieldset>
-            <!----Facility Adminstrator Registration -->
-            <fieldset>
-                <h3 class="fs-title">Step 2</h3>
-                <h3 class="fs-subtitle">Register your facility administrator</h3>
-                <h3 class="fs-subtitle">This is the user who will oversee all administrative duties </h3>
-                <div class="row">
-                    <div class="col-md-5"><input type="text" name="first" placeholder="First Name" ng-model="administratorData.first_name"/> </div>
-                    <div class="col-md-5" ><input type="text" name="last" placeholder="Last Name" ng-model="administratorData.last_name"/> </div>
-                    <div class="col-md-2" >
-                        <select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles" ng-model="administratorData.TitleID"> 
-                        </select>
+                    <!---------------------------------- End Facility Questions ------------------------>
+                    <input type="button" name="next" class="next action-button" value="Next" />
+                </fieldset>
+                <!----Facility Adminstrator Registration -->
+                <fieldset>
+                    <h3 class="fs-title">Step 2</h3>
+                    <h3 class="fs-subtitle">Register your facility administrator</h3>
+                    <h3 class="fs-subtitle">This is the user who will oversee all administrative duties </h3>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="box" name="first" placeholder="First Name" ng-model="administratorData.first_name"/> 
+                        </div>
+                        <div class="col-md-5" >
+                            <input type="text" class="box" name="last" placeholder="Last Name" ng-model="administratorData.last_name"/> </div>
+                        <div class="col-md-2" >
+                            <select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles"
+                                    ng-model="administratorData.TitleID"> 
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <input type="text" name="username" placeholder="Username" ng-model="administratorData.username"/>
-                <input type="password" name="password" placeholder="Password" ng-model="administratorData.password"/>
-                
-                <input type="text" name="email" placeholder="Email" ng-model="administratorData.email"/>
-                <input type="text" name="phone" placeholder="Phone Number" ng-model="administratorData.phone"/>
-                
-                <input type="button" name="previous" class="previous action-button" value="Previous" />
-			    <button id="submit" class="action-button" value="Submit" ng-click="registerFacility()" ng-disabled="disableRegister">{{button}}</button> 
-            </fieldset>
-        </form>
-            </div>
+                    <input type="text" class="box" name="username" placeholder="Username" ng-model="administratorData.username"/>
+                    <input type="password" name="password" placeholder="Password" ng-model="administratorData.password"/>
+                    <input type="text" class="box" name="email" placeholder="Email" ng-model="administratorData.email"/>
+                    <input type="text" class="box" name="phone" placeholder="Phone Number" ng-model="administratorData.phone"/>
+                    <input type="button" name="previous" class="previous action-button" value="Previous" />
+                    <button id="submit" class="action-button" value="Submit" ng-click="registerFacility()" ng-disabled="disableRegister">
+                        {{button}}
+                    </button> 
+                </fieldset>
+            </form>
+        </div>
     </body>
     <!-- All Dependencies Here -->
-  
-<script src="js/angular.js"></script>
-<script src="js/angular-route.js"></script>
-<script src="js/checklist-model.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-<script src="js/jquery.min.js"></script>
-<!-- jQuery easing plugin -->
-<script src="js/jquery.easing.min.js" type="text/javascript"></script>
-<script src="js/registration.js" type="text/javascript"></script>
-
-<script>
-    var regApp = angular.module('regApp', ['ui.bootstrap','checklist-model'] ); 
-   
-    var controllers = {};
-   
-    controllers.regCtrl =  function($scope, $http, getData, $window) {
-	   
-	    $scope.administratorData = {};
-	    $scope.facilityData = {};
-	    $scope.facilityData.Services = {};
-	   
-	    //Choices for the facility questions on facility Registration
-	    $scope.facilityDescription = [
-		    { name: "Academic"},
-		    { name: "Tertiary"},
-		    { name: "Community-based"},
-		    { name: "Private"}
-	    ];
-	    $scope.facilityServices = [
-		    { name: "Audiology"},
-		    { name: "Surgery"},
-		    { name: "Speech"}
-	    ];
-	    $scope.facilityCochlearTraining = [
-		    { name: "General Otolaryngologist"},
-		    { name: "Fellowship Trained Otologist"}
-	    ];
-	    //End Choices for facility questions
-		
-	    //get the UserTitles (MD, AUD, etc)
-	    getData.get('http://killzombieswith.us/aii-api/v1/userTitles').success(function(data){
-		    $scope.userTitles = data.records;
-	    }); 
-	   
-	   //$scope.facilitaData.
-	   $scope.populations= ["5,000-10,000", "10,000-50,000","50,000-100,000","100,000-500,000","500,000-1,000,000","1,000,000+"]
-	   $scope.usStates = [
-			{ name: 'ALABAMA', abbreviation: 'AL'},
-			{ name: 'ALASKA', abbreviation: 'AK'},
-			{ name: 'ARIZONA', abbreviation: 'AZ'},
-			{ name: 'ARKANSAS', abbreviation: 'AR'},
-			{ name: 'CALIFORNIA', abbreviation: 'CA'},
-			{ name: 'COLORADO', abbreviation: 'CO'},
-			{ name: 'CONNECTICUT', abbreviation: 'CT'},
-			{ name: 'DELAWARE', abbreviation: 'DE'},
-			{ name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
-			{ name: 'FLORIDA', abbreviation: 'FL'},
-			{ name: 'GEORGIA', abbreviation: 'GA'},
-			{ name: 'GUAM', abbreviation: 'GU'},
-			{ name: 'HAWAII', abbreviation: 'HI'},
-			{ name: 'IDAHO', abbreviation: 'ID'},
-			{ name: 'ILLINOIS', abbreviation: 'IL'},
-			{ name: 'INDIANA', abbreviation: 'IN'},
-			{ name: 'IOWA', abbreviation: 'IA'},
-			{ name: 'KANSAS', abbreviation: 'KS'},
-			{ name: 'KENTUCKY', abbreviation: 'KY'},
-			{ name: 'LOUISIANA', abbreviation: 'LA'},
-			{ name: 'MAINE', abbreviation: 'ME'},
-			{ name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
-			{ name: 'MARYLAND', abbreviation: 'MD'},
-			{ name: 'MASSACHUSETTS', abbreviation: 'MA'},
-			{ name: 'MICHIGAN', abbreviation: 'MI'},
-			{ name: 'MINNESOTA', abbreviation: 'MN'},
-			{ name: 'MISSISSIPPI', abbreviation: 'MS'},
-			{ name: 'MISSOURI', abbreviation: 'MO'},
-			{ name: 'MONTANA', abbreviation: 'MT'},
-			{ name: 'NEBRASKA', abbreviation: 'NE'},
-			{ name: 'NEVADA', abbreviation: 'NV'},
-			{ name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
-			{ name: 'NEW JERSEY', abbreviation: 'NJ'},
-			{ name: 'NEW MEXICO', abbreviation: 'NM'},
-			{ name: 'NEW YORK', abbreviation: 'NY'},
-			{ name: 'NORTH CAROLINA', abbreviation: 'NC'},
-			{ name: 'NORTH DAKOTA', abbreviation: 'ND'},
-			{ name: 'OHIO', abbreviation: 'OH'},
-			{ name: 'OKLAHOMA', abbreviation: 'OK'},
-			{ name: 'OREGON', abbreviation: 'OR'},
-			{ name: 'PALAU', abbreviation: 'PW'},
-			{ name: 'PENNSYLVANIA', abbreviation: 'PA'},
-			{ name: 'PUERTO RICO', abbreviation: 'PR'},
-			{ name: 'RHODE ISLAND', abbreviation: 'RI'},
-			{ name: 'SOUTH CAROLINA', abbreviation: 'SC'},
-			{ name: 'SOUTH DAKOTA', abbreviation: 'SD'},
-			{ name: 'TENNESSEE', abbreviation: 'TN'},
-			{ name: 'TEXAS', abbreviation: 'TX'},
-			{ name: 'UTAH', abbreviation: 'UT'},
-			{ name: 'VERMONT', abbreviation: 'VT'},
-			{ name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
-			{ name: 'VIRGINIA', abbreviation: 'VA'},
-			{ name: 'WASHINGTON', abbreviation: 'WA'},
-			{ name: 'WEST VIRGINIA', abbreviation: 'WV'},
-			{ name: 'WISCONSIN', abbreviation: 'WI'},
-			{ name: 'WYOMING', abbreviation: 'WY' }
-		];
-	    $scope.button = "Submit";
-	    $scope.registerFacility = function() {
-		   
-		   //Check for facility invitation token
-			if((document.URL).indexOf("?") >= 0)
-				this.facilityData.Token = (document.URL).split("?")[1];
-			else
-				this.facilityData.Token = 0;
-		   
-		   //send in one object that contains both form information
-		   $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
-		   			
-		    $scope.button = "Processing...";
-		    $scope.disableRegister = true;
-		    $http({
-			    method  : 'POST',
-			    url     : 'http://killzombieswith.us/aii-api/v1/facilities',
-			    data    : $scope.registration,  // pass in data as strings
-			    headers : { 'Content-Type': 'application/json' } 
-		    })
-		    .success(function(data) {
-			    console.log(data.records);
-			    //if both are registered, let em know and redirect to sign in 
-			    if(data.records["Facility Admin Registration Response"] == "Success" && data.records["Facility Registration Response"] == "Success"){
-				  
-				    alert("Your facility and administrator have been registered with AII!");
-				    $window.location.href = "./";
-				   
-			    }else if(data.records["Facility Registration Response"] == "Success"){ //else if only fac was successful, alert admin problems
-				    $scope.button = "Submit";
-				    alert("You are missing necssary information for your adminstrator.\n\nPlease enter any missing information and press submit again.");        
-				    $scope.disableRegister = false;
-				    $scope.facilityData.FacilityID = data.records['FacilityID'];
-				   
-			    }else{
-				    $scope.button = "Submit";
-				   
-			   	    alert("You are missing necessary information for both your facility and your facility administrator.\n\n" +
-						"Please make sure to fill out facility and facility admin information.\n"+
-						"Enter any missing information and press submit again.");
-				   
-			 	   $scope.disableRegister = false;
-			    }
-			  
-		    });
-		   
-		   
-	    }
-	   
-	   
-	   
-    }
-   
-   //Added by Travis. 
-    /**
-     * @function getData - 
-     *  Helper function that accepts a URL API call and GET's an appropriate
-     *  JSON response for that URL.
-     *
-     * @param: string $http - reference to URL API call
-     * @returns {object} - 
-     *      @function get - returns a value based on a key
-     */
-    regApp.factory('getData', function($http){
-
-        return {
-            get: function(url) { 
-                var data = $http.get(url).success(function(data) {
-                });
-                return data;
-            },
+    <script src="js/angular.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="js/checklist-model.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <!-- jQuery easing plugin -->
+    <script src="js/jquery.easing.min.js" type="text/javascript"></script>
+    <script src="js/registration.js" type="text/javascript"></script>
+    <script>
+        var regApp = angular.module('regApp', ['ui.bootstrap','checklist-model'] ); 
+        
+        var controllers = {};
+        
+        controllers.regCtrl =  function($scope, $http, getData, $window) {
+        
+         $scope.administratorData = {};
+         $scope.facilityData = {};
+         $scope.facilityData.Services = {};
+        
+         //Choices for the facility questions on facility Registration
+         $scope.facilityDescription = [
+            { name: "Academic"},
+            { name: "Tertiary"},
+            { name: "Community-based"},
+            { name: "Private"}
+         ];
+         $scope.facilityServices = [
+            { name: "Audiology"},
+            { name: "Surgery"},
+            { name: "Speech"}
+         ];
+         $scope.facilityCochlearTraining = [
+            { name: "General Otolaryngologist"},
+            { name: "Fellowship Trained Otologist"}
+         ];
+         //End Choices for facility questions
+        
+         //get the UserTitles (MD, AUD, etc)
+         getData.get('../aii-api/v1/userTitles').success(function(data){
+          $scope.userTitles = data.records;
+         }); 
+        
+        //$scope.facilitaData.
+        $scope.populations= ["5,000-10,000", "10,000-50,000","50,000-100,000","100,000-500,000","500,000-1,000,000","1,000,000+"]
+        $scope.usStates = [
+            { name: 'ALABAMA', abbreviation: 'AL'},
+            { name: 'ALASKA', abbreviation: 'AK'},
+            { name: 'ARIZONA', abbreviation: 'AZ'},
+            { name: 'ARKANSAS', abbreviation: 'AR'},
+            { name: 'CALIFORNIA', abbreviation: 'CA'},
+            { name: 'COLORADO', abbreviation: 'CO'},
+            { name: 'CONNECTICUT', abbreviation: 'CT'},
+            { name: 'DELAWARE', abbreviation: 'DE'},
+            { name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
+            { name: 'FLORIDA', abbreviation: 'FL'},
+            { name: 'GEORGIA', abbreviation: 'GA'},
+            { name: 'GUAM', abbreviation: 'GU'},
+            { name: 'HAWAII', abbreviation: 'HI'},
+            { name: 'IDAHO', abbreviation: 'ID'},
+            { name: 'ILLINOIS', abbreviation: 'IL'},
+            { name: 'INDIANA', abbreviation: 'IN'},
+            { name: 'IOWA', abbreviation: 'IA'},
+            { name: 'KANSAS', abbreviation: 'KS'},
+            { name: 'KENTUCKY', abbreviation: 'KY'},
+            { name: 'LOUISIANA', abbreviation: 'LA'},
+            { name: 'MAINE', abbreviation: 'ME'},
+            { name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
+            { name: 'MARYLAND', abbreviation: 'MD'},
+            { name: 'MASSACHUSETTS', abbreviation: 'MA'},
+            { name: 'MICHIGAN', abbreviation: 'MI'},
+            { name: 'MINNESOTA', abbreviation: 'MN'},
+            { name: 'MISSISSIPPI', abbreviation: 'MS'},
+            { name: 'MISSOURI', abbreviation: 'MO'},
+            { name: 'MONTANA', abbreviation: 'MT'},
+            { name: 'NEBRASKA', abbreviation: 'NE'},
+            { name: 'NEVADA', abbreviation: 'NV'},
+            { name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
+            { name: 'NEW JERSEY', abbreviation: 'NJ'},
+            { name: 'NEW MEXICO', abbreviation: 'NM'},
+            { name: 'NEW YORK', abbreviation: 'NY'},
+            { name: 'NORTH CAROLINA', abbreviation: 'NC'},
+            { name: 'NORTH DAKOTA', abbreviation: 'ND'},
+            { name: 'OHIO', abbreviation: 'OH'},
+            { name: 'OKLAHOMA', abbreviation: 'OK'},
+            { name: 'OREGON', abbreviation: 'OR'},
+            { name: 'PALAU', abbreviation: 'PW'},
+            { name: 'PENNSYLVANIA', abbreviation: 'PA'},
+            { name: 'PUERTO RICO', abbreviation: 'PR'},
+            { name: 'RHODE ISLAND', abbreviation: 'RI'},
+            { name: 'SOUTH CAROLINA', abbreviation: 'SC'},
+            { name: 'SOUTH DAKOTA', abbreviation: 'SD'},
+            { name: 'TENNESSEE', abbreviation: 'TN'},
+            { name: 'TEXAS', abbreviation: 'TX'},
+            { name: 'UTAH', abbreviation: 'UT'},
+            { name: 'VERMONT', abbreviation: 'VT'},
+            { name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
+            { name: 'VIRGINIA', abbreviation: 'VA'},
+            { name: 'WASHINGTON', abbreviation: 'WA'},
+            { name: 'WEST VIRGINIA', abbreviation: 'WV'},
+            { name: 'WISCONSIN', abbreviation: 'WI'},
+            { name: 'WYOMING', abbreviation: 'WY' }
+        ];
+         $scope.button = "Submit";
+         $scope.registerFacility = function() {
+         
+         //Check for facility invitation token
+        if((document.URL).indexOf("?") >= 0)
+        this.facilityData.Token = (document.URL).split("?")[1];
+        else
+        this.facilityData.Token = 0;
+         
+         //send in one object that contains both form information
+         $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
+         			
+          $scope.button = "Processing...";
+          $scope.disableRegister = true;
+          $http({
+           method  : 'POST',
+           url     : '../aii-api/v1/facilities',
+           data    : $scope.registration,  // pass in data as strings
+           headers : { 'Content-Type': 'application/json' } 
+          })
+          .success(function(data) {
+           console.log(data.records);
+           //if both are registered, let em know and redirect to sign in 
+           if(data.records["Facility Admin Registration Response"] == "Success" && data.records["Facility Registration Response"] == "Success"){
+          
+            alert("Your facility and administrator have been registered with AII!");
+            $window.location.href = "./";
+           
+           }else if(data.records["Facility Registration Response"] == "Success"){ //else if only fac was successful, alert admin problems
+            $scope.button = "Submit";
+            alert("You are missing necssary information for your adminstrator.\n\nPlease enter any missing information and press submit again.");        
+            $scope.disableRegister = false;
+            $scope.facilityData.FacilityID = data.records['FacilityID'];
+           
+           }else{
+            $scope.button = "Submit";
+           
+          	    alert("You are missing necessary information for both your facility and your facility administrator.\n\n" +
+        		"Please make sure to fill out facility and facility admin information.\n"+
+        		"Enter any missing information and press submit again.");
+           
+        	   $scope.disableRegister = false;
+           }
+         
+          });
+         
+         
+         }
+        
+        
+        
         }
-
-    });
-   
-    //Added by Anne.
-    /**
-     * attribute directive fileread 
-     * gets the base64 info of an image
-     * that is uploaded in a file type input
-     */
-    regApp.directive("fileread", [function () {
-        return {
-            scope: {
-                fileread: "="
-            },
-            link: function (scope, element, attributes) {
-                element.bind("change", function (changeEvent) {
-                    var reader = new FileReader();
-                    reader.onload = function (loadEvent) {
-                        scope.$apply(function () {
-                            scope.fileread = loadEvent.target.result;
-                        });
-                    }
-                    reader.readAsDataURL(changeEvent.target.files[0]);
-                });
+        
+        //Added by Travis. 
+        /**
+         * @function getData - 
+         *  Helper function that accepts a URL API call and GET's an appropriate
+         *  JSON response for that URL.
+         *
+         * @param: string $http - reference to URL API call
+         * @returns {object} - 
+         *      @function get - returns a value based on a key
+         */
+        regApp.factory('getData', function($http){
+        
+            return {
+                get: function(url) { 
+                    var data = $http.get(url).success(function(data) {
+                    });
+                    return data;
+                },
             }
-        }
-    }]);
-   
-   regApp.controller(controllers);
-   
-</script>
+        
+        });
+        
+        //Added by Anne.
+        /**
+         * attribute directive fileread 
+         * gets the base64 info of an image
+         * that is uploaded in a file type input
+         */
+        regApp.directive("fileread", [function () {
+            return {
+                scope: {
+                    fileread: "="
+                },
+                link: function (scope, element, attributes) {
+                    element.bind("change", function (changeEvent) {
+                        var reader = new FileReader();
+                        reader.onload = function (loadEvent) {
+                            scope.$apply(function () {
+                                scope.fileread = loadEvent.target.result;
+                            });
+                        }
+                        reader.readAsDataURL(changeEvent.target.files[0]);
+                    });
+                }
+            }
+        }]);
+        
+        regApp.controller(controllers);
+        
+    </script>

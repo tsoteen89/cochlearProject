@@ -1,6 +1,6 @@
-<div data-ng-controller="audioQuestionsController" class="form3D container" style="width:60%; background-color: #CAE5F0;">
+<div data-ng-controller="audioQuestionsController" class="form3D container col-md-8 col-md-offset-2" style="width:60%; background-color: #CAE5F0; margin-bottom:60px">
     <!-- Audio phase name on top of sentence testing page -->
-    <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;">{{phaseName}} </p>
+    <p style="font-size:2vw; color:#4B92AE; text-align:center; font-weight:bold;"> Sentence Testing </p>
     <!-- Patient info at the top of the page -->
     <div class="row">
         <div class="col-md-4 col-md-offset-1">
@@ -165,3 +165,13 @@
     </div>
         
 </div>
+
+<!-- Return to patient directory Button -->
+    <div data-ng-controller="audioQuestionsController" class="col-md-2" >
+        <br>
+        <a href="#/audioQuestions" style="position:fixed" >
+        <button class="btn btn-info">
+            Back to {{phaseName}} <br> Main Page
+        </button>
+        </a> 
+    </div>

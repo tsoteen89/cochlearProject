@@ -22,7 +22,9 @@
 
         //get the questions for audiology so we can use the test information to populate the table - ie test name,
         //units, fields(presentation level, snr, etc)
-        $scope.questionsURL = "http://killzombieswith.us/aii-api/v1/phases/" + 2 + "/questions";
+        
+        //arbitrary change in url 
+        $scope.questionsURL = "../aii-api/v1/phases/" + 2 + "/questions/event/1";
         getData.get($scope.questionsURL).success(function(data) {
             $scope.audioQuestions = data.records;
             $scope.fields = []; //array to hold all the fields for all the tests.
@@ -88,7 +90,7 @@
         }
         
         //get the list of questions to populate the first column of the perioperative report
-        var questionsURL = 'http://killzombieswith.us/aii-api/v1/reports/allQuestions';
+        var questionsURL = '../aii-api/v1/reports/allQuestions';
         getData.get(questionsURL).success(function(data) {
             $scope.questions = data.records;
         });
@@ -132,7 +134,7 @@
             $scope.showReport = true;
             $scope.loadMessage = "Please wait for report to load...";
             var fullFacilityURL = 
-                'http://killzombieswith.us/aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' + $scope.reportType + '/' + cookieSessionID;
+                '../aii-api/v1/reports/fullFacility/' + $scope.patientType + '/' + $scope.reportType + '/' + cookieSessionID;
             getData.get(fullFacilityURL).success(function(data) {
                 $scope.facilityReport = data.records;
             }).then(function() {

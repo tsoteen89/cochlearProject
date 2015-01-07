@@ -90,7 +90,7 @@
                         <script type="text/ng-template" id="addUser.html">
                         <div class="modal-header">
                             <button type="button" class="close" ng-click="ok()"><span>&times;</span><span class="sr-only">Close</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Add User by email invitation</h4>
+                            <h4 class="modal-title" id="myModalLabel">Add user by email invitation</h4>
                         </div>
                         <div class="modal-body">
                             <!-- Invite user form -->
@@ -100,21 +100,21 @@
                                         <label>First Name</label>
                                         <div class="controls" >
                                             <input type="text" class="form-control" name="firstName" ng-model="addUser.First" ng-required="true" 
-                                                placeholder="Enter First Name" alphabet>
+                                                placeholder="Enter First Name" alphabet required>
                                         </div>
                                     </div>
                                     <div class="control-group col-md-4" >
                                         <label>Last Name</label>
                                         <div class="controls" >
                                             <input type="text" class="form-control" name="lastName" ng-model="addUser.Last" ng-required="true" 
-                                                placeholder="Enter Last Name" alphabet>
+                                                placeholder="Enter Last Name" alphabet required>
                                         </div>
                                     </div>
                                     <div class="control-group col-md-2" >
                                         <label>Title</label>
                                         <select id="titles" class="form-control" name="title"
                                             ng-options="title.TitleID as title.Abbreviation for title in userTitles" 
-                                            ng-model="addUser.TitleID">  </select>
+                                            ng-model="addUser.TitleID" required>  </select>
                                     </div>
                                 </div>
                                 <br>
@@ -129,12 +129,13 @@
                                 </div>
                                 <br>
                                 <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" 
-                                    ng-click="sendInvitation()">Submit</button>
+                                    ng-click="sendInvitation()" ng-disabled="addUserForm.$invalid">Submit</button>
+                                    <span style="color:red; margin-left:10px" ng-if="addUserForm.$invalid"> All fields are required. </span>
                                 <br>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-primary" ng-click="ok()">Close</button>
+                            <button class="btn btn-primary" ng-click="ok()">Cancel</button>
                         </div>
                         </script>
                     </div>
@@ -146,7 +147,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Messaging</h3>
-                    </div>
+                    </div> 
                     <div class="panel-body">
                         <!-- Messaging tabs - inbox, alerts, notification (appropriate for user level) -->
                         <tabset style="cursor:default">
