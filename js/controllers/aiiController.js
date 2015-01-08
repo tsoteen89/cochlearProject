@@ -2527,7 +2527,7 @@
 		//Controller variables
 		var sessionID = userInfo.get().SessionID;
 		var userID = userInfo.get().UserID;
-		var userLevelID = userInfo.get().UserLevelID;
+		var userLevel = userInfo.get().UserLevelID;
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var urlSet = {		//(Keys are defined as : messageType + messageProperty)
 			'MessagesReceived' 		: 'users/inbox/',
@@ -2549,6 +2549,12 @@
 		$scope.messageType = null; 		//marks if message consists of 'Messages', 'Alerts', or 'Notifications'
 		$scope.messageProperty = null;	//marks if messages are 'Received', 'Deleted', 'Sent', or 'Drafts'
 		
+		//Message Count Variables
+		$scope.unreadMessageCount = 0;
+		$scope.unreadAlertCount = 0;
+		$scope.unreadNotificationCount = 0;
+		$scope.unreadCount = 0;
+		
 		//Composed Message Variables
 		$scope.composedMessage = []; 	//object to hold the composed message
 		
@@ -2558,6 +2564,75 @@
 		
 		//--------------------------------- 
 		
+		//Clear any content currently in the composed message
+		$scope.clearComposedMessage = function(){
+			$scope.composedMessage = [];
+		}
+		
+		//Either delete or restore the given message.
+		//	toDelete: true - Delete the message
+		//			  false - Restore the message
+		$scope.deleteMessage = function(message, toDelete){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+		
+			//Determine Deleted field name
+			var deletedName = 'IsArchived';
+			if($scope.messageType == 'Messages'){
+				if(message['ReceiverName'] == 'Me'){
+					deletedName = 'ReceiverDeleted';
+				} else if(message['SenderName'] == 'Me'){
+					deletedName = 'SenderDeleted';
+				}
+			}
+			//Modify the value of the deleted field
+			if(toDelete){
+				message[deletedName]++;
+			} else {
+				message[deletedName]--;
+			}
+			
+			//Save the modified message
+			putData.put(baseURL + lowerMessageType + '/' + message[$scope.messageType + 'ID'], message).success(function(data){
+				//Get message counts
+				$scope.getMessageCounts();
+			});
+			
+		}
+		
+		//Marks the selected messages as deleted 
+		$scope.deleteSelectedMessages = function(){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+		
+			//Loop through each selected message 
+			for(var i in $scope.markedMessages){
+				//Determine Deleted field name
+				var deletedName = 'IsArchived';
+				if($scope.messageType == 'Messages'){
+					if($scope.markedMessages[i]['ReceiverName'] == 'Me'){
+						deletedName = 'ReceiverDeleted';
+					} else if($scope.markedMessages[i]['SenderName'] == 'Me'){
+						deletedName = 'SenderDeleted';
+					}
+				}
+				//Modify the value of their fields
+				$scope.markedMessages[i][deletedName]++;
+				
+				//Save the modified message
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][$scope.messageType + 'ID'], $scope.markedMessages[i]).success(function(data){
+					//Get message counts
+					$scope.getMessageCounts();
+				});
+			}
+		}
+		
+		//Edit a given draft as the composed message
+		$scope.editDraft = function(message){
+			$scope.composedMessage = message;
+			$scope.composedMessage['isDraft'] = true;
+		}
+		
 		//Modify the current message (by PUT request)
 		$scope.editMessage = function(message, field, value){
 			//Modify field value of message
@@ -2566,7 +2641,10 @@
 			//Save message edit
 			//Use lower case message type in the PUT URL
 			var lowerMessageType = $scope.messageType.toLowerCase();
-			putData.put(baseURL + lowerMessageType + '/' + message[$scope.messageType + 'ID'], message);
+			putData.put(baseURL + lowerMessageType + '/' + message[$scope.messageType + 'ID'], message).success(function(data){
+				//Get message counts
+				$scope.getMessageCounts();
+			});
 		}
 		
 		//Modify the marked messages
@@ -2580,7 +2658,10 @@
 				$scope.markedMessages[i][field] = value;
 				
 				//Save the modified message
-				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][$scope.messageType + 'ID'], $scope.markedMessages[i]);
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][$scope.messageType + 'ID'], $scope.markedMessages[i]).success(function(data){
+					//Get message counts
+					$scope.getMessageCounts();
+				});
 			}
 		}
 		
@@ -2595,10 +2676,34 @@
 					if(typeof data == "object"){
 						$scope.messages[key] = data.records;
 					}
-				}
+				});
 			}
 			//Parse the retrieved messages
 			$scope.parseAllMessages();
+			//Get all message counts
+			$scope.getMessageCounts();
+		}
+		
+		//Get counts for all three message types
+		$scope.getMessageCounts = function(){
+			var unreadMessageURL = baseURL + "users/unreadMessagesCount/" + sessionID;
+			
+			//Get all counts
+			getData.get(unreadMessageURL).success(function(data) {
+				if(typeof data == "object"){
+					$scope.unreadMessageCount = data['records']['messageCount'];
+					$scope.unreadAlertCount = data['records']['alertCount'];
+					$scope.unreadNotificationCount = data['records']['notificationCount'];
+					
+					//Set the current count
+					var types = {
+						'Messages' : $scope.unreadMessageCount,
+						'Alerts' : $scope.unreadAlertCount,
+						'Notifications' : $scope.unreadNotificationCount,
+					};
+					$scope.unreadCount = types[$scope.messageType];
+				}
+			});
 		}
 		
 		//Get current messages (depending on the message type and property) 
@@ -2621,6 +2726,16 @@
 					$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
 				}
 			});
+		}
+		
+		//Returns whether or not a given property is selected
+		$scope.isCurrentProperty = function(input){
+			return $scope.messageProperty == input;
+		}
+		
+		//Returns whether or not a given type is selected
+		$scope.isCurrentType = function(input){
+			return $scope.messageType == input;
 		}
 		
 		//Define necessary fields for all available messages
@@ -2653,8 +2768,9 @@
 						}
 					}
 					
-					//Define ShortSubject, ShortSenderName, and ShortReceiverName
+					//Define ShortSubject, ShortContent, ShortSenderName, and ShortReceiverName
 					$scope.shortenField(key, 'Subject');
+					$scope.shortenField(key, 'Content');
 					$scope.shortenField(key, 'SenderName');
 					$scope.shortenField(key, 'ReceiverName');
 				}
@@ -2693,6 +2809,27 @@
 			}
 		}
 		
+		//Prefill the composed message's content as either a reply or forward of the given message
+		$scope.prefillComposedMessage = function(message, isReply){
+			$scope.composedMessage = [];
+			
+			//Handle Subject and Content differences in Forwarding or Replying to the message
+			if(isReply){
+				$scope.composedMessage['Subject'] = "RE: " + message['subject'];
+				$scope.composedMessage['Content'] = "\n\n------------------------------\n" + "From: " + message['SenderName'];
+			} else {
+				$scope.composedMessage['Subject'] = "FWD: " + message['subject'];
+				$scope.composedMessage['Content'] = "\n\n------------------------------\n" + "From: " + message['SenderName'] + "\n" + "To: " + message['ReceiverName'];
+			}
+			
+			//Determine Time and Date of the message
+			var messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
+			var messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
+			
+			//Fill in remaining content
+			$scope.composedMessage['Content'] = $scope.composedMessage['Content'] + "\n" + "Subject: " + message['Subject'] + "\n" + "Time: " + messageTime + "\n" + "Date: " + messageDate + "\n\n" + message['Content']; 
+		}
+		
 		//Defines "Short{field}" value for every message in the given key
 		$scope.shortenField = function(key, field){
 			//Length of the shortened fields
@@ -2705,6 +2842,11 @@
 					$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field].substr(0, shortLength - 3) + "...";
 				}
 			}
+		}
+		
+		//Selects a message which will be displayed in the modal
+		$scope.selectMessage = function(message){
+			$scope.selectedMessage = message;
 		}
 		
 		//Send composed message. 
@@ -2757,8 +2899,50 @@
 			
 		}
 		
+		//Display the Compose Message view in a modal
+		$scope.showMessageComposition = function(){
+			$scope.showComposeMessageBox = true;
+		}
+		
 		//Control the display of elements on the page based on the current message type and message property
-		//TODO
+		$scope.updateDisplay = function(){
+			//Adjust display based on Message Type
+			switch($scope.messageType){
+				case 'Messages':
+					$scope.showSentTab = true;
+					$scope.showDraftsTab = true;
+					break;
+				case 'Alerts':
+				
+					break;
+				case 'Notifications':
+				
+					break;
+			}
+			
+			//Adjust display based on Message Property
+			switch($scope.messageProperty){
+				case 'Received':
+					$scope.showMarkAsRead = true;
+					$scope.showMarkAsUnread = true;
+					break;
+				case 'Deleted':
+				
+					break;
+				case 'Sent':
+				
+					break;
+				case 'Drafts':
+				
+					break;
+			}
+			
+			//Adjust display based on user level
+			if(userLevel > 10){
+				$scope.showAlertsTab = false;
+				$scope.showNotificationsTab = false;
+			}
+		}
 		
 		
 		//Define onControllerLoad behavior
@@ -2768,7 +2952,7 @@
 		if(recipient != -1){
 			//Fill in the composed message's recipient
 			$scope.composeMessage['ReceiverUsername'] =
-				recipient.['username'] + " <" + recipient['full_name'] + ">";
+				recipient['username'] + " <" + recipient['full_name'] + ">";
 			
 		} else { 		//Otherwise, display the Message Inbox
 			$scope.messageType = 'Messages';		

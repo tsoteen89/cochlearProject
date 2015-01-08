@@ -20,8 +20,6 @@
 </style>
 
 <div class="container" ng-controller="messagingController">
-<div class="container" ng-controller="alertsController" >
-<div class="container" ng-controller="notificationsController" >
     <div class="row">
         <div class="col-lg-6">
             <label style="font-size:2vw; color:#4B92AE">Messages</label><br><br>
@@ -79,19 +77,16 @@
 -->
             </div>
             <!-- top bar buttons-->
-            <button class="btn btn-default"ng-show="isTypeSelected('inbox')" ng-click="putMarkedMessages('read',1)">
+            <button class="btn btn-default" ng-show="showMarkAsRead" ng-click="editSelectedMessages('IsRead',1)">
                 <!--<i class="glyphicon glyphicon-bookmark"></i>--> Mark as Read
             </button>
-            <button ng-show="isTypeSelected('inbox')" class="btn btn-default" ng-click="putMarkedMessages('read',0)">
+            <button ng-show="showMarkAsUnread" class="btn btn-default" ng-click="editSelectedMessages('IsRead',0)">
                 <!--<i class="glyphicon glyphicon-tag"></i>-->Mark as Unread
             </button>
-			<button class="btn btn-default" ng-click="refreshMessages();clearMarkedMessages()">
+			<button class="btn btn-default" ng-click="getMessages()">
                 <i class="glyphicon glyphicon-refresh"></i> Refresh
             </button>
-            <button type="button" class="btn btn-default" ng-show="showDelete" ng-click="putMarkedMessages('deleted',1)">
-                Delete
-            </button>
-            <button type="button" class="btn btn-default" ng-show="showFullDelete" ng-click="putMarkedMessages('deleted',2)">
+            <button type="button" class="btn btn-default" ng-show="showDelete" ng-click="deleteSelectedMessages()">
                 Delete
             </button>
             <!-- Single button -->
@@ -107,14 +102,8 @@
             </div>
             <div class="pull-right">
                 <!-- message counts-->
-                <span class="text-muted" ng-show="isSelectedTab('messages')">
-                    <b>1</b>–<b>{{currentMessages._meta.count}}</b> of <b>{{currentMessages._meta.count}}</b></span>
-                <!-- alert counts-->
-                <span class="text-muted" ng-show="isSelectedTab('alerts')">
-                    <b>1</b>–<b>{{currentAlerts._meta.count}}</b> of <b>{{currentAlerts._meta.count}}</b></span>
-                <!-- notification counts-->
-                <span class="text-muted" ng-show="isSelectedTab('notifications')">
-                    <b>1</b>–<b>{{currentNotifications._meta.count}}</b> of <b>{{currentNotifications._meta.count}}</b></span>
+                <span class="text-muted">
+                    <b>1</b>–<b>{{currentMessages.length}}</b> of <b>{{currentMessages.length}}</b></span>
                 <!--left and right buttons to navigate messages perhaps, not implemented yet -->
                 <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-default">
@@ -132,49 +121,21 @@
         <!-- side buttons - depending on which tab is viewed, for messages(inbox, sent, etc ) for alerts (receieved, deleted)-->
         <div class="col-sm-3 col-md-2">
             <a href="" class="btn btn-danger btn-sm btn-block" role="button" 
-               ng-click="setMessageType('composeMessage');clearComposedMessage()">COMPOSE</a> 
+               ng-click="showMessageComposition();clearComposedMessage()">COMPOSE</a> 
             <hr />
             <!-- buttons for messages -->
             <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('messages')">
-                <li ng-class="{active:isTypeSelected('inbox') }">
-                    <a href="" ng-click="setMessageType('inbox'); messagesTogglePopup(); clearMarkedMessages()">
-                    <span class="badge pull-right">{{messageCount}}</span> Inbox </a>
+                <li ng-class="{active:isCurrentProperty('Received') }">
+                    <a href="" ng-click="setMessageProperty('Received'); clearMarkedMessages()">
+                    <span class="badge pull-right">{{unreadCount}}</span> Received </a>
                 </li>
-                <li ng-class="{active:isTypeSelected('sent') }">
-                    <a href="" ng-click="setMessageType('sent'); messagesTogglePopup(); clearMarkedMessages()">Sent Mail</a></li>
-                <li ng-class="{active:isTypeSelected('drafts') } ">
-                    <a href="" ng-click="setMessageType('drafts'); messagesTogglePopup(); clearMarkedMessages()">
-                    <span class="badge pull-right"><!--PUT DRAFT COUNT HERE--></span>Drafts</a></li>
-                <li ng-class="{active:isTypeSelected('deleted') } ">
-                    <a href="" ng-click="setMessageType('deleted'); messagesTogglePopup(); clearMarkedMessages()">Deleted</a></li>
-            </ul>
-            <!-- buttons for alerts -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('alerts')">
-                <li ng-class="{active:isAlertTypeSelected('received') }">
-                    <a href ng-click="setAlertType('received'); alertHidePopup(); clearMarkedAlerts()">
-                        <span class="badge pull-right">{{alertCount}}</span>
-                        <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
-                    </a>
-                </li>
-                <li ng-class="{active:isAlertTypeSelected('deleted') }">
-                    <a href ng-click="setAlertType('deleted'); alertHidePopup(); clearMarkedAlerts()">
-                        <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
-                    </a>
-                </li>
-            </ul>
-            <!-- buttons for notifications -->
-            <ul class="nav nav-pills nav-stacked" ng-show="isSelectedTab('notifications')" >
-                <li ng-class="{active:isNotiTypeSelected('received') }">
-                    <a href ng-click="setNotificationType('received'); notifHidePopup(); clearMarkedMessages()">
-                        <span class="badge pull-right">{{notificationCount}}</span>
-                        <i class="glyphicon glyphicon-envelope" style="margin-right:5px"></i> Received
-                    </a>
-                </li>
-                <li ng-class="{active:isNotiTypeSelected('deleted') }">
-                  <a href ng-click="setNotificationType('deleted'); notifHidePopup(); clearMarkedMessages()">
-                      <i class="glyphicon glyphicon-trash" style="margin-right:5px"></i> Deleted
-                  </a>
-                </li>
+                <li ng-class="{active:isCurrentProperty('Sent') }">
+                    <a href="" ng-click="setMessageProperty('Sent'); messagesTogglePopup(); clearMarkedMessages()">Sent</a></li>
+                <li ng-class="{active:isCurrentProperty('Drafts') } ">
+                    <a href="" ng-click="setMessageProperty('Drafts'); messagesTogglePopup(); clearMarkedMessages()">
+                    <span class="badge pull-right"></span>Drafts</a></li>
+                <li ng-class="{active:isCurrentProperty('Deleted') } ">
+                    <a href="" ng-click="setMessageProperty('Deleted'); messagesTogglePopup(); clearMarkedMessages()">Deleted</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-md-10">
@@ -183,41 +144,39 @@
             <!-- Tab panes -->
             <tabset style="cursor:default">
                 <!-- MESSAGES TAB---------------------------->
-                <tab  style="cursor:pointer" ng-init="checkForRecipients()" ng-click="selectTab('messages')">
-                    <tab-heading> Messages <span class="badge pull-right" style="margin-left:5px">{{messageCount}}</span> </tab-heading>
+                <tab  style="cursor:pointer" ng-click="setMessageType('Messages')">
+                    <tab-heading> Messages <span class="badge pull-right" style="margin-left:5px">{{unreadMessageCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <div class="list-group">
                             <span class="list-group-item" 
-                               ng-repeat="message in currentMessages.records | filter:search | orderBy:orderFilter:reverse"
-                               ng-click="messagesTogglePopup(message)" style="cursor:pointer" 
-                               ng-class="{'read bold':(message.IsRead == '0') && isTypeSelected('inbox')}">
+                               ng-repeat="message in currentMessages | filter:search | orderBy:orderFilter:reverse"
+                               ng-click="showMessage(message)" style="cursor:pointer" 
+                               ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
                                 <div class="checkbox">
                                     <label>
                                         <input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> 
                                     </label>
                                 </div>
                                 <!--Sender/receiver name -->
-                                <span class="glyphicon glyphicon-star-empty" ng-if="showFrom"></span>
-                                    <span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}</span> 
-                                <span class="glyphicon glyphicon-star-empty" ng-if="showTo"></span>
-                                    <span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>  
+                                <span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}</span>
+                                <span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
                                 <!--big title -->
                                 <span class="">{{message.ShortSubject}}</span>
                                 <!--little message preview -->
-                                <span class="text-muted" style="font-size: 11px;">message preview...</span>
+                                <span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
                                 <!--time badge-->
                                 <span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span> 
                             </span>
                         </div>
                     </div>
                     <!-- COMPOSE MESSAGE BOX -->
-                    <div class="col-xs-12 message-wrapper" ng-show="isTypeSelected('composeMessage')" style="padding:0">
+                    <div class="col-xs-12 message-wrapper" ng-show="showComposeMessageBox" style="padding:0">
                         <hr>
                         <form name="compose_Message" class="form3D" style="width:100%; margin:0 0 20px 0">
                             <!-- Message Box-->
                             <div class="row">
                                 <div class="col-md-2">
-                                    <span >To (Username):</span> 
+                                    <span >To (Username):</span>
                                 </div>
                                 <div class="col-md-10">
                                     <input class="send" type="text"  style="width: 100%;" ng-required="true"
@@ -243,13 +202,13 @@
                             </div><br>
 
                             <div class="col-md-offset-8">
-                            <!--message options -->
+                            <!--compose message options -->
                               <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" 
-                                     ng-click="sendMessage(composeMessage);setMessageType('inbox')"></input>
+                                     ng-click="sendMessage(true)"></input>
                               <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft"
-                                     ng-click="saveDraft(composeMessage);setMessageType('inbox')"></input>
+                                     ng-click="sendMessage(false)"></input>
                               <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" 
-                                     ng-click="clearComposedMessage();setMessageType('inbox')"></input>
+                                     ng-click="clearComposedMessage()"></input>
                             </div>
                         </form>
 
@@ -277,20 +236,19 @@
                                 </p>
                             </div>
                             <div class="modal-footer">
-                                <a class="btn btn-primary" ng-if="showReply" ng-click="setMessageType('composeMessage'); reply()">Reply</a>
-                                <a class="btn btn-primary" ng-if="showForward" ng-click="setMessageType('composeMessage'); forward()">Forward</a>
-                                <a class="btn btn-primary" ng-if="showEdit" ng-click="setMessageType('composeMessage'); edit()">Edit</a>
-                                <a class="btn btn-primary" ng-if="showRestore" ng-click="restoreSelectedMessage()">Restore</a>
-                                <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteSelectedMessage()">Delete</a>
-                                <a class="btn btn-primary" ng-if="showFullDelete" ng-click="fullyDeleteSelectedMessage()">Delete</a>
+                                <a class="btn btn-primary" ng-if="showReply" ng-click="showMessageComposition(); prefillComposedMessage(selectedMessage, true)">Reply</a>
+                                <a class="btn btn-primary" ng-if="showForward" ng-click="showMessageComposition(); prefillComposedMessage(selectedMessage, false)">Forward</a>
+                                <a class="btn btn-primary" ng-if="showEdit" ng-click="showMessageComposition(); edit(selectedMessage)">Edit</a>
+                                <a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)">Restore</a>
+                                <a class="btn btn-primary" ng-if="showDelete" ng-click="deleteMessage(selectedMessage, true)">Delete</a>
                                 <a class="btn btn-primary" ng-click="messagesTogglePopup()">Close</a>
                             </div>
                         </div>
                     </div>
                 </tab>
                 <!-- ALERTS TAB---------------------------->
-                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('alerts')" >
-                    <tab-heading> Alerts <span class="badge pull-right" style="margin-left:5px">{{alertCount}}</span> </tab-heading>
+                <tab style="cursor:pointer" ng-show="showAlertsTab" ng-click="setMessageType('Alerts')" >
+                    <tab-heading> Alerts <span class="badge pull-right" style="margin-left:5px">{{unreadAlertCount}}</span> </tab-heading>
                     <div class="tab-pane fade in active" id="home">
                         <!-- alert list-->
                         <div class="list-group">
@@ -341,8 +299,8 @@
                 </tab>
 
                 <!-- NOTIFICATIONS TAB---------------------------->
-                <tab style="cursor:pointer" ng-show="userLevel < 11" ng-click="selectTab('notifications')">
-                    <tab-heading> Notifications <span class="badge pull-right" style="margin-left:5px">{{notificationCount}}</span> </tab-heading>
+                <tab style="cursor:pointer" ng-show="showNotificationsTab" ng-click="setMessageType('Notifications')">
+                    <tab-heading> Notifications <span class="badge pull-right" style="margin-left:5px">{{unreadNotificationCount}}</span> </tab-heading>
                      <div class="tab-pane fade in active" id="home">
                          <!-- notification list-->
                         <div class="list-group">
@@ -398,8 +356,6 @@
             </tabset>
         </div>
     </div>
-</div>
-</div>
 </div>
 
                         
