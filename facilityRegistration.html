@@ -22,6 +22,9 @@
         body {
             background: linear-gradient(rgba(10, 102, 120, 0.2), rgba(10, 100, 182, 0.2))
         }
+        #baa{
+            width: 500px; height: 400px; overflow-y: scroll; resize: none;
+        }
         </style>
     </head>
     <body >
@@ -167,7 +170,7 @@
                     <h3 class="fs-subtitle">Accept the terms of the business associate agreement</h3>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2">
-                            <textarea style="width: 500px; height: 400px; overflow-y: scroll;" readonly id="terms">
+                            <textarea readonly id="baa">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pellentesque iaculis viverra. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut mauris ut ex dapibus aliquam. Mauris pretium nunc eget risus scelerisque finibus. Curabitur interdum gravida congue. Mauris tortor nibh, efficitur et tempor ac, ultrices consectetur sem. Mauris posuere, neque id sodales consectetur, lacus arcu fringilla sapien, eget convallis nisi lorem eu sem. Proin ipsum est, dapibus eu vulputate non, hendrerit ac orci. Suspendisse at velit sit amet orci aliquet rutrum quis id libero.
 
 Cras placerat, nisl nec tincidunt hendrerit, tellus ante gravida arcu, id laoreet dui quam non dolor. In egestas purus nec metus tincidunt cursus. Suspendisse vel libero sodales, scelerisque libero eget, rhoncus nibh. Fusce id feugiat ligula. Suspendisse potenti. Donec efficitur imperdiet lacus ut semper. Nulla cursus lorem ut augue posuere, non consequat nulla pellentesque. Etiam vestibulum ut purus vel hendrerit. Donec sagittis enim non tincidunt feugiat.
@@ -222,14 +225,14 @@ Mauris bibendum efficitur consectetur. Fusce fermentum diam ante. Integer ullamc
             $scope.disableRegister = true;
 
             //jquery validation for baa scrolling
-            $('#terms').scroll(function () {
+            $('#baa').scroll(function () {
                 /*
                 console.log("scrolling");
                 console.log($(this).scrollTop() + '\n');
                 console.log($(this)[0].scrollHeight + '\n');
                 console.log($(this).height() + '\n');
                 */
-                $('#terms').scroll(function () {
+                $('#baa').scroll(function () {
                     if ($(this).scrollTop() + $(this).innerHeight() +2 >= $(this)[0].scrollHeight) {
                         $('#register').removeAttr('disabled');
                     }

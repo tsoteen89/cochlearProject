@@ -159,23 +159,38 @@
                                     </div>
                                 </div>
                             </li>
-                            <!--Don't know what that is doing ng-if="offSet 0" -->
-                            <button ng-if="offSet > 0" class="questionsButton btn btn-primary" ng-click="previousPage()" 
-                                    style="float:left">Back</button>
-                            <button ng-if="finished == false" class="btn btn-primary" ng-click="nextPage()" style="float:right">Continue</button>
-                            <a href="#/patientDirectory" >
-                            <button ng-if="finished == true" class="questionsButton btn btn-primary" style="float:right" 
-                                popover="Click to save data but remain in this phase" popover-trigger="mouseenter" popover-placement="right" 
-                                    ng-click="saveUnanswered()">
-                            Save
-                            </button> &nbsp;
-                            </a>
-                            <button ng-click="getDataSummary()" ng-if="finished == true" class="btn btn-default"
-                                popover="Click to review data entry for this phase before concluding this visit" popover-placement="bottom"
-                                    popover-trigger="mouseenter" style="float:right" ng-click="saveUnanswered()">
-                            Finished
-                            </button>
                             <br>
+                            <div class="container" id="cp_questionForm" style="background-color:floralwhite; margin-bottom:200px">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <button ng-if="offSet > 0" class="btn btn-primary" ng-click="previousPage()" 
+                                                style="float:left">Back</button>
+                                    </div>
+                                    <div class="col-md-3" style="float:right">
+                                        <button ng-if="finished == false" class="btn btn-primary" ng-click="nextPage()">
+                                            Continue
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3 col-md-offset-1">
+                                        <a href="#/patientDirectory" >
+                                        <button ng-if="finished == true" class="btn btn-primary" style="float:right" 
+                                            popover="Click to save data but remain in this phase" popover-trigger="mouseenter" 
+                                                popover-placement="bottom" ng-click="saveUnanswered()">
+                                        Save
+                                        </button> &nbsp;
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button ng-click="getDataSummary()" ng-if="finished == true" class="btn btn-default"
+                                            popover="Click to review data for this phase before concluding this visit"
+                                                popover-placement="bottom" popover-trigger="mouseenter" style="float:right" 
+                                                ng-click="saveUnanswered()">
+                                        Finished
+                                        </button>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
                         </div>
                     </ul>
                     <!-- End Display Of All Questions -->
