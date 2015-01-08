@@ -18,6 +18,11 @@
             textinput.value = fileinput.value;
         }
         </script>
+        <style>
+        body {
+            background: linear-gradient(rgba(10, 102, 120, 0.2), rgba(10, 100, 182, 0.2))
+        }
+        </style>
     </head>
     <body >
         <div ng-controller="regCtrl" class="container-fluid">
@@ -66,14 +71,21 @@
                             <input type="text" class="box" style="height:56px" name="phone" placeholder="Phone (1234567890)" 
                                    ng-model="facilityData.Phone"/> 
                         </div>
-                        <div class="col-md-6" > 
+                        <!-- Upload facility image-->
+                        <div class="col-md-6 container" > 
                             <div class="box" style="text-align:left">
                                 <input type="file" id="browse" name="fileupload" fileread="facilityData.image" 
                                        accept="image/gif, image/jpeg, image/png"  
                                     style="display: none" onChange="Handlechange();"/>
-                                <input type="button" class="btn btn-default btn-xs" value="Upload facility logo" id="fakeBrowse"
-                                       title="Please upload your facility image" onclick="HandleBrowseClick();"/>
-                                <input type="text" id="filename" readonly="true" value="No file chosen"/>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="button" class="btn btn-default btn-xs" value="Upload facility logo" id="fakeBrowse"
+                                               title="Please upload your facility image" onclick="HandleBrowseClick();"/>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" id="filename" readonly="true" value="No file chosen"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

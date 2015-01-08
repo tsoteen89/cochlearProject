@@ -34,10 +34,10 @@
             <fieldset>
                 <h3 class="fs-title">Register as a new user</h3>
                 <div class="row">
-                    <div class="col-md-6"><input type="text" name="first" placeholder="First Name" ng-model="registration.First"/> </div>
-                    <div class="col-md-6" ><input type="text" name="last" placeholder="Last Name" ng-model="registration.Last"/> </div>
+                    <div class="col-md-6"><input type="text" class="box" name="first" placeholder="First Name" ng-model="registration.First"/> </div>
+                    <div class="col-md-6" ><input type="text" class="box" name="last" placeholder="Last Name" ng-model="registration.Last"/> </div>
                 </div>
-                <input type="text" name="username" placeholder="Username" ng-model="registration.Username"/>
+                <input type="text" class="box" name="username" placeholder="Username" ng-model="registration.Username"/>
                 <input type="password" name="password" placeholder="Password" ng-model="registration.Password"/>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" ng-model="registration.confirmPassword"/>
                 
@@ -91,7 +91,7 @@
 			if($scope.registration.Password === $scope.registration.confirmPassword){
 				$http({
 				   method  : 'POST',
-				   url     : 'http://killzombieswith.us/aii-api/v1/users',
+				   url     : '../aii-api/v1/users',
 				   //url     : '../aii-api/v1/users',
 				   data    : $scope.registration,  // pass in data as strings
 				   headers : { 'Content-Type': 'application/json' } 
@@ -155,24 +155,6 @@
         }
 
     });
-    userRegApp.directive("fileread", [function () {
-        return {
-            scope: {
-                fileread: "="
-            },
-            link: function (scope, element, attributes) {
-                element.bind("change", function (changeEvent) {
-                    var reader = new FileReader();
-                    reader.onload = function (loadEvent) {
-                        scope.$apply(function () {
-                            scope.fileread = loadEvent.target.result;
-                        });
-                    }
-                    reader.readAsDataURL(changeEvent.target.files[0]);
-                });
-            }
-        }
-    }]);
    
    userRegApp.controller(controllers);
    
