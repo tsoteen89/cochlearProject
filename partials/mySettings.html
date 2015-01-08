@@ -9,9 +9,15 @@
             <!-- fieldset -->
                 <fieldset>
                     <h3 class="fs-title">Edit user details</h3>
+                    <label class="settings-label">Username</label>
                     <input type="text" class="box" name="username" placeholder="Username" ng-model="user.username"/>
+                    <label class="settings-label">Email</label>
+                    <input type="text" class="box" name="email" placeholder="email" ng-model="user.email"/>
+                    <label class="settings-label">Current Password</label>
                     <input type="password" name="password" placeholder="Current password" ng-model="user.currentPassword"/>
+                    <label class="settings-label">New Password</label>
                     <input type="password" name="password" placeholder="New password" ng-model="user.Password"/>
+                    <label class="settings-label">Confirm New Password</label>
                     <input type="password" name="confirmPassword" placeholder="Confirm New Password" ng-model="user.confirmPassword"/>
 
                    <!-- {{user}}-->

@@ -26,26 +26,36 @@
                 <fieldset>
                     <h3 class="fs-title">Facility Settings</h3>
                     <h3 class="fs-subtitle">Edit your facility information</h3>
+                    <label class="settings-label">Facility Name</label>
                     <input type="text" class="box" class="box" name="facName" placeholder="Facility Name" ng-model="facilityData.Name" />
+                    <label class="settings-label">Street Address</label>
                     <input type="text" class="box" name="address" placeholder="Address" ng-model="facilityData.Address1" />
                     <div class="row">
-                        <div class="col-md-6"><input type="text" class="box" name="city" placeholder="City" ng-model="facilityData.City"/></div>
+                        
+                        <div class="col-md-6">
+                            <label class="settings-label">City</label>
+                            <input type="text" class="box" name="city" placeholder="City" ng-model="facilityData.City"/>
+                        </div>
                         <div class="col-md-4">
+                            <label class="settings-label">State</label>
                             <select id="states" name="State" ng-options="states.name as states.name for states in usStates" 
                                     ng-model="facilityData.State"> 
                             </select>
                         </div>
                         <div class="col-md-2">
+                            <label class="settings-label">Zipcode</label>
                             <input type="text" class="box" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="text" class="box" style="height:56px" name="phone" placeholder="Phone (1234567890)" 
+                            <label class="settings-label">Phone</label>
+                            <input type="text" class="box" name="phone" placeholder="Phone (1234567890)" 
                                    ng-model="facilityData.Phone"/> 
                         </div>
                         <!-- Upload facility image-->
-                        <div class="col-md-6 container" > 
+                         <label class="settings-label" style="margin-left:15px">Facility Logo</label>
+                        <div class="col-md-6" >
                             <div class="box" style="text-align:left">
                                 <input type="file" id="browse" name="fileupload" fileread="facilityData.image" 
                                        accept="image/gif, image/jpeg, image/png"  
