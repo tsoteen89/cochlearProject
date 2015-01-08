@@ -58,11 +58,12 @@
                                 ({{facData.records.Phone.slice(0,3)}}){{facData.records.Phone.slice(3,6)}}-{{facData.records.Phone.slice(6)}} <br>
                                 <b>Facility Admin: </b>
                                 <a href="#/messages" ng-click="sendMessageToUser(facilityAdmin)"> {{facilityAdmin.full_name}} </a> <br>
-                                <button type="button" class="btn btn-default btn-sm" ng-if="userLevel < 11"> 
-                                    <a style="color:black; text-decoration:none;" href="#/facilitySettings"><span class="fa fa-building"></span> 
-                                        Facility Settings 
-                                    </a>
-                                </button> 
+                                <a style="color:black; text-decoration:none;" href="#/facilitySettings" ng-if="userLevel < 11">
+                                    <button type="button" class="btn btn-default btn-sm" > 
+                                        <span class="fa fa-building"></span> 
+                                            Facility Settings 
+                                    </button> 
+                                </a>
                             </div>
                             <!-- END FACILITY DETAILS-->
                         </div>
