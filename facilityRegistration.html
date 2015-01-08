@@ -221,12 +221,13 @@ Mauris bibendum efficitur consectetur. Fusce fermentum diam ante. Integer ullamc
         
         $scope.disableRegister = true;
         $('#terms').scroll(function () {
+            /*
             console.log("scrolling");
             console.log($(this).scrollTop() + '\n');
             console.log($(this)[0].scrollHeight + '\n');
             console.log($(this).height() + '\n');
+            */
             if ($(this).scrollTop() == $(this)[0].scrollHeight - $(this).height()-30) {
-                console.log("at the bottom");
                 $('#register').removeAttr('disabled');
             }
         });
