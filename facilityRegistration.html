@@ -65,6 +65,7 @@
                         <div class="col-md-4">
                             <select id="states" name="State" ng-options="states.name as states.name for states in usStates" 
                                     ng-model="facilityData.State"> 
+                                <option value=''> State </option>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -129,7 +130,7 @@
                         <div class="col-md-6" >
                             <div class="box" style="text-align:left">
                                 <label for="training"> 
-                                    If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons
+                                    If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons (select all that apply)
                                 </label>
                                 <div ng-repeat="training in facilityCochlearTraining">
                                     <input type="checkbox" checklist-value="training.name" 
@@ -672,7 +673,8 @@
             ];
             $scope.facilityCochlearTraining = [
                 { name: "General Otolaryngologist"},
-                { name: "Fellowship Trained Otologist"}
+                { name: "Fellowship trained Otologist/Neurotologist"},
+                { name: "Fellowship trained Pediatric Otolaryngologist"}
             ];
             //End Choices for facility questions
 
