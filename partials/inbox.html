@@ -86,20 +86,11 @@
 			<button class="btn btn-default" ng-click="getAllMessages()">
                 <i class="glyphicon glyphicon-refresh"></i> Refresh
             </button>
-            <button type="button" class="btn btn-default" ng-show="showDelete" ng-click="deleteSelectedMessages()">
+            <button type="button" class="btn btn-default" ng-click="deleteSelectedMessages()">
                 Delete
             </button>
             <!-- Single button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    More <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="">Stuff</a></li>
-                    <li class="divider"></li>
-                    <li class="text-center"><small class="text-muted">Select messages to see more actions</small></li>
-                </ul>
-            </div>
+            
             <div class="pull-right">
                 <!-- message counts-->
                 <span class="text-muted">
@@ -120,8 +111,8 @@
     <div class="row">
         <!-- side buttons - depending on which tab is viewed-->
         <div class="col-sm-3 col-md-2">
-            <a href="" class="btn btn-danger btn-sm btn-block" role="button" 
-               ng-click="showMessageComposition();clearComposedMessage()">COMPOSE</a> 
+            <a href="" class="btn btn-danger btn-sm btn-block" role="button" data-toggle="modal" data-target="#composeMessageModal"
+               ng-click="showMessageComposition();clearComposedMessage()">COMPOSE</a>
             <hr />
             <!-- buttons for messages -->
             <ul class="nav nav-pills nav-stacked" >
@@ -156,100 +147,121 @@
 			</tabset>
 			<div class="tab-pane fade in active" id="home">
 				<div class="list-group">
-					<span class="list-group-item" 
+					<span class="list-group-item"
 					   ng-repeat="message in currentMessages | filter:search | orderBy:orderFilter:reverse"
-					   ng-click="showMessage(message)" style="cursor:pointer" 
+					   ng-click="selectMessage(message)" style="cursor:pointer" 
 					   ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
 						<div class="checkbox">
 							<label>
 								<input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> 
 							</label>
 						</div>
+						<span data-toggle="modal" data-target="#displayMessageModal">
 						<!--Sender/receiver name -->
-						<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}</span>
+						<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}{{message.ShortPatientName}}{{message.ShortSenderFacilityName}}</span>
 						<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
 						<!--big title -->
 						<span class="">{{message.ShortSubject}}</span>
 						<!--little message preview -->
 						<span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
 						<!--time badge-->
-						<span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span> 
+						<span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
+						</span>
 					</span>
 				</div>
 			</div>
-			<!-- COMPOSE MESSAGE BOX -->
-			<div class="col-xs-12 message-wrapper" ng-show="showComposeMessageBox" style="padding:0">
-				<hr>
-				<form name="compose_Message" class="form3D" style="width:100%; margin:0 0 20px 0">
-					<!-- Message Box-->
-					<div class="row">
-						<div class="col-md-2">
-							<span >To (Username):</span>
+			<!-- COMPOSE MESSAGE MODAL -->
+			<div class="modal fade" id="composeMessageModal" tabindex="-1" role="dialog" aria-labelledby="composeMessageModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title" id="composeMessageModalLabel">Compose a Message</h4>
 						</div>
-						<div class="col-md-10">
-							<input class="send" type="text"  style="width: 100%;" ng-required="true"
-								   ng-model="composeMessage.ReceiverUsername"> 
-						</div>
-					</div><br>
-					<div class="row">
-						<div class="col-md-2">
-							<span >Subject:</span>
-						</div>
-						<div class="col-md-10">
-							<input class="subject" type="text" style="width: 100%;" ng-required="true" ng-model="composeMessage.Subject">
-						</div>
-					</div><br>
-					<div class="row">
-						<div class="col-md-2">
-							<span >Message:</span> 
-						</div>
-						<div class="col-md-10">
-							<textarea rows="10" style="width:100%; margin-bottom: 10px;border:1px solid black"
-									  ng-required="true" ng-model="composeMessage.Content"></textarea><
-						</div>
-					</div><br>
+						<div class="modal-body">
+							<div class="col-xs-12 message-wrapper" style="padding:0">
+								
+								<form name="compose_Message">
+									<!-- Message Box-->
+									<div class="row">
+										<div class="col-md-2">
+											<span >To:<br>(Username)</span>
+										</div>
+										<div class="col-md-10">
+											<input class="send" type="text"  style="width: 100%;" ng-required="true"
+												   ng-model="composedMessage.ReceiverUsername"> 
+										</div>
+									</div><br>
+									<div class="row">
+										<div class="col-md-2">
+											<span >Subject:</span>
+										</div>
+										<div class="col-md-10">
+											<input class="subject" type="text" style="width: 100%;" ng-required="true" ng-model="composedMessage.Subject">
+										</div>
+									</div><br>
+									<div class="row">
+										<div class="col-md-2">
+											<span >Message:</span> 
+										</div>
+										<div class="col-md-10">
+											<textarea rows="10" style="width:100%; margin-bottom: 10px;border:1px solid black"
+													  ng-required="true" ng-model="composedMessage.Content"></textarea>
+										</div>
+									</div><br>
 
-					<div class="col-md-offset-8">
-					<!--compose message options -->
-					  <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send" 
-							 ng-click="sendMessage(true)"></input>
-					  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft"
-							 ng-click="sendMessage(false)"></input>
-					  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" 
-							 ng-click="clearComposedMessage()"></input>
+									<div class="col-md-offset-6">
+									<!--compose message options -->
+									  <input class="btn btn-success" type="submit" name="submit" style="margin-right: 5px;" value="Send"  data-dismiss="modal"
+											 ng-click="sendMessage(true)"></input>
+									  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Save as Draft" data-dismiss="modal"
+											 ng-click="sendMessage(false)"></input>
+									  <input class="btn btn-primary" type="submit" name="submit" style="margin-right: 5px;" value="Cancel" data-dismiss="modal"
+											 ng-click="clearComposedMessage()"></input>
+									</div>
+								</form>
+
+								<hr>
+							</div>
+						</div>
 					</div>
-				</form>
-
-				<hr>
+				</div>
 			</div>
 			<!-- DISPLAY MESSAGE BOX-->
-			<div class="col-xs-12 message-display" ng-show="displayMessages" style="padding:0">
-				<hr>
-				<div class="modal-dialogue form3D" ng-show="isPopupVisible" style="width:100%;margin:0 0 20px 0">
-					<div class="modal-header">
-						<h3>{{selectedMessage.Subject}}</h3>
-					</div>
-					<div class="modal-body">
-						<div ng-if="showFrom">
-							<strong>From:</strong> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br>
+			<div class="modal fade" id="displayMessageModal" tabindex="-1" role="dialog" aria-labelledby="displayMessageModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h3 class="modal-title" id="displayMessageModalLabel">{{selectedMessage.Subject}}</h3>
 						</div>
-						<div ng-if="showTo">
-							<strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br>
+						<div class="modal-body">
+							<div class="col-xs-12 message-display" style="padding:0">
+								<div ng-if="showFrom">
+									<strong>From:</strong> {{selectedMessage.SenderName}}{{selectedMessage.SenderFacilityName}} <span ng-if="isCurrentType('Messages')">({{selectedMessage.SenderUsername}})</span> </br>
+								</div>
+								<div ng-if="showTo">
+									<strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br>
+								</div>
+								<div ng-if="showPatientInfo"><strong>Patient:</strong> {{selectedMessage.Patient}} </br></div>
+								<div ng-if="showPatientInfo"><strong>Patient DOB:</strong> {{selectedMessage.PatientDOB}} </br></div>
+								<div><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
+								<div><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
+								</br>
+								<p style="white-space: pre-line">
+									{{selectedMessage.Content}}
+								</p>
+							
+								<div class="modal-footer">
+									<a class="btn btn-primary" ng-if="showReply" ng-click="prefillComposedMessage(selectedMessage, true)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Reply</a>
+									<a class="btn btn-primary" ng-if="showForward" ng-click="prefillComposedMessage(selectedMessage, false)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Forward</a>
+									<a class="btn btn-primary" ng-if="showEdit" ng-click="edit(selectedMessage)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Edit</a>
+									<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)">Restore</a>
+									<a class="btn btn-primary" ng-click="deleteMessage(selectedMessage, true)">Delete</a>
+									<a class="btn btn-primary" data-dismiss="modal">Close</a>
+								</div>								
+							</div>
 						</div>
-						<div ng-if="showTimestamp"><strong>Time:</strong> {{selectedMessage.Timestamp * 1000 | date:'h:mm a'}} </br></div>
-						<div ng-if="showTimestamp"><strong>Date:</strong> {{selectedMessage.Timestamp * 1000 | date:'M/d/yy'}} </br></div>
-						</br>
-						<p style="white-space: pre-line">
-							{{selectedMessage.Content}}
-						</p>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-primary" ng-if="showReply" ng-click="showMessageComposition(); prefillComposedMessage(selectedMessage, true)">Reply</a>
-						<a class="btn btn-primary" ng-if="showForward" ng-click="showMessageComposition(); prefillComposedMessage(selectedMessage, false)">Forward</a>
-						<a class="btn btn-primary" ng-if="showEdit" ng-click="showMessageComposition(); edit(selectedMessage)">Edit</a>
-						<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)">Restore</a>
-						<a class="btn btn-primary" ng-if="showDelete" ng-click="deleteMessage(selectedMessage, true)">Delete</a>
-						<a class="btn btn-primary" ng-click="messagesTogglePopup()">Close</a>
 					</div>
 				</div>
 			</div>
