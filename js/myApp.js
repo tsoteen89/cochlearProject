@@ -30,6 +30,10 @@ myApp.config(function ($routeProvider) {
   {
       templateUrl: 'partials/mySettings.html'
   })
+  .when('/facilitySettings',
+  {
+      templateUrl: 'partials/facilitySettings.html'
+  })
   .when('/dashboard',
   {
       templateUrl: 'partials/dashboard.html'

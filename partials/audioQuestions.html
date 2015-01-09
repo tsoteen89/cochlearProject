@@ -22,13 +22,15 @@
             <!-- Audiograms Button -->
             <a href = "#/audiogram">
                 <button class="select-audio-tests btn-lg btn-block">
-                    <h1 style="display:inline-block;"> Audiograms </h1>
-                    <!-- Hoverable help exclamation next to audiograms that contains a link that opens informative modal-->
-                    <span>
-                        <hovercard hover-tmpl-url="hovercards/audiogramHelp.html">
-                            <p style="color:#125bff;" class="fa fa-exclamation-circle"></p>
-                        </hovercard>
-                    </span>
+                    <div class="container">
+                        <h1 style="display:inline-block;"> Audiograms </h1>
+                        <!-- Hoverable help exclamation next to audiograms that contains a link that opens informative modal-->
+                        <span>
+                            <hovercard hover-tmpl-url="hovercards/audiogramHelp.html" style="float:right;margin-top:30px">
+                                <p style="color:#125bff;" class="fa fa-exclamation-circle"></p>
+                            </hovercard>
+                        </span>
+                    </div>
                 </button>
             </a>
             <br><br><br>
@@ -154,7 +156,7 @@
                     <completed-audiology></completed-audiology>
     
                 </div>
-                <div ng-controller="audioQuestionsController">
+                <div ng-controller="audioQuestionsController" class="form3D">
                      <style>
                         table, th, td {
                                border: 1px solid #164a5e;
@@ -165,8 +167,8 @@
                         <caption></caption>
                         <thead>
                         <tr align="Center">
-                          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Question</b></h3></td>
-                          <td colspan="1" style="background-color:#cae5f0"><br><h3><b>Answer</b></h3></td>
+                            <td colspan="1" style="background-color:#cae5f0"><h4><b>Question</b></h4></td>
+                            <td colspan="1" style="background-color:#cae5f0"><h4><b>Answer</b></h4></td>
                         </tr>
                         </thead>
                         <tbody>

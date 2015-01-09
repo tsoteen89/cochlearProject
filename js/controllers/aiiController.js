@@ -2457,45 +2457,50 @@
      *
      */
     controllers.editUserController = function($scope, $http, getData, putData, persistData, userInfo) {
+        
         $scope.editUser = {};
-        $scope.editFacility = {};
-        $scope.passwordChange = false;
 
-        $scope.sessionID = userInfo.get().SessionID;
-        $scope.facilityID = userInfo.get().FacilityID;
+        var sessionID = userInfo.get().SessionID;
 
         //url to get signed in users info
-        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
-        $scope.faciltyURL = "http://aii-hermes.org/aii-api/v1/facilities/" + $scope.facilityID + '/' + $scope.sessionID;
-        $scope.userLevel = persistData.getUserLevel();
-
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
         //Grab single User by ID and then bind email and phone details to the editUser scope variable
         getData.get($scope.userURL).success(function(data) {
-            $scope.editUser.email = data.records.email;
-            $scope.editUser.phone = data.records.phone;
+            $scope.user= data.records;
         });
 
-        //Grab information about users Facility
-        getData.get($scope.faciltyURL).success(function(data) {
-            $scope.editFacility.Address1 = data.records.Address1;
-            $scope.editFacility.Phone = data.records.Phone;
-            $scope.editFacility.Description = data.records.Description;
-        })
+        
+        //Scope variables
+        $scope.message ="";
+	    $scope.messageIsError = false; //Determines the style of the message
+	    $scope.disableRegister = true; //Disables the save button
+	    $scope.button = "Save"; //save button content
+	   
+	    //Validates the form data and sends a user registration request to the API
+        $scope.editUser = function() {
+	   
+			//TODO - form validation
+			//	insure valid username (no spaces, adequate length)
+			//	insure valid password (adequate length, valid characters)
+		
+			//Insure password fields match before sending request
+			if($scope.user.Password === $scope.user.confirmPassword){
+				putData.put('http://aii-hermes.org/aii-api/v1/users/' + sessionID, $scope.editUser).success(function(data) {
+                    if (data.records["User Edit Response"]) {
+                        alert(data.records['User Edit Respone']);
+                    }
+                })
+			}
+			//If the password and confirmation do not match, inform the user
+			else{
+				$scope.message = "Password fields do not match.";
+				$scope.messageIsError = true;
+			}
+        }
+        
+        
 
-
-        //Put changed User information into database
-        $scope.editUserPut = function() {
-            putData.put('http://aii-hermes.org/aii-api/v1/users/' + this.userData.records.UserID, $scope.editUser).success(function(data) {
-                if (data.records["User Edit Response"] == "Successfully edited a user") {
-                    $scope.passwordChange = true;
-                }
-            })
-        };
-
-        //Put changed Facility information into database
-        $scope.editFacilityPut = function() {
-            putData.put('http://aii-hermes.org/aii-api/v1/facilities/' + this.userData.records.FacilityID, $scope.editFacility);
-        };
+        
 
     }
 
@@ -3031,12 +3036,6 @@
         $scope.tokenTimeout = false;
         $scope.invalidToken = false;
 
-        //Used by Terry for testing. Will delete before production
-        var c = {};
-        c['one'] = 1;
-        cookie.set(c);
-        //end added by Terry
-
         //Check if the user has a SessionID stored on their machine
         var cookieSessionID = $cookieStore.get('SessionID');
         //If SessionID is stored...
@@ -3199,6 +3198,88 @@
     //************************************MISCELLANEOUS CONTROLLERS***************************************//
 
 
+    //Added by Anne
+    
+    controllers.facilitySettingsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $cookieStore) {
+        $scope.usStates = [
+            { name: 'ALABAMA', abbreviation: 'AL'},
+            { name: 'ALASKA', abbreviation: 'AK'},
+            { name: 'ARIZONA', abbreviation: 'AZ'},
+            { name: 'ARKANSAS', abbreviation: 'AR'},
+            { name: 'CALIFORNIA', abbreviation: 'CA'},
+            { name: 'COLORADO', abbreviation: 'CO'},
+            { name: 'CONNECTICUT', abbreviation: 'CT'},
+            { name: 'DELAWARE', abbreviation: 'DE'},
+            { name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
+            { name: 'FLORIDA', abbreviation: 'FL'},
+            { name: 'GEORGIA', abbreviation: 'GA'},
+            { name: 'GUAM', abbreviation: 'GU'},
+            { name: 'HAWAII', abbreviation: 'HI'},
+            { name: 'IDAHO', abbreviation: 'ID'},
+            { name: 'ILLINOIS', abbreviation: 'IL'},
+            { name: 'INDIANA', abbreviation: 'IN'},
+            { name: 'IOWA', abbreviation: 'IA'},
+            { name: 'KANSAS', abbreviation: 'KS'},
+            { name: 'KENTUCKY', abbreviation: 'KY'},
+            { name: 'LOUISIANA', abbreviation: 'LA'},
+            { name: 'MAINE', abbreviation: 'ME'},
+            { name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
+            { name: 'MARYLAND', abbreviation: 'MD'},
+            { name: 'MASSACHUSETTS', abbreviation: 'MA'},
+            { name: 'MICHIGAN', abbreviation: 'MI'},
+            { name: 'MINNESOTA', abbreviation: 'MN'},
+            { name: 'MISSISSIPPI', abbreviation: 'MS'},
+            { name: 'MISSOURI', abbreviation: 'MO'},
+            { name: 'MONTANA', abbreviation: 'MT'},
+            { name: 'NEBRASKA', abbreviation: 'NE'},
+            { name: 'NEVADA', abbreviation: 'NV'},
+            { name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
+            { name: 'NEW JERSEY', abbreviation: 'NJ'},
+            { name: 'NEW MEXICO', abbreviation: 'NM'},
+            { name: 'NEW YORK', abbreviation: 'NY'},
+            { name: 'NORTH CAROLINA', abbreviation: 'NC'},
+            { name: 'NORTH DAKOTA', abbreviation: 'ND'},
+            { name: 'OHIO', abbreviation: 'OH'},
+            { name: 'OKLAHOMA', abbreviation: 'OK'},
+            { name: 'OREGON', abbreviation: 'OR'},
+            { name: 'PALAU', abbreviation: 'PW'},
+            { name: 'PENNSYLVANIA', abbreviation: 'PA'},
+            { name: 'PUERTO RICO', abbreviation: 'PR'},
+            { name: 'RHODE ISLAND', abbreviation: 'RI'},
+            { name: 'SOUTH CAROLINA', abbreviation: 'SC'},
+            { name: 'SOUTH DAKOTA', abbreviation: 'SD'},
+            { name: 'TENNESSEE', abbreviation: 'TN'},
+            { name: 'TEXAS', abbreviation: 'TX'},
+            { name: 'UTAH', abbreviation: 'UT'},
+            { name: 'VERMONT', abbreviation: 'VT'},
+            { name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
+            { name: 'VIRGINIA', abbreviation: 'VA'},
+            { name: 'WASHINGTON', abbreviation: 'WA'},
+            { name: 'WEST VIRGINIA', abbreviation: 'WV'},
+            { name: 'WISCONSIN', abbreviation: 'WI'},
+            { name: 'WYOMING', abbreviation: 'WY' }
+        ];
+        var SessionID = $cookieStore.get('SessionID');
+
+        //**********API URL's***********************/
+        $scope.facilityURL = "http://aii-hermes.org/aii-api/v1/facilities/" + SessionID; //returns user's facility info
+
+
+        //Grab Facility info  using facilityURL
+        getData.get($scope.facilityURL).success(function(data) {
+            $scope.facilityData = data.records;
+        });
+        
+        $scope.saveFacility = function(){
+             putData.put($scope.facilityURL,$scope.facilityData).success(function(data) {
+                if(data.records['Image Save Response']){
+                    alert(data.records['Facility Edit Response'] + '\n' + data.records['Image Save Response'] );
+                }else{
+                    alert(data.records['Facility Edit Response']);
+                }
+            });
+        }
+    }
     //Added by James 
     /**
      * @controller composeMessage -

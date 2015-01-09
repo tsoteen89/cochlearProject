@@ -1,0 +1,79 @@
+<html style="width:100%;height:100%;">
+    <head>
+        
+        <script>
+        function HandleBrowseClick()
+        {
+            var fileinput = document.getElementById("browse");
+            fileinput.click();
+        }
+
+        function Handlechange()
+        {
+            var fileinput = document.getElementById("browse");
+            var textinput = document.getElementById("filename");
+            textinput.value = fileinput.value;
+        }
+        </script>
+    </head>
+    <body >
+        <div ng-controller="facilitySettingsController" class="container-fluid">
+            <!--Stolen form -->
+            <!-- multistep form -->
+            <form id="msform"  >
+                <!-- fieldsets -->
+                <!----Facility Registration -->
+                <fieldset>
+                    <h3 class="fs-title">Facility Settings</h3>
+                    <h3 class="fs-subtitle">Edit your facility information</h3>
+                    <label class="settings-label">Facility Name</label>
+                    <input type="text" class="box" class="box" name="facName" placeholder="Facility Name" ng-model="facilityData.Name" />
+                    <label class="settings-label">Street Address</label>
+                    <input type="text" class="box" name="address" placeholder="Address" ng-model="facilityData.Address1" />
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+                            <label class="settings-label">City</label>
+                            <input type="text" class="box" name="city" placeholder="City" ng-model="facilityData.City"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="settings-label">State</label>
+                            <select id="states" name="State" ng-options="states.name as states.name for states in usStates" 
+                                    ng-model="facilityData.State"> 
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="settings-label">Zipcode</label>
+                            <input type="text" class="box" name="zipcode" placeholder="Zipcode" ng-model="facilityData.Zipcode" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="settings-label">Phone</label>
+                            <input type="text" class="box" name="phone" placeholder="Phone (1234567890)" 
+                                   ng-model="facilityData.Phone"/> 
+                        </div>
+                        <!-- Upload facility image-->
+                         <label class="settings-label" style="margin-left:15px">Facility Logo</label>
+                        <div class="col-md-6" >
+                            <div class="box" style="text-align:left">
+                                <input type="file" id="browse" name="fileupload" fileread="facilityData.image" 
+                                       accept="image/gif, image/jpeg, image/png"  
+                                    style="display: none" onChange="Handlechange();"/>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="button" class="btn btn-default btn-xs" value="Change facility logo" id="fakeBrowse"
+                                               title="Please upload your facility image" onclick="HandleBrowseClick();"/>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" id="filename" readonly="true" value="No file chosen"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="button" name="submit" class="action-button" value="Save" ng-click="saveFacility()"/>
+                </fieldset>
+            </form>
+        </div>
+    </body>
