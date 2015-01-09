@@ -2543,7 +2543,7 @@
 		//----- Data-bound variables -----
 		
 		//Message Variables
-		$scope.messages = []; 			//object consisting of all of the user's messages (Keys are defined as : messageType + messageProperty)
+		$scope.messages = {}; 			//object consisting of all of the user's messages (Keys are defined as : messageType + messageProperty)
 		$scope.currentMessages = [];	//object consisting of the messages currently being viewed
 		$scope.markedMessages = [];		//object consisting of all currently marked messages
 		$scope.messageType = null; 		//marks if message consists of 'Messages', 'Alerts', or 'Notifications'
@@ -2682,6 +2682,10 @@
 			$scope.parseAllMessages();
 			//Get all message counts
 			$scope.getMessageCounts();
+			//Set the current message type 
+			setTimeout(function(){
+				$scope.resetCurrentMessages();
+			},0);
 		}
 		
 		//Get counts for all three message types
@@ -2771,8 +2775,12 @@
 					//Define ShortSubject, ShortContent, ShortSenderName, and ShortReceiverName
 					$scope.shortenField(key, 'Subject');
 					$scope.shortenField(key, 'Content');
-					$scope.shortenField(key, 'SenderName');
-					$scope.shortenField(key, 'ReceiverName');
+					setTimeout(function(){
+						$scope.shortenField(key, 'SenderName');
+					},0);
+					setTimeout(function(){
+						$scope.shortenField(key, 'ReceiverName');
+					},0);
 				}
 			}
 		}
@@ -2803,7 +2811,9 @@
 						}
 					}
 					//Define ShortSubject and ShortSenderFacilityName for all Notifications
-					$scope.shortenField(key, 'Subject');
+					setTimeout(function(){
+						$scope.shortenField(key, 'Subject');
+					},0);
 					$scope.shortenField(key, 'SenderFacilityName');
 				}
 			}
@@ -2837,11 +2847,21 @@
 		
 			//Loop through every message in the key and define 'Short{field}'
 			for(var i in $scope.messages[key]){
+				console.log($scope.messages[key][i]);
+				console.log("Field: " + field);
+		
 				$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field];
 				if($scope.messages[key][i][field].length > shortLength){
 					$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field].substr(0, shortLength - 3) + "...";
 				}
 			}
+		}
+		
+		//Reset the messages being displayed to the correct messages
+		$scope.resetCurrentMessages = function(){
+			console.log("!! : " + $scope.messages);
+			$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
+			console.log($scope.currentMessages);
 		}
 		
 		//Selects a message which will be displayed in the modal
@@ -2875,11 +2895,15 @@
 		//Set current message property ('Received', 'Deleted', 'Sent', or 'Drafts')
 		$scope.setMessageProperty = function(input){
 			$scope.messageProperty = input;
+			$scope.updateDisplay();
+			$scope.resetCurrentMessages();
 		}
 		
 		//Set current message type ('Messages', 'Alerts', or 'Notifications')
 		$scope.setMessageType = function(input){
 			$scope.messageType = input;
+			$scope.updateDisplay();
+			$scope.resetCurrentMessages();
 		}
 		
 		//Display the current message in a modal
@@ -2906,6 +2930,14 @@
 		
 		//Control the display of elements on the page based on the current message type and message property
 		$scope.updateDisplay = function(){
+			//Default settings
+			$scope.showAlertsTab = true;
+			$scope.showNotificationsTab = true;
+			$scope.showSentTab = false;
+			$scope.showDraftsTab = false;
+			$scope.showMarkAsRead = false;
+			$scope.showMarkAsUnread = false;
+		
 			//Adjust display based on Message Type
 			switch($scope.messageType){
 				case 'Messages':
@@ -2951,7 +2983,7 @@
 		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			//Fill in the composed message's recipient
-			$scope.composeMessage['ReceiverUsername'] =
+			$scope.composedMessage['ReceiverUsername'] =
 				recipient['username'] + " <" + recipient['full_name'] + ">";
 			
 		} else { 		//Otherwise, display the Message Inbox
@@ -2961,6 +2993,9 @@
 
 		//Get all message data
 		$scope.getAllMessages();
+		
+		//Load display control
+		$scope.updateDisplay();
 		
 		//====================================================
 	}
