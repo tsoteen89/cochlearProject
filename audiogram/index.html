@@ -1,366 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
 
-        <!--CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/context.bootstrap.css">
-        <link rel="stylesheet" href="css/chosen.css">  
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+
+    
+    <!--JavaScript -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
+    <script src="js/kinetic.js"></script>
+    <script src="js/context.js"></script> 
+    <script src="js/contextMenu.js"></script>
+    <script src="js/audiogram.js"></script>
+
+    <!-- https://github.com/js-coder/cookie.js -->
+    <script src="js/cookie.min.js"></script>
+
+    <style>
+        /* scheme 1 */
+        /* turquiose #64D4F9 */
+        /* robins egg #15C2D2 */
+        /* orange yellow #F7C868 */
+        /* light carmine pink #F16767 */
+        /* mamba #776A7D */
+
+        /* scheme 2 */
+        /*dark cyan #008D8E*/
+        /*robins egg blue #15C8D1*/
+        /*gray #808281*/
+        /*white lilac #E5E7E6*/
+
+        /* tin #7E7E7E */
+        /* gray #818181 */
+        body{
+            color:#3C3F41;
+            background-color: #CEE0E9;
+            padding-top:10px;
+/*            font-family: 'Inconsolata', ;*/
+/*            font-family: 'Indie Flower', cursive;*/
+            font-family: 'Play', sans-serif;
+        }
         
-        <!--JavaScript -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="js/kinetic.js"></script>
-        <script src="js/context.js"></script> 
-        <script src="js/contextMenu.js"></script>
-        <script src="js/chosen.jquery.js"></script> 
-        <script src="js/audiogram.js"></script>
+/*        .btn-warning{
+            background-image: linear-gradient(to bottom,#f74242 0,#f9a4a4 100%);
+        }
+*/
         
-        <!-- https://github.com/js-coder/cookie.js -->
-        <script src="js/cookie.min.js"></script>
+        h2 {
+            color:#414141;
+            text-shadow: 2px 2px #808281;
+        }
+        h3.panel-title{
+            font-weight:bold;
+        }
+        
+        .list-group-wrap{
+            margin: 0 auto; 
+            text-align: center;
+        }
+        
+        .navbar{
+            margin-left:15px;
+            margin-right:15px;
+        }
+        
+        .navbar-default .navbar-brand{
+            color:#15C2D2;
+            font-size:20px;
+        }
+        
+        .navbar-default .navbar-brand.subheading{
+            color:#777;
+            font-size:14px;
+        }
+        
+        #patient-audiogram-date{
+            width:100%
+        }
+        
+        /*Aii styles*/
+        
+        .aii-btn-border{
+            border: 3px solid rgba(0,0,0,.3);
+            background-color: #EEEEEE;
+        }
+        
+        .aii-canvas{
+            text-align:center;
+            margin-top:-20px;
+        }
+        
+        .aii-canvas-menu{
+            text-align:center;
+        }
+        
+        .aii-center-column{
+            margin: 0 auto; 
+            text-align: center;
+        }
+        
+        .aii.control-label{
+            font-size:16px;
+            font-weight:normal;
+            padding-top:5px;
+        }
+        
+        .aii.fa{
+            padding-top:3px;
+        }
+        
+        .aii.input-label{
+            font-weight:bold;
+            padding:5px;
+            text-align:right;
+        }
+                
+        .aii.form-control{
+            font-weight:bold;
+        }
+        
+        #aii-main-container{
+            padding: 0px;
+            background-color: #E5E7E6;
+            -moz-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+            -webkit-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+            box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
+            /*padding: 5px 25px 25px 25px;*/
+        }
+        
+        #measure-buttons{
+            width:130px;
+        }
+        
+        .aii-mea-btn{
+/*            width:130px;*/
+            border:3px solid rgba(0,0,0,0);
+        }     
+        
+        .aii-mea-btn.mid{
+            margin-left:5px;
+            margin-right:5px;
+        }
+        
+        .aii-mea-btn.left{
+            font-size:20px;
+            font-weight:bold;
+            text-align: left;
+        }
+        
+        .aii-mea-btn.right{
+            font-size:20px;
+            font-weight:bold;
+            text-align: right;
+        }
+        
+        #aii-navbar{
+            font-size:20px;
+        }
+        
+        .aii.panel.panel-default{
+            background:rgba(255,255,255,.5);
+        }
+        
+        .aii.panel.panel-default.patient-info{        
+            padding-bottom:10px;
+            height:160px;
+        }
+        
+        .aii.panel-heading{
+            font-size:20px
+        }
+        
+        .aii.row{
+            margin:10px 0px 5px 0px;
+/*            padding-left:10px;*/
+        }
+        
+        
+        /*Sawr - styles added to speech audiometry and word recognition */
+        .sawr-input{
+            width:45px;
+            text-align:right;
+            padding:3px;
+        }
+        
+        .sawr.panel-heading{
+            font-size:16px;
+            font-weight:bold;
+        }
+        
+        .sawr-table td,th{
+            text-align: center;
+        }
+        
 
-        <style>
-            /* scheme 1 */
-            /* turquiose #64D4F9 */
-            /* robins egg #15C2D2 */
-            /* orange yellow #F7C868 */
-            /* light carmine pink #F16767 */
-            /* mamba #776A7D */
-
-            /* scheme 2 */
-            /*dark cyan #008D8E*/
-            /*robins egg blue #15C8D1*/
-            /*gray #808281*/
-            /*white lilac #E5E7E6*/
-
-            /* tin #7E7E7E */
-            /* gray #818181 */
-            body{
-                color:#3C3F41;
-                background-color: #CEE0E9;
-                padding-top:10px;
-            }
-            h2 {
-                color:#414141;
-                text-shadow: 2px 2px #808281;
-            }
-
-            .container{
-                maring-top:-40px;
-                background-color: #E5E7E6;
-                -moz-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
-                -webkit-box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
-                box-shadow: 0 0 5px 5px rgba(200,200,200,0.5);
-                padding: 5px 25px 25px 25px;
-            }
-
-            .mea-btn {
-                background-color:#383D44;
-                color:white;
-                line-height: .9;
-            }
-
-
-            .mea-btn:hover{
-                color:#7E7E7E;            
-            }
-            /*Audiograph action/menu buttons*/  
-            .audiogram-menu{
-                margin-bottom: 20px;
-                margin-top:-20px;
-                padding-left: 130px;
-            }
-            .btn-action{
-                background-color:#383D44;
-                color:white;
-                padding: 3px 8px 3px 8px;
-            }
-
-            .btn-action:hover{
-                color:#7E7E7E;
-            }
-
-            .btn-action .fa{
-                padding-right:5px
-            }
-
-            i.fa.pull-left{
-                padding-top:2px;
-                padding-left:5px
-            }
-            /*Audiogram container styles*/            
-
-            #audiogram_left {
-                margin-left: -30px;
-            }
-            /*Measure buttons*/
-            .btn.mea-btn {
-                padding: 5px 0px 5px 0px;
-            }
-            .mea-btn {
-                background-color: hsl(216, 9%, 21%) !important;
-                background-repeat: repeat-x;
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3a3e45", endColorstr="#30343a");
-                background-image: -khtml-gradient(linear, left top, left bottom, from(#3a3e45), to(#30343a));
-                background-image: -moz-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -ms-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3a3e45), color-stop(100%, #30343a));
-                background-image: -webkit-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -o-linear-gradient(top, #3a3e45, #30343a);
-                background-image: linear-gradient(#3a3e45, #30343a);
-                border-color: #30343a #30343a hsl(216, 9%, 20%);
-                color: #fff !important;
-                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
-                -webkit-font-smoothing: antialiased;
-                width:100%;
-                border: 3px solid transparent;
-            }
-
-            .btn-toolbar{
-                width:120px;
-                padding:5px;
-            }
-
-            .border{
-                border-color: #15C2D2 #15C2D2 HSL(185, 82%, 45%);
-                font-weight:bold;
-            }
-
-            #measure-buttons{
-                padding-left: 30px;
-                padding-top: 100px;
-            }
-
-            #measure-buttons .fa{
-                color:#15C8D1;
-                font-size:24px;
-            }        
-
-            .left, .right{
-                color:#15C8D1;
-                font-size:24px;  
-            }
-
-            .left{
-                padding-right:10px
-            }
-
-            .right{
-                padding-left:10px
-            }
-
-            span.mid{
-                color:white;
-            }
-
-            #mask-button{
-                margin-top:30px;
-                border-radius:5px;
-                border-width: 2px;
-            }
-
-            #mask-button .fa{
-                font-size:18px;
-            }
-
-            #mask-button a{
-                color:white
-            }
-
-            #mask-button a:hover{
-                text-decoration: none;
-            }
-            /*bad programming*/
-
-            #no-response-button .fa{
-                font-size:18px;
-            }
-
-            #no-response-button a{
-                color:white
-            }
-
-            #no-response-button a:hover{
-                text-decoration: none;
-            }
-            .btn.mea-btn a"{
-            padding:0px;
-            margin:0px;
-            }
-
-            /*title row*/
-            .title{
-                text-align:center;
-                padding:0px;
-                margin-top:-10px;
-                margin-bottom:-40px;
-            }
-
-            .tool{
-                padding: 2px 5px 2px 5px;
-                margin-top: -25px;
-                margin-bottom: 10px;
-                width:75px;
-            }
-            .testButton {
-                width: 80px;
-                height: 80px;
-                background: #3382c0;
-                color: #FFF;
-            }
-            .audioInputs{
-                width:50px;
-            }
-            .audioInputs-container{
-                width:350px;
-            }
-            .audioInputs-heading{
-                text-align:center;
-                font-weight:bold;
-            }
-            .audioInputs-rowLabel{
-                text-align:right;
-            }
-            .audioInputs-table tr {
-                line-height: 10px;
-                min-height: 10px;
-                height: 10px;
-            }
-            .audioInputs-table th{
-                text-align:center;
-            }
-            .audioInputs-table td{
-                text-align:center;
-            }
-            .audioInputs-table input{
-                text-align:right;
-            }
-            .navbar-xs { 
-                min-height:22px; 
-                border-radius:5px;
-                border:1px solid #15C8D1;
-            } 
-            .navbar-xs .navbar-brand{ padding: 5px 8px;font-size: 24px;line-height: 14px; color:#15C8D1} 
-            .navbar-xs .navbar-nav > li > a { border-right:1px solid #ddd; padding-top: 2px; padding-bottom: 2px; line-height: 16px }
-
-            .button-checkbox{
-                padding-left: 40px;  
-            }
-
-            .button-checkbox .fa{
-                font-size:18px;
-                color:#15C2D2;
-            }
-
-            .btn-masked{
-                background-color: hsl(216, 9%, 21%) !important;
-                background-repeat: repeat-x;
-                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3a3e45", endColorstr="#30343a");
-                background-image: -khtml-gradient(linear, left top, left bottom, from(#3a3e45), to(#30343a));
-                background-image: -moz-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -ms-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3a3e45), color-stop(100%, #30343a));
-                background-image: -webkit-linear-gradient(top, #3a3e45, #30343a);
-                background-image: -o-linear-gradient(top, #3a3e45, #30343a);
-                background-image: linear-gradient(#3a3e45, #30343a);
-                border-color: #30343a #30343a hsl(216, 9%, 20%);
-                color: #fff !important;
-                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
-                -webkit-font-smoothing: antialiased;
-                border: 2px solid transparent;        
-            }
-            .btn-masked.btn-default{
-                color: #ffffff; 
-                background-color: #040008;    
-            }
-            .input-label{
-                line-height: 2;
-                color:#777777;
-            }
-
-            .patient-data{
-                font-size:16px;
-                padding-left:20px;
-                padding-right:20px;
-                text-align:center;
-                color:#000000;
-                font-weight:bold;
-            }
-            .underlined{
-                border-bottom-width: 2px;
-                border-bottom-style: solid;
-                border-bottom-color: #c0c0c0;
-                line-height: 35px;
-            }
-            /* Date field */
-            input[type="date"] {
-                -webkit-align-items: center;
-                display: -webkit-inline-flex;
-                overflow: hidden;
-                padding: 0;
-                -webkit-padding-start: 10px;
-                height:35px
-            }
-
-            input::-webkit-datetime-edit {
-                -webkit-flex: 1;
-                -webkit-user-modify: read-only !important;
-                display: inline-block;
-                min-width: 0;
-                overflow: hidden;
-            }
-
-            input::-webkit-datetime-edit-fields-wrapper {
-                -webkit-user-modify: read-only !important;
-                display: inline-block;
-                padding: 1px 0;
-                white-space: pre;
-            }
-
-            hr{
-                border-top: 1px solid #34383E;
-            }
-            .panel-primary {
-                border-color: #aaa;
-                background-color: rgba(255, 255, 255, .7);
-            }
-            .panel-primary .panel-heading {
-              background-image: none;
-              color: RGBA(119, 119, 119, 1);
-              background-color: #ddd;
-              border-color: #ddd;
-              font-size:18px;
-              font-weight:bold;
-              margin-bottom:5px;
-            }
-            .aii-panel-row{
-                line-height:40px;
-            }
-            .aii-toggle{
-              color: RGBA(119, 119, 119, 1);
-              font-weight:bold;                
-            }
-            
-            
-        </style>
+        
+    </style>
+    
     </head>
     <body>
-        <div class="container">
+        <div class="container" id="aii-main-container">
+            <!-- Start Menu bar -->
             <div class="row">
                 <nav class="navbar navbar-default navbar-xs" role="navigation">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#"><b>Aii</b> Audiogram</a>
+                        <a class="navbar-brand" href="#"><b>Aii</b> Audiogram</a> 
+                        <span class="navbar-brand subheading" id="facility-name">Facility Name</span>
                     </div>
-
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse pull-right" id="aii-navbar">
                         <ul class="nav navbar-nav">
-                            <li><a href="#" id="searchAudiogram"><i class="fa fa-search"></i></a></li>
-                            <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i></a></li>
-                            <li><a href="#" id="printAudiogram"><i class="fa fa-print"></i></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -373,272 +232,338 @@
                                     <li><a href="#">One more separated link</a></li>
                                 </ul>
                             </li>
+                            <li><a href="#" id="searchAudiogram"><i class="fa fa-search"></i></a></li>
+                            <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i></a></li>
+                            <li><a href="#" id="printAudiogram"><i class="fa fa-print"></i></a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
             </div>
-            <div class="row" style="margin-top:-20px" id="patient-info">
-                <div class="col-sm-4" style="padding:0px">
-                    <div class="panel panel-primary" style="margin:3px;width:98%;padding-bottom:10px;height:150px">
-                        <div class="panel-heading">Patient:</div>
-                        <div class="row">
-                            <div class="col-xs-3 col-sm-3 ">
-                                <span class="input-label" style="font-size:16px;padding-left:20px;">Name:</span>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 underlined">
-                                <span class="input-label patient-data" id="patient-name"> Joseph Smith</span>
-                            </div>
+            <!-- End Menu bar -->
+            <!-- Start Patient Info Row -->
+            <div class="row" id="patient-info">
+                <div class="col-sm-4">
+                    <div class="panel panel-default aii patient-info" style="margin-left:15px">
+                        <div class="panel-heading aii">
+                            <h3 class="panel-title">Patient Info</h3>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-3 col-sm-3">
-                                <span class="input-label" style="font-size:16px;padding-left:20px;text-align:right">DOB:</span>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 underlined">
-                                <span class="input-label patient-data" id="patient-dob">10 Oct 1950</span>
-                            </div>
+                        <div class="row aii">
+                            <div class="form-group">
+                                <label for="date" class="col-sm-3 control-label">Name:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="patient-name" place-holder="Patient Name" disabled>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row aii">
+                            <div class="form-group">
+                                <label for="date" class="col-sm-3 control-label">DOB:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="patient-dob" placeholder="DOB" disabled>
+                                </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4" style="padding:0px">
-                    <div class="panel panel-primary" style="margin:3px;;width:98%;padding-bottom:10px;height:150px">
-                        <div class="panel-heading">Current Audiogram:</div>
-                            <div class="row aii-panel-row">
-                                <div class="col-xs-1 col-sm-1"></div>
-                                <div class="col-xs-10 col-sm-10">
-                                    <div class="input-group">
-                                      <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false">Title: <span class="caret"></span></button>
-                                        <ul class="dropdown-menu" role="menu" id="aii-audiogram-title-ul">
-                                          <li><a href="#">Pre Operative Audiogram</a></li>
-                                          <li><a href="#">Aided Testing</a></li>
-                                          <li><a href="#">Residual Hearing</a></li>
-                                        </ul>
-                                      </div><!-- /btn-group -->
-                                      <input type="text" class="form-control" id="aii-audiogram-title-new">
-                                    </div>
-                                </div>
-                                <div class="col-xs-1 col-sm-1"></div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default aii patient-info">
+                        <div class="panel-heading aii">
+                            <h3 class="panel-title"id="patient-phase"></h3>
+                        </div>
+                        <div class="row aii">
+                            <div class="form-group">
+                            <label for="date" class="col-sm-3 control-label">Title:</label>
+                            <select class="selectpicker show-tick" data-style="btn-default" id="aii-audiogram-title-new">
+                                <option value="" disabled selected>Audiogram title...</option>
+                                <option>Pre Operative Audiogram</option>
+                                <option>Aided Testing</option>
+                                <option>Residual Hearing</option>
+                              </select>
                             </div>
+<!--
+                            <div class="form-group">
+                                <label for="status" class="col-sm-3 control-label">Title:</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control error" id="status" name="status"  id="aii-audiogram-title-new">
+                                        <option value="" disabled selected>Audiogram title...</option>
+                                        <option>Pre Operative Audiogram</option>
+                                        <option>Aided Testing</option>
+                                        <option>Residual Hearing</option>
+                                    </select>
+                                </div>
+                            </div>
+-->
+                        </div>
+                        <div class="row aii">
+                            <div class="form-group">
+                                <label for="date" class="col-sm-2 control-label">Date:</label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control aii" id="patient-audiogram-date">
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default aii patient-info" style="margin-right:15px">
+                        <div class="panel-heading aii">
+                            <h3 class="panel-title">Search</h3>
+                        </div>
                             <div class="row">
                                 <div class="col-xs-1 col-sm-1"></div>
                                 <div class="col-xs-10 col-sm-10">
                                     <div class="input-group">
                                       <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false">Date: <span class="caret"></span></button>
-                                      </div><!-- /btn-group -->
-                                      <input type="date" class="form-control" id="patient-audiogram-date">
-                                    </div>
-                                </div>
-                                <div class="col-xs-1 col-sm-1"></div>
-                            </div>
-                    </div>
-                </div>
-                <div class="col-sm-4" style="padding:0px">
-                    <div class="panel panel-primary" style="margin:3px;width:98%;padding-bottom:10px;height:150px">
-                        <div class="panel-heading">Previous Audiograms:</div>
-                            <div class="row">
-                                <div class="col-xs-1 col-sm-1"></div>
-                                <div class="col-xs-10 col-sm-10">
-                                    <div class="input-group">
-                                      <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-med dropdown-toggle aii-toggle" data-toggle="dropdown" aria-expanded="false">Find: <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-default" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-search"></i><span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
                                           <li><a href="#">Pre Operative Audiogram</a></li>
                                           <li><a href="#">Aided Testing</a></li>
                                           <li><a href="#">Residual Hearing</a></li>
                                         </ul>
                                       </div><!-- /btn-group -->
-                                      <input type="text" class="form-control">
+                                      <input type="text" class="form-control aii">
                                     </div>
                                 </div>
                                 <div class="col-xs-1 col-sm-1"></div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-2 col-sm-2">
-
                                 </div>
                                 <div class="col-xs-8 col-sm-8 ">
-            
                                 </div>
                             </div>   
                     </div>
                  </div>
-
             </div>
+            <!-- End Patient Info Row -->
 
-            <div class="row">
-                <div class="col-xs-1">
-                    &nbsp;
-                </div>
-                <div class="col-xs-4 title" style="text-align:center">
-                    <h2>Right Ear</h2>
-                </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-4 title" style="text-align:center">            
-                    <h2>Left Ear</h2>
-                </div>
-                <div class="col-xs-1">
-                    &nbsp;
+            <!-- Start Ear Condition Row -->
+            <div class="container" id="aii-controls-container">
+                <div class="row">
+                    <!-- Begin Right Column -->
+                    <div class="col-sm-5">
+                            <div class="panel panel-default aii">
+                              <div class="panel-heading sawr">
+                                <h3 class="panel-title">Right Ear</h3>
+                              </div>
+                              <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="status" class="col-sm-3 control-label aii">Condition: </label>
+                                        <div class="col-sm-7">
+                                            <select class="selectpicker show-tick" id="right-condition-opts">
+                                                <option value="" disabled selected>Choose ear condition...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+                                <!-- Begin Right Canvas -->
+                                <div class="row">   
+                                    <div class="aii-canvas"  id="left_column">
+                                        <div class="audiogram-container" id="audiogram_right"></div>
+                                    </div>
+                                </div>              
+                                <!-- End Right Canvas -->
+                                <!-- Begin Menu Row -->
+                                <div class="row">
+                                    <div class="aii-canvas-menu" data="right">
+                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i>Undo</button>
+                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i>Clear</button>
+                                        <button class="btn btn-default btn-xs" data="Redo" id="redo"><i class="fa fa-repeat pull-left aii"></i>Redo</button>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Right Column -->
+                    <!-- Begin Middle Column -->
+                    <div class="col-sm-2" id="aii-center-column">
+                        <!-- Auditory measure buttons -->
+                        <div class="list-group-wrap">
+                            <div class="panel panel-default aii">
+                              <div class="panel-heading">
+                                <h3 class="panel-title">Measures</h3>
+                              </div>
+                              <div class="panel-body">
+                                    <div class="list-group" id="measure-buttons">
+                                        <a href="#" class="list-group-item aii-mea-btn aii-btn-border" id="AC">
+                                            <span class="aii-mea-btn left" id="ACR"><i class="fa fa-circle-o"></i>&nbsp;&nbsp;</span><span class="aii-mea-btn mid">AC</span>&nbsp;&nbsp;<span class="aii-mea-btn right" id="ACL">&#10005;</span>
+                                        </a>
+                                        <a href="#" class="list-group-item aii-mea-btn" id="BC">
+                                            <span class="aii-mea-btn left" id="BCR">&nbsp;&nbsp;<i class="fa fa-chevron-left"></i></span><span class="aii-mea-btn mid">BC</span>&nbsp;&nbsp;<span class="aii-mea-btn right" id="BCL"><i class="fa fa-chevron-right"></i></span>
+                                        </a>
+                                        <a href="#" class="list-group-item aii-mea-btn" id="MCL">
+                                            <span class="aii-mea-btn left">M</span>&nbsp;&nbsp;<span class="aii-mea-btn mid">MCL</span>&nbsp;&nbsp;<span class="aii-mea-btn right">M</span>
+                                        </a>
+                                        <a href="#" class="list-group-item aii-mea-btn" id="UCL">
+                                            <span class="aii-mea-btn left">m</span>&nbsp;&nbsp;<span class="aii-mea-btn mid">UCL</span>&nbsp;&nbsp;<span class="aii-mea-btn right">m</span>
+                                        </a>
+                                        <a href="#" class="list-group-item aii-mea-btn" id="SF">
+                                            <span class="aii-mea-btn left">S</span>&nbsp;&nbsp;&nbsp;<span class="aii-mea-btn mid">SF</span>&nbsp;&nbsp;&nbsp;<span class="aii-mea-btn right">S</span>
+                                        </a>
+                                        <a href="#" class="list-group-item aii-mea-btn" id="SF-A">
+                                            <span class="aii-mea-btn left">A</span>&nbsp;<span class="aii-mea-btn mid">SF-A</span>&nbsp;<span class="aii-mea-btn right">A</span>
+                                        </a>
+                                    </div> 
+                                    <div>
+                                        <span class="button-checkbox">
+                                            <button type="button" class="btn" id="mask-tool"> Masked</button>
+                                            <input type="checkbox" class="hidden" />
+                                        </span>
+                                    </div>
+                              </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End Middle Column -->
+                    <!-- Begin Left Column -->
+                    <div class="col-sm-5">
+                            <div class="panel panel-default aii">
+                              <div class="panel-heading">
+                                <h3 class="panel-title">Left Ear</h3>
+                              </div>
+                              <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="status" class="col-sm-3 control-label aii">Condition: </label>
+                                        <div class="col-sm-7">
+                                            <select class="selectpicker show-tick" id="left-condition-opts">
+                                                <option value="" disabled selected>Choose ear condition...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+                                <!-- Begin Right Canvas -->
+                                <div class="row">   
+                                    <div class="aii-canvas"  id="right_column">
+                                        <div class="audiogram-container" id="audiogram_left"></div>
+                                    </div>
+                                </div>              
+                                <!-- End Right Canvas -->
+                                <!-- Begin Menu Row -->
+                                <div class="row">
+                                    <div class="aii-canvas-menu" data="left">
+                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i>Undo</button>
+                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i>Clear</button>
+                                        <button class="btn btn-default btn-xs" data="Redo" id="redo"><i class="fa fa-repeat pull-left aii"></i>Redo</button>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Left Column -->
                 </div>
             </div>
+            <!-- End Ear Condition Row -->
             <div class="row">
-                <div class="col-xs-5"  id="left_column">
-                    <div id="audiogram_right"></div>
-                </div>
-                <div class="col-xs-2">
-                    <!-- Auditory measure buttons -->
-                    <div class="btn-group-vertical" id="measure-buttons" >
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn mea-btn border" id="AC">
-                                <a href="#"><span class="left" id="ACR"><i class="fa fa-circle-o"></i></span><span class="mid">&nbsp;AC&nbsp;</span><span class="right" id="ACL">&#10005;</span></a>
-                            </button>
-                        </div>
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn  mea-btn" id="BC">
-                                <a href="#" ><span class="left" id="BCR"><i class="fa fa-chevron-left"></i>&nbsp;</span><span class="mid">&nbsp;BC&nbsp;</span><span class="right" id="BCL">&nbsp;<i class="fa fa-chevron-right"></i></span></a>
-                            </button>
-                        </div>
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn mea-btn" id="MCL">
-                                <a href="#" ><span class="left">M</span><span class="mid">MCL</span><span class="right">M</span></a>
-                            </button>
-                        </div>
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn mea-btn" id="UCL">
-                                <a href="#"><span class="left">m</span><span class="mid">UCL</span><span class="right">m</span></a>
-                            </button>
-                        </div>
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn mea-btn" id="SF">
-                                <a href="#"><span class="left">S</span><span class="mid">&nbsp;&nbsp;SF&nbsp;&nbsp;</span><span class="right">S</span></a>
-                            </button>
-                        </div>
-                        <div class="btn-toolbar">
-                            <button type="button" class="btn mea-btn" id="SF-A">
-                                <a href="#"><span class="left">A</span><span class="mid">SF-A</span><span class="right">A</span></a>
-                            </button>
-                        </div>
-                        <br>
-                    </div>
-                    <div>
-                        <span class="button-checkbox">
-                            <button type="button" class="btn btn-masked" id="mask-tool"> Masked</button>
-                            <input type="checkbox" class="hidden" />
-                        </span>
-                    </div>
-                </div><!-- End Button Column-->
-                <div class="col-md-5" id="right_column">
-                    <div id="audiogram_left"></div>
-                </div>
-            </div> <!-- End Row -->
-            <div class="row">
-                <div class="col-xs-4" style="text-align:center">
-                    <div class="audiogram-menu" data="right">
-                        <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
-                        <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
-                    </div>
-                </div>
-                <div class="col-xs-4" style="text-align:center">
+                <div class="col-xs-2 aii-center-menu">
 
                 </div>
-                <div class="col-xs-3" style="text-align:center">            
-                    <div class="audiogram-menu" data="left" style="margin-left:0px;padding-left:0px;">
-                        <button class="btn btn-xs btn-action" data="Undo" id="undo"><i class="fa fa-undo pull-left"></i>Undo</button>
-                        <button class="btn btn-xs btn-action" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left"></i>Clear</button>
-                        <button class="btn btn-xs btn-action" data="Redo" id="redo"><i class="fa fa-repeat pull-left"></i>Redo</button>
-                    </div>
-                </div>
-                <div class="col-xs-1" style="text-align:center">            
-                </div>
-            </div>
+                <!-- End Button Column-->
+            </div> 
+            <!-- End Row -->
             <div class="row">
-                <div class="col-xs-2"></div>
-                <div class="col-xs-4">
-                    <div class="panel panel-default audioInputs-container">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-5">
+                    <div class="panel panel-default aii">
                         <!-- Default panel contents -->
-                        <div class="panel-heading audioInputs-heading">Speech Audiometry</div>
-
+                        <div class="panel-heading sawr">
+                            <h3 class="panel-title">Speech Audiometry:</h3>
+                        </div>
                         <!-- Table -->
-                        <table class="table audioInputs-table">
+                        <table class="table table-condensed sawr-table">
                             <tr style="text-align:center"><th></th><th>SRT</th><th>Mask</th><th></th></tr>
-                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="spch-aud-srt-r"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-r"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="spch-aud-srt-l"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-l"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="spch-aud-srt-b"></td><td><input type="text" class="audioInputs" id="spch-aud-mask-b"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">R</td><td><input type="text" class="sawr-input" id="spch-aud-srt-r"></td><td><input type="text" class="sawr-input" id="spch-aud-mask-r"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">L</td><td><input type="text" class="sawr-input" id="spch-aud-srt-l"></td><td><input type="text" class="sawr-input" id="spch-aud-mask-l"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="sawr-input" id="spch-aud-srt-b"></td><td><input type="text" class="sawr-input" id="spch-aud-mask-b"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
                         </table>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <div class="panel panel-default audioInputs-container">
+                <div class="col-xs-5">
+                    <div class="panel panel-default aii">
                         <!-- Default panel contents -->
-                        <div class="panel-heading audioInputs-heading">Word Recognition</div>
+                        <div class="panel-heading sawr">
+                            <h3 class="panel-title">Word Recognition:</h3>
+                        </div>
                         <!-- Table -->
-                        <table class="table audioInputs-table">
+                        <table class="table table-condensed sawr-table">
                             <tr style="text-align:center"><th></th><th>%</th><th>Stimulus</th><th>Mask</th><th>Noise</th></tr>
-                            <tr><td style="text-align:right">R</td><td><input type="text" class="audioInputs" id="word-rec-per-r"></td><td><input type="text" class="audioInputs" id="word-rec-stim-r"></td><td><input type="text" class="audioInputs" id="word-rec-mask-r"></td><td><input type="text" class="audioInputs" id="word-rec-noise-r"></td></tr>
-                            <tr><td style="text-align:right">L</td><td><input type="text" class="audioInputs" id="word-rec-per-l"></td><td><input type="text" class="audioInputs" id="word-rec-stim-l"></td><td><input type="text" class="audioInputs" id="word-rec-mask-l"></td><td><input type="text" class="audioInputs" id="word-rec-noise-l"></td></tr>
-                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="audioInputs" id="word-rec-per-b"></td><td><input type="text" class="audioInputs" id="word-rec-stim-b"></td><td><input type="text" class="audioInputs" id="word-rec-mask-b"></td><td><input type="text" class="audioInputs" id="word-rec-noise-b"></td></tr>
+                            <tr><td style="text-align:right">R</td><td><input type="text" class="sawr-input" id="word-rec-per-r"></td><td><input type="text" class="sawr-input" id="word-rec-stim-r"></td><td><input type="text" class="sawr-input" id="word-rec-mask-r"></td><td><input type="text" class="sawr-input" id="word-rec-noise-r"></td></tr>
+                            <tr><td style="text-align:right">L</td><td><input type="text" class="sawr-input" id="word-rec-per-l"></td><td><input type="text" class="sawr-input" id="word-rec-stim-l"></td><td><input type="text" class="sawr-input" id="word-rec-mask-l"></td><td><input type="text" class="sawr-input" id="word-rec-noise-l"></td></tr>
+                            <tr><td style="text-align:right">Binaural</td><td><input type="text" class="sawr-input" id="word-rec-per-b"></td><td><input type="text" class="sawr-input" id="word-rec-stim-b"></td><td><input type="text" class="sawr-input" id="word-rec-mask-b"></td><td><input type="text" class="sawr-input" id="word-rec-noise-b"></td></tr>
                         </table>
                     </div>
                 </div>
-                <div class="col-xs-2"><a class="btn btn-default saveAudiogram" href="#" role="button" style="margin-top: 175px;margin-left: 70px;"><i class="fa fa-save"></i> Save</a></div>
+                <div class="col-xs-1"></div>
             </div>
-
-        </div>
+            <div class="row">
+               <div class="col-xs-10"></div><div class="col-xs-2"><a class="btn btn-default saveAudiogram" href="#" role="button"><i class="fa fa-save"></i> Save</a></div>
+            </div>
         </div> <!-- End Container --> 
     <script>
+        
         $(function() {
             //combine stuff later
-
+            $( "a" ).click(function( event ) {
+              event.preventDefault();
+            });
+            
             var stage_right = new Kinetic.Stage({
                 container: 'audiogram_right',
-                width: 500,
-                height: 500
+                width: 450,
+                height: 450
             });
 
             var stage_left = new Kinetic.Stage({
                 container: 'audiogram_left',
-                width: 500,
-                height: 500
+                width: 450,
+                height: 450
             });
 
             var Stage = {};
-
+            var cookieData = null;
+            var conditionChoices = null;
+            
             //create both canvas' and add 'right-click' event handlers to each canvas
             //should be handled in audiogram.js
             //setTimeout(function(){
             Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
             Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
             Stage['right'].bindContextMenu();
-            Stage['left'].bindContextMenu();       
+            Stage['left'].bindContextMenu();  
+            Stage['right'].bindKeyPress();
+            Stage['left'].bindKeyPress();
 
 
-            $( ".mea-btn" ).on( "click", function(event) {
+            $( ".aii-mea-btn" ).on( "click", function(e) {
                 var clicked = $( this )[0].id;
                 setTimeout( function (){
-                    $( ".mea-btn" ).each(function( index ) {
+                    $( ".aii-mea-btn" ).each(function( index ) {
                         if($( this )[0].id != 'mask-button'){
                             if(clicked == $( this )[0].id){
-                                $( this ).addClass('border');
+                                $( this ).addClass('aii-btn-border');
                                 $( this ).blur();
                             }else{
-                                $( this ).removeClass('border');
+                                $( this ).removeClass('aii-btn-border');
                             }
                         }
                     })
                     setTimeout( function (){
-                        $( ".mea-btn" ).each(function( index ) {
-                            if($( this ).hasClass( "border" )){
+                        $( ".aii-mea-btn" ).each(function( index ) {
+                            if($( this ).hasClass( "aii-btn-border" )){
                                 Stage['right'].setMeasureType(clicked);
                                 Stage['left'].setMeasureType(clicked);
                             }
                         });
                     }, 0 );
                 }, 0 );
+                e.preventDefault();
             });
 
-            $('.audiogram-menu').on('click', function(event) {
+            $('.aii-canvas-menu').on('click', function(event) {
                 var side = $( this ).attr('data');
                 var action = $(event.target).closest('button').attr("data");
                 var current = null;
@@ -652,6 +577,7 @@
                         break;
                 }
                 $(event.target).closest('button').blur();
+                event.preventDefault();
             });
             
             $('#printAudiogram').on('click', function(event) {
@@ -676,28 +602,26 @@
                 .done(function( data ) {
                     console.log( "Data Loaded: " + data );
                 });
+                event.preventDefault();
             });
             
             $('.saveAudiogram').on('click', function(event) {
                 
-                $('#aii-audiogram-title-new').removeClass('error');
+                checkSaveError($('#aii-audiogram-title-new'),'Title Needed...');
+                checkSaveError($('#right-condition-opts'),'Condition Needed...');
+                checkSaveError($('#left-condition-opts'),'Condition Needed...');
                 
-                var title = $('#aii-audiogram-title-new').val().trim();
-                if(title == ""){
-                    console.log("error");
-                    $('#aii-audiogram-title-new').parent().parent().parent().append('<i class="fa fa-exclamation-circle" style="font-size:18px;color:red"></i>');
-                    $('#aii-audiogram-title-new').attr('placeholder','Title Needed...');
-                }else{
-                    $('#aii-audiogram-title-new').parent().parent().parent().find('i').remove();
-                }
-                            
                 var AudiogramData = {
-                    "action" : "save",
+                    "Action" : "saveAudiogram",
+                    "Token": cookieData.SessionID,
                     "patient_data" : {
                         "patient-audiogram-date" : $("#patient-audiogram-date").attr("value"),
-                        "patient-name" : $('#patient-name').html(),
-                        "patient-dob" : $('#patient-dob').html(),
-                        "patient-audiogramTitle-new" : $('#aii-audiogramTitle-new').val()
+                        "patient-name" : $('#patient-name').val(),
+                        "patient-dob" : $('#patient-dob').val(),
+                        "patient-audiogramTitle-new" : $('#aii-audiogramTitle-new option:selected').val(),
+                        "CareTeamID": "1018",
+                        "CurrentPhaseID": "7",
+                        "PatientID": "1018"
                     },
                     "sawr" : {
                         "spch-aud-srt-r":$('#spch-aud-srt-r').val(),
@@ -719,46 +643,56 @@
                         "word-rec-noise-l":$('#word-rec-noise-l').val(),
                         "word-rec-noise-b":$('#word-rec-noise-b').val()
                     },
-                    "leftMeasures" : Stage['left'].getAudiogramMeasures(),
-                    "rightMeasures" : Stage['right'].getAudiogramMeasures()
+                    "condition":{
+                        "left": $('#left-condition-opts option:selected').val(),
+                        "right":$('#right-condition-opts option:selected').val()
+                    },
+                    "measures" : {
+                        "left": Stage['left'].getAudiogramMeasures(),
+                        "right": Stage['right'].getAudiogramMeasures()
+                    }
                 };
-                
-                console.log(AudiogramData);
                 
                 //OK! If I pass AudiogramData as the above object to my $.post, the kinetic canvas (Stage) literally
                 //gets destroyed ?!? I have no clue. Just by converting the "object" to a string so I 
                 //could analyze it better I noticed that it didn't destroy...
                 AudiogramData = JSON.stringify(AudiogramData);
                 AudiogramData = eval('(' + AudiogramData + ')');
-                 console.log(AudiogramData);               
-                $.post("class.audiogram.php", AudiogramData)
+                //console.log(AudiogramData);               
+//                $.post("class.audiogram.php", AudiogramData)
+//                .done(function( data ) {
+//                    console.log( data );
+//                });
+                
+                $.post("http://aii-hermes.org/aii-api/v1/audiograms", AudiogramData)
                 .done(function( data ) {
                     console.log( data );
                 });
+                
+                event.preventDefault();
             });
             
             $('#searchAudiogram').on('click', function(event) {
                 $.post("class.audiogram.php", searchData)
                 .done(function( data ) {
                     console.log( "Data Loaded: " + data );
-                });           
+                });
+                event.preventDefault();
             });
             
             $('#aii-audiogram-title-ul li').on('click', function(event) {
                 var $this = $(this);
-                console.log($(this).text());
                 $('#aii-audiogram-title-new').val($(this).text());
+                event.preventDefault();
             });
             
-            //$('#aii-audiogram-title-ul').on('click',function (event) {
-            //    console.log($(this).text());
-
-                //if ($(this).val() == 'Other'){
-                //    $('#audiogram-title-container').html('<input type="text" name="audiogramTitle" id="patient-audiogramTitle-new">');
-                //}
-                
-           // });
-
+            $('#aii-audiogram-title-new').on('focus', function(event) {
+                console.log("focused");
+                $('#aii-audiogram-title-new').blur();
+                $('#aii-audiogram-title-ul').focus();
+                $('#aii-audiogram-title-new').siblings("div").addClass('open');
+            });
+        
             //Added for checkbox buttons
             $('.button-checkbox').each(function () {
 
@@ -780,89 +714,271 @@
                 $button.on('click', function () {
                     $checkbox.prop('checked', !$checkbox.is(':checked'));
                     $checkbox.triggerHandler('change');
-                    updateDisplay();
-                });
-                $checkbox.on('change', function () {
-                    updateDisplay();
+                    updateConditionButtons();
+                    event.preventDefault();
                 });
                 
-                $('#toggle-patient-info').on('click', function () {
-                    console.log( this);
-                    if($('#patient-info').hasClass('hidden')){
-                        console.log('hidden');
-                        $( "#patient-info" ).slideDown( "slow", function() {
-                            $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
-                            $('#patient-info').removeClass('hidden');
-                        });
-                    }else{
-                        console.log('not hidden');
-                        $( "#patient-info" ).slideUp( "slow", function() {
-                            $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-down"></i> Show Patient Info');
-                            $('#patient-info').addClass('hidden');
-                        });
-                    }
+                $checkbox.on('change', function () {
+                    updateConditionButtons();
                 });
-                $('#show-patient-info').on('click', function () {
-                    $('#patient-info').css('display','block');
-                    $('#hide-patient-info').css('display','block');
-                    $('#show-patient-info').css('display','none');
-                });
-                // Actions
-                function updateDisplay() {
-                    var isChecked = $checkbox.is(':checked');
-
-                    // Set the button's state
-                    $button.data('state', (isChecked) ? "on" : "off");
-
-                    // Set the button's icon
-                    $button.find('.state-icon')
-                    .removeClass()
-                    .addClass('state-icon ' + settings[$button.data('state')].icon);
-
-                    // Update the button's color
-                    if (isChecked) {
-                        $button
-                        .removeClass('btn-default')
-                        .addClass('btn-' + color + ' active')
-                        .blur();
-                        Stage['right'].setMasked(1);
-                        Stage['left'].setMasked(1);
-                        $('#BCL').html('&nbsp;&nbsp;]');
-                        $('#BCR').html('[&nbsp;&nbsp;');        
-                        $('#ACL').html('<i class="fa fa-square-o"></i>');
-                        $('#ACR').html('&#x25b3;');
-                    } else {
-                        $button
-                        .removeClass('btn-' + color + ' active')
-                        .addClass('btn-default')
-                        .blur();
-                        Stage['right'].setMasked(0);
-                        Stage['left'].setMasked(0);  
-                        $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
-                        $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
-                        $('#ACR').html('<i class="fa fa-circle-o"></i>');
-                        $('#ACL').html('&#10005;');
-                    }
-                }
-
-                // Initialization
-                function init() {
-
-                    updateDisplay();
-
-                    // Inject the icon if applicable
-                    if ($button.find('.state-icon').length == 0) {
-                        $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
-                    }
-                }
-                init();
+                
             });
 
-            setTodaysDate();
-            loadSpeechWordData();
+            
+            $('#toggle-patient-info').on('click', function () {
+                if($('#patient-info').hasClass('hidden')){
+                    $( "#patient-info" ).slideDown( "slow", function() {
+                        $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
+                        $('#patient-info').removeClass('hidden');
+                    });
+                }else{
+                    $( "#patient-info" ).slideUp( "slow", function() {
+                        $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-down"></i> Show Patient Info');
+                        $('#patient-info').addClass('hidden');
+                    });
+                }
+                event.preventDefault();
+            });
 
+            $('#show-patient-info').on('click', function () {
+                $('#patient-info').css('display','block');
+                $('#hide-patient-info').css('display','block');
+                $('#show-patient-info').css('display','none');
+                event.preventDefault();
+            });
+            
+            function checkSaveError(ele,message){
+                
+                console.log(ele);
+                var $ele = ele
+                var title = $ele.val();
+                
+                console.log("Title: "+title);
+                                
+                if(title == "" || title == null){
+                    console.log("error-title");
+                    $ele.selectpicker('setStyle', 'btn-danger', 'add');
+                }
+                
+                $ele.on('change',function(){
+                    console.log("changed");
+                    $ele.selectpicker('setStyle', 'btn-danger', 'remove').selectpicker('refresh');;                  
+                });
+            }
+            
+
+            
+            function updateConditionButtons() {
+                // Settings
+                var $widget = $('.button-checkbox'),
+                    $button = $widget.find('button'),
+                    $checkbox = $widget.find('input:checkbox'),
+                    color = $button.data('color'),
+                    isChecked = $checkbox.is(':checked'),
+                    settings = {
+                        on: {
+                            icon: 'fa fa-check-square-o'
+                        },
+                        off: {
+                            icon: 'fa fa-ban'
+                        }
+                    };
+
+                // Set the button's state
+                $button.data('state', (isChecked) ? "on" : "off");
+
+                // Set the button's icon
+                $button.find('.state-icon')
+                .removeClass()
+                .addClass('state-icon ' + settings[$button.data('state')].icon);
+
+                // Update the button's color
+                if (isChecked) {
+                    $button
+                    .removeClass('btn-default')
+                    .addClass('btn-' + color + ' active')
+                    .blur();
+                    Stage['right'].setMasked(1);
+                    Stage['left'].setMasked(1);
+                    $('#BCL').html('&nbsp;&nbsp;]');
+                    $('#BCR').html('[&nbsp;&nbsp;');        
+                    $('#ACL').html('<i class="fa fa-square-o"></i>');
+                    $('#ACR').html('&#x25b3;');
+                } else {
+                    $button
+                    .removeClass('btn-' + color + ' active')
+                    .addClass('btn-default')
+                    .blur();
+                    Stage['right'].setMasked(0);
+                    Stage['left'].setMasked(0);  
+                    $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
+                    $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
+                    $('#ACR').html('<i class="fa fa-circle-o"></i>');
+                    $('#ACL').html('&#10005;');
+                }
+            }
+            
+            // Initialization
+            function init() {
+                setTimeout( function (){
+                    //Gets cookies from current session
+                    cookieData = getCookieData();
+                    
+                    console.log('cookie:');
+                    console.log(cookieData);
+
+                    //If the cookie timed out, redirect home
+                    if(cookieData['BadToken'] == 'Token Timeout'){
+                        window.location.href = '/cochlearProject/';
+                    }
+
+                    //Put condition buttons in the proper state
+                    updateConditionButtons();
+
+                    setTimeout( function (){
+                        
+                        populateConditionChoices(cookieData);
+                        
+                        loadPatientData(cookieData);
+                        
+                        var $button = $('.button-checkbox').find('button');
+                        var settings = {
+                            on: {
+                                icon: 'fa fa-check-square-o'
+                            },
+                            off: {
+                                icon: 'fa fa-ban'
+                            }
+                        };
+                        // Inject the icon if applicable next to the masked button.
+                        if ($button.find('.state-icon').length == 0) {
+                            $button.prepend('<i class="state-icon '+settings[$button.data('state')].icon + '"></i>');
+                        }
+                    }, 0 );
+                }, 0 );                                    
+            }
+            
+            init();
+
+            setTodaysDate();
+            
+            //testing only
+            loadSpeechWordData();
+            
+            //Library for bootstrap dropdowns.
+            $('.selectpicker').selectpicker();
+            
         });
 
+        /**
+        * Gets the unique condition choices for each ear (cochlear, unaided, etc.)
+        * @param {void}
+        * @return {void}
+        */ 
+        function populateConditionChoices(cookie_data){
+            
+            $.post("class.audiogram.php", { "Token": cookie_data.SessionID, "Action": "getConditions" })
+            .done(function( json ) {
+                json = eval( "(" + json + ")" );
+                var List = [];
+                var Html = "";
+                for (var key in json) {
+                    List.push(key);
+                }
+                List.sort();
+                
+                Html = '<option value="" disabled selected>Choose ear condition...</option>';
+                
+                for(var i=0;i<List.length;i++){
+                    Html = Html + '<option value="'+List[i]+'">'+List[i]+'</option>';
+                }
+                
+                console.log(List);
+                
+                $('#right-condition-opts').html(Html).selectpicker('refresh');
+                $('#left-condition-opts').html(Html).selectpicker('refresh');
+//                $('#left-condition-opts').html(Html); 
+//                $('#left-condition-opts li').on('click', function(e) {
+//                    var $this = $(this);
+//                    $('#left-condition-choice').val($(this).text());
+//                    e.preventDefault();
+//                }); 
+//                
+//                $('#right-condition-opts').html(Html); 
+//                $('#right-condition-opts li').on('click', function(e) {
+//                    var $this = $(this);
+//                    $('#right-condition-choice').val($(this).text());
+//                    e.preventDefault();
+//                });
+            });
+        }        
+        
+        /**
+        * Trims extra double quotes and single quotes off of strings. I used a locally created
+        * object because of some funny behavior I couldnt track down quickly.
+        * @param {void}
+        * @return {object} cookies object
+        */ 
+        function cleanCookies(c){
+            var obj = {};
+            for (var key in c) {
+              if (c.hasOwnProperty(key)) {
+                obj[key] = c[key].replace(/['"]+/g, '');
+              }
+            }
+            return obj;
+        }
+        
+        /**
+        * Grabs all existing cookies
+        * @param {void}
+        * @return {void}
+        */ 
+        function getCookieData(){
+            var cookies = cookie.all();
+            cookies = cleanCookies(cookies);
+            return cookies;
+        }
+        
+        /**
+        * If a patient ID exists, grab that singular data, otherwise get all active patients and let user pick.
+        * @param {object} - cookie object
+        * @return {void}
+        */ 
+        function loadPatientData(cookie_data){
+            //Do we have a single user? Or are we wanting all users.
+            
+            var json = null;
+            
+            if(cookie_data.hasOwnProperty('PatientID')){
+                //single patient
+                json = {'PatientID':cookie_data.PatientID,'Action':"getPatientInfo","Token":cookie_data.SessionID};
+            }else{
+                //all patients
+                json = {'Action':"getPatientInfo","Token":cookie_data.SessionID};
+            }
+
+            $.post("class.audiogram.php", json)
+            .done(function( json ) {
+                json = eval("(" + json + ")");
+//                console.log('patientinfo:');
+//                console.log( json );
+                if (typeof json.records == 'object'){
+                    $('#patient-name').val(json.records.First+' '+json.records.Last);
+                    $('#patient-dob').val(json.records.DOB);
+                    $('#facility-name').html(cookie_data.FacilityName);
+                    $('#patient-phase').html(cookie_data.PhaseName);
+                }else{
+                    //Handle multiple patients later
+                }
+            });
+        }
+        
+        /**
+        * Place todays date in the patient data form
+        * @param {void}
+        * @return {void}
+        */        
         function setTodaysDate(){
             var date = new Date();
 
@@ -877,6 +993,11 @@
             $("#patient-audiogram-date").attr("value", today);
         }
         
+        /**
+        * Debug helper to load speech and word testing forms with test data
+        * @param {void}
+        * @return {void}
+        */
         function loadSpeechWordData(){
             $('#spch-aud-srt-r').val('45');
             $('#spch-aud-srt-l').val('50');
@@ -897,6 +1018,9 @@
             $('#word-rec-noise-l').val('None');
             $('#word-rec-noise-b').val('+10');          
         }
+        
+
+
     </script>      
     </body>
 </html>
