@@ -58,7 +58,7 @@
                 <button type="button" class="btn btn-default">
                     <div class="checkbox" style="margin: 0;">
                         <label>
-                            <input type="checkbox" name="inboxCheckbox" ng-model="isAllChecked" onclick="markAllMessages('inbox', this)"> <span><i class="glyphicon glyphicon-chevron-down" style="color:blue"></i></span>
+                            <input type="checkbox" name="markAllCheckbox" onclick="selectAllMessages(this)"/> <span><i class="glyphicon glyphicon-chevron-down" style="color:blue"></i></span>
                         </label>
                     </div>
                 </button>
@@ -153,19 +153,19 @@
 					   ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
 						<div class="checkbox">
 							<label>
-								<input type="Checkbox" name="inboxCheckbox" checklist-value="message" checklist-model="markedMessages"> 
+								<input type="checkbox" name="messageCheckbox" checklist-value="message" checklist-model="markedMessages"> 
 							</label>
 						</div>
 						<span data-toggle="modal" data-target="#displayMessageModal">
-						<!--Sender/receiver name -->
-						<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}{{message.ShortPatientName}}{{message.ShortSenderFacilityName}}</span>
-						<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
-						<!--big title -->
-						<span class="">{{message.ShortSubject}}</span>
-						<!--little message preview -->
-						<span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
-						<!--time badge-->
-						<span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
+							<!--Sender/receiver name -->
+							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}{{message.ShortPatient}}{{message.ShortSenderFacilityName}}</span>
+							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
+							<!--big title -->
+							<span class="">{{message.ShortSubject}}</span>
+							<!--little message preview -->
+							<span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
+							<!--time badge-->
+							<span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
 						</span>
 					</span>
 				</div>
@@ -238,7 +238,10 @@
 						<div class="modal-body">
 							<div class="col-xs-12 message-display" style="padding:0">
 								<div ng-if="showFrom">
-									<strong>From:</strong> {{selectedMessage.SenderName}}{{selectedMessage.SenderFacilityName}} <span ng-if="isCurrentType('Messages')">({{selectedMessage.SenderUsername}})</span> </br>
+									<strong>From:</strong> 
+									<span ng-if="isCurrentType('Messages')"> {{selectedMessage.SenderName}} ({{selectedMessage.SenderUsername}}) </br></span> 
+									<span ng-if="isCurrentType('Alerts')"> {{selectedMessage.Patient}} </br></span> 
+									<span ng-if="isCurrentType('Notifications')"> {{selectedMessage.SenderFacilityName}} </br></span>
 								</div>
 								<div ng-if="showTo">
 									<strong>To:</strong> {{selectedMessage.ReceiverName}} ({{selectedMessage.ReceiverUsername}}) </br>
@@ -255,8 +258,10 @@
 								<div class="modal-footer">
 									<a class="btn btn-primary" ng-if="showReply" ng-click="prefillComposedMessage(selectedMessage, true)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Reply</a>
 									<a class="btn btn-primary" ng-if="showForward" ng-click="prefillComposedMessage(selectedMessage, false)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Forward</a>
-									<a class="btn btn-primary" ng-if="showEdit" ng-click="edit(selectedMessage)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Edit</a>
+									<a class="btn btn-primary" ng-if="showEdit" ng-click="editDraft(selectedMessage)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Edit</a>
 									<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)">Restore</a>
+									<a class="btn btn-success" ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, 1)">Accept</a>
+									<a class="btn btn-danger"  ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, 2)">Reject</a>
 									<a class="btn btn-primary" ng-click="deleteMessage(selectedMessage, true)">Delete</a>
 									<a class="btn btn-primary" data-dismiss="modal">Close</a>
 								</div>								

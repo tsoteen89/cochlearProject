@@ -2573,6 +2573,12 @@
 			$scope.composedMessage = [];
 		}
 		
+		//Clears all selected checkboxes and messages
+		$scope.clearSelectedMessages = function(){
+			$scope.markedMessages = [];
+			$scope.isAllChecked = false;
+		}
+		
 		//Either delete or restore the given message.
 		//	toDelete: true - Delete the message
 		//			  false - Restore the message
@@ -2601,6 +2607,7 @@
 			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
+				$scope.getMessages();
 			});
 			
 		}
@@ -2610,6 +2617,7 @@
 			//Use lower case message type in the PUT URL
 			var lowerMessageType = $scope.messageType.toLowerCase();
 			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			var gettingMessages = false;
 			
 			//Loop through each selected message 
 			for(var i in $scope.markedMessages){
@@ -2629,6 +2637,10 @@
 				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
+					if(!gettingMessages){
+						gettingMessages = true;
+						$scope.getMessages();
+					}
 				});
 			}
 		}
@@ -2651,6 +2663,7 @@
 			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
+				$scope.getMessages();
 			});
 		}
 		
@@ -2659,6 +2672,7 @@
 			//Use lower case message type in the PUT URL
 			var lowerMessageType = $scope.messageType.toLowerCase();
 			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			var gettingMessages = false;
 		
 			//Loop through each selected message 
 			for(var i in $scope.markedMessages){
@@ -2669,32 +2683,72 @@
 				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
+					if(!gettingMessages){
+						gettingMessages = true;
+						$scope.getMessages();
+					}
 				});
 			}
 		}
 		
 		//Get all of the messages the user has access to.
-		//(Should only be called on controller load)
 		$scope.getAllMessages = function(){
-			//Loop through the URL Set and retrieve the user's messages
-			for(var key in urlSet){
-				var currentURL = baseURL + urlSet[key] + sessionID;
+			//Get data from each message type/property
+			var currentURL = baseURL + urlSet['MessagesReceived'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesReceived'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesSent'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesSent'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesDrafts'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesDrafts'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesDeleted'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesDeleted'] = data.records;
+				$scope.checkForParse();
+			});
+			if(userLevel <= 10){
+				currentURL = baseURL + urlSet['AlertsReceived'] + sessionID;
 				getData.get(currentURL).success(function(data) {
-					//If the data is not an error code, add it to the known messages
-					if(typeof data == "object"){
-						$scope.messages[key] = data.records;
-					}
+					$scope.messages['AlertsReceived'] = data.records;
+					$scope.checkForParse();
 				});
+				currentURL = baseURL + urlSet['AlertsDeleted'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['AlertsDeleted'] = data.records;
+					$scope.checkForParse();
+				});
+				currentURL = baseURL + urlSet['NotificationsReceived'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['NotificationsReceived'] = data.records;
+					$scope.checkForParse();
+				});
+				currentURL = baseURL + urlSet['NotificationsDeleted'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['NotificationsDeleted'] = data.records;
+					$scope.checkForParse();
+				});
+				$scope.getMessageCounts();
 			}
-			//Parse the retrieved messages
-			$scope.parseAllMessages();
-			//Get all message counts
-			$scope.getMessageCounts();
-			//Set the current message type 
-			$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
-			setTimeout(function(){
-				$scope.resetCurrentMessages();
-			},0);
+		}
+		
+		//Insures that all messages have been retrieved before attempting to parse them.
+		//This is insured as the function must be called once by every message type/property
+		//before parsing occurs.
+		$scope.parseCount = 0;
+		$scope.checkForParse = function(){
+			$scope.parseCount++;
+			if($scope.parseCount >= 8 || (userLevel > 10 && $scope.parseCount >= 4)){
+				$scope.parseCount = 0;
+				$scope.parseAllMessages();
+			}
 		}
 		
 		//Get counts for all three message types
@@ -2719,7 +2773,6 @@
 			});
 		}
 		
-		//Get current messages (depending on the message type and property) 
 		$scope.getMessages = function(){
 			//Get current messages depending on current message Type and Property
 			var messageURL = baseURL + urlSet[$scope.messageType + $scope.messageProperty] + sessionID;
@@ -2735,8 +2788,6 @@
 					} else if($scope.messageType == "Notifications"){
 						$scope.parseNotifications();
 					}
-					//TODO - Insure that currentMessages is being assigned AFTER message parsing
-					$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
 				}
 			});
 		}
@@ -2758,14 +2809,16 @@
 			$scope.parseNotifications();
 		}
 		
-		
 		//Defines SenderName, ReceiverName, ShortSubject, ShortSenderName, and ShortReceiverName 
 		//for all messages
 		$scope.parseMessages = function(){		
+			//console.log("Parsing some messages");
+			
 			//Loop through each message and parse accordingly
 			for(var key in $scope.messages){
+				//console.log("var key in $scope.messages: " + key);
 				if(key.charAt(0) == 'M'){	//Only parse Messages
-				
+					//console.log("Messages Key: " + key);
 					//Define SenderName and ReceiverName for each message
 					for(var i in $scope.messages[key]){
 						$scope.messages[key][i]['ReceiverName'] = $scope.messages[key][i]['Receiver_First'] + " " + $scope.messages[key][i]['Receiver_Last'];
@@ -2779,18 +2832,15 @@
 					//Define ShortSubject, ShortContent, ShortSenderName, and ShortReceiverName
 					$scope.shortenField(key, 'Subject');
 					$scope.shortenField(key, 'Content');
-					setTimeout(function(){
-						$scope.shortenField(key, 'SenderName');
-					},0);
-					setTimeout(function(){
-						$scope.shortenField(key, 'ReceiverName');
-					},0);
+					$scope.shortenField(key, 'SenderName');
+					$scope.shortenField(key, 'ReceiverName');
 				}
 			}
 		}
 		
 		//Define ShortSubject and ShortPatient for all Alerts
 		$scope.parseAlerts = function(){
+			//console.log("Parse these Alerts!");
 			$scope.shortenField('AlertsReceived', 'Subject');
 			$scope.shortenField('AlertsReceived', 'Patient');
 			$scope.shortenField('AlertsDeleted', 'Subject');
@@ -2807,17 +2857,15 @@
 						if ($scope.messages[key][i]['IsRequest'] == '1') {
 							$scope.messages[key][i]['Subject'] = 'Invitation - ' + $scope.messages[key][i]['Patient'];
 						} else {
-							if ($scope.messages[key]['Response'] == '1') {
-								$scope.messages[key]['Subject'] = 'Accepted - ' + $scope.messages[key][i]['Patient'];
-							} else if ($scope.messages[key]['Response'] == '2') {
-								$scope.messages[key]['Subject'] = 'Declined - ' + $scope.messages[key][i]['Patient'];
+							if ($scope.messages[key][i]['Response'] == '1') {
+								$scope.messages[key][i]['Subject'] = 'Accepted - ' + $scope.messages[key][i]['Patient'];
+							} else if ($scope.messages[key][i]['Response'] == '2') {
+								$scope.messages[key][i]['Subject'] = 'Declined - ' + $scope.messages[key][i]['Patient'];
 							}
 						}
 					}
 					//Define ShortSubject and ShortSenderFacilityName for all Notifications
-					setTimeout(function(){
-						$scope.shortenField(key, 'Subject');
-					},0);
+					$scope.shortenField(key, 'Subject');
 					$scope.shortenField(key, 'SenderFacilityName');
 				}
 			}
@@ -2847,29 +2895,54 @@
 		
 		//Defines "Short{field}" value for every message in the given key
 		$scope.shortenField = function(key, field){
+			//console.log("This Key is: " + key);
+		
 			//Length of the shortened fields
 			var shortLength = 24;
 		
 			//Loop through every message in the key and define 'Short{field}'
 			for(var i in $scope.messages[key]){
 				console.log($scope.messages[key][i]);
-				console.log("Key: " + key);
-				console.log("Field: " + field);
+				console.log("Field: " + field + " -- Key: " + key);
 		
 				$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field];
 				if($scope.messages[key][i][field].length > shortLength){
 					$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field].substr(0, shortLength - 3) + "...";
 				}
 				
-				console.log("Result: " + $scope.messages[key][i]['Short' + field]);
+				//console.log("Result: " + $scope.messages[key][i]['Short' + field]);
 			}
+			$scope.resetCurrentMessages();
 		}
 		
 		//Reset the messages being displayed to the correct messages
 		$scope.resetCurrentMessages = function(){
-			console.log("!! : " + $scope.messages);
 			$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
-			console.log($scope.currentMessages);
+		}
+		
+		//Respond to request Notifications
+		$scope.respondToNotification = function(message, response){
+			message['Response'] = response;
+			message['IsArchived'] = 2;
+			putData.put(baseURL + 'notifications/' + message['NotificationID'], message).success(function(data) {
+				$scope.getMessages();
+			});
+		}
+		
+		$scope.selectAllMessages = function(sourceCheckbox){
+			//Find all the checkboxes that will be affected by this function
+			checkboxes = document.getElementsByName('messageCheckbox');
+			for(i = 0; i < checkboxes.length; i++){
+				checkboxes[i].checked = sourceCheckbox.checked;
+			}
+			//If the checkbox is checked, add all messages as marked
+			if(sourceCheckbox.checked){
+				$scope.markedMessages = $scope.currentMessages;
+			}
+			//When unchecked, remove all messages from marked
+			else{
+				$scope.clearSelectedMessages();
+			}
 		}
 		
 		//Selects a message which will be displayed in the modal
@@ -2909,6 +2982,7 @@
 			$scope.messageProperty = input;
 			$scope.updateDisplay();
 			$scope.resetCurrentMessages();
+			$scope.clearSelectedMessages();
 		}
 		
 		//Set current message type ('Messages', 'Alerts', or 'Notifications')
@@ -2917,6 +2991,7 @@
 			$scope.messageProperty = 'Received';
 			$scope.updateDisplay();
 			$scope.resetCurrentMessages();
+			$scope.clearSelectedMessages();
 		}
 		
 		//Display the Compose Message view in a modal
@@ -2942,6 +3017,7 @@
 			$scope.showForward = false;
 			$scope.showEdit = false;
 			$scope.showRestore = false;
+			$scope.showResponses = false;
 		
 			//Adjust display based on Message Type
 			switch($scope.messageType){
@@ -2966,6 +3042,9 @@
 				case 'Received':
 					$scope.showMarkAsRead = true;
 					$scope.showMarkAsUnread = true;
+					if($scope.messageType == 'Notifications'){
+						$scope.showResponses = true;
+					}
 					break;
 				case 'Deleted':
 					$scope.showRestore = true;

@@ -152,53 +152,53 @@
                     </div> 
                     <div class="panel-body">
                         <!-- Messaging tabs - inbox, alerts, notification (appropriate for user level) -->
-                        <tabset style="cursor:default">
-                            <tab heading="Inbox" ng-controller="messagingController" style="cursor:pointer">
+                        <tabset style="cursor:default" ng-controller="messagingController">
+                            <tab heading="Inbox" style="cursor:pointer" ng-click="setMessageType('Messages')">
                                 <table class="table table-hover">
-                                    <tr ng-if="inboxMessages._meta.count != 0">
+                                    <tr ng-if="currentMessages.length != 0">
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
-                                    <tr ng-repeat="message in inboxMessages.records" style="cursor:pointer" 
-                                        ng-class="{'bold':message.IsRead == '0'}" ng-click="redirectToMessages()">
-                                        <td>{{message.SenderName}}</td>
+                                    <tr ng-repeat="message in currentMessages" style="cursor:pointer" 
+                                        ng-class="{'bold':message.IsRead == '0'}" >
+                                        <td>{{message.ShortSenderName}}</td>
                                         <td>{{message.ShortSubject}}</td>
                                     </tr>
-                                    <tr ng-if="inboxMessages._meta.count == 0">
+                                    <tr ng-if="currentMessages.length == 0">
                                         <br>
                                         <td class="bold">No New Messages</td>
                                     </tr>
                                 </table>
                             </tab>
-                            <tab  heading="Alerts" ng-controller="alertsController" style="cursor:pointer" ng-show="userLevel < 11">
+                            <tab  heading="Alerts" style="cursor:pointer" ng-click="setMessageType('Alerts')" ng-show="userLevel < 11">
                                 <table class="table table-hover">
-                                    <tr ng-if="receivedAlerts._meta.count != 0">
+                                    <tr ng-if="currentMessages.length != 0">
                                         <th>Patient</th>
                                         <th>Subject</th>
                                     </tr>
-                                    <tr ng-repeat="alert in receivedAlerts.records" style="cursor:pointer" 
+                                    <tr ng-repeat="alert in currentMessages" style="cursor:pointer" 
                                         ng-class="{'bold':alert.IsRead == '0'}" ng-click="redirectToMessages()">
                                         <td>{{alert.ShortPatient}}</td>
                                         <td>{{alert.ShortSubject}}</td>
                                     </tr>
-                                    <tr ng-if="receivedAlerts._meta.count == 0">
+                                    <tr ng-if="currentMessages.length == 0">
                                         <br>
                                         <td class="bold">No New Alerts</td>
                                     </tr>
                                 </table>
                             </tab>
-                            <tab  heading="Notifications" ng-controller="notificationsController" style="cursor:pointer" ng-show="userLevel < 11">
+                            <tab  heading="Notifications" style="cursor:pointer" ng-click="setMessageType('Notifications')" ng-show="userLevel < 11">
                                 <table class="table table-hover">
-                                    <tr ng-if="receivedNotifications._meta.count != 0">
+                                    <tr ng-if="currentMessages.length != 0">
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
-                                    <tr ng-repeat="notification in receivedNotifications.records" style="cursor:pointer" 
+                                    <tr ng-repeat="notification in currentMessages" style="cursor:pointer" 
                                         ng-class="{'bold':notification.IsRead == '0'}" ng-click="redirectToMessages()">
                                         <td>{{notification.ShortSenderFacilityName}}</td>
                                         <td>{{notification.ShortSubject}}</td>
                                     </tr>
-                                    <tr ng-if="receivedNotifications._meta.count == 0">
+                                    <tr ng-if="currentMessages.length == 0">
                                         <br>
                                         <td class="bold">No New Notifications</td>
                                     </tr>
