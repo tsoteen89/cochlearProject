@@ -16,12 +16,12 @@
                     <label class="settings-label">Current Password</label>
                     <input type="password" name="password" placeholder="Current password" ng-model="user.currentPassword"/>
                     <label class="settings-label">New Password</label>
-                    <input type="password" name="password" placeholder="New password" ng-model="user.Password"/>
+                    <input type="password" name="password" placeholder="New password" ng-model="user.newPassword"/>
                     <label class="settings-label">Confirm New Password</label>
                     <input type="password" name="confirmPassword" placeholder="Confirm New Password" ng-model="user.confirmPassword"/>
 
                    <!-- {{user}}-->
-                    <button class="btn btn-primary" id="submit" class="submit action-button" value="Register" ng-click="editUser()" ng-disabled="disableRegister">{{button}}</button> 
+                    <button class="btn btn-primary" id="submit" class="submit action-button" ng-click="editUser()" ng-disabled="disableRegister">{{button}}</button> 
                     <br><br>
                     <span name="errorMessage" ng-class="{'error':messageIsError}">{{message}}</span>
                 </fieldset>
