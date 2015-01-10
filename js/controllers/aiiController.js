@@ -2507,10 +2507,7 @@
 
     //**************************************END USER CONTROLLERS******************************************//
 
-
-
-    //*************************************MESSAGING CONTROLLERS******************************************//
-
+	//*************************************MESSAGING CONTROLLER*******************************************//
 
     //Added by James. 
     /**
@@ -2529,1357 +2526,571 @@
      *      @returns - NULL
      *
      */
-    controllers.messagingController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount, $cookieStore) {
-
-        $scope.isAllChecked = false;
-        //User's ID (will be retrieved using session data)
-        $scope.userID = userInfo.get().UserID;
-        //console.log("yserid" + $scope.userID);
-        $scope.userLevelID = userInfo.get().UserLevelID;
-        $scope.sessionID = userInfo.get().SessionID;
-        //Controls the message display popup
-        $scope.isPopupVisible = false;
-        //OrderBy property : true means display contents in reverse order  
-        $scope.reverse = true;
-        $scope.orderFilter = 'Timestamp';
-        //Messages that have been marked (for deleting, marking as read, or marking as unread)
-        $scope.markedMessages = [];
-
-        //The type of message currently being displayed - inbox, sent, drafts, deleted
-        $scope.currentMessageType = 'inbox';
-        $scope.currentMessages;
-
-        $scope.inboxURL = "http://aii-hermes.org/aii-api/v1/users/inbox/" + $scope.sessionID;
-        $scope.sentURL = "http://aii-hermes.org/aii-api/v1/users/sent/" + $scope.sessionID;
-        $scope.draftsURL = "http://aii-hermes.org/aii-api/v1/users/drafts/" + $scope.sessionID;
-        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/users/deleted/" + $scope.sessionID;
-        $scope.messageURL = "http://aii-hermes.org/aii-api/v1/messages/";
-
-
-
-        //Grab all inbox messages using patientURL 
-        getData.get($scope.inboxURL).success(function(data) {
-            //Combine First and Last into Name for each message
-            for (i = 0; i < data.records.length; i++) {
-                data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
-                data.records[i].ReceiverName = "Me";
-                data.records[i].ShortSubject = data.records[i].Subject;
-                if (data.records[i].Subject.length > 24) {
-                    data.records[i].ShortSubject = data.records[i].Subject.substr(0, 21) + "...";
-                }
-                data.records[i].ShortSenderName = data.records[i].SenderName;
-                if (data.records[i].SenderName.length > 25) {
-                    data.records[i].ShortSenderName = data.records[i].SenderName.substr(0, 22) + "...";
-                }
-                data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-            }
-            $scope.inboxMessages = data;
-            $scope.currentMessages = $scope.inboxMessages;
-        });
-
-        //Grab all sent messages using patientURL 
-        getData.get($scope.sentURL).success(function(data) {
-            //Combine First and Last into Name for each message
-            for (i = 0; i < data.records.length; i++) {
-                data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                data.records[i].SenderName = "Me";
-                data.records[i].ShortSubject = data.records[i].Subject;
-                if (data.records[i].Subject.length > 24) {
-                    data.records[i].ShortSubject = data.records[i].Subject.substr(0, 21) + "...";
-                }
-                data.records[i].ShortSenderName = data.records[i].SenderName;
-                data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                if (data.records[i].ReceiverName.length > 25) {
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                }
-            }
-            $scope.sentMessages = data;
-        });
-
-        //Grab all draft messages using patientURL 
-        getData.get($scope.draftsURL).success(function(data) {
-            //Combine First and Last into Name for each message
-            for (i = 0; i < data.records.length; i++) {
-                data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                data.records[i].SenderName = "Me";
-                data.records[i].ShortSubject = data.records[i].Subject;
-                if (data.records[i].Subject.length > 24) {
-                    data.records[i].ShortSubject = data.records[i].Subject.substr(0, 21) + "...";
-                }
-                data.records[i].ShortSenderName = data.records[i].SenderName;
-                data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                if (data.records[i].ReceiverName.length > 25) {
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                }
-            }
-            $scope.draftMessages = data;
-        });
-
-        //Grab all deleted messages using patientURL 
-        getData.get($scope.deletedURL).success(function(data) {
-            //Combine First and Last into Name for each message and mark the user as either the sender or receiver
-            for (i = 0; i < data.records.length; i++) {
-                if (data.records[i].Sender_First == null && data.records[i].Sender_Last == null) {
-                    data.records[i].SenderName = 'Me';
-                    data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                }
-                if (data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null) {
-                    data.records[i].ReceiverName = 'Me';
-                    data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
-                }
-                data.records[i].ShortSubject = data.records[i].Subject;
-                if (data.records[i].Subject.length > 24) {
-                    data.records[i].ShortSubject = data.records[i].Subject.substr(0, 21) + "...";
-                }
-                data.records[i].ShortSenderName = data.records[i].SenderName;
-                if (data.records[i].SenderName.length > 25) {
-                    data.records[i].ShortSenderName = data.records[i].SenderName.substr(0, 22) + "...";
-                }
-                data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                if (data.records[i].ReceiverName.length > 25) {
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                }
-            }
-            $scope.deletedMessages = data;
-        });
-        
-        $scope.tab = 'messages';
-
-        $scope.selectTab = function(selectedTab) {
-            $scope.tab = selectedTab;
-        }
-        $scope.isSelectedTab = function(checkTab) {
-            return $scope.tab === checkTab;
-        }
-
-        //Sets the current message type. This updates the current messages and
-        //alters the components of the message display.
-        $scope.setMessageType = function(messageType) {
-            $scope.currentMessageType = messageType;
-
-            switch ($scope.currentMessageType) {
-                case 'inbox':
-                    $scope.currentMessages = $scope.inboxMessages;
-                    $scope.displayMessages = true;
-                    //Message table columns
-                    $scope.showFrom = true;
-                    $scope.showTo = false;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    //Selected Message buttons
-                    $scope.showReply = true;
-                    $scope.showForward = true;
-                    $scope.showEdit = false;
-                    $scope.showRestore = false;
-                    $scope.showDelete = true;
-                    $scope.showFullDelete = false;
-                    break;
-                case 'sent':
-                    $scope.currentMessages = $scope.sentMessages;
-                    $scope.displayMessages = true;
-                    $scope.showFrom = false;
-                    $scope.showTo = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    //Selected Message buttons
-                    $scope.showReply = false;
-                    $scope.showForward = true;
-                    $scope.showEdit = false;
-                    $scope.showRestore = false;
-                    $scope.showDelete = true;
-                    $scope.showFullDelete = false;
-                    break;
-                case 'drafts':
-                    $scope.currentMessages = $scope.draftMessages;
-                    $scope.displayMessages = true;
-                    $scope.showFrom = false;
-                    $scope.showTo = false;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    //Selected Message buttons
-                    $scope.showReply = false;
-                    $scope.showForward = false;
-                    $scope.showEdit = true;
-                    $scope.showRestore = false;
-                    $scope.showDelete = true;
-                    $scope.showFullDelete = false;
-                    break;
-                case 'deleted':
-                    $scope.currentMessages = $scope.deletedMessages;
-                    $scope.displayMessages = true;
-                    $scope.showFrom = true;
-                    $scope.showTo = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    //Selected Message buttons
-                    $scope.showReply = false;
-                    $scope.showForward = false;
-                    $scope.showEdit = false;
-                    $scope.showRestore = true;
-                    $scope.showDelete = false;
-                    $scope.showFullDelete = true;
-                    break;
-                case 'composeMessage':
-                    $scope.displayMessages = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        $scope.isTypeSelected = function(messageType) {
-            if ($scope.currentMessageType == messageType)
-                return true;
-            return false;
-        }
-
-        //Checks if the user wants to send a message to another user
-        //whenever the page loads.
-        $scope.checkForRecipients = function() {
-            var recipient = persistData.getMessageRecipient();
-            if (recipient != -1) {
-                $scope.setMessageType('composeMessage');
-                $scope.composeMessage = {};
-                $scope.composeMessage.ReceiverUsername =
-                    recipient.username + " <" + recipient.full_name + ">";
-            }
-            //If there was no request to send a message to a user,
-            //show the inbox page.
-            else {
-                $scope.setMessageType('inbox');
-            }
-            //Reset the persist data
-            persistData.setMessageRecipient(-1);
-        }
-
-        $scope.unreadMessageURL = "http://aii-hermes.org/aii-api/v1/users/unreadMessagesCount/" + $scope.sessionID;
-        
-        //get each unread message count
-        getData.get($scope.unreadMessageURL).success(function(data) {
-            $scope.messageCount = data.records['messageCount'];
-            $scope.alertCount = data.records['alertCount'];
-            $scope.notificationCount = data.records['notificationCount'];
-            $scope.totalUnreadCount = data.records['totalUnreadCount'];
-            //console.log("count"+$scope.messageCount);
-        });
-        
-        //Toggles visibility of the message content display
-        $scope.messagesTogglePopup = function(message) {
-            if ($scope.selectedMessage == message || message == null) {
-                $scope.isPopupVisible = false;
-                $scope.selectedMessage = null;
-            } else {
-
-                $scope.isPopupVisible = true;
-                $scope.selectedMessage = message;
-                //If the message is a user received message and has not already been marked as read, mark it
-                if ($scope.selectedMessage.ReceiverName == 'Me' && $scope.selectedMessage.IsRead == 0) {
-                    messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
-                    //Change the message's Read attribute to true
-                    $scope.selectedMessage.IsRead = 1;
-                    //PUT the message using the message URL
-                    putData.put(messageURL, message).success(function(data) {
-                        $scope.refreshMessages();
-                    }).then(function() {
-                        
-                        getData.get($scope.unreadMessageURL).success(function(data) {
-                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
-                            $scope.messageCount = data.records['messageCount'];
-                            //console.log("count"+$scope.messageCount);
-                        }).then(function() {
-                            messageCount.prepForBroadcast($scope.totalUnreadCount);
-                        });
-                    });
-                }
-            }
-        };
-
-        //Handles creation of replies to the selectedMessage
-        $scope.reply = function() {
-            $scope.composeMessage = {};
-
-            messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
-            messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
-
-            //Format the new reply message with info from the original message
-            $scope.composeMessage.ReceiverUsername = $scope.selectedMessage.SenderUsername;
-            $scope.composeMessage.Subject = "RE: " + $scope.selectedMessage.Subject;
-            $scope.composeMessage.Content = "\n\n------------------------------\n" + "From: " + $scope.selectedMessage.Sender_First + " " + $scope.selectedMessage.Sender_Last + "\n" + "Subject: " + $scope.selectedMessage.Subject + "\n" + "Time: " + messageTime + "\n" + "Date: " + messageDate + "\n\n" + $scope.selectedMessage.Content;
-        }
-
-        //Handles creation of 'forwards' of the selectedMessage
-        $scope.forward = function() {
-            $scope.composeMessage = {};
-
-            messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
-            messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
-
-            //Format the new reply message with info from the original message
-            $scope.composeMessage.Subject = "FWD: " + $scope.selectedMessage.Subject;
-            $scope.composeMessage.Content = "\n\n------------------------------\n" + "From: " + $scope.selectedMessage.SenderName + "\n" + "To: " + $scope.selectedMessage.ReceiverName + "\n" + "Subject: " + $scope.selectedMessage.Subject + "\n" + "Time: " + messageTime + "\n" + "Date: " + messageDate + "\n\n" + $scope.selectedMessage.Content;
-        }
-
-        //Moves the contents of a draft message into the composing message
-        $scope.edit = function() {
-            $scope.composeMessage = $scope.selectedMessage;
-            $scope.composeMessage.isDraft = true;
-        }
-
-        //Posts the input message after properly filling out the appropriate fields of the message
-        $scope.sendMessage = function(message) {
-            //Post the user defined message to the database
-            //input 'message' should only contain the recipient username (currently UserID instead),
-            //the subject, and the message content.
-
-            //Define the SenderID as the current user
-            message.SenderID = $cookieStore.get('UserID'); //$scope.userID
-            message.Sent = 1;
-            message.SenderDeleted = 0;
-            message.ReceiverDeleted = 0;
-
-            //console.log("message object" + message);
-            //If this message is an edited draft, PUT the message instead of POSTing
-            if (message.isDraft) {
-                putData.put($scope.messageURL + message.MessageID, message).success(function(data) {
-                    $scope.refreshMessages();
-                });
-            }
-            //Insure that all elements contain data before POSTing
-            else if (message.ReceiverUsername && message.Subject && message.Content) {
-                postData.post($scope.messageURL, message).success(function(data) {
-                    $scope.refreshMessages();
-                });
-            }
-            //If elements are missing, inform the user and save as draft if possible
-            else {
-                var errorMessage = "The message could not be sent due to:"
-                if (!message.ReceiverUsername) {
-                    errorMessage += "\n     -No receiver defined."
-                }
-                if (!message.Subject) {
-                    errorMessage += "\n     -No subject defined."
-                }
-                if (!message.Content) {
-                    errorMessage += "\n     -No message content\nThe message has not been saved."
-                } else if (message.Content) {
-                    //If the message had content, save it as a draft.
-                    message.sent = 0;
-                    postData.post($scope.messageURL, message).success(function(data) {
-                        $scope.refreshMessages();
-                    });
-
-                    errorMessage += "\nThe message has been saved as a draft."
-                }
-                alert(errorMessage);
-            }
-        }
-
-        //Posts the input message similarly to the 'sendMessage' function, but marks the Sent property as
-        //false. This message will populate the user's 'draft' section instead of their 'sent' section
-        $scope.saveDraft = function(message) {
-            //POST a message where Sent is false. Only the content is required to be filled.
-            message.SenderID = $scope.userID;
-            //Generate Timestamp
-            message.Sent = 0;
-            message.SenderDeleted = 0;
-            message.ReceiverDeleted = 0;
-
-            //Insure that all elements contain data before posting
-            if (message.Content) {
-                postData.post($scope.messageURL, message).success(function(data) {
-                    $scope.refreshMessages();
-                });
-            } else {
-                alert("The message could not be saved as it contained no content.");
-            }
-        }
-
-        //Erases the content in the composed message fields
-        $scope.clearComposedMessage = function() {
-            $scope.composeMessage = {};
-        }
-
-        //Controls the ordering of messages. Filter is the field AngularJS will order messages by.
-        $scope.order = function(filter) {
-            $scope.reverse = !($scope.reverse);
-            $scope.orderFilter = filter;
-        }
-
-        //Controls the marking of messages for different PUT functions (marking as deleted, read, or unread)
-        $scope.markMessage = function(message, checkbox) {
-            //If checkbox was just selected, add the message as marked
-            if (checkbox.checked) {
-                $scope.markedMessages.push(message);
-            }
-            //On unselecting a checkbox, find the message and remove it from the marked messages
-            else {
-                for (i = 0; i < $scope.markedMessages.length; i++) {
-                    if ($scope.markedMessages[i] == message) {
-                        foundMessage = true;
-                        //Remove the input message from the marked array
-                        $scope.markedMessages.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        //Add all the messages in the input to the marked messages
-        markAllMessages = function(messageType, sourceCheckbox) {
-
-            switch (messageType) {
-                case 'inbox':
-                    messages = $scope.inboxMessages.records;
-                    checkboxName = 'inboxCheckbox';
-                    break;
-                case 'sent':
-                    messages = $scope.sentMessages.records;
-                    checkboxName = 'sentCheckbox';
-                    break;
-                case 'drafts':
-                    messages = $scope.draftMessages.records;
-                    checkboxName = 'draftCheckbox';
-                    break;
-                case 'deleted':
-                    messages = $scope.deletedMessages.records;
-                    checkboxName = 'deletedCheckbox';
-                    break;
-                default:
-                    messages = [];
-                    break;
-            }
-
-            //Find all the checkboxes that will be affected by this function
-            checkboxes = document.getElementsByName(checkboxName);
-            for (i = 0; i < checkboxes.length; i++) {
-                checkboxes[i].checked = sourceCheckbox.checked;
-            }
-            //If the checkbox is checked, add all messages as marked
-            if (sourceCheckbox.checked) {
-                for (i = 0; i < messages.length; i++) {
-                    $scope.markedMessages.push(messages[i]);
-                }
-            }
-            //When unchecked, remove all messages from marked
-            else {
-                $scope.markedMessages = [];
-            }
-        }
-
-        //Remove all messages from the marked messages array
-        $scope.clearMarkedMessages = function() {
-            $scope.markedMessages = [];
-
-            //Mark all the checkboxes as unchecked
-            checkboxNames = ['inboxCheckbox', 'sentCheckbox', 'draftCheckbox', 'deletedCheckbox'];
-
-            for (i = 0; i < checkboxNames.length; i++) {
-                checkboxes = document.getElementsByName(checkboxNames[i]);
-                for (j = 0; j < checkboxes.length; j++) {
-                    checkboxes[j].checked = false;
-                }
-            }
-        }
-
-        //Send a PUT request with the user-defined property and value
-        $scope.putMarkedMessages = function(property, value) {
-            //Parse value (string) as an int (in base 10)
-            value = parseInt(value, 10);
-            if (property == 'read') {
-                for (i = 0; i < $scope.markedMessages.length; i++) {
-                    putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
-                    //Change the message's Deleted attribute to true
-                    $scope.markedMessages[i].IsRead = value;
-                    //PUT the message using the message URL
-                    putData.put(putMessageURL, $scope.markedMessages[i]).success(function(data) {
-                        $scope.refreshMessages();
-                    }).then(function(){
-                        getData.get($scope.unreadMessageURL).success(function(data) {
-                            $scope.totalUnreadCount = data.records['totalUnreadCount'];
-                            $scope.messageCount = data.records['messageCount'];
-                            console.log("count"+$scope.messageCount);
-                        }).then(function() {
-                            messageCount.prepForBroadcast($scope.totalUnreadCount);
-                        });
-                    });
-                }
-            } else if (property == 'deleted') {
-                for (i = 0; i < $scope.markedMessages.length; i++) {
-                    putMessageURL = $scope.messageURL + $scope.markedMessages[i].MessageID;
-                    //Change the message's Deleted attribute to true
-                    if ($scope.markedMessages[i].ReceiverName == "Me") {
-                        $scope.markedMessages[i].ReceiverDeleted = value;
-                    } else if ($scope.markedMessages[i].SenderName == "Me") {
-                        $scope.markedMessages[i].SenderDeleted = value;
-                    }
-                    //PUT the message using the message URL
-                    console.log("About to PUT data");
-                    putData.put(putMessageURL, $scope.markedMessages[i]).success(function(data) {
-                        console.log("PUT complete - About to get messages");
-                        $scope.refreshMessages();
-                        console.log("Got messages");
-                        $scope.displayMessages = false;
-                    });
-                }
-                
-            }
-            
-            $scope.isAllChecked = false;
-            
-            //$scope.refreshCurrentMessages();
-        }
-
-        //Refreshes all of the user's messages
-        $scope.refreshMessages = function() {
-            $scope.refreshInbox();
-            $scope.refreshSent();
-            $scope.refreshDrafts();
-            $scope.refreshDeleted();
-        }
-
-        $scope.refreshInbox = function() {
-            getData.get($scope.inboxURL).success(function(data) {
-                for (i = 0; i < data.records.length; i++) {
-                    data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
-                    data.records[i].ReceiverName = "Me";
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderName = data.records[i].SenderName;
-                    if (data.records[i].SenderName.length > 25) {
-                        data.records[i].ShortSenderName = data.records[i].SenderName.substr(0, 22) + "...";
-                    }
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                }
-                $scope.inboxMessages = data;
-                if ($scope.currentMessageType == 'inbox') {
-                    $scope.currentMessages = $scope.inboxMessages;
-                }
-            });
-        }
-
-        $scope.refreshSent = function() {
-            getData.get($scope.sentURL).success(function(data) {
-                for (i = 0; i < data.records.length; i++) {
-                    data.records[i].SenderName = "Me";
-                    data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderName = data.records[i].SenderName;
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                    if (data.records[i].ReceiverName.length > 25) {
-                        data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                    }
-                }
-                $scope.sentMessages = data;
-                if ($scope.currentMessageType == 'sent') {
-                    $scope.currentMessages = $scope.sentMessages;
-                }
-            });
-        }
-
-        $scope.refreshDrafts = function() {
-            getData.get($scope.draftsURL).success(function(data) {
-                for (i = 0; i < data.records.length; i++) {
-                    data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                    data.records[i].SenderName = "Me";
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderName = data.records[i].SenderName;
-                    data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                    if (data.records[i].ReceiverName.length > 25) {
-                        data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                    }
-                }
-                $scope.draftMessages = data;
-                if ($scope.currentMessageType == 'drafts') {
-                    $scope.currentMessages = $scope.draftMessages;
-                }
-            });
-        }
-
-        $scope.refreshDeleted = function() {
-            getData.get($scope.deletedURL).success(function(data) {
-                if (typeof data == 'object') {
-                    //Combine First and Last into Name for each message and mark the user as either the sender or receiver
-                    for (i = 0; i < data.records.length; i++) {
-                        if (data.records[i].Sender_First == null && data.records[i].Sender_Last == null) {
-                            data.records[i].SenderName = 'Me';
-                            data.records[i].ReceiverName = data.records[i].Receiver_First + " " + data.records[i].Receiver_Last;
-                        }
-                        if (data.records[i].Receiver_First == null && data.records[i].Receiver_Last == null) {
-                            data.records[i].ReceiverName = 'Me';
-                            data.records[i].SenderName = data.records[i].Sender_First + " " + data.records[i].Sender_Last;
-                        }
-                        data.records[i].ShortSubject = data.records[i].Subject;
-                        if (data.records[i].Subject.length > 30) {
-                            data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                        }
-                        data.records[i].ShortSenderName = data.records[i].SenderName;
-                        if (data.records[i].SenderName.length > 25) {
-                            data.records[i].ShortSenderName = data.records[i].SenderName.substr(0, 22) + "...";
-                        }
-                        data.records[i].ShortReceiverName = data.records[i].ReceiverName;
-                        if (data.records[i].ReceiverName.length > 25) {
-                            data.records[i].ShortReceiverName = data.records[i].ReceiverName.substr(0, 22) + "...";
-                        }
-                    }
-                    $scope.deletedMessages = data;
-                    if ($scope.currentMessageType == 'deleted') {
-                        $scope.currentMessages = $scope.deletedMessages;
-                    }
-                }
-            });
-        }
-
-        $scope.refreshCurrentMessages = function() {
-            switch ($scope.currentMessageType) {
-                case 'inbox':
-                    $scope.refreshInbox();
-                    break;
-                case 'sent':
-                    $scope.refreshSent();
-                    break;
-                case 'drafts':
-                    $scope.refreshDrafts();
-                    break;
-                case 'deleted':
-                    $scope.refreshDeleted();
-                    break;
-            }
-        }
-
-        $scope.deleteSelectedMessage = function() {
-            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
-            //Change the message's Deleted attribute to true
-            if ($scope.selectedMessage.ReceiverName == "Me") {
-                $scope.selectedMessage.ReceiverDeleted = 1;
-            } else if ($scope.selectedMessage.SenderName == "Me") {
-                $scope.selectedMessage.SenderDeleted = 1;
-            }
-            //PUT the message using the message URL and then refresh the messages
-            putData.put(messageURL, $scope.selectedMessage).success(function(data) {
-                $scope.refreshMessages();
-            });
-            //$scope.$apply();
-        }
-
-        //Marks the message as deleted, however the message will no longer appear in the Deleted messages.
-        $scope.fullyDeleteSelectedMessage = function() {
-            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
-            //Change the message's Deleted attribute to true
-            if ($scope.selectedMessage.ReceiverName == "Me") {
-                $scope.selectedMessage.ReceiverDeleted = 2;
-            } else {
-                $scope.selectedMessage.SenderDeleted = 2;
-            }
-            //PUT the message using the message URL and then refresh the messages
-            putData.put(messageURL, $scope.selectedMessage).success(function(data) {
-                $scope.refreshMessages();
-            });
-        }
-
-        $scope.restoreSelectedMessage = function() {
-            messageURL = "http://aii-hermes.org/aii-api/v1/messages/" + $scope.selectedMessage.MessageID;
-            //Change the message's Deleted attribute to true
-            if ($scope.selectedMessage.ReceiverName == "Me") {
-                $scope.selectedMessage.ReceiverDeleted = 0;
-            } else {
-                $scope.selectedMessage.SenderDeleted = 0;
-            }
-            //PUT the message using the message URL and then refresh the messages
-            putData.put(messageURL, $scope.selectedMessage).success(function(data) {
-                $scope.refreshMessages();
-            });
-            //$scope.$apply();
-        }
-    };
-
-
-    //************************************END MESSAGING CONTROLLERS***************************************//
-
-
-
-    //***************************************ALERT CONTROLLERS********************************************// 
-
-
-    //Added by James. 
-    /**
-     * @controller alertsController -
-     *      DESCRIPTION OF CONTROLLER GOES HERE
-     *
-     * @variables -
-     *      @*****
-     *
-     * @injections -
-     *      $scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo
-     *
-     * @functions -
-     *      @function **** -
-     *      @param - NULL
-     *      @returns - NULL
-     *
-     */
-    controllers.alertsController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo) {
-
-        $scope.userLevelID = userInfo.get().UserLevelID;
-        $scope.sessionID = userInfo.get().SessionID;
-
-        $scope.receivedURL = "http://aii-hermes.org/aii-api/v1/facilities/alerts/" + $scope.sessionID;
-        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/facilities/deletedAlerts/" + $scope.sessionID;
-
-        $scope.alertURL = "http://aii-hermes.org/aii-api/v1/alerts/";
-
-        $scope.currentAlerts;
-
-        /* Miscellaneous Variables */
-        //OrderBy property : true means display contents in reverse order  
-        $scope.reverse = true;
-        $scope.orderFilter = 'Timestamp';
-        //Alerts that have been marked (for deleting, marking as read, or marking as unread)
-        $scope.markedAlerts = [];
-
-        getData.get($scope.receivedURL).success(function(data) {
-            if (typeof data == 'object') {
-                $scope.receivedAlerts = data;
-                for (i = 0; i < data.records.length; i++) {
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortPatient = data.records[i].Patient;
-                    if (data.records[i].Patient.length > 24) {
-                        data.records[i].ShortPatient = data.records[i].Patient.substr(0, 21) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-                $scope.currentAlerts = $scope.receivedAlerts;
-            }
-        });
-
-        getData.get($scope.deletedURL).success(function(data) {
-            if (typeof data == 'object') {
-                $scope.deletedAlerts = data;
-                for (i = 0; i < data.records.length; i++) {
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortPatient = data.records[i].Patient;
-                    if (data.records[i].Patient.length > 24) {
-                        data.records[i].ShortPatient = data.records[i].Patient.substr(0, 21) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-            }
-        });
-
-        $scope.currentAlertType = 'received';
-        $scope.setAlertType = function(alertType) {
-            $scope.currentAlertType = alertType;
-
-            switch ($scope.currentAlertType) {
-                case 'received':
-                    $scope.currentAlerts = $scope.receivedAlerts;
-                    $scope.showFrom = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    $scope.showRestore = false;
-                    $scope.showDelete = true;
-                    $scope.showFullDelete = false;
-                    break;
-                case 'deleted':
-                    $scope.currentAlerts = $scope.deletedAlerts;
-                    $scope.showFrom = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    $scope.showRestore = true;
-                    $scope.showDelete = false;
-                    $scope.showFullDelete = true;
-                    break;
-            }
-        }
-
-        $scope.isAlertTypeSelected = function(alertType) {
-            if (alertType == $scope.currentAlertType) {
-                return true;
-            }
-            return false;
-        }
-
-        $scope.alertTogglePopup = function(alert) {
-            if ($scope.showPopup) {
-                $scope.selectedAlert = [];
-            } else {
-                $scope.selectedAlert = alert;
-                //Mark the selected alert as read
-                if ($scope.selectedAlert.IsRead == 0) {
-                    putAlertURL = $scope.alertURL + $scope.selectedAlert.AlertID;
-                    $scope.selectedAlert.IsRead = 1;
-                    putData.put(putAlertURL, $scope.selectedAlert).success(function(data) {
-                        $scope.refreshAlerts();
-                    }).then(function(){
-                        //get each unread notification count
-                        var unreadAlertURL = "http://aii-hermes.org/aii-api/v1/facilities/unreadAlertsCount/" + $scope.sessionID;
-                        getData.get(unreadAlertURL).success(function(data) {
-                            $scope.alertCount = data.records['alertCount'];
-                        });
-                    });
-                }
-            }
-            $scope.showPopup = !$scope.showPopup;
-        }
-
-        $scope.alertHidePopup = function() {
-            $scope.showPopup = false;
-            $scope.selectedAlert = [];
-        }
-
-        $scope.deleteSelectedAlert = function(deletedState) {
-            putAlertURL = "http://aii-hermes.org/aii-api/v1/alerts/" + $scope.selectedAlert.AlertID;
-            //Change the alert's Deleted attribute to true
-            $scope.selectedAlert.IsArchived = deletedState;
-            //PUT the alert using the URL and then refresh the alerts
-            putData.put(putAlertURL, $scope.selectedAlert).success(function(data) {
-                $scope.refreshAlerts();
-            });
-            $scope.refreshAlerts();
-        }
-
-        $scope.refreshAlerts = function() {
-            $scope.refreshReceived();
-            $scope.refreshDeleted();
-        }
-
-        $scope.refreshReceived = function() {
-            getData.get($scope.receivedURL).success(function(data) {
-                if (typeof data == 'object') {
-                    $scope.receivedAlerts = data;
-                    for (i = 0; i < data.records.length; i++) {
-                        data.records[i].ShortSubject = data.records[i].Subject;
-                        if (data.records[i].Subject.length > 30) {
-                            data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                        }
-                        data.records[i].ShortPatient = data.records[i].Patient;
-                        if (data.records[i].Patient.length > 24) {
-                            data.records[i].ShortPatient = data.records[i].Patient.substr(0, 21) + "...";
-                        }
-                        data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                        data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                        data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                    }
-                    if ($scope.currentAlertType == 'received') {
-                        $scope.currentAlerts = $scope.receivedAlerts;
-                    }
-                }
-            });
-        }
-
-        $scope.refreshDeleted = function() {
-            getData.get($scope.deletedURL).success(function(data) {
-                if (typeof data == 'object') {
-                    $scope.deletedAlerts = data;
-                    for (i = 0; i < data.records.length; i++) {
-                        data.records[i].ShortSubject = data.records[i].Subject;
-                        if (data.records[i].Subject.length > 30) {
-                            data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                        }
-                        data.records[i].ShortPatient = data.records[i].Patient;
-                        if (data.records[i].Patient.length > 24) {
-                            data.records[i].ShortPatient = data.records[i].Patient.substr(0, 21) + "...";
-                        }
-                        data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                        data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                        data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                    }
-                    if ($scope.currentAlertType == 'deleted') {
-                        $scope.currentAlerts = $scope.deletedAlerts;
-                    }
-                }
-            });
-        }
-
-        $scope.order = function(filter) {
-            $scope.reverse = !($scope.reverse);
-            $scope.orderFilter = filter;
-        }
-
-        $scope.markAlert = function(alert, checkbox) {
-            //If checkbox was just selected, add the message as marked
-            if (checkbox.checked) {
-                $scope.markedAlerts.push(alert);
-            }
-            //On unselecting a checkbox, find the message and remove it from the marked messages
-            else {
-                for (i = 0; i < $scope.markedAlerts.length; i++) {
-                    if ($scope.markedAlerts[i] == alert) {
-                        //Remove the input message from the marked array
-                        $scope.markedAlerts.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        //Add all the alerts in the input to the marked alerts
-        markAllAlerts = function(sourceCheckbox) {
-
-            switch ($scope.currentAlertType) {
-                case 'received':
-                    alerts = $scope.receivedAlerts.records;
-                    break;
-                case 'deleted':
-                    alerts = $scope.deletedAlerts.records;
-                    break;
-                default:
-                    alerts = [];
-                    break;
-            }
-
-            checkboxName = 'alertCheckbox';
-
-            //Find all the checkboxes that will be affected by this function
-            checkboxes = document.getElementsByName(checkboxName);
-            for (i = 0; i < checkboxes.length; i++) {
-                checkboxes[i].checked = sourceCheckbox.checked;
-            }
-            //If the checkbox is checked, add all alerts as marked
-            if (sourceCheckbox.checked) {
-                for (i = 0; i < alerts.length; i++) {
-                    $scope.markedAlerts.push(alerts[i]);
-                }
-            }
-            //When unchecked, remove all alerts from marked
-            else {
-                $scope.clearMarkedAlerts();
-            }
-        }
-
-        //Remove all messages from the marked messages array
-        $scope.clearMarkedAlerts = function() {
-            $scope.markedAlerts = [];
-
-            //Mark all the checkboxes as unchecked
-            checkboxNames = ['alertCheckbox', 'controlCheckbox'];
-
-            for (i = 0; i < checkboxNames.length; i++) {
-                checkboxes = document.getElementsByName(checkboxNames[i]);
-                for (j = 0; j < checkboxes.length; j++) {
-                    checkboxes[j].checked = false;
-                }
-            }
-        }
-
-        //Send a PUT request with the user-defined property and value
-        $scope.putMarkedAlerts = function(property, value) {
-            //Parse value (string) as an int (in base 10)
-            value = parseInt(value, 10);
-            if (property == 'read') {
-                for (i = 0; i < $scope.markedAlerts.length; i++) {
-                    putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
-                    //Change the alert's Deleted attribute to true
-                    $scope.markedAlerts[i].IsRead = value;
-                    //PUT the alert using the alert URL
-                    putData.put(putAlertURL, $scope.markedAlerts[i]).success(function(data) {
-                        $scope.refreshAlerts();
-                    });
-                }
-            } else if (property == 'deleted') {
-                for (i = 0; i < $scope.markedAlerts.length; i++) {
-                    putAlertURL = $scope.alertURL + $scope.markedAlerts[i].AlertID;
-                    //Change the alert's Deleted attribute to true
-                    $scope.markedAlerts[i].IsArchived = value;
-                    //PUT the alert using the alert URL
-                    putData.put(putAlertURL, $scope.markedAlerts[i]).success(function(data) {
-                        $scope.refreshAlerts();
-                    });
-                }
-            }
-        }
-    };
-
-
-    //*************************************END ALERT CONTROLLERS******************************************//
-
-
-
-    //***********************************NOTIFICATION CONTROLLERS*****************************************// 
-
-
-    //Added by James. 
-    /**
-     * @controller notificationsController -
-     *      DESCRIPTION OF CONTROLLER GOES HERE
-     *
-     * @variables -
-     *      @*****
-     *
-     * @injections -
-     *      $scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo
-     *
-     * @functions -
-     *      @function **** -
-     *      @param - NULL
-     *      @returns - NULL
-     *
-     */
-    controllers.notificationsController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo) {
-
-        /* User Data */
-        $scope.userLevelID = userInfo.get().UserLevelID;
-        $scope.sessionID = userInfo.get().SessionID;
-
-        $scope.receivedURL = "http://aii-hermes.org/aii-api/v1/facilities/notifications/" + $scope.sessionID;
-        $scope.deletedURL = "http://aii-hermes.org/aii-api/v1/facilities/deletedNotifications/" + $scope.sessionID;
-
-        $scope.notificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
-        $scope.currentNotificationType = 'received';
-
-        /* Miscellaneous Variables */
-        //OrderBy property : true means display contents in reverse order  
-        $scope.reverse = true;
-        $scope.orderFilter = 'Timestamp';
-        //Alerts that have been marked (for deleting, marking as read, or marking as unread)
-        $scope.markedNotifications = [];
-
-        /* Initially executed functions */
-        getData.get($scope.receivedURL).success(function(data) {
-            //Generate the subject for every notification
-            if (typeof data == "object") {
-                for (i = 0; i < data.records.length; i++) {
-                    //If the notification was a request to join a care team...
-                    if (data.records[i].IsRequest == '1') {
-                        data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-                    }
-                    //Otherwise the notification is a response to a sent care team invitation
-                    else {
-                        if (data.records[i].Response == '1') {
-                            data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-                        } else if (data.records[i]['Response'] == '2') {
-                            data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-                        }
-                    }
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-                    if (data.records[i].SenderFacilityName.length > 17) {
-                        data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0, 14) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-            } else {
-                data = null;
-            }
-            $scope.receivedNotifications = data;
-            $scope.currentNotifications = $scope.receivedNotifications;
-        });
-
-        getData.get($scope.deletedURL).success(function(data) {
-            //Generate the subject for every notification
-            if (typeof data == "object") {
-                for (i = 0; i < data.records.length; i++) {
-                    //If the notification was a request to join a care team...
-                    if (data.records[i].IsRequest == '1') {
-                        data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-                    }
-                    //Otherwise the notification is a response to a sent care team invitation
-                    else {
-                        if (data.records[i].Response == '1') {
-                            data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-                        } else if (data.records[i]['Response'] == '2') {
-                            data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-                        }
-                    }
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-                    if (data.records[i].SenderFacilityName.length > 17) {
-                        data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0, 14) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-            } else {
-                data = null;
-            }
-            $scope.deletedNotifications = data;
-        });
-
-        $scope.setNotificationType = function(notificationType) {
-            $scope.currentNotificationType = notificationType;
-
-            switch ($scope.currentNotificationType) {
-                case 'received':
-                    $scope.currentNotifications = $scope.receivedNotifications;
-                    $scope.showFrom = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    $scope.showRestore = false;
-                    $scope.showDelete = true;
-                    $scope.showFullDelete = false;
-                    break;
-                case 'deleted':
-                    $scope.currentNotifications = $scope.deletedNotifications;
-                    $scope.showFrom = true;
-                    $scope.showSubject = true;
-                    $scope.showTimestamp = true;
-                    $scope.showRestore = true;
-                    $scope.showDelete = false;
-                    $scope.showFullDelete = true;
-                    break;
-            }
-        }
-
-        $scope.isNotiTypeSelected = function(notificationType) {
-            if (notificationType == $scope.currentNotificationType) {
-                return true;
-            }
-            return false;
-        }
-
-        $scope.notifTogglePopup = function(notification) {
-            //console.log("notiftogglePop");
-            if ($scope.showPopup) {
-                $scope.selectedNotification = [];
-            } else {
-                $scope.selectedNotification = notification;
-                //Mark the selected notification as read
-                if ($scope.selectedNotification.IsRead == 0) {
-                    putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
-                    $scope.selectedNotification.IsRead = 1;
-                    putData.put(putNotificationURL, $scope.selectedNotification).success(function(data) {
-                        $scope.refreshNotifications();
-                    }).then(function(){
-                        //get each unread notification count
-                        var unreadNotifcationURL = "http://aii-hermes.org/aii-api/v1/facilities/unreadNotificationsCount/" + $scope.sessionID;
-                        getData.get(unreadAlertURL).success(function(data) {
-                            $scope.notificationCount = data.records['notificationCount'];
-                        });
-                    });
-                }
-            }
-            $scope.showPopup = !$scope.showPopup;
-        }
-
-        $scope.notifHidePopup = function() {
-            $scope.showPopup = false;
-            $scope.selectedNotification = [];
-        }
-
-        $scope.deleteSelectedNotification = function(deletedState) {
-            notificationURL = "http://aii-hermes.org/aii-api/v1/notifications/" + $scope.selectedNotification.NotificationID;
-            //Change the notification's Deleted attribute to true
-            $scope.selectedNotification.IsArchived = deletedState;
-            //PUT the notification using the URL and then refresh the notifications
-            putData.put(notificationURL, $scope.selectedNotification).success(function(data) {
-                $scope.refreshNotifications();
-            });
-            $scope.refreshNotifications();
-        }
-
-        $scope.refreshNotifications = function() {
-            $scope.refreshReceived();
-            $scope.refreshDeleted();
-        }
-
-        $scope.refreshReceived = function() {
-            getData.get($scope.receivedURL).success(function(data) {
-                //Generate the subject for every notification
-                for (i = 0; i < data.records.length; i++) {
-                    //If the notification was a request to join a care team...
-                    if (data.records[i].IsRequest == '1') {
-                        data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-                    }
-                    //Otherwise the notification is a response to a sent care team invitation
-                    else {
-                        if (data.records[i].Response == '1') {
-                            data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-                        } else if (data.records[i]['Response'] == '2') {
-                            data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-                        }
-                    }
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-                    if (data.records[i].SenderFacilityName.length > 17) {
-                        data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0, 14) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-                $scope.receivedNotifications = data;
-                if ($scope.currentNotificationType == 'received') {
-                    $scope.currentNotifications = $scope.receivedNotifications;
-                }
-            });
-        }
-
-        $scope.refreshDeleted = function() {
-            getData.get($scope.deletedURL).success(function(data) {
-                //Generate the subject for every notification
-                for (i = 0; i < data.records.length; i++) {
-                    //If the notification was a request to join a care team...
-                    if (data.records[i].IsRequest == '1') {
-                        data.records[i].Subject = 'Invitation - ' + data.records[i]['Patient'];
-                    }
-                    //Otherwise the notification is a response to a sent care team invitation
-                    else {
-                        if (data.records[i].Response == '1') {
-                            data.records[i].Subject = 'Accepted - ' + data.records[i].Patient;
-                        } else if (data.records[i]['Response'] == '2') {
-                            data.records[i].Subject = 'Declined - ' + data.records[i].Patient;
-                        }
-                    }
-                    data.records[i].ShortSubject = data.records[i].Subject;
-                    if (data.records[i].Subject.length > 30) {
-                        data.records[i].ShortSubject = data.records[i].Subject.substr(0, 27) + "...";
-                    }
-                    data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName;
-                    if (data.records[i].SenderFacilityName.length > 17) {
-                        data.records[i].ShortSenderFacilityName = data.records[i].SenderFacilityName.substr(0, 14) + "...";
-                    }
-                    data.records[i].PatientDOBMonth = data.records[i].PatientDOB.substr(4, 2);
-                    data.records[i].PatientDOBDay = data.records[i].PatientDOB.substr(6, 2);
-                    data.records[i].PatientDOBYear = data.records[i].PatientDOB.substr(0, 4);
-                }
-                $scope.deletedNotifications = data;
-                if ($scope.currentNotificationType == 'deleted') {
-                    $scope.currentNotifications = $scope.deletedNotifications;
-                }
-            });
-        }
-
-        $scope.order = function(filter) {
-            $scope.reverse = !($scope.reverse);
-            $scope.orderFilter = filter;
-        }
-
-        $scope.markNotification = function(notification, checkbox) {
-            //If checkbox was just selected, add the message as marked
-            if (checkbox.checked) {
-                $scope.markedNotifications.push(notification);
-            }
-            //On unselecting a checkbox, find the message and remove it from the marked messages
-            else {
-                for (i = 0; i < $scope.markedNotifications.length; i++) {
-                    if ($scope.markedNotifications[i] == notification) {
-                        //Remove the input message from the marked array
-                        $scope.markedNotifications.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        //Add all the notifications in the input to the marked notifications
-        markAllNotifications = function(sourceCheckbox) {
-
-            switch ($scope.currentNotificationType) {
-                case 'received':
-                    notifications = $scope.receivedNotifications.records;
-                    break;
-                case 'deleted':
-                    notifications = $scope.deletedNotifications.records;
-                    break;
-                default:
-                    notifications = [];
-                    break;
-            }
-
-            checkboxName = 'notificationCheckbox';
-
-            //Find all the checkboxes that will be affected by this function
-            checkboxes = document.getElementsByName(checkboxName);
-            for (i = 0; i < checkboxes.length; i++) {
-                checkboxes[i].checked = sourceCheckbox.checked;
-            }
-            //If the checkbox is checked, add all notifications as marked
-            if (sourceCheckbox.checked) {
-                for (i = 0; i < notifications.length; i++) {
-                    $scope.markedNotifications.push(notifications[i]);
-                }
-            }
-            //When unchecked, remove all notifications from marked
-            else {
-                $scope.clearMarkedNotifications();
-            }
-        }
-
-        //Remove all messages from the marked messages array
-        $scope.clearMarkedNotifications = function() {
-            $scope.markedNotifications = [];
-
-            //Mark all the checkboxes as unchecked
-            checkboxNames = ['notificationCheckbox', 'controlCheckbox'];
-
-            for (i = 0; i < checkboxNames.length; i++) {
-                checkboxes = document.getElementsByName(checkboxNames[i]);
-                for (j = 0; j < checkboxes.length; j++) {
-                    checkboxes[j].checked = false;
-                }
-            }
-        }
-
-        //Send a PUT request with the user-defined property and value
-        $scope.putMarkedNotifications = function(property, value) {
-            //Parse value (string) as an int (in base 10)
-            value = parseInt(value, 10);
-            if (property == 'read') {
-                for (i = 0; i < $scope.markedNotifications.length; i++) {
-                    putNotificationURL = $scope.notificationURL + $scope.markedNotifications[i].NotificationID;
-                    //Change the message's Deleted attribute to true
-                    $scope.markedNotifications[i].IsRead = value;
-                    //PUT the message using the message URL
-                    putData.put(putNotificationURL, $scope.markedNotifications[i]).success(function(data) {
-                        $scope.refreshNotifications();
-                    });
-
-                }
-            } else if (property == 'deleted') {
-                for (i = 0; i < $scope.markedNotifications.length; i++) {
-                    putNotificationURL = $scope.notificationURL + $scope.markedNotifications[i].NotificationID;
-                    //Change the message's Deleted attribute to true
-                    $scope.markedNotifications[i].IsArchived = value;
-                    //PUT the message using the message URL
-                    putData.put(putNotificationURL, $scope.markedNotifications[i]).success(function(data) {
-                        $scope.refreshNotifications();
-                    });
-                }
-            }
-        }
-
-        $scope.respondToRequest = function(status) {
-            //console.log("respond to request");
-            putNotificationURL = $scope.notificationURL + $scope.selectedNotification.NotificationID;
-            $scope.selectedNotification.Response = status;
-            $scope.selectedNotification.IsArchived = 2;
-            putData.put(putNotificationURL, $scope.selectedNotification).success(function(data) {
-                $scope.refreshNotifications();
-            });
-        }
-    };
-
-
-    //*********************************END NOTIFICATION CONTROLLERS***************************************// 
-
-
-
+	
+	controllers.messagingController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount, $cookieStore) {
+
+		//Controller variables
+		var sessionID = userInfo.get().SessionID;
+		var userLevel = userInfo.get().UserLevelID;
+		var baseURL = "http://aii-hermes.org/aii-api/v1/";
+		var urlSet = {		//(Keys are defined as : messageType + messageProperty)
+			'MessagesReceived' 		: 'users/inbox/',
+			'MessagesDeleted' 		: 'users/deleted/',
+			'MessagesSent'			: 'users/sent/',
+			'MessagesDrafts'		: 'users/drafts/',
+			'AlertsReceived' 		: 'facilities/alerts/',
+			'AlertsDeleted' 		: 'facilities/deletedAlerts/',
+			'NotificationsReceived' : 'facilities/notifications/',
+			'NotificationsDeleted' 	: 'facilities/deletedNotifications/',
+		};
+
+		//----- Data-bound variables -----
+		
+		//Message Variables
+		$scope.messages = {}; 			//object consisting of all of the user's messages (Keys are defined as : messageType + messageProperty)
+		$scope.currentMessages = [];	//object consisting of the messages currently being viewed
+		$scope.markedMessages = [];		//object consisting of all currently marked messages
+		$scope.messageType = null; 		//marks if message consists of 'Messages', 'Alerts', or 'Notifications'
+		$scope.messageProperty = null;	//marks if messages are 'Received', 'Deleted', 'Sent', or 'Drafts'
+		
+		//Message Count Variables
+		$scope.unreadMessageCount = 0;
+		$scope.unreadAlertCount = 0;
+		$scope.unreadNotificationCount = 0;
+		$scope.unreadCount = 0;
+		
+		//Composed Message Variables
+		$scope.composedMessage = []; 	//object to hold the composed message
+		
+		//Display Variables
+		$scope.reverse = true;				//OrderBy property : true means display contents in reverse order
+		$scope.orderFilter = 'Timestamp';	//Initialize orderBy property to Timestamp
+		
+		//--------------------------------- 
+		
+		//Clear any content currently in the composed message
+		$scope.clearComposedMessage = function(){
+			$scope.composedMessage = [];
+		}
+		
+		//Clears all selected checkboxes and messages
+		$scope.clearSelectedMessages = function(){
+			$scope.markedMessages = [];
+			$scope.isAllChecked = false;
+		}
+		
+		//Either delete or restore the given message.
+		//	toDelete: true - Delete the message
+		//			  false - Restore the message
+		$scope.deleteMessage = function(message, toDelete){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			
+			//Determine Deleted field name
+			var deletedName = 'IsArchived';
+			if($scope.messageType == 'Messages'){
+				if(message['ReceiverName'] == 'Me'){
+					deletedName = 'ReceiverDeleted';
+				} else if(message['SenderName'] == 'Me'){
+					deletedName = 'SenderDeleted';
+				}
+			}
+			//Modify the value of the deleted field
+			if(toDelete){
+				message[deletedName]++;
+			} else {
+				message[deletedName]--;
+			}
+			
+			//Save the modified message
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+				//Get message counts
+				$scope.getMessageCounts();
+				$scope.getMessages();
+			});
+			
+		}
+		
+		//Marks the selected messages as deleted 
+		$scope.deleteSelectedMessages = function(){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			var gettingMessages = false;
+			
+			//Loop through each selected message 
+			for(var i in $scope.markedMessages){
+				//Determine Deleted field name
+				var deletedName = 'IsArchived';
+				if($scope.messageType == 'Messages'){
+					if($scope.markedMessages[i]['ReceiverName'] == 'Me'){
+						deletedName = 'ReceiverDeleted';
+					} else if($scope.markedMessages[i]['SenderName'] == 'Me'){
+						deletedName = 'SenderDeleted';
+					}
+				}
+				//Modify the value of their fields
+				$scope.markedMessages[i][deletedName]++;
+				
+				//Save the modified message
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+					//Get message counts
+					$scope.getMessageCounts();
+					if(!gettingMessages){
+						gettingMessages = true;
+						$scope.getMessages();
+					}
+				});
+			}
+		}
+		
+		//Edit a given draft as the composed message
+		$scope.editDraft = function(message){
+			$scope.composedMessage = message;
+			$scope.composedMessage['isDraft'] = true;
+		}
+		
+		//Modify the current message (by PUT request)
+		$scope.editMessage = function(message, field, value){
+			//Modify field value of message
+			message[field] = value;
+			
+			//Save message edit
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+				//Get message counts
+				$scope.getMessageCounts();
+				$scope.getMessages();
+			});
+		}
+		
+		//Modify the marked messages
+		$scope.editSelectedMessages = function(field, value){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
+			var gettingMessages = false;
+		
+			//Loop through each selected message 
+			for(var i in $scope.markedMessages){
+				//Modify the value of their fields
+				$scope.markedMessages[i][field] = value;
+				
+				//Save the modified message
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+					//Get message counts
+					$scope.getMessageCounts();
+					if(!gettingMessages){
+						gettingMessages = true;
+						$scope.getMessages();
+					}
+				});
+			}
+		}
+		
+		//Get all of the messages the user has access to.
+		$scope.getAllMessages = function(){
+			//Get data from each message type/property
+			var currentURL = baseURL + urlSet['MessagesReceived'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesReceived'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesSent'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesSent'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesDrafts'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesDrafts'] = data.records;
+				$scope.checkForParse();
+			});
+			currentURL = baseURL + urlSet['MessagesDeleted'] + sessionID;
+			getData.get(currentURL).success(function(data) {
+				$scope.messages['MessagesDeleted'] = data.records;
+				$scope.checkForParse();
+			});
+			if(userLevel <= 10){
+				currentURL = baseURL + urlSet['AlertsReceived'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['AlertsReceived'] = data.records;
+					$scope.checkForParse();
+				});
+				currentURL = baseURL + urlSet['AlertsDeleted'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['AlertsDeleted'] = data.records;
+					$scope.checkForParse();
+				});
+				currentURL = baseURL + urlSet['NotificationsReceived'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['NotificationsReceived'] = data.records;
+					$scope.checkForParse();
+				});
+				currentURL = baseURL + urlSet['NotificationsDeleted'] + sessionID;
+				getData.get(currentURL).success(function(data) {
+					$scope.messages['NotificationsDeleted'] = data.records;
+					$scope.checkForParse();
+				});
+				$scope.getMessageCounts();
+			}
+		}
+		
+		//Insures that all messages have been retrieved before attempting to parse them.
+		//This is insured as the function must be called once by every message type/property
+		//before parsing occurs.
+		$scope.parseCount = 0;
+		$scope.checkForParse = function(){
+			$scope.parseCount++;
+			if($scope.parseCount >= 8 || (userLevel > 10 && $scope.parseCount >= 4)){
+				$scope.parseCount = 0;
+				$scope.parseAllMessages();
+			}
+		}
+		
+		//Get counts for all three message types
+		$scope.getMessageCounts = function(){
+			var unreadMessageURL = baseURL + "users/unreadMessagesCount/" + sessionID;
+			
+			//Get all counts
+			getData.get(unreadMessageURL).success(function(data) {
+				if(typeof data == "object"){
+					$scope.unreadMessageCount = data['records']['messageCount'];
+					$scope.unreadAlertCount = data['records']['alertCount'];
+					$scope.unreadNotificationCount = data['records']['notificationCount'];
+					
+					//Set the current count
+					var types = {
+						'Messages' : $scope.unreadMessageCount,
+						'Alerts' : $scope.unreadAlertCount,
+						'Notifications' : $scope.unreadNotificationCount,
+					};
+					$scope.unreadCount = types[$scope.messageType];
+				}
+			});
+		}
+		
+		$scope.getMessages = function(){
+			//Get current messages depending on current message Type and Property
+			var messageURL = baseURL + urlSet[$scope.messageType + $scope.messageProperty] + sessionID;
+			getData.get(messageURL).success(function(data) {
+				//Parse the messages after they are retrieved
+				if(typeof data == "object"){
+					$scope.messages[$scope.messageType + $scope.messageProperty] = data.records;
+					//Parse the retrieved messages
+					if($scope.messageType == "Messages"){
+						$scope.parseMessages();
+					} else if($scope.messageType == "Alerts"){
+						$scope.parseAlerts();
+					} else if($scope.messageType == "Notifications"){
+						$scope.parseNotifications();
+					}
+				}
+			});
+		}
+		
+		//Returns whether or not a given property is selected
+		$scope.isCurrentProperty = function(input){
+			return $scope.messageProperty == input;
+		}
+		
+		//Returns whether or not a given type is selected
+		$scope.isCurrentType = function(input){
+			return $scope.messageType == input;
+		}
+		
+		//Define necessary fields for all available messages
+		$scope.parseAllMessages = function(){
+			$scope.parseMessages();
+			$scope.parseAlerts();
+			$scope.parseNotifications();
+		}
+		
+		//Defines SenderName, ReceiverName, ShortSubject, ShortSenderName, and ShortReceiverName 
+		//for all messages
+		$scope.parseMessages = function(){		
+			//console.log("Parsing some messages");
+			
+			//Loop through each message and parse accordingly
+			for(var key in $scope.messages){
+				//console.log("var key in $scope.messages: " + key);
+				if(key.charAt(0) == 'M'){	//Only parse Messages
+					//console.log("Messages Key: " + key);
+					//Define SenderName and ReceiverName for each message
+					for(var i in $scope.messages[key]){
+						$scope.messages[key][i]['ReceiverName'] = $scope.messages[key][i]['Receiver_First'] + " " + $scope.messages[key][i]['Receiver_Last'];
+						$scope.messages[key][i]['SenderName'] = $scope.messages[key][i]['Sender_First'] + " " + $scope.messages[key][i]['Sender_Last'];
+						if($scope.messages[key][i]['Receiver_First'] == null && $scope.messages[key][i]['Receiver_Last'] == null) 
+							$scope.messages[key][i]['ReceiverName'] = "Me";
+						if($scope.messages[key][i]['Sender_First'] == null && $scope.messages[key][i]['Sender_Last'] == null) 
+							$scope.messages[key][i]['SenderName'] = "Me";
+					}
+					
+					//Define ShortSubject, ShortContent, ShortSenderName, and ShortReceiverName
+					$scope.shortenField(key, 'Subject');
+					$scope.shortenField(key, 'Content');
+					$scope.shortenField(key, 'SenderName');
+					$scope.shortenField(key, 'ReceiverName');
+				}
+			}
+		}
+		
+		//Define ShortSubject and ShortPatient for all Alerts
+		$scope.parseAlerts = function(){
+			//console.log("Parse these Alerts!");
+			$scope.shortenField('AlertsReceived', 'Subject');
+			$scope.shortenField('AlertsReceived', 'Patient');
+			$scope.shortenField('AlertsDeleted', 'Subject');
+			$scope.shortenField('AlertsDeleted', 'Patient');
+		}
+		
+		//Define Subject, ShortSubject, and ShortSenderFacilityName for all Notifications
+		$scope.parseNotifications = function(){
+			//Loop through each notifications and parse accordingly
+			for(var key in $scope.messages){
+				if(key.charAt(0) == 'N'){	
+					//Define Subject of each notification
+					for(var i in $scope.messages[key]){
+						if ($scope.messages[key][i]['IsRequest'] == '1') {
+							$scope.messages[key][i]['Subject'] = 'Invitation - ' + $scope.messages[key][i]['Patient'];
+						} else {
+							if ($scope.messages[key][i]['Response'] == '1') {
+								$scope.messages[key][i]['Subject'] = 'Accepted - ' + $scope.messages[key][i]['Patient'];
+							} else if ($scope.messages[key][i]['Response'] == '2') {
+								$scope.messages[key][i]['Subject'] = 'Declined - ' + $scope.messages[key][i]['Patient'];
+							}
+						}
+					}
+					//Define ShortSubject and ShortSenderFacilityName for all Notifications
+					$scope.shortenField(key, 'Subject');
+					$scope.shortenField(key, 'SenderFacilityName');
+				}
+			}
+		}
+		
+		//Prefill the composed message's content as either a reply or forward of the given message
+		$scope.prefillComposedMessage = function(message, isReply){
+			$scope.composedMessage = [];
+			
+			//Handle Subject and Content differences in Forwarding or Replying to the message
+			if(isReply){
+				$scope.composedMessage['ReceiverUsername'] = message['SenderUsername'];
+				$scope.composedMessage['Subject'] = "RE: " + message['Subject'];
+				$scope.composedMessage['Content'] = "\n\n------------------------------\n" + "From: " + message['SenderName'];
+			} else {
+				$scope.composedMessage['Subject'] = "FWD: " + message['Subject'];
+				$scope.composedMessage['Content'] = "\n\n------------------------------\n" + "From: " + message['SenderName'] + "\n" + "To: " + message['ReceiverName'];
+			}
+			
+			//Determine Time and Date of the message
+			var messageTime = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'h:mm a');
+			var messageDate = $filter('date')(($scope.selectedMessage.Timestamp * 1000), 'M/d/yy');
+			
+			//Fill in remaining content
+			$scope.composedMessage['Content'] = $scope.composedMessage['Content'] + "\n" + "Subject: " + message['Subject'] + "\n" + "Time: " + messageTime + "\n" + "Date: " + messageDate + "\n\n" + message['Content']; 
+		}
+		
+		//Defines "Short{field}" value for every message in the given key
+		$scope.shortenField = function(key, field){
+			//console.log("This Key is: " + key);
+		
+			//Length of the shortened fields
+			var shortLength = 24;
+		
+			//Loop through every message in the key and define 'Short{field}'
+			for(var i in $scope.messages[key]){
+				console.log($scope.messages[key][i]);
+				console.log("Field: " + field + " -- Key: " + key);
+		
+				$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field];
+				if($scope.messages[key][i][field].length > shortLength){
+					$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field].substr(0, shortLength - 3) + "...";
+				}
+				
+				//console.log("Result: " + $scope.messages[key][i]['Short' + field]);
+			}
+			$scope.resetCurrentMessages();
+		}
+		
+		//Reset the messages being displayed to the correct messages
+		$scope.resetCurrentMessages = function(){
+			$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
+		}
+		
+		//Respond to request Notifications
+		$scope.respondToNotification = function(message, response){
+			message['Response'] = response;
+			message['IsArchived'] = 2;
+			putData.put(baseURL + 'notifications/' + message['NotificationID'], message).success(function(data) {
+				$scope.getMessages();
+			});
+		}
+		
+		$scope.selectAllMessages = function(sourceCheckbox){
+			//Find all the checkboxes that will be affected by this function
+			checkboxes = document.getElementsByName('messageCheckbox');
+			for(i = 0; i < checkboxes.length; i++){
+				checkboxes[i].checked = sourceCheckbox.checked;
+			}
+			//If the checkbox is checked, add all messages as marked
+			if(sourceCheckbox.checked){
+				$scope.markedMessages = $scope.currentMessages;
+			}
+			//When unchecked, remove all messages from marked
+			else{
+				$scope.clearSelectedMessages();
+			}
+		}
+		
+		//Selects a message which will be displayed in the modal
+		$scope.selectMessage = function(message){
+			$scope.selectedMessage = message;
+			//Mark the message as read if it is unread
+			if(message['IsRead'] == 0){
+				$scope.editMessage(message, 'IsRead', 1);
+			}
+		}
+		
+		//Send composed message. 
+		//Expects:
+			//ReceiverUsername
+			//SenderID
+			//Subject
+			//Content
+			//Sent
+		$scope.sendMessage = function(isSent){
+			//Use lower case message type in the PUT URL
+			var lowerMessageType = $scope.messageType.toLowerCase();
+		
+			//Mark whether or not the message is being sent
+			$scope.composedMessage['Sent'] = isSent;
+		
+			//Either POST the message if being sent for the first time or PUT it if 
+			//it is an edited draft being sent.
+			if($scope.composedMessage['isDraft'] === true){
+				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'], $scope.composedMessage);
+			} else {
+				postData.post(baseURL + 'messages/', $scope.composedMessage);
+			}
+		}
+		
+		//Set current message property ('Received', 'Deleted', 'Sent', or 'Drafts')
+		$scope.setMessageProperty = function(input){
+			$scope.messageProperty = input;
+			$scope.updateDisplay();
+			$scope.resetCurrentMessages();
+			$scope.clearSelectedMessages();
+		}
+		
+		//Set current message type ('Messages', 'Alerts', or 'Notifications')
+		$scope.setMessageType = function(input){
+			$scope.messageType = input;
+			$scope.messageProperty = 'Received';
+			$scope.updateDisplay();
+			$scope.resetCurrentMessages();
+			$scope.clearSelectedMessages();
+		}
+		
+		//Display the Compose Message view in a modal
+		$scope.showMessageComposition = function(){
+			$scope.showComposeMessageBox = true;
+		}
+		
+		//Control the display of elements on the page based on the current message type and message property
+		$scope.updateDisplay = function(){
+			//Default settings
+			$scope.showAlertsTab = true;
+			$scope.showNotificationsTab = true;
+			$scope.showSentTab = false;
+			$scope.showDraftsTab = false;
+			$scope.showMarkAsRead = false;
+			$scope.showMarkAsUnread = false;
+			
+			$scope.showFrom = true;
+			$scope.showTo = false;
+			$scope.showPatientInfo = true;
+
+			$scope.showReply = false;
+			$scope.showForward = false;
+			$scope.showEdit = false;
+			$scope.showRestore = false;
+			$scope.showResponses = false;
+		
+			//Adjust display based on Message Type
+			switch($scope.messageType){
+				case 'Messages':
+					$scope.showSentTab = true;
+					$scope.showDraftsTab = true;
+					$scope.showPatientInfo = false;
+					if($scope.messageProperty == "Received"){
+						$scope.showReply = true;
+					}
+					if($scope.messageProperty == "Received" || $scope.messageProperty == "Sent"){
+						$scope.showForward = true;
+					}
+					if($scope.messageProperty == "Deleted" || $scope.messageProperty == "Sent"){
+						$scope.showTo = true;
+					}
+					break;
+			}
+			
+			//Adjust display based on Message Property
+			switch($scope.messageProperty){
+				case 'Received':
+					$scope.showMarkAsRead = true;
+					$scope.showMarkAsUnread = true;
+					if($scope.messageType == 'Notifications'){
+						$scope.showResponses = true;
+					}
+					break;
+				case 'Deleted':
+					$scope.showRestore = true;
+					break;
+				case 'Sent':
+					$scope.showFrom = false;
+					break;
+				case 'Drafts':
+					$scope.showFrom = false;
+					$scope.showEdit = true;
+					break;
+			}
+			
+			//Adjust display based on user level
+			if(userLevel > 10){
+				$scope.showAlertsTab = false;
+				$scope.showNotificationsTab = false;
+			}
+		}
+		
+		
+		//Define onControllerLoad behavior
+		//====================================================
+		//If user is messaging someone, display the Compose Message screen
+		var recipient = persistData.getMessageRecipient();
+		if(recipient != -1){
+			//Fill in the composed message's recipient
+			$scope.composedMessage['ReceiverUsername'] =
+				recipient['username'] + " <" + recipient['full_name'] + ">";
+			
+		} else { 		//Otherwise, display the Message Inbox
+			$scope.messageType = 'Messages';		
+			$scope.messageProperty = 'Received';
+		}
+
+		//Get all message data
+		$scope.getAllMessages();
+		
+		//Load display control
+		$scope.updateDisplay();
+		
+		//====================================================
+	}
+	
+	//***********************************END MESSAGING CONTROLLER*****************************************// 
+	
     //************************************LOGIN/LOGOUT CONTROLLERS****************************************//
 
 
