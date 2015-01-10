@@ -2473,7 +2473,7 @@
         //Scope variables
         $scope.message ="";
 	    $scope.messageIsError = false; //Determines the style of the message
-	    $scope.disableRegister = true; //Disables the save button
+	    $scope.disableRegister = false; //Disables the save button
 	    $scope.button = "Save"; //save button content
 	   
 	    //Validates the form data and sends a user registration request to the API
@@ -2484,12 +2484,12 @@
 			//	insure valid password (adequate length, valid characters)
 		
 			//Insure password fields match before sending request
-			if($scope.user.Password === $scope.user.confirmPassword){
-				putData.put('http://aii-hermes.org/aii-api/v1/users/' + sessionID, $scope.editUser).success(function(data) {
+			if($scope.user.newPassword === $scope.user.confirmPassword){
+				putData.put('http://aii-hermes.org/aii-api/v1/users/' + sessionID, $scope.user).success(function(data) {
                     if (data.records["User Edit Response"]) {
-                        alert(data.records['User Edit Respone']);
+                        alert(data.records['User Edit Response']);
                     }
-                })
+                });
 			}
 			//If the password and confirmation do not match, inform the user
 			else{
