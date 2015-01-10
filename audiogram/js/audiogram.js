@@ -897,6 +897,35 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             return false;
         }
     }
+    
+    /**
+    * Loads a previously saved audiogram
+    * @param {json} data - json object of the whole shabang
+    * @return {bool} - True = success or False = broke!.
+    */
+    function loadAudiogram(data) {
+        for(var i=0;i<data.length;i++){
+            console.log(JSON.parse(data[i]));
+            var shape = JSON.parse(data[i]);
+            if(shape.attrs.x)
+                var x = shape.attrs.x;
+            else
+                var x = shape.attrs.center.x;
+            if(shape.attrs.y)
+                var y = shape.attrs.y;
+            else
+                var y = shape.attrs.center.y;
+            console.log("x: "+x+",y: "+y);
+            setMeasureType(shape.attrs.measure);
+            console.log("Measure: "+shape.attrs.measure);            
+            setMasked(shape.attrs.masked);
+            console.log("Masked: "+shape.attrs.masked); 
+            addMeasure(x,y);
+            currentStack.push(shape);
+        }
+        console.log(currentStack);
+        drawStack();
+    }
 
     function makeNoResponse(index) {
         currentStack[index].attrs.noResponse = true;
@@ -1075,6 +1104,15 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         return stackData;
     }
     
+    function getRawMeasures(){
+        var i = 0;
+        var stackData = [];
+        for (i = 0; i < currentStack.length; ++i) {
+            stackData.push(currentStack[i]);
+        }
+        return stackData;
+    }
+    
     /**
     * Pops last item off the stack and removes it from the "stage"
     * @param {void}
@@ -1177,6 +1215,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         undo : undoMeasure,
         redo : redoMeasure,
         getAudiogramMeasures : getVisibleMeasures,
-        dumpStack: dumpStack
+        getAudiogramRawMeasures: getRawMeasures,
+        dumpStack: dumpStack,
+        loadAudiogram: loadAudiogram
     };
 };

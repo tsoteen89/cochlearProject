@@ -65,6 +65,17 @@
             font-weight:bold;
         }
         
+        hr {
+            margin: 10px 10px 0px 10px;
+            border: 0;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .fa-md{
+            font-size:1.3em;
+            margin-top:3px;
+        }
+        
         .list-group-wrap{
             margin: 0 auto; 
             text-align: center;
@@ -187,7 +198,6 @@
 /*            padding-left:10px;*/
         }
         
-        
         /*Sawr - styles added to speech audiometry and word recognition */
         .sawr-input{
             width:45px;
@@ -258,6 +268,7 @@
                                 </div>
                             </div> 
                         </div>
+                        <hr>
                         <div class="row aii">
                             <div class="form-group">
                                 <label for="date" class="col-sm-3 control-label">DOB:</label>
@@ -284,6 +295,7 @@
                                 <div class="col-sm-2"></div>
                             </div>
                         </div>
+                            <hr>
                         <div class="row aii">
                             <div class="form-group">
                                 <label for="date" class="col-sm-2 control-label">Date:</label>
@@ -301,27 +313,29 @@
                         </div>
                             <div class="row aii">
                                 <div class="form-group">
-                                    <label for="aii-audiogram-prev" class="col-sm-2 control-label">All: </label>
-                                    <div class="col-sm-10">
-                                        <select class="selectpicker show-tick" id="aii-audiogram-prev">
+                                    <div class="col-sm-8">
+                                        <select class="selectpicker show-tick" id="aii-audiogram-prev" name="loaded_audiogram_title">
                                             <option value="" disabled selected>Choose Audiogram...</option>
                                         </select>
-                                        <button class="btn btn-default" type="button"><i class="fa fa-download"></i></button>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button class="btn btn-default" type="button" id="load-audiogram"><i class="fa fa-headphones fa-md"></i> Load </button>
                                     </div>
                                 </div>
                             </div>
+                            <hr>
                             <div class="row aii">
                                 <div class="form-group">
-                                    <label for="aii-audiogram-latest" class="col-sm-2 control-label">Latest: </label>
-                                     <div class="col-sm-10">
+                                    <div class="col-sm-3"></div>
+                                     <div class="col-sm-4">
                                         <div class="input-group">
-                                          <input type="text" class="form-control" placeholder="Last Audiogram...">
                                           <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-download"></i></button>
+                                            <button class="btn btn-default" type="button" id="load-latest"><i class="fa fa-headphones fa-md"></i> Load Latest</button>
                                           </span>
                                         </div><!-- /input-group -->
+ 
                                       </div><!-- /.col-lg-6 -->
-                                    
+                                    <div class="col-sm-5"></div>                                   
                                     
                                 </div>
                             </div>  
@@ -645,10 +659,13 @@
                             "word_rec_noise_b":$('#word_rec_noise_b').val(),
                             "left_condition": $('#left-condition-opts option:selected').val(),
                             "right_condition":$('#right-condition-opts option:selected').val(),
-                            "left_measures": Stage['left'].getAudiogramMeasures(),
-                            "right_measures": Stage['right'].getAudiogramMeasures()
+                            "left_measures": Stage['left'].getAudiogramRawMeasures(),
+                            "right_measures": Stage['right'].getAudiogramRawMeasures()                       
                     };
 
+                    //"left_measures": Stage['left'].getAudiogramMeasures(),
+                    //"right_measures": Stage['right'].getAudiogramMeasures(),
+                    
                     //Perform ajax save
                     var tmp = JSON.stringify(AudiogramData);
                     console.log(tmp);
@@ -741,6 +758,37 @@
                 $('#patient-info').css('display','block');
                 $('#hide-patient-info').css('display','block');
                 $('#show-patient-info').css('display','none');
+                event.preventDefault();
+            });
+            
+            $('#load-audiogram').on('click', function (event) {
+                var audiogram_id = $('#aii-audiogram-prev option:selected').val();
+                if(audiogram_id == '')
+                    console.log("error");
+                else
+                    console.log(audiogram_id);
+                event.preventDefault();
+            });
+            
+            $('#load-latest').on('click', function (event) {
+                Stage['right'].dumpStack();
+                Stage['left'].dumpStack();
+                var audiogram_id = $('#aii-audiogram-prev option:last-child').val();
+                if(audiogram_id == ''){
+                    console.log("error");
+                    return;
+                }
+
+                
+                $.get("http://aii-hermes.org/aii-api/v1/audiograms/"+audiogram_id)
+                .done(function( data ) {
+                    var right_json = JSON.parse(data.records.right_measures);
+                    var left_json = JSON.parse(data.records.right_measures);
+                    console.log(right_json);
+                    console.log(left_json);
+                    Stage['right'].loadAudiogram(right_json);
+                    Stage['left'].loadAudiogram(left_json);
+                });
                 event.preventDefault();
             });
             
@@ -910,7 +958,7 @@
                     conditions.push(json.records[i].Title);
                 }
                 
-                var Html = '<option value="" disabled selected>Audiogram Title...</option>';
+                var Html = '<option value="" disabled selected>Choose Title...</option>';
                 
                 for(var i=0;i<conditions.length;i++){
                     Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
@@ -932,7 +980,7 @@
             $.get("http://aii-hermes.org/aii-api/v1/audiograms&fields=(audiogram_id,date,title)")
             .done(function( json ){
                 if(json.records.length>0){
-                    var Html = '<option value="" disabled selected>Previous Audiograms...</option>';
+                    var Html = '<option value="" disabled selected>Find Previous Audiogram <i class="fa fa-search"></i></option>';
                     for( i=0; i<json.records.length; i++) {
                         console.log(json.records[i].date);
                         audiogram_date = moment.unix(json.records[i].date).format("MM/DD/YY");
