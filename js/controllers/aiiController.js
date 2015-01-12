@@ -1553,8 +1553,9 @@
         //uses $scope.conditions object info (left and right ear conditions) to find ID of the two conditions set for the ears
         $scope.getConditionsID = function() {
             console.log("getConditionsID Called");
-            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/left/" + this.conditions.Left + "/right/" + this.conditions.Right).success(function(data) {
-                $scope.answer.ConditionsID = data.records.ConditionsID;
+            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/?q=(LeftAidCondition:" + this.conditions.Left + ",RightAidCondition:" + this.conditions.Right + ")").success(function(data) {
+                $scope.answer.ConditionsID = data.records[0].ConditionsID;
+                //console.log($scope.answer.ConditionsID);
             });
         }
 
