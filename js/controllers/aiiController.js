@@ -824,7 +824,47 @@
 
         //get the SessionID stored
         var cookieSessionID = $cookieStore.get('SessionID');
-        $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //hmm, don't know why in questions controller
+        
+        //currents phase patient is in. used in logic to decide next phase
+        $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); 
+        
+        //get clicked patient info as well as facility info
+        var patientID =$cookieStore.get('PatientID');
+        var patientWithFacilityURL= "http://aii-hermes.org/aii-api/v1/patients/" + patientID + "/withFacility/" + cookieSessionID;
+        getData.get(patientWithFacilityURL).success(function(data) {
+            //Patient info display on top of question pages
+            $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientSex = data.records.Patient.Sex;
+            $scope.patientDOB = data.records.Patient.DOB;
+            $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
+            $scope.dirAnchor = data.records.Patient.Last;
+            //Facility info (name and image) used in pdf report headers
+            $scope.facilityName = data.records.Facility.Name;
+            $scope.facilityImage = data.records.Facility.FacilityImage;
+        });
+        
+        var phaseID = $cookieStore.get("PhaseID"); //clicked phase
+        var phaseURL= "http://aii-hermes.org/aii-api/v1/phases/" + phaseID + '/' + cookieSessionID;
+        getData.get(phaseURL).success(function(data) {
+             $scope.phaseName = data.records.Name //grab the name of the phase currently viewed
+             
+        }).then(function(){
+            //Hard coded page limit numbers
+            if ($scope.phaseName == 'Initial Surgical Consultation') {
+                $scope.finalPage = 4;
+            } else if ($scope.phaseName == 'Preoperative Visit') {
+                $scope.finalPage = 3;
+            } else if ($scope.phaseName == 'One week Postoperative Visit') {
+                $scope.finalPage = 4;
+            } else if ($scope.phaseName == 'Activation') {
+                $scope.finalPage = 1;
+            }
+
+            if ($scope.phaseName == 'Activation') {
+                $scope.finished = true;
+            };
+        });
+       
 
         //Travis's stuff limiting number of questions to a page
         $scope.limit = 5;
@@ -834,23 +874,9 @@
         $scope.page = 1;
         $scope.finalPage = null;
 
-     
-
-        $scope.phaseName = $cookieStore.get('PhaseName'); //grab the name of the phase currently viewed 
-
-        //Patient info display on top of question pages
-        $scope.patientName = $cookieStore.get('PatientName');
-        $scope.patientSex = $cookieStore.get('PatientSex');
-        $scope.patientDOB = $cookieStore.get('PatientDOB');
-
-        //Facility info (name and image) used in pdf report headers
-        $scope.facilityName = $cookieStore.get('FacilityName');
-        $scope.facilityImage = $cookieStore.get('FacilityImage');
-        $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); //currents phase patient is in. used in logic to decide next phase
-
         $scope.answer = {}; //object to hold all the info neccesary to submit question answers (i.e PhaseID, eventID (aka CareTeamID)
         $scope.answer.Answers = {};
-        $scope.answer.PhaseID = $cookieStore.get('PhaseID');
+        $scope.answer.PhaseID = phaseID;
         $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
         //api urls to grab questions for the active phase
         $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID;
@@ -859,7 +885,7 @@
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
             $scope.answer.PhaseID;
-        $scope.dirAnchor = $cookieStore.get('dirAnchor'); //anchor on patient directory page for patient, so can return/scroll back to patient status
+        
         $scope.clickedPhase = null;
 
         //Modal handler for different implant providers (Med El, Cochlear americas, )
@@ -944,21 +970,6 @@
 
             });
 
-        };
-
-        //Hard coded page limit numbers (im guessing-Anne) written by travis most likely 
-        if ($scope.phaseName == 'Initial Surgical Consultation') {
-            $scope.finalPage = 4;
-        } else if ($scope.phaseName == 'Preoperative Visit') {
-            $scope.finalPage = 3;
-        } else if ($scope.phaseName == 'One week Postoperative Visit') {
-            $scope.finalPage = 4;
-        } else if ($scope.phaseName == 'Activation') {
-            $scope.finalPage = 1;
-        }
-
-        if ($scope.phaseName == 'Activation') {
-            $scope.finished = true;
         };
 
         //checking data types so ng-repeat can be used correctly to display
@@ -1407,20 +1418,30 @@
 
         //get the SessionID stored
         var cookieSessionID = $cookieStore.get('SessionID');
-
         
-        //patient info to be displayed on top of audio pages
-        $scope.patientName = $cookieStore.get('PatientName');
-        $scope.patientSex = $cookieStore.get('PatientSex');
-        $scope.patientDOB = $cookieStore.get('PatientDOB');
-
-        //facility info to be displayed in report headers
-        $scope.facilityName = $cookieStore.get('FacilityName');
-        $scope.facilityImage = $cookieStore.get('FacilityImage');
-
-        $scope.dirAnchor = $cookieStore.get('dirAnchor');
-        $scope.phaseID = $cookieStore.get('PhaseID');
-        $scope.phaseName = $cookieStore.get('PhaseName');
+        //currents phase patient is in. used in logic to decide next phase
+        $scope.patientPhaseID = $cookieStore.get('CurrentPhaseID'); 
+        
+        //get clicked patient info as well as facility info
+        var patientID =$cookieStore.get('PatientID');
+        var patientWithFacilityURL= "http://aii-hermes.org/aii-api/v1/patients/" + patientID + "/withFacility/" + cookieSessionID;
+        getData.get(patientWithFacilityURL).success(function(data) {
+            //Patient info display on top of question pages
+            $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientSex = data.records.Patient.Sex;
+            $scope.patientDOB = data.records.Patient.DOB;
+            $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
+            $scope.dirAnchor = data.records.Patient.Last;
+            //Facility info (name and image) used in pdf report headers
+            $scope.facilityName = data.records.Facility.Name;
+            $scope.facilityImage = data.records.Facility.FacilityImage;
+        });
+        
+        var phaseID = $cookieStore.get("PhaseID"); //clicked phase
+        var phaseURL= "http://aii-hermes.org/aii-api/v1/phases/" + phaseID + '/' + cookieSessionID;
+        getData.get(phaseURL).success(function(data) {
+             $scope.phaseName = data.records.Name //grab the name of the phase currently viewed
+        });
 
         //Get Audiology Phase fields and tests to populate the form 
         $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions/event/" + $cookieStore.get('CareTeamID');
@@ -1553,8 +1574,9 @@
         //uses $scope.conditions object info (left and right ear conditions) to find ID of the two conditions set for the ears
         $scope.getConditionsID = function() {
             console.log("getConditionsID Called");
-            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/left/" + this.conditions.Left + "/right/" + this.conditions.Right).success(function(data) {
-                $scope.answer.ConditionsID = data.records.ConditionsID;
+            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/?q=(LeftAidCondition:" + this.conditions.Left + ",RightAidCondition:" + this.conditions.Right + ")").success(function(data) {
+                $scope.answer.ConditionsID = data.records[0].ConditionsID;
+                //console.log($scope.answer.ConditionsID);
             });
         }
 
@@ -1757,11 +1779,12 @@
     controllers.apiPatientsController = function($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {
         //hmm 
         var modalCounter = 1;
-        $scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //?? dont know the usage here either
+        
+        //$scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //?? dont know the usage here either
         $scope.userFacilityID = userInfo.get().FacilityID;
         $scope.userLevelID = userInfo.get().UserLevelID;
         $scope.sessionID = userInfo.get().SessionID;
-        $scope.dirAnchor = $cookieStore.get('dirAnchor');
+        //$scope.dirAnchor = $cookieStore.get('dirAnchor');
 
         //Function to change patient to inactive or update patient info - like address
         $scope.submitPatientInfo = function(patient) {
@@ -1895,21 +1918,11 @@
         $scope.goToQuestions = function(careTeam, phase, patient) {
 
             $cookieStore.put('PatientID', patient.PatientID);
+            $cookieStore.put('PhaseName', phase.PhaseName);
             $cookieStore.put('CareTeamID', careTeam.CareTeamID);
             $cookieStore.put('PhaseID', phase.PhaseID);
-            $cookieStore.put('PhaseName', phase.PhaseName);
-            $cookieStore.put('PatientName', patient.First + " " + patient.Last);
             $cookieStore.put('dirAnchor', patient.Last);
-            //persistData.setCareTeamID(careTeam.CareTeamID);
-            //persistData.setPhaseID(phase.PhaseID);
-            //persistData.setPhaseName(phase.Name);
-            //persistData.setPatientName(patient.First + " " + patient.Last);
-            //persistData.setPatientID(patient.PatientID);
-            //persistData.setDirAnchor(patient.Last);
-            $cookieStore.put('PatientDOB', patient.DOB);
-            $cookieStore.put('PatientSex', patient.Sex);
             $cookieStore.put('CurrentPhaseID', careTeam.CurrentPhaseID);
-            $cookieStore.put('PatientInactiveStatus', patient.InactiveStatus);
 
         };
 
@@ -3247,14 +3260,10 @@
             $cookieStore.remove('SessionID');
             $cookieStore.remove('UserLevel');
             $cookieStore.remove('CareTeamID');
-            $cookieStore.remove('FacilityName');
             $cookieStore.remove('PhaseID');
-            $cookieStore.remove('PhaseName');
-            $cookieStore.remove('PatientName');
             $cookieStore.remove('PatientID');
             $cookieStore.remove('dirAnchor');
             $cookieStore.remove('PatientID');
-            $cookieStore.remove('PatientSex');
             $cookieStore.remove('Title');
 			
 			//Remove all information from userInfo
