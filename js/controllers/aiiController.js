@@ -68,7 +68,7 @@
     myApp.factory('userInfo', function($cookieStore, $window) {
         //User Info
         var SessionID = $cookieStore.get('SessionID');
-        var UserLevelID = $cookieStore.get('UserLevel');
+        var UserLevelID;
         var UserID;
         var Username;
         var FacilityID;
@@ -80,16 +80,15 @@
                 //Set the persistent user info
                 SessionID = info.SessionID;
                 UserID = info.UserID;
-                $cookieStore.put("UserID", UserID);
+                $cookieStore.put('UserID', UserID);
                 Username = info.Username;
                 FacilityID = info.FacilityID;
                 Name = info.First + " " + info.Last;
                 Title = info.Title;
                 UserLevelID = info.UserLevelID;
-
+                console.log(info.UserLevelID);
                 //Set the SessionID and UserLevel to persist in the cookie
                 $cookieStore.put('SessionID', SessionID);
-                $cookieStore.put('UserLevel', UserLevelID);
 
                 return;
             },
@@ -126,7 +125,6 @@
                     if (typeof data === "object") {
                         if (data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token") {
                             $cookieStore.remove('SessionID');
-                            $cookieStore.remove('UserLevel');
                            // console.log(data.records['error']);
                             
                             if (data.records['error'] == 'Token Timeout') {
@@ -221,75 +219,19 @@
      *
      * @param: NULL
      * @returns function -
-     *      @function setCareTeamID - set the CareTeam ID passed in.
-     *      @function setPhaseID - set the Phase ID passed in.
-     *      @function setPhaseName - set the Phase Name passed in.
-     *      @function setPatientName - set the Patiet Name passed in.
      *      @function setLoggedIn - set the current Login Status.
-     *      @function setDirAnchor - set the Patient Directory Anchor.
      *      @function setUserLevel - set the current User Level.
-     *      @function getPatientName - return the current Patient Name.
-     *      @function getCareTeamID - return the current CareTeam ID.
-     *      @function getPhaseID - return the current PhaseID.
-     *      @function getPhaseName - return the current Phase Name.
      *      @function getLoggedIn - return the current Login Status.
-     *      @function getDirAnchor - return the current Patient Directory Anchor.
      *      @function getUserLevel - return the current User Level.
      */
     myApp.factory('persistData', function($cookieStore) {
-        //User info
-        var CareTeamID;
-        var PhaseID;
         var loggedIn;
-        var PhaseName;
-        var PatientName;
         var dirAnchor;
         var userLevel;
-        var PatientID;
-
         //Messaging info
         var messageRecipient = -1;
 
         return {
-            //most are being replaced by cookie function - not used
-            setPatientID: function(data) {
-                PatientID = data;
-                $cookieStore.put('PatientID', PatientID);
-            },
-            setCareTeamID: function(data) {
-                CareTeamID = data;
-                $cookieStore.put('CareTeamID', CareTeamID);
-                console.log(data);
-
-            },
-            setPhaseID: function(data) {
-                PhaseID = data;
-                $cookieStore.put('PhaseID', PhaseID);
-
-                console.log(data);
-            },
-            setPhaseName: function(data) {
-                PhaseName = data;
-                $cookieStore.put('PhaseName', PhaseName);
-                console.log(data);
-            },
-            setPatientName: function(data) {
-                PatientName = data;
-                $cookieStore.put('PatientName', PatientName);
-                console.log(data);
-            },
-            getPatientName: function(data) {
-                return PatientName;
-            },
-            getCareTeamID: function() {
-                return CareTeamID;
-            },
-            getPhaseID: function(data) {
-                return PhaseID;
-            },
-            getPhaseName: function() {
-                return PhaseName;
-            },
             setLoggedIn: function(data) {
                 loggedIn = data;
                 console.log(loggedIn);
@@ -297,14 +239,6 @@
             getLoggedIn: function() {
                 console.log(loggedIn);
                 return loggedIn;
-            },
-            setDirAnchor: function(data) {
-                dirAnchor = data;
-                $cookieStore.put('dirAnchor', dirAnchor);
-                console.log(dirAnchor);
-            },
-            getDirAnchor: function(data) {
-                return dirAnchor;
             },
             setUserLevel: function(data) {
                 userLevel = data;
@@ -394,9 +328,15 @@
      */
     controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout, $cookieStore) {
 
-        $scope.userLevel = userInfo.get().UserLevelID;
-        $scope.userFacilityID = userInfo.get().FacilityID;
         $scope.sessionID = userInfo.get().SessionID;
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            $scope.userLevel = data.records.UserLevelID;
+        });
+        
+        $scope.userFacilityID = userInfo.get().FacilityID;
 
         //**********API URL's***********************/
         $scope.facilityURL = "http://aii-hermes.org/aii-api/v1/facilities/" + $scope.sessionID; //returns user's facility info
@@ -405,8 +345,6 @@
         //Grab Facility info  using facilityURL
         getData.get($scope.facilityURL).success(function(data) {
             $scope.facData = data;
-            $cookieStore.put('FacilityName', $scope.facData.records.Name); //put facility name and image in cookie so it's grabbable anywhere
-            $cookieStore.put('FacilityImage', $scope.facData.records.FacilityImage);
         });
 
         //Grab All AII Facilities 
@@ -1270,10 +1208,12 @@
         //Complete all phases of care and make patient inactive
         $scope.completeCare = function() {
             var patID = $cookieStore.get('PatientID');
+            /*
             var updateToInactive = {
                 'InactiveStatus': 60
             }
             putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID, updateToInactive);
+            */
             //Update Current phase number in database
 
             $scope.newPhase = {
@@ -1285,35 +1225,6 @@
             });
 
         }
-
-        /* not being used anymore - was the patient summary for any phase on the side of questions
-        $scope.patientSummary = function(phaseNumber){
-            this.clickedPhase = phaseNumber;
-            
-            if(phaseNumber == 2 || phaseNumber > 6){
-            
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('CareTeamID')).success(function(data) {
-                        $scope.patientSummaryAnswers = data.records.DetailedAnswers;
-                        console.log("first" + $scope.audioSummaryAnswers);
-                });
-            }
-            
-            if(phaseNumber == 1 || phaseNumber > 2 && phaseNumber < 7){
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + phaseNumber; 
-
-                getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-                    $scope.patientSummaryAnswers = data.records;          
-                });
-            }
-            
-            if(phaseNumber == 0)
-            {
-                $scope.patientSummaryAnswers = "";
-            }
-            
-        }
-        */
-
 
         //Added by ???
         //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
@@ -1780,12 +1691,18 @@
         //hmm 
         var modalCounter = 1;
         
-        //$scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //?? dont know the usage here either
+        var userID = $cookieStore.get('UserID');
+        
         $scope.userFacilityID = userInfo.get().FacilityID;
-        $scope.userLevelID = userInfo.get().UserLevelID;
+    
         $scope.sessionID = userInfo.get().SessionID;
-        //$scope.dirAnchor = $cookieStore.get('dirAnchor');
-
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            $scope.userLevel = data.records.UserLevelID;
+        });
+        
         //Function to change patient to inactive or update patient info - like address
         $scope.submitPatientInfo = function(patient) {
             $timeout(function() {
@@ -1918,10 +1835,8 @@
         $scope.goToQuestions = function(careTeam, phase, patient) {
 
             $cookieStore.put('PatientID', patient.PatientID);
-            $cookieStore.put('PhaseName', phase.PhaseName);
             $cookieStore.put('CareTeamID', careTeam.CareTeamID);
             $cookieStore.put('PhaseID', phase.PhaseID);
-            $cookieStore.put('dirAnchor', patient.Last);
             $cookieStore.put('CurrentPhaseID', careTeam.CurrentPhaseID);
 
         };
@@ -2544,7 +2459,13 @@
 
 		//Controller variables
 		var sessionID = userInfo.get().SessionID;
-		var userLevel = userInfo.get().UserLevelID;
+		var userLevel;
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            userLevel= data.records.UserLevelID;
+        });
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var urlSet = {		//(Keys are defined as : messageType + messageProperty)
 			'MessagesReceived' 		: 'users/inbox/',
@@ -3157,13 +3078,10 @@
                     info.Last = data.records.last_name;
                     info.Title = data.records.Title;
                     $scope.name = data.records.first_name + " " + data.records.last_name;
-                    $scope.title = $cookieStore.get('Title');
+                    $scope.title = data.records.Title;
                     info.UserLevelID = data.records.UserLevelID;
                     $scope.userLevel = data.records.UserLevelID;
                     userInfo.set(info);
-
-                    //Store the user level in the persistData factory
-                    persistData.setUserLevel(info.UserLevelID);
 
                     //Redirect the user to the dashboard if they were going to the login page
                     if ($window.location.pathname == "#" || $window.location.pathname == "") {
@@ -3175,7 +3093,6 @@
                     console.log("Bad cookie! sending to login page")
                     $scope.loggedIn = false;
                     $cookieStore.remove('SessionID');
-                    $cookieStore.remove('UserLevel');
                     if (data.records['error'] == 'Token Timeout') {
                         $cookieStore.put('BadToken', 'Token Timeout');
                     }
@@ -3220,7 +3137,6 @@
                         userInfo.set(data.data.records);
                         $scope.name = data.data.records.First + " " + data.data.records.Last;
                         $scope.title = data.data.records.Title;
-                        $cookieStore.put('Title', $scope.title);
                         $scope.userLevel = data.data.records.UserLevelID;
                         $scope.loggedIn = true;
                         $window.location.href = "#/dashboard";
@@ -3258,7 +3174,6 @@
 
             //Remove all information from the cookie
             $cookieStore.remove('SessionID');
-            $cookieStore.remove('UserLevel');
             $cookieStore.remove('CareTeamID');
             $cookieStore.remove('PhaseID');
             $cookieStore.remove('PatientID');
