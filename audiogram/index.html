@@ -932,9 +932,10 @@
 
                     setTimeout( function (){
                         
-                        populateConditionChoices();
-                        populateTitleChoices();
-                        populatePrevAudiograms();
+                        console.log("sessionid: "+cookieData.SessionID);
+                        populateConditionChoices(cookieData.SessionID);
+                        populateTitleChoices(cookieData.SessionID);
+                        populatePrevAudiograms(cookieData.SessionID);
                         loadPatientData(cookieData);
                         
                         var $button = $('.button-checkbox').find('button');
@@ -1012,9 +1013,9 @@
         * @param {void}
         * @return {void}
         */ 
-        function populateTitleChoices(){
+        function populateTitleChoices(sessionID){
             
-            $.get("http://aii-hermes.org/aii-api/v1/audioTitles")
+            $.get("http://aii-hermes.org/aii-api/v1/audioTitles/sessionID")
             .done(function( json ){
                 var temp = [], conditions = [], l = json.records.length, i;
                 for( i=0; i<l; i++) {
