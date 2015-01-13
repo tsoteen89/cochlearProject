@@ -729,7 +729,7 @@
             addFunc:addFunc,
             clearDeferreds:clearDeferreds,
             getDeferreds:getDeferreds,
-            runDeferred:runDeferreds
+            runDeferreds:runDeferreds
         }
 
     }
@@ -741,7 +741,7 @@
     //"/v1/audiograms/{audiogram_id:[0-9]+}/patient/{patient_id:[0-9]+}",
     //"/v1/audiograms/patient/{patient_id:[0-9]+}",
     //"/v1/audiograms/getLatestAudiogramID",
-    var AiiApiHelper = function(baseurl,token){
+    var AiiApiHelper = function(baseurl,token,patient_id,event_id){
 
         var BaseUrl;
         var CookieData;
@@ -752,9 +752,13 @@
         var Id;
 
         
-        function init(baseurl,token){
+        function init(baseurl,token,patient_id,event_id){
             BaseUrl = baseurl;
-            CookieData = {};
+            CookieData = {
+                "Token":token,
+                "PatientID":patient_id,
+                "EventID":event_id
+            };
             Deferred = new MyDeferred();
             MaxAudiogramID = 0;
             SessionData = {};
@@ -839,7 +843,7 @@
         * @return {void}
         */
         function getPatientInfo(){
-            Deferred.addFunc('get',BaseUrl+"patients/"+Id+"/withAll/"+Token,function( json ) {
+            Deferred.addFunc('get',BaseUrl+"patients/"+Id+"/event/"+Id+"/"+Token,function( json ) {
                 if (typeof json.records == 'object'){
                     $('#patient-name').val(patientData.Patient('First')+' '+patientData.Patient('Last'));
                     $('#patient-dob').val(patientData.Patient('DOB'));
@@ -893,9 +897,13 @@
         * @return {void}
         */ 
         function getSessionData(){
-            Deferred.addFunc('get',BaseUrl+"patients/"+Id+"/withAll/"+Token,function(data){
-                    console.log(BaseUrl+"patients/"+Id+"/withAll/"+Token);
-                    SessionData = data.records;
+            var Pid = CookieData.PatientID;
+            var Eid = CookieData.EventID;
+            var Token = CookieData.Token;
+            
+            Deferred.addFunc('get',BaseUrl+"patients/"+Pid+"/event/"+Eid+"/"+Token,function( json ) {
+                    console.log(BaseUrl+"patients/"+Pid+"/event/"+Eid+"/"+Token);
+                    SessionData = json.records;
                     console.log(SessionData);
             });    
         }
@@ -940,11 +948,7 @@
                     console.log(json);
             },data);
         }
-        
-        function setId(id){
-            Id = id;
-        }
-        
+                
         function deferredClear(){
             Deferred.clearDeferreds();
         }
@@ -961,7 +965,60 @@
             return Deferred.getDeferreds();
         }
         
-        init(baseurl,token);
+        var waitingDialog = (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-m">' +
+                '<div class="modal-content">' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+                    '<div class="modal-body">' +
+                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'm',
+                        progressType: ''
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+                    if (settings.progressType) {
+                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+                    }
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+        
+        init(baseurl,token,patient_id,event_id);
 
         return {
             getAudiograms:getAudiograms,
@@ -972,13 +1029,13 @@
             getPhaseName:getPhaseName,
             getPrevAudiogramsList:getPrevAudiogramsList,
             saveAudiogram:saveAudiogram,
-            setId:setId,
             getSessionData:getSessionData,
             deferredClear:deferredClear,
             deferredDone:deferredDone,
             deferredGet:deferredGet,
             deferredRun:deferredRun,
-            saveAudiogram:saveAudiogram
+            saveAudiogram:saveAudiogram,
+            waitingDialog:waitingDialog
         };
     };
 
@@ -1320,10 +1377,6 @@
         // Initialization /////////////////////////////////////////////////////////////////////////////////////
         function init() {
             
-            
-            waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 1000);
-            
-
             CookieData = new cookieCleaner();
     
             //If the cookie timed out, redirect home
@@ -1335,10 +1388,10 @@
             console.log(CookieData);
 
                 
-            aiiApi = new AiiApiHelper('http://aii-hermes.org/aii-api/v1/',CookieData.SessionID);
-            aiiApi.setId(CookieData.PatientID);
+            aiiApi = new AiiApiHelper('http://aii-hermes.org/aii-api/v1/',CookieData.SessionID,CookieData.PatientID,CookieData.CareTeamID);
+            aiiApi.waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {aiiApi.waitingDialog.hide();}, 1000);
             aiiApi.getSessionData();
-            aiiApi.deferredRun();
+            
 
             console.log(aiiApi);
                 
@@ -1479,59 +1532,7 @@
         //Example that closes after 1 second
         //waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 1000);
 
-        var waitingDialog;
-        waitingDialog = waitingDialog || (function () {
 
-            // Creating modal dialog's DOM
-            var $dialog = $(
-                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
-                '<div class="modal-dialog modal-m">' +
-                '<div class="modal-content">' +
-                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
-                    '<div class="modal-body">' +
-                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
-                    '</div>' +
-                '</div></div></div>');
-
-            return {
-                /**
-                 * Opens our dialog
-                 * @param message Custom message
-                 * @param options Custom options:
-                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
-                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
-                 */
-                show: function (message, options) {
-                    // Assigning defaults
-                    var settings = $.extend({
-                        dialogSize: 'm',
-                        progressType: ''
-                    }, options);
-                    if (typeof message === 'undefined') {
-                        message = 'Loading';
-                    }
-                    if (typeof options === 'undefined') {
-                        options = {};
-                    }
-                    // Configuring dialog
-                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
-                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
-                    if (settings.progressType) {
-                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
-                    }
-                    $dialog.find('h3').text(message);
-                    // Opening dialog
-                    $dialog.modal();
-                },
-                /**
-                 * Closes dialog
-                 */
-                hide: function () {
-                    $dialog.modal('hide');
-                }
-            }
-
-        })();
     </script>      
     </body>
 </html>
