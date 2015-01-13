@@ -514,462 +514,858 @@
         </div> <!-- End Container --> 
     <script>
         
-        $(function() {
-            //combine stuff later
-            $( "a" ).click(function( event ) {
-              event.preventDefault();
-            });
+    var myDateObj = function(){
+        /**
+        * Place todays date in the patient data form
+        * @param {void}
+        * @return {void}
+        */        
+        function getTodaysDate(){
+            var date = new Date();
+
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+
+            return today = year + "-" + month + "-" + day;       
+            //$("#patient-audiogram-date").attr("value", today);
+        }
+                
+        function unixTime(){
+            var time = 0;
+            if (!Date.now) {
+                time =  new Date().getTime() / 1000;
+            }else{
+                time = Date.now() / 1000;
+            }
             
-            var stage_right = new Kinetic.Stage({
-                container: 'audiogram_right',
-                width: 450,
-                height: 450
-            });
+            return Math.floor(time);
+        }
+        
+        function fromUnixTime(UNIX_timestamp){
+            var a = new Date(UNIX_timestamp*1000);
 
-            var stage_left = new Kinetic.Stage({
-                container: 'audiogram_left',
-                width: 450,
-                height: 450
-            });
+            var year = a.getFullYear();
 
-            var Stage = {};
-            var cookieData = null;
-            var conditionChoices = null;
+            var month = a.getMonth() + 1;
+            if (month < 10) month = "0" + month;
             
-            //create both canvas' and add 'right-click' event handlers to each canvas
-            //should be handled in audiogram.js
-            //setTimeout(function(){
-            Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
-            Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
-            Stage['right'].bindContextMenu();
-            Stage['left'].bindContextMenu();  
-            Stage['right'].bindKeyPress();
-            Stage['left'].bindKeyPress();
+            var day = a.getDate();
+            if (day < 10) day = "0" + day;
+            
+            return  year + "-" + month + "-" + day;  
+        }
+        
+        return {
+            today:getTodaysDate,
+            unixTime:unixTime,
+            fromUnixTime:fromUnixTime
+        };
+    }
+         
+    var getSessionData = function(BaseUrl,patient_id,token,callback){
+        
+        var SessionData;
+        
+        console.log(BaseUrl+"patients/"+patient_id+"/withAll/"+token);
+        
+        function initialize(){
+            $.get(BaseUrl+"patients/"+patient_id+"/withAll/"+token)
+            .done(function(data){
+                SessionData = data.records;
+                callback(SessionData);
+            });    
+        }
+                
+        initialize();
+        
+    }
+    
+    var managePatientData = function(session_data){
+        var PatientData = {}
+        var Session = session_data;
+        
+        function initialize(){
+            PatientData['Event'] = Session.CareTeam;
+            PatientData['Facility'] = Session.Facility;
+            PatientData['Patient'] = Session.Patient;
+        }
+        
+        function Event(key){
+            key = typeof key !== 'undefined' ? key : null;
+            
+            if(key === null)
+                return PatientData.Event;
+            else
+                return PatientData.Event[key];          
+        }
+        
+        function Facility(key){
+            key = typeof key !== 'undefined' ? key : null;
+            if(key === null)
+                return PatientData.Facility;
+            else
+                return PatientData.Facility[key]; 
+        }
+        
+        function Patient(key){
+            key = typeof key !== 'undefined' ? key : null;
+            if(key === null)
+                return PatientData.Patient;
+            else
+                return PatientData.Patient[key];  
+        }
+        
+        function All(){
+            return [
+                JSON.stringify(PatientData.Patient),
+                JSON.stringify(PatientData.Facility),
+                JSON.stringify(PatientData.Event)
+            ];
+        }
+        
+        initialize();
+        
+        return {
+            Event:Event,
+            Facility:Facility,
+            Patient:Patient,
+            All:All
+        };
+    }
+        
+    var cookieCleaner = function(){
+        
+        var cookies;
+        
+        function initialize(){
+            getCookieData();
+            return cookies;
+        }
+        /**
+        * Trims extra double quotes and single quotes off of strings. I used a locally created
+        * object because of some funny behavior I couldnt track down quickly.
+        * @param {void}
+        * @return {object} cookies object
+        */ 
+        function cleanCookies(){
+            var obj = {};
+            for (var key in cookies) {
+              if (cookies.hasOwnProperty(key)) {
+                obj[key] = cookies[key].replace(/['"]+/g, '');
+              }
+            }
+            return obj;
+        }
 
+        /**
+        * Grabs all existing cookies
+        * @param {void}
+        * @return {void}
+        */ 
+        function getCookieData(){
+            cookies = cookie.all();
+            cookies = cleanCookies();
+        }
+        
+        return initialize();
+    }
+    //"/v1/audioConditions",
+    //"/v1/audioTitles/{token:[a-zA-Z0-9_-]+}",
+    //"/v1/audiograms",
+    //"/v1/audiograms/{audiogram_id:[0-9]+}",
+    //"/v1/audiograms/{audiogram_id:[0-9]+}/patient/{patient_id:[0-9]+}",
+    //"/v1/audiograms/patient/{patient_id:[0-9]+}",
+    //"/v1/audiograms/getLatestAudiogramID",
+    var AiiApiHelper = function(baseurl,token){
 
-            $( ".aii-mea-btn" ).on( "click", function(e) {
-                var clicked = $( this )[0].id;
+        var BaseUrl = baseurl;
+        var Token = token;
+
+        function getAudiograms(id,success){
+            id = typeof id !== 'undefined' ? id : -1;
+            //Get one audiogram
+            if(id > 0){
+                $.get(BaseUrl+"audiograms/"+id)
+                .success(success);
+            //Get all audiograms
+            }else{
+                $.get(BaseUrl+"audiograms/")
+                .success(success);
+            }
+        }
+
+        function getAudiogramTitles(success){
+            $.get(BaseUrl+"audioTitles/"+Token)
+            .success(success);
+        }
+
+        function getEarConditions(success){
+            $.get(BaseUrl+"audioConditions")
+            .success(success);
+        }
+
+        function getPatientInfo(id,success){
+            $.get(BaseUrl+"patients/"+id+"/withAll/"+Token)
+            .success(success);
+        }
+        
+        function getPhaseName(id,success){
+            $.get(BaseUrl+"phases/"+id+"/"+Token)
+            .success(success);
+        }
+        
+        function getPrevAudiogramsList(id,success){
+            $.get(BaseUrl+"audiograms/patient/"+id)
+            .success(success);
+        }
+
+        function saveAudiogram(data,success){
+
+            $.ajax({
+                type: 'POST',
+                url: BaseUrl+'audiograms',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                success: success
+            });
+        }
+
+        return {
+            getAudiograms:getAudiograms,
+            getAudiogramTitles:getAudiogramTitles,
+            getEarConditions:getEarConditions,
+            getPatientInfo:getPatientInfo,
+            getPhaseName:getPhaseName,
+            getPrevAudiogramsList:getPrevAudiogramsList,
+            saveAudiogram:saveAudiogram
+        };
+    };
+        
+
+        
+    $(function() {
+        //combine stuff later
+        $( "a" ).click(function( event ) {
+          event.preventDefault();
+        });
+
+        var stage_right = new Kinetic.Stage({
+            container: 'audiogram_right',
+            width: 450,
+            height: 450
+        });
+
+        var stage_left = new Kinetic.Stage({
+            container: 'audiogram_left',
+            width: 450,
+            height: 450
+        });
+
+        var Stage = {};
+        var cookieData = null;
+        var conditionChoices = null;
+        var aiiApi = null;
+        var SessionData = {};
+        var patientData = {};
+        var MyDate = null;
+
+        //create both canvas' and add 'right-click' event handlers to each canvas
+        //should be handled in audiogram.js
+        //setTimeout(function(){
+        Stage['right'] = new AudioGram(stage_right,100,'right','audiogram_right');
+        Stage['left'] = new AudioGram(stage_left,200,'left','audiogram_left');
+        Stage['right'].bindContextMenu();
+        Stage['left'].bindContextMenu();  
+        Stage['right'].bindKeyPress();
+        Stage['left'].bindKeyPress();
+
+        /** Canvas Buttons ************************************************************************************/
+
+        /**
+        * Controls the choosing of a measurement for an audiogram, and
+        * highlighting the clicked button.
+        * @param {obj} event
+        * @return {void}
+        */ 
+        $( ".aii-mea-btn" ).on( "click", function(event) {
+            var clicked = $( this )[0].id;
+            setTimeout( function (){
+                $( ".aii-mea-btn" ).each(function( index ) {
+                    if($( this )[0].id != 'mask-button'){
+                        if(clicked == $( this )[0].id){
+                            $( this ).addClass('aii-btn-border');
+                            $( this ).blur();
+                        }else{
+                            $( this ).removeClass('aii-btn-border');
+                        }
+                    }
+                })
                 setTimeout( function (){
                     $( ".aii-mea-btn" ).each(function( index ) {
-                        if($( this )[0].id != 'mask-button'){
-                            if(clicked == $( this )[0].id){
-                                $( this ).addClass('aii-btn-border');
-                                $( this ).blur();
-                            }else{
-                                $( this ).removeClass('aii-btn-border');
-                            }
+                        if($( this ).hasClass( "aii-btn-border" )){
+                            Stage['right'].setMeasureType(clicked);
+                            Stage['left'].setMeasureType(clicked);
                         }
-                    })
-                    setTimeout( function (){
-                        $( ".aii-mea-btn" ).each(function( index ) {
-                            if($( this ).hasClass( "aii-btn-border" )){
-                                Stage['right'].setMeasureType(clicked);
-                                Stage['left'].setMeasureType(clicked);
-                            }
-                        });
-                    }, 0 );
+                    });
                 }, 0 );
-                e.preventDefault();
-            });
+            }, 0 );
+            event.preventDefault();
+        });
 
-            $('.aii-canvas-menu').on('click', function(event) {
-                var side = $( this ).attr('data');
-                var action = $(event.target).closest('button').attr("data");
-                var current = null;
+        /**
+        * Adds events to the small menu buttons below each audiogram canvas.
+        * @param {obj} event
+        * @return {void}
+        */ 
+        $('.aii-canvas-menu').on('click', function(event) {
+            var side = $( this ).attr('data');                              // Right or Left
+            var action = $(event.target).closest('button').attr("data");    // Button to determine action
 
-                switch(action){
-                    case 'Refresh': Stage[side].clear();
-                        break;
-                    case 'Undo':    Stage[side].undo();
-                        break;
-                    case 'Redo':    Stage[side].redo();
-                        break;
+            switch(action){
+                case 'Refresh': Stage[side].clear();
+                    break;
+                case 'Undo':    Stage[side].undo();
+                    break;
+                case 'Redo':    Stage[side].redo();
+                    break;
+            }
+            $(event.target).closest('button').blur();
+            event.preventDefault();
+        });
+
+        /** Top Menu Bar ************************************************************************************/
+        /**
+        * Adds a print action to the "print" button in the top menu
+        * @param {obj} event
+        * @return {void}
+        */ 
+        $('#printAudiogram').on('click', function(event) {
+            var canvas_right = $("#audiogram_right").find(".kineticjs-content").children();
+            var canvas_left = $("#audiogram_left").find(".kineticjs-content").children();
+            var ImgData = {
+                "action" : "print",
+                "background" : canvas_right[0].toDataURL("image/png"),
+                "right" : {
+                    "line" : canvas_right[1].toDataURL("image/png"),
+                    "measures" : canvas_right[2].toDataURL("image/png")
+                },
+                "left" : {
+                    "line" : canvas_left[1].toDataURL("image/png"),
+                    "measures" : canvas_left[2].toDataURL("image/png")
                 }
-                $(event.target).closest('button').blur();
-                event.preventDefault();
+            }
+
+            console.log(ImgData);
+
+            $.post( "class.audiogram.php", ImgData)
+            .done(function( data ) {
+                console.log( "Data Loaded: " + data );
             });
-            
-            $('#printAudiogram').on('click', function(event) {
-                var canvas_right = $("#audiogram_right").find(".kineticjs-content").children();
-                var canvas_left = $("#audiogram_left").find(".kineticjs-content").children();
-                var ImgData = {
-                    "action" : "print",
-                    "background" : canvas_right[0].toDataURL("image/png"),
-                    "right" : {
-                        "line" : canvas_right[1].toDataURL("image/png"),
-                        "measures" : canvas_right[2].toDataURL("image/png")
+            event.preventDefault();
+        });
+
+        /**
+        * Adds a print action to the "print" button in the top menu
+        * @param {obj} event
+        * @return {void}
+        */ 
+        $('.saveAudiogram').on('click', function(event) {
+
+            event.preventDefault();
+            var errors = 0;
+            var audiogram_id = 0;
+
+            //Check for mandatory fields on audiogram page
+            errors += checkSaveError($('#aii-audiogram-title'),'Title Needed...');
+            errors += checkSaveError($('#right-condition-opts'),'Condition Needed...');
+            errors += checkSaveError($('#left-condition-opts'),'Condition Needed...');
+
+            //If errors, then quit (handle later)
+            if(errors > 0){
+                console.log("error on save");
+                return;
+            }
+
+            //Create the save function which builds the json package for the ajax request
+            var saveAudiogramData = function(id){
+                var AudiogramData = {
+                        "date" : unixTime(),                
+                        "title" : $('#aii-audiogram-title option:selected').val(),
+                        "audiogram_id": id,
+                        "event_id": patientData.Event('CareTeamID'),
+                        "phase_id": patientData.Event('CurrentPhaseID'),
+                        "patient_id": patientData.Patient('PatientID'),
+                        "spch_aud_srt_r":$('#spch_aud_srt_r').val(),
+                        "spch_aud_srt_l":$('#spch_aud_srt_l').val(),
+                        "spch_aud_srt_b":$('#spch_aud_srt_b').val(),
+                        "spch_aud_mask_r":$('#spch_aud_mask_r').val(),
+                        "spch_aud_mask_l":$('#spch_aud_mask_l').val(),
+                        "spch_aud_mask_b":$('#spch_aud_mask_b').val(),
+                        "word_rec_per_r":$('#word_rec_per_r').val(),
+                        "word_rec_per_l":$('#word_rec_per_l').val(),
+                        "word_rec_per_b":$('#word_rec_per_b').val(),
+                        "word_rec_stim_r":$('#word_rec_stim_r').val(),
+                        "word_rec_stim_l":$('#word_rec_stim_l').val(),
+                        "word_rec_stim_b":$('#word_rec_stim_b').val(),
+                        "word_rec_mask_r":$('#word_rec_mask_r').val(),
+                        "word_rec_mask_l":$('#word_rec_mask_l').val(),
+                        "word_rec_mask_b":$('#word_rec_mask_b').val(),
+                        "word_rec_noise_r":$('#word_rec_noise_r').val(),
+                        "word_rec_noise_l":$('#word_rec_noise_l').val(),
+                        "word_rec_noise_b":$('#word_rec_noise_b').val(),
+                        "left_condition": $('#left-condition-opts option:selected').val(),
+                        "right_condition":$('#right-condition-opts option:selected').val(),
+                        "left_measures": Stage['left'].getAudiogramRawMeasures(),
+                        "right_measures": Stage['right'].getAudiogramRawMeasures()                       
+                };
+
+                //"left_measures": Stage['left'].getAudiogramMeasures(),
+                //"right_measures": Stage['right'].getAudiogramMeasures(),
+                console.log(AudiogramData);
+
+                //Perform ajax save
+                var tmp = JSON.stringify(AudiogramData);
+                console.log(tmp);
+                $.ajax({
+                    type: 'POST',
+                    url: "http://aii-hermes.org/aii-api/v1/audiograms",
+                    data: tmp,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(tmp) {
+                        console.log(tmp);
+                    }
+                });
+            }
+
+            //Create a function to get the max audiogram_id, then pass in the
+            //saveAudiogramData as a callback function so we get the max_id 
+            //before we try to save the audiogram. 
+            //Maybe should get the max id on the back end? Probably.
+            var getMaxAudiogramId = function(callback){
+                $.get("http://aii-hermes.org/aii-api/v1/audiograms/getLatestAudiogramID")
+                .done(function( data ) {
+                    var id = parseInt(data.records) + 1;
+                    if(typeof callback === "function") callback(id);
+                });
+            }
+
+            setTimeout( function (){
+
+                getMaxAudiogramId(saveAudiogramData);
+
+                setTimeout( function (){
+                    init(); 
+                }, 0 );
+            }, 0 );
+
+        });
+
+        $('#searchAudiogram').on('click', function(event) {
+            $.post("class.audiogram.php", searchData)
+            .done(function( data ) {
+                console.log( "Data Loaded: " + data );
+            });
+            event.preventDefault();
+        });
+
+
+        //Added for checkbox buttons
+        $('.button-checkbox').each(function () {
+
+            // Settings
+            var $widget = $(this),
+                $button = $widget.find('button'),
+                $checkbox = $widget.find('input:checkbox'),
+                color = $button.data('color'),
+                settings = {
+                    on: {
+                        icon: 'fa fa-check-square-o'
                     },
-                    "left" : {
-                        "line" : canvas_left[1].toDataURL("image/png"),
-                        "measures" : canvas_left[2].toDataURL("image/png")
+                    off: {
+                        icon: 'fa fa-ban'
                     }
-                }
-            
-                console.log(ImgData);
+                };
 
-                $.post( "class.audiogram.php", ImgData)
-                .done(function( data ) {
-                    console.log( "Data Loaded: " + data );
-                });
+            // Event Handlers
+            $button.on('click', function () {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                $checkbox.triggerHandler('change');
+                updateConditionButtons();
                 event.preventDefault();
             });
-            
-            $('.saveAudiogram').on('click', function(event) {
-                
-                event.preventDefault();
-                var errors = 0;
-                var audiogram_id = 0;
-                
-                //Check for mandatory fields on audiogram page
-                errors += checkSaveError($('#aii-audiogram-title'),'Title Needed...');
-                errors += checkSaveError($('#right-condition-opts'),'Condition Needed...');
-                errors += checkSaveError($('#left-condition-opts'),'Condition Needed...');
-                
-                //If errors, then quit (handle later)
-                if(errors > 0){
-                    console.log("error on save");
-                    return;
-                }
-                
-                //Create the save function which builds the json package for the ajax request
-                var saveAudiogramData = function(id){
-                    console.log(id);
-                    var AudiogramData = {
-                            "date" : unixTime(),                
-                            "title" : $('#aii-audiogram-title option:selected').val(),
-                            "audiogram_id": id,
-                            "event_id": "1018",
-                            "phase_id": "7",
-                            "patient_id": "1018",
-                            "spch_aud_srt_r":$('#spch_aud_srt_r').val(),
-                            "spch_aud_srt_l":$('#spch_aud_srt_l').val(),
-                            "spch_aud_srt_b":$('#spch_aud_srt_b').val(),
-                            "spch_aud_mask_r":$('#spch_aud_mask_r').val(),
-                            "spch_aud_mask_l":$('#spch_aud_mask_l').val(),
-                            "spch_aud_mask_b":$('#spch_aud_mask_b').val(),
-                            "word_rec_per_r":$('#word_rec_per_r').val(),
-                            "word_rec_per_l":$('#word_rec_per_l').val(),
-                            "word_rec_per_b":$('#word_rec_per_b').val(),
-                            "word_rec_stim_r":$('#word_rec_stim_r').val(),
-                            "word_rec_stim_l":$('#word_rec_stim_l').val(),
-                            "word_rec_stim_b":$('#word_rec_stim_b').val(),
-                            "word_rec_mask_r":$('#word_rec_mask_r').val(),
-                            "word_rec_mask_l":$('#word_rec_mask_l').val(),
-                            "word_rec_mask_b":$('#word_rec_mask_b').val(),
-                            "word_rec_noise_r":$('#word_rec_noise_r').val(),
-                            "word_rec_noise_l":$('#word_rec_noise_l').val(),
-                            "word_rec_noise_b":$('#word_rec_noise_b').val(),
-                            "left_condition": $('#left-condition-opts option:selected').val(),
-                            "right_condition":$('#right-condition-opts option:selected').val(),
-                            "left_measures": Stage['left'].getAudiogramRawMeasures(),
-                            "right_measures": Stage['right'].getAudiogramRawMeasures()                       
-                    };
 
-                    //"left_measures": Stage['left'].getAudiogramMeasures(),
-                    //"right_measures": Stage['right'].getAudiogramMeasures(),
-                    
-                    //Perform ajax save
-                    var tmp = JSON.stringify(AudiogramData);
-                    console.log(tmp);
-                    $.ajax({
-                        type: 'POST',
-                        url: "http://aii-hermes.org/aii-api/v1/audiograms",
-                        data: tmp,
-                        contentType: "application/json; charset=utf-8",
-                        success: function(tmp) {
-                            console.log(tmp);
-                        }
-                    });
-                }
-                
-                //Create a function to get the max audiogram_id, then pass in the
-                //saveAudiogramData as a callback function so we get the max_id 
-                //before we try to save the audiogram. 
-                //Maybe should get the max id on the back end? Probably.
-                var getMaxAudiogramId = function(callback){
-                    $.get("http://aii-hermes.org/aii-api/v1/audiograms/getLatestAudiogramID")
-                    .done(function( data ) {
-                        var id = parseInt(data.records) + 1;
-                        if(typeof callback === "function") callback(id);
-                    });
-                }
-                
-                setTimeout( function (){
-                    
-                    getMaxAudiogramId(saveAudiogramData);
-                    
-                    setTimeout( function (){
-                        init(); 
-                    }, 0 );
-                }, 0 );
-                             
+            $checkbox.on('change', function () {
+                updateConditionButtons();
             });
-            
-            $('#searchAudiogram').on('click', function(event) {
-                $.post("class.audiogram.php", searchData)
-                .done(function( data ) {
-                    console.log( "Data Loaded: " + data );
+
+        });
+
+
+        $('#toggle-patient-info').on('click', function () {
+            if($('#patient-info').hasClass('hidden')){
+                $( "#patient-info" ).slideDown( "slow", function() {
+                    $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
+                    $('#patient-info').removeClass('hidden');
                 });
-                event.preventDefault();
+            }else{
+                $( "#patient-info" ).slideUp( "slow", function() {
+                    $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-down"></i> Show Patient Info');
+                    $('#patient-info').addClass('hidden');
+                });
+            }
+            event.preventDefault();
+        });
+
+        $('#show-patient-info').on('click', function () {
+            $('#patient-info').css('display','block');
+            $('#hide-patient-info').css('display','block');
+            $('#show-patient-info').css('display','none');
+            event.preventDefault();
+        });
+
+        //Load a previously saved audiogram
+        //Putting it back in the same state with title, and ear conditions.
+        $('#load-audiogram').on('click', function (event) {
+            Stage['right'].clear();
+            Stage['left'].clear();
+
+            console.log($('#load-latest').is( ":focus" ));
+
+            var audiogram_id = $('#aii-audiogram-prev option:selected').val();
+            if(audiogram_id == ''){
+                console.log("error");
+                return;
+            }
+
+            aiiApi.getAudiograms(audiogram_id,function( data ) {
+
+                var data = data.records;
+
+                var right_json = JSON.parse(data.right_measures);
+                var left_json = JSON.parse(data.right_measures);
+
+                //Load measures on each canvas
+                Stage['right'].loadAudiogram(right_json);
+                Stage['left'].loadAudiogram(left_json);
+
+                //Update audiogram title
+                $('#aii-audiogram-title').val(data.title);
+                $('#aii-audiogram-title').selectpicker('refresh');
+
+                $("#patient-audiogram-date").attr("value", fromUnixTime(data.date));
+
+                //Update left and right ear conditions
+                $('#right-condition-opts').val(data.right_condition);
+                $('#right-condition-opts').selectpicker('refresh');
+                $('#left-condition-opts').val(data.left_condition);
+                $('#left-condition-opts').selectpicker('refresh');
+
+                $('#spch_aud_srt_r').val(data.spch_aud_srt_r);
+                $('#spch_aud_srt_l').val(data.spch_aud_srt_l);
+                $('#spch_aud_srt_b').val(data.spch_aud_srt_b);
+                $('#spch_aud_mask_r').val(data.spch_aud_mask_r);
+                $('#spch_aud_mask_l').val(data.spch_aud_mask_l);
+                $('#spch_aud_mask_b').val(data.spch_aud_mask_b);
+                $('#word_rec_per_r').val(data.word_rec_per_r);
+                $('#word_rec_per_l').val(data.word_rec_per_l);
+                $('#word_rec_per_b').val(data.word_rec_per_b);
+                $('#word_rec_stim_r').val(data.word_rec_stim_r);
+                $('#word_rec_stim_l').val(data.word_rec_stim_l);
+                $('#word_rec_stim_b').val(data.word_rec_stim_b);
+                $('#word_rec_mask_r').val(data.word_rec_mask_r);
+                $('#word_rec_mask_l').val(data.word_rec_mask_l);
+                $('#word_rec_mask_b').val(data.word_rec_mask_b);
+                $('#word_rec_noise_r').val(data.word_rec_noise_r);
+                $('#word_rec_noise_l').val(data.word_rec_noise_l);
+                $('#word_rec_noise_b').val(data.word_rec_noise_b);
+
             });
-            
+            event.preventDefault();
+        });
+
+
+        $('#load-latest').on('click', function (event) {
+            $('#aii-audiogram-prev option:last-child').attr('selected', 'selected');
+            $('#load-audiogram').trigger( "click" );
+        });
+
+        function checkSaveError(ele,message){
+
+            var $ele = ele
+            var title = $ele.val();
+            var error = 0;
+
+            if(title == "" || title == null){
+                error = 1;
+                $ele.selectpicker('setStyle', 'btn-danger', 'add');
+            }
+
+            $ele.on('change',function(){
+                $ele.selectpicker('setStyle', 'btn-danger', 'remove').selectpicker('refresh');;                  
+            });
+
+            return error;
+        }
+
+        function updateConditionButtons() {
+            // Settings
+            var $widget = $('.button-checkbox'),
+                $button = $widget.find('button'),
+                $checkbox = $widget.find('input:checkbox'),
+                color = $button.data('color'),
+                isChecked = $checkbox.is(':checked'),
+                settings = {
+                    on: {
+                        icon: 'fa fa-check-square-o'
+                    },
+                    off: {
+                        icon: 'fa fa-ban'
+                    }
+                };
+
+            // Set the button's state
+            $button.data('state', (isChecked) ? "on" : "off");
+
+            // Set the button's icon
+            $button.find('.state-icon')
+            .removeClass()
+            .addClass('state-icon ' + settings[$button.data('state')].icon);
+
+            // Update the button's color
+            if (isChecked) {
+                $button
+                .removeClass('btn-default')
+                .addClass('btn-' + color + ' active')
+                .blur();
+                Stage['right'].setMasked(1);
+                Stage['left'].setMasked(1);
+                $('#BCL').html('&nbsp;&nbsp;]');
+                $('#BCR').html('[&nbsp;&nbsp;');        
+                $('#ACL').html('<i class="fa fa-square-o"></i>');
+                $('#ACR').html('&#x25b3;');
+            } else {
+                $button
+                .removeClass('btn-' + color + ' active')
+                .addClass('btn-default')
+                .blur();
+                Stage['right'].setMasked(0);
+                Stage['left'].setMasked(0);  
+                $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
+                $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
+                $('#ACR').html('<i class="fa fa-circle-o"></i>');
+                $('#ACL').html('&#10005;');
+            }
+        }
         
-            //Added for checkbox buttons
-            $('.button-checkbox').each(function () {
+        /**
+        * If a patient ID exists, grab that singular data, otherwise get all active patients and let user pick.
+        * @param {object} - cookie object
+        * @return {void}
+        */ 
+        function populateEventData(){
 
-                // Settings
-                var $widget = $(this),
-                    $button = $widget.find('button'),
-                    $checkbox = $widget.find('input:checkbox'),
-                    color = $button.data('color'),
-                    settings = {
-                        on: {
-                            icon: 'fa fa-check-square-o'
-                        },
-                        off: {
-                            icon: 'fa fa-ban'
-                        }
-                    };
-
-                // Event Handlers
-                $button.on('click', function () {
-                    $checkbox.prop('checked', !$checkbox.is(':checked'));
-                    $checkbox.triggerHandler('change');
-                    updateConditionButtons();
-                    event.preventDefault();
-                });
-                
-                $checkbox.on('change', function () {
-                    updateConditionButtons();
-                });
-                
-            });
-
-            
-            $('#toggle-patient-info').on('click', function () {
-                if($('#patient-info').hasClass('hidden')){
-                    $( "#patient-info" ).slideDown( "slow", function() {
-                        $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
-                        $('#patient-info').removeClass('hidden');
-                    });
+            aiiApi.getPatientInfo(patientData.Patient('PatientID'),function( json ) {
+                if (typeof json.records == 'object'){
+                    $('#patient-name').val(patientData.Patient('First')+' '+patientData.Patient('Last'));
+                    $('#patient-dob').val(patientData.Patient('DOB'));
+                    $('#facility-name').html(patientData.Facility('Name'));
                 }else{
-                    $( "#patient-info" ).slideUp( "slow", function() {
-                        $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-down"></i> Show Patient Info');
-                        $('#patient-info').addClass('hidden');
-                    });
+                    //error
                 }
-                event.preventDefault();
             });
-
-            $('#show-patient-info').on('click', function () {
-                $('#patient-info').css('display','block');
-                $('#hide-patient-info').css('display','block');
-                $('#show-patient-info').css('display','none');
-                event.preventDefault();
-            });
-            
-            //Load a previously saved audiogram
-            //Putting it back in the same state with title, and ear conditions.
-            $('#load-audiogram').on('click', function (event) {
-                Stage['right'].clear();
-                Stage['left'].clear();
-                
-                console.log($('#load-latest').is( ":focus" ));
-                
-                var audiogram_id = $('#aii-audiogram-prev option:selected').val();
-                if(audiogram_id == ''){
-                    console.log("error");
-                    return;
+            aiiApi.getPhaseName(patientData.Event('CurrentPhaseID'),function( json ) {
+                if (typeof json.records == 'object'){
+                    $('#patient-phase').html(json.records.Name);
+                }else{
+                    //error
                 }
-                
-                $.get("http://aii-hermes.org/aii-api/v1/audiograms/"+audiogram_id)
-                .done(function( data ) {
-                    console.log("Loading:");
-
-                    
-                    var data = data.records;
-                    
-                    console.log(data);
-                    
-                    var right_json = JSON.parse(data.right_measures);
-                    var left_json = JSON.parse(data.right_measures);
-                    
-                    //Load measures on each canvas
-                    Stage['right'].loadAudiogram(right_json);
-                    Stage['left'].loadAudiogram(left_json);
-                    
-                    //Update audiogram title
-                    $('#aii-audiogram-title').val(data.title);
-                    $('#aii-audiogram-title').selectpicker('refresh');
-                    
-                    $("#patient-audiogram-date").attr("value", fromUnixTime(data.date));
-                    
-                    //Update left and right ear conditions
-                    $('#right-condition-opts').val(data.right_condition);
-                    $('#right-condition-opts').selectpicker('refresh');
-                    $('#left-condition-opts').val(data.left_condition);
-                    $('#left-condition-opts').selectpicker('refresh');
-                    
-                    
-                    
-                    $('#spch_aud_srt_r').val(data.spch_aud_srt_r);
-                    $('#spch_aud_srt_l').val(data.spch_aud_srt_l);
-                    $('#spch_aud_srt_b').val(data.spch_aud_srt_b);
-                    $('#spch_aud_mask_r').val(data.spch_aud_mask_r);
-                    $('#spch_aud_mask_l').val(data.spch_aud_mask_l);
-                    $('#spch_aud_mask_b').val(data.spch_aud_mask_b);
-                    $('#word_rec_per_r').val(data.word_rec_per_r);
-                    $('#word_rec_per_l').val(data.word_rec_per_l);
-                    $('#word_rec_per_b').val(data.word_rec_per_b);
-                    $('#word_rec_stim_r').val(data.word_rec_stim_r);
-                    $('#word_rec_stim_l').val(data.word_rec_stim_l);
-                    $('#word_rec_stim_b').val(data.word_rec_stim_b);
-                    $('#word_rec_mask_r').val(data.word_rec_mask_r);
-                    $('#word_rec_mask_l').val(data.word_rec_mask_l);
-                    $('#word_rec_mask_b').val(data.word_rec_mask_b);
-                    $('#word_rec_noise_r').val(data.word_rec_noise_r);
-                    $('#word_rec_noise_l').val(data.word_rec_noise_l);
-                    $('#word_rec_noise_b').val(data.word_rec_noise_b);
-                    
-                });
-                event.preventDefault();
             });
-                        
-
-            $('#load-latest').on('click', function (event) {
-                $('#aii-audiogram-prev option:last-child').attr('selected', 'selected');
-                $('#load-audiogram').trigger( "click" );
-            });
-            
-            function checkSaveError(ele,message){
-                
-                var $ele = ele
-                var title = $ele.val();
-                var error = 0;
                                 
-                if(title == "" || title == null){
-                    error = 1;
-                    $ele.selectpicker('setStyle', 'btn-danger', 'add');
+        }
+        
+        /**
+        * Gets the unique condition choices for each ear (cochlear, unaided, etc.)
+        * @param {void}
+        * @return {void}
+        */ 
+        function populateConditionChoices(){
+            aiiApi.getEarConditions(function( json ){
+                var temp = [], conditions = [], l = json.records.length, i;
+                for( i=0; i<l; i++) {
+                    if( temp[json.records[i].LeftAidCondition]) continue;
+                    temp[json.records[i].LeftAidCondition] = true;
+                    conditions.push(json.records[i].LeftAidCondition);
                 }
-                
-                $ele.on('change',function(){
-                    $ele.selectpicker('setStyle', 'btn-danger', 'remove').selectpicker('refresh');;                  
-                });
-                
-                return error;
-            }
-            
 
-            
-            function updateConditionButtons() {
-                // Settings
-                var $widget = $('.button-checkbox'),
-                    $button = $widget.find('button'),
-                    $checkbox = $widget.find('input:checkbox'),
-                    color = $button.data('color'),
-                    isChecked = $checkbox.is(':checked'),
-                    settings = {
-                        on: {
-                            icon: 'fa fa-check-square-o'
-                        },
-                        off: {
-                            icon: 'fa fa-ban'
-                        }
-                    };
+                var Html = '<option value="" disabled selected>Choose ear condition...</option>';
 
-                // Set the button's state
-                $button.data('state', (isChecked) ? "on" : "off");
-
-                // Set the button's icon
-                $button.find('.state-icon')
-                .removeClass()
-                .addClass('state-icon ' + settings[$button.data('state')].icon);
-
-                // Update the button's color
-                if (isChecked) {
-                    $button
-                    .removeClass('btn-default')
-                    .addClass('btn-' + color + ' active')
-                    .blur();
-                    Stage['right'].setMasked(1);
-                    Stage['left'].setMasked(1);
-                    $('#BCL').html('&nbsp;&nbsp;]');
-                    $('#BCR').html('[&nbsp;&nbsp;');        
-                    $('#ACL').html('<i class="fa fa-square-o"></i>');
-                    $('#ACR').html('&#x25b3;');
-                } else {
-                    $button
-                    .removeClass('btn-' + color + ' active')
-                    .addClass('btn-default')
-                    .blur();
-                    Stage['right'].setMasked(0);
-                    Stage['left'].setMasked(0);  
-                    $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
-                    $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
-                    $('#ACR').html('<i class="fa fa-circle-o"></i>');
-                    $('#ACL').html('&#10005;');
+                for(var i=0;i<conditions.length;i++){
+                    Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
                 }
-            }
-            
-            // Initialization
-            function init() {
-                waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 2000);
 
-                setTimeout( function (){
-                    //Gets cookies from current session
-                    cookieData = getCookieData();
-                    
-                    console.log('cookie:');
-                    console.log(cookieData);
+                $('#right-condition-opts').html(Html).selectpicker('refresh');
+                $('#left-condition-opts').html(Html).selectpicker('refresh');
+            });
+        }
 
-                    //If the cookie timed out, redirect home
-                    if(cookieData['BadToken'] == 'Token Timeout'){
-                        window.location.href = '/cochlearProject/';
+        /**
+        * Gets the titles available for audiograms
+        * @param {void}
+        * @return {void}
+        */ 
+        function populateTitleChoices(){
+
+            aiiApi.getAudiogramTitles(function( json ){
+                var temp = [], conditions = [], l = json.records.length, i;
+                for( i=0; i<l; i++) {
+                    if( temp[json.records[i].Title]) continue;
+                    temp[json.records[i].Title] = true;
+                    conditions.push(json.records[i].Title);
+                }
+
+                var Html = '<option value="" disabled selected>Choose Title...</option>';
+
+                for(var i=0;i<conditions.length;i++){
+                    Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
+                }
+
+                $('#aii-audiogram-title').html(Html).selectpicker('refresh');
+            });
+        }
+
+        /**
+        * Gets a list of previous audiograms ... if any
+        * @param {void}
+        * @return {void}
+        */ 
+        function populatePrevAudiograms(patient_id){
+            var audiogram_date = null;
+
+            aiiApi.getPrevAudiogramsList(patient_id,function( json ){
+                if(json.records.length>0){
+                    var Html = '<option value="" disabled selected>Find Previous Audiogram <i class="fa fa-search"></i></option>';
+                    for( i=0; i<json.records.length; i++) {
+                        console.log(json.records[i].date);
+                        audiogram_date = moment.unix(json.records[i].date).format("MM/DD/YY");
+                        Html = Html + '<option value="'+json.records[i].audiogram_id+'">'+audiogram_date+' - '+json.records[i].title+'</option>';
                     }
+                }else{
+                    var Html = '<option value="" disabled selected>NO Previous Audiograms </option>';                    
+                }
 
-                    //Put condition buttons in the proper state
+                $('#aii-audiogram-prev').html(Html).selectpicker('refresh');
+            });
+        }
+        
+        
+
+        // Initialization
+        function init() {
+            
+            waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 1000);
+            
+
+            function loadCookies(){
+                cookieData = new cookieCleaner();
+                
+                //If the cookie timed out, redirect home
+                if(cookieData['BadToken'] == 'Token Timeout'){
+                    window.location.href = '/cochlearProject/';
+                }
+            }
+
+            function loadSessionData(){
+                getSessionData('http://aii-hermes.org/aii-api/v1/',cookieData.PatientID,cookieData.SessionID,finishInit);
+            }
+                                          
+            
+            function initAiiHelper(){
+                aiiApi = new AiiApiHelper('http://aii-hermes.org/aii-api/v1/',cookieData.SessionID);
+            }
+
+
+            function finishInit(session){
+                
+                patientData = new managePatientData(session);
+                console.log(patientData.All());
+                console.log(patientData.Event());
+                
+                waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 10000);
+                
+                //Put condition buttons in the proper state
+                
+            
+                setTimeout(function(){
                     updateConditionButtons();
+                },0); 
+                setTimeout(function(){ 
+                    populateConditionChoices();
+                },0); 
+                setTimeout(function(){ 
+                    populateTitleChoices();
+                },0); 
+                setTimeout(function(){ 
+                    populatePrevAudiograms(cookieData.PatientID);
+                },0);
+                setTimeout(function(){ 
+                    populateEventData(cookieData.PatientID);
+                    waitingDialog.hide();
+                },0);
 
-                    setTimeout( function (){
-                        
-                        console.log("sessionid: "+cookieData.SessionID);
-                        populateConditionChoices(cookieData.SessionID);
-                        populateTitleChoices(cookieData.SessionID);
-                        populatePrevAudiograms(cookieData.SessionID);
-                        loadPatientData(cookieData);
-                        
-                        var $button = $('.button-checkbox').find('button');
-                        var settings = {
-                            on: {
-                                icon: 'fa fa-check-square-o'
-                            },
-                            off: {
-                                icon: 'fa fa-ban'
-                            }
-                        };
-                        // Inject the icon if applicable next to the masked button.
-                        if ($button.find('.state-icon').length == 0) {
-                            $button.prepend('<i class="state-icon '+settings[$button.data('state')].icon + '"></i>');
-                        }
-                    }, 0 );
-                }, 0 );
+//                var $button = $('.button-checkbox').find('button');
+//                var settings = {
+//                    on: {
+//                        icon: 'fa fa-check-square-o'
+//                    },
+//                    off: {
+//                        icon: 'fa fa-ban'
+//                    }
+//                };
+//
+//                // Inject the icon if applicable next to the masked button.
+//                if ($button.find('.state-icon').length == 0) {
+//                    $button.prepend('<i class="state-icon '+settings[$button.data('state')].icon + '"></i>');
+//                }
+                updateConditionButtons();
+                
                 Stage['right'].clear();
                 Stage['left'].clear(); 
-
             }
             
-            init();
+            setTimeout(function(){
+                loadCookies();
+                setTimeout(function(){ 
+                    loadSessionData();
+                    setTimeout(function(){ 
+                        initAiiHelper();
+                    },0);  
+                },0); 
+            },0); 
+
+ 
+  
+
+            MyDate = new myDateObj();
 
             setTodaysDate();
-            
+
             //testing only
             loadSpeechWordData();
-            
+
             //Library for bootstrap dropdowns.
             $('.selectpicker').selectpicker();
             
-            
-        });
+        }
+
+        init();
+        
+    });
+
+
         
         /**
         * Re-sets the page back to its original "state" of cleanliness.
@@ -981,146 +1377,7 @@
             //$("#target option:first").attr('selected','selected');
         }
 
-        /**
-        * Gets the unique condition choices for each ear (cochlear, unaided, etc.)
-        * @param {void}
-        * @return {void}
-        */ 
-        function populateConditionChoices(){
-        
-            $.get("http://aii-hermes.org/aii-api/v1/audioConditions")
-            .done(function( json ){
-                var temp = [], conditions = [], l = json.records.length, i;
-                for( i=0; i<l; i++) {
-                    if( temp[json.records[i].LeftAidCondition]) continue;
-                    temp[json.records[i].LeftAidCondition] = true;
-                    conditions.push(json.records[i].LeftAidCondition);
-                }
-                
-                var Html = '<option value="" disabled selected>Choose ear condition...</option>';
-                
-                for(var i=0;i<conditions.length;i++){
-                    Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
-                }
-                
-                $('#right-condition-opts').html(Html).selectpicker('refresh');
-                $('#left-condition-opts').html(Html).selectpicker('refresh');
-            });
-        }    
-        
-        /**
-        * Gets the titles available for audiograms
-        * @param {void}
-        * @return {void}
-        */ 
-        function populateTitleChoices(sessionID){
-            
-            $.get("http://aii-hermes.org/aii-api/v1/audioTitles/sessionID")
-            .done(function( json ){
-                var temp = [], conditions = [], l = json.records.length, i;
-                for( i=0; i<l; i++) {
-                    if( temp[json.records[i].Title]) continue;
-                    temp[json.records[i].Title] = true;
-                    conditions.push(json.records[i].Title);
-                }
-                
-                var Html = '<option value="" disabled selected>Choose Title...</option>';
-                
-                for(var i=0;i<conditions.length;i++){
-                    Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
-                }
-                
-                $('#aii-audiogram-title').html(Html).selectpicker('refresh');
-            });
-        }
-        
-        /**
-        * Gets a list of previous audiograms ... if any
-        * @param {void}
-        * @return {void}
-        */ 
-        function populatePrevAudiograms(){
-
-            var audiogram_date = null;
-            
-            $.get("http://aii-hermes.org/aii-api/v1/audiograms&fields=(audiogram_id,date,title)")
-            .done(function( json ){
-                if(json.records.length>0){
-                    var Html = '<option value="" disabled selected>Find Previous Audiogram <i class="fa fa-search"></i></option>';
-                    for( i=0; i<json.records.length; i++) {
-                        console.log(json.records[i].date);
-                        audiogram_date = moment.unix(json.records[i].date).format("MM/DD/YY");
-                        Html = Html + '<option value="'+json.records[i].audiogram_id+'">'+audiogram_date+' - '+json.records[i].title+'</option>';
-                    }
-                }else{
-                    var Html = '<option value="" disabled selected>NO Previous Audiograms </option>';                    
-                }
-                
-                $('#aii-audiogram-prev').html(Html).selectpicker('refresh');
-            });
-        }        
-        
-        /**
-        * Trims extra double quotes and single quotes off of strings. I used a locally created
-        * object because of some funny behavior I couldnt track down quickly.
-        * @param {void}
-        * @return {object} cookies object
-        */ 
-        function cleanCookies(c){
-            var obj = {};
-            for (var key in c) {
-              if (c.hasOwnProperty(key)) {
-                obj[key] = c[key].replace(/['"]+/g, '');
-              }
-            }
-            return obj;
-        }
-        
-        /**
-        * Grabs all existing cookies
-        * @param {void}
-        * @return {void}
-        */ 
-        function getCookieData(){
-            var cookies = cookie.all();
-            cookies = cleanCookies(cookies);
-            return cookies;
-        }
-        
-        /**
-        * If a patient ID exists, grab that singular data, otherwise get all active patients and let user pick.
-        * @param {object} - cookie object
-        * @return {void}
-        */ 
-        function loadPatientData(cookie_data){
-            //Do we have a single user? Or are we wanting all users.
-            
-            var json = null;
-            
-            if(cookie_data.hasOwnProperty('PatientID')){
-                //single patient
-                json = {'PatientID':cookie_data.PatientID,'Action':"getPatientInfo","Token":cookie_data.SessionID};
-            }else{
-                //all patients
-                json = {'Action':"getPatientInfo","Token":cookie_data.SessionID};
-            }
-
-            $.post("class.audiogram.php", json)
-            .done(function( json ) {
-                json = eval("(" + json + ")");
-//                console.log('patientinfo:');
-//                console.log( json );
-                if (typeof json.records == 'object'){
-                    $('#patient-name').val(json.records.First+' '+json.records.Last);
-                    $('#patient-dob').val(json.records.DOB);
-                    $('#facility-name').html(cookie_data.FacilityName);
-                    $('#patient-phase').html(cookie_data.PhaseName);
-                }else{
-                    //Handle multiple patients later
-                }
-            });
-        }
-        
+      
         /**
         * Place todays date in the patient data form
         * @param {void}
@@ -1192,7 +1449,9 @@
         }
         
 
-        
+        //Example that closes after 1 second
+        //waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 1000);
+
         var waitingDialog;
         waitingDialog = waitingDialog || (function () {
 
