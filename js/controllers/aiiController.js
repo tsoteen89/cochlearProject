@@ -86,7 +86,6 @@
                 Name = info.First + " " + info.Last;
                 Title = info.Title;
                 UserLevelID = info.UserLevelID;
-                console.log(info.UserLevelID);
                 //Set the SessionID and UserLevel to persist in the cookie
                 $cookieStore.put('SessionID', SessionID);
 
@@ -2459,7 +2458,7 @@
 
 		//Controller variables
 		var sessionID = userInfo.get().SessionID;
-		var userLevel;
+		var userLevel = 0;
         //url to get signed in users info
         $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
         //Grab single User by ID and then bind email and phone details to the editUser scope variable
