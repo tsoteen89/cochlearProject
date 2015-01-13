@@ -584,6 +584,8 @@
         
     }
     
+
+    
     var managePatientData = function(session_data){
         var PatientData = {}
         var Session = session_data;
@@ -673,6 +675,55 @@
         
         return initialize();
     }
+    
+    var MyDeferred = function() {
+        var deferreds = [];
+        var done;
+        var i=0;
+        
+        function addFunc(type,url,callback,data){
+            if(type == 'get'){
+                deferreds.push(
+                    $.get(url)
+                    .done(callback)
+                );
+            }else{
+                deferreds.push(
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: data,
+                        contentType: "application/json; charset=utf-8",
+                        success: callback
+                    })
+                );               
+            }
+            i++;
+        }
+        
+        function addDone(func){
+            done = func;
+        }
+        
+        function getDeferreds(){
+            return deferreds;
+        }
+        
+        function runDeferred(){
+            $.when.apply(null, deferreds).done(function() {
+                done;
+            });
+        }
+
+        return {
+            addDone:addDone,
+            addFunc:addFunc,
+            getDeferreds:getDeferreds,
+            runDeferred:runDeferred
+        }
+
+    }
+    
     //"/v1/audioConditions",
     //"/v1/audioTitles/{token:[a-zA-Z0-9_-]+}",
     //"/v1/audiograms",
@@ -684,55 +735,63 @@
 
         var BaseUrl = baseurl;
         var Token = token;
+        var Def = new MyDeferred();
 
         function getAudiograms(id,success){
             id = typeof id !== 'undefined' ? id : -1;
             //Get one audiogram
             if(id > 0){
-                $.get(BaseUrl+"audiograms/"+id)
-                .success(success);
+                Def.addFunc('get',BaseUrl+"audiograms/"+id,success);
             //Get all audiograms
             }else{
-                $.get(BaseUrl+"audiograms/")
-                .success(success);
+                Def.addFunc('get',BaseUrl+"audiograms/",success);
             }
         }
 
         function getAudiogramTitles(success){
-            $.get(BaseUrl+"audioTitles/"+Token)
-            .success(success);
+            Def.addFunc('get',BaseUrl+"audioTitles/"+Token,success);            
         }
 
         function getEarConditions(success){
-            $.get(BaseUrl+"audioConditions")
-            .success(success);
+            Def.addFunc('get',BaseUrl+"audioConditions",success); 
         }
 
         function getPatientInfo(id,success){
-            $.get(BaseUrl+"patients/"+id+"/withAll/"+Token)
-            .success(success);
+            Def.addFunc('get',BaseUrl+"patients/"+id+"/withAll/"+Token,success);
+
         }
         
         function getPhaseName(id,success){
-            $.get(BaseUrl+"phases/"+id+"/"+Token)
-            .success(success);
+            Def.addFunc('get',BaseUrl+"phases/"+id+"/"+Token,success);
         }
         
         function getPrevAudiogramsList(id,success){
-            $.get(BaseUrl+"audiograms/patient/"+id)
-            .success(success);
+            Def.addFunc('get',BaseUrl+"audiograms/patient/"+id,success);
         }
 
         function saveAudiogram(data,success){
-
-            $.ajax({
-                type: 'POST',
-                url: BaseUrl+'audiograms',
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                success: success
-            });
+            Def.addFunc('post',BaseUrl+'audiograms',success,data);
+//            $.ajax({
+//                type: 'POST',
+//                url: BaseUrl+'audiograms',
+//                data: data,
+//                contentType: "application/json; charset=utf-8",
+//                success: success
+//            });
         }
+        
+        function defDone(func){
+            Def.addDone(func);
+        }
+        
+        function defRun(){
+            Def.runDeferred();
+        }
+        
+        function defGet(){
+            return Def.getDeferreds();
+        }
+        
 
         return {
             getAudiograms:getAudiograms,
@@ -741,6 +800,9 @@
             getPatientInfo:getPatientInfo,
             getPhaseName:getPhaseName,
             getPrevAudiogramsList:getPrevAudiogramsList,
+            defRun:defRun,
+            defGet:defGet,
+            defDone:defDone,
             saveAudiogram:saveAudiogram
         };
     };
@@ -1261,10 +1323,11 @@
             });
         }
         
-        
+
 
         // Initialization
         function init() {
+            
             
             waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 1000);
             
@@ -1292,29 +1355,27 @@
                 
                 patientData = new managePatientData(session);
                 console.log(patientData.All());
-                console.log(patientData.Event());
                 
                 waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {waitingDialog.hide();}, 10000);
                 
                 //Put condition buttons in the proper state
                 
             
-                setTimeout(function(){
-                    updateConditionButtons();
-                },0); 
-                setTimeout(function(){ 
-                    populateConditionChoices();
-                },0); 
-                setTimeout(function(){ 
-                    populateTitleChoices();
-                },0); 
-                setTimeout(function(){ 
-                    populatePrevAudiograms(cookieData.PatientID);
-                },0);
-                setTimeout(function(){ 
-                    populateEventData(cookieData.PatientID);
-                    waitingDialog.hide();
-                },0);
+
+                updateConditionButtons();
+
+                populateConditionChoices();
+
+                populateTitleChoices();
+
+                populatePrevAudiograms(cookieData.PatientID);
+
+                populateEventData(cookieData.PatientID);
+                console.log(aiiApi.defGet());
+                aiiApi.defDone(function(){console.log("hello I'm done");});
+                //aiiApi.defRun();
+                //waitingDialog.hide();
+
 
 //                var $button = $('.button-checkbox').find('button');
 //                var settings = {
