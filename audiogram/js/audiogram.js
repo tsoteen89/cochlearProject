@@ -157,8 +157,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             y_values.push({"value" : i, "y" : y});
         }
         addBackgroundLayer();
-    
-        
     }
 
     /**
@@ -210,14 +208,14 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             {text: 'Undo', href: '#', action: function (e) {
                 e.preventDefault();
                 undoMeasure();
-                //console.log("Undo");
+
             }, fa_icon : 'fa-history'},
             {text: 'Redo', href: '#', fa_icon : 'fa-rotate-right'},
             {divider: true},
             {text: 'Clear Audiogram', href: '#', action: function (e) {
                 e.preventDefault();
                 clearStage();
-                //console.log("Clear");
+
             }, fa_icon : 'fa-refresh'}
         ]);
     }
@@ -344,7 +342,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 //        Profound Hearing Loss: 91dB and up
         
         //Combine into single funtion later....
-        //console.log("x=",row_height);
+
         var mild = new Kinetic.Rect({
             x : graph_bounds.min.x,
             y : graph_bounds.min.y+row_height*3.5+20,
@@ -437,6 +435,8 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     function addMeasure(x, y) {
         var index = false;
         var shape = null;
+        
+
 
 
         //Get frequency and decibels assigned to the coordinate (x,y)
@@ -470,6 +470,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 
         //Determine the actual measure type so it can be customized
         if (measureData.type == 'text') {
+            console.log("text");
             commonStyle.text = measureData.value;
             commonStyle.fontSize = fontSize;
             commonStyle.fontFamily = 'Courier';
@@ -485,16 +486,19 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
         } else {
             commonStyle.stroke = Colors.strokeColor;
             if (measureData.value == 'circle') {
+                console.log("circle");
                 commonStyle.radius = 10;
                 commonStyle.audioLine = true;
                 shape = new Kinetic.Circle(commonStyle);
             } else if(measureData.value == 'triangle') {
+                console.log("triangle");
                 commonStyle.sides = 3;
                 commonStyle.radius = 12;
                 commonStyle.audioLine = true;
                 commonStyle.masked = true;
                 shape = new Kinetic.RegularPolygon (commonStyle);
             } else if(measureData.value == 'square') {
+                console.log("sqaure");
                 commonStyle.width = 17;
                 commonStyle.height = 17;
                 commonStyle.center.x = x;
@@ -506,15 +510,19 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                 commonStyle.y -= commonStyle.height/2;
                 shape = new Kinetic.Rect(commonStyle);
             } else if(measureData.value == 'wedge') {
+                console.log("wedge");
                 //remove base x,y because it throws line way off
                 commonStyle.x = null;
                 commonStyle.y = null;
+
                 if(Side == 'right') {
                     commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10];
                 }else{
                     commonStyle.points =  [x - 10, y - 10, x, y, x - 10, y + 10];
                 }
+
                 shape = new Kinetic.Line(commonStyle);
+                console.log(shape);                
             } else if(measureData.value == 'x') {
                 //remove base x,y because it throws line way off
                 commonStyle.x = null;
@@ -524,6 +532,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 
                 shape = new Kinetic.Line(commonStyle);
             } else if (measureData.value == 'bracket') {
+                console.log("bracket");
                 //remove base x,y because it throws line way off
                 commonStyle.x = null;
                 commonStyle.y = null;
@@ -539,7 +548,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
 
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
-        
         drawStack();
     }
 
@@ -640,7 +648,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     */
     function drawStack() {
         //console.log("drawStack");
-        //console.log("Stack:");
+
         //console.log(currentStack);
 
         var temp = [];
@@ -661,11 +669,15 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                 arrow = drawArrow(i);
                 Layers.measures.add(arrow);
             }
-        }
 
+        }
+        console.log("Measures:");
+        console.log(Layers.measures);
         //Add layer to Stage
         Stage.add(Layers.measures);
-
+        console.log("Raw:");
+        console.log(getRawMeasures());
+            
 
         //Draw line connecting any measure that has the attribute 'audioLine' set to 'true'
         for (i = 0; i < currentStack.length; ++i) {
@@ -692,7 +704,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
             lineJoin : 'round'
         });
 
-        Layers.connect.removeChildren ();
+        Layers.connect.removeChildren();
 
         //Push measure into the "layer"
         Layers.connect.add(line);
@@ -905,7 +917,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     */
     function loadAudiogram(data) {
         for(var i=0;i<data.length;i++){
-            console.log(JSON.parse(data[i]));
             var shape = JSON.parse(data[i]);
             if(shape.attrs.x)
                 var x = shape.attrs.x;
@@ -915,16 +926,11 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                 var y = shape.attrs.y;
             else
                 var y = shape.attrs.center.y;
-            console.log("x: "+x+",y: "+y);
-            setMeasureType(shape.attrs.measure);
-            console.log("Measure: "+shape.attrs.measure);            
+            setMeasureType(shape.attrs.measure);         
             setMasked(shape.attrs.masked);
-            console.log("Masked: "+shape.attrs.masked); 
             addMeasure(x,y);
-            currentStack.push(shape);
         }
-        console.log(currentStack);
-        drawStack();
+
     }
 
     function makeNoResponse(index) {
@@ -1188,10 +1194,7 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
                         showContextMenu(clickInfo.x,clickInfo.y);
                     }else if(clickInfo.sameFrequency !== false) {
                         //handle moving item on same frequency
-                        console.log(clickInfo.sameFrequency);
                         currentStack.slice(clickInfo.sameFrequency,clickInfo.sameFrequency+1);
-                        console.log(currentStack);
-                        console.log("hello");
                         addMeasure(clickInfo.x,clickInfo.y);                       
                     }else{
                         addMeasure(clickInfo.x,clickInfo.y);
