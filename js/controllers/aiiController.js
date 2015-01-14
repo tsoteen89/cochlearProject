@@ -1251,7 +1251,7 @@
                     "CurrentPhaseID": $scope.nextPhase
                 };
                 // Post the changed currentPhaseID here
-                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID +'/' + cookieSessionID, $scope.newPhase).then(function() {
                     $location.path('patientDirectory')
                 });
 
@@ -1274,7 +1274,7 @@
                 "CurrentPhaseID": 12
             };
             // Post the changed currentPhaseID here
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID + '/'+ cookieSessionID, $scope.newPhase).then(function() {
                 $location.path('patientDirectory')
             });
 
@@ -1749,11 +1749,11 @@
             // Creating modal dialog's DOM
             var $dialog = $(
                 '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
-                '<div class="modal-dialog modal-m" style="margin-left:30%">' +
+                '<div class="modal-dialog modal-sm" style="margin-left:30%">' +
                 '<div class="modal-content" >' +
-                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3> </div>' +
                     '<div class="modal-body">' +
-                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+                        '<i class="fa fa-spinner fa-spin fa-3x" style="margin-left:45%"></i>' +
                     '</div>' +
                 '</div></div></div>');
 
@@ -1822,7 +1822,7 @@
                     patient.reason = null;
                 }
                 $timeout(function() {
-                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, patient);
+                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, patient);
                 }, 0);
             }, 0);
 
@@ -1833,7 +1833,7 @@
             var updateToActive = {
                 'InactiveStatus': 10
             };
-            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, updateToActive);
             patient.InactiveStatus = 10;
         }
 
@@ -1859,7 +1859,7 @@
         $scope.editDescrip = false; // used to show description as text - changed to true if user needs to edit - in which case, text becomes textbox
 
         $scope.submitDescriptionInfo = function(careTeam) {
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID, careTeam);
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID + '/' + $scope.sessionID, careTeam);
         };
 
         //Get all the possible reasons to become inactive
@@ -1992,7 +1992,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2040,7 +2040,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2183,7 +2183,7 @@
                             var updateToActive = {
                                 'InactiveStatus': 10
                             };
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + "/" + cookieSessionID, updateToActive);
                             patient.InactiveStatus = 10;
                         });
 
