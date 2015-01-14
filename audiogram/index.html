@@ -895,17 +895,20 @@
         * Gets session data for audiogram
         * @param {void}
         * @return {void}
-        */ 
+        */
+        
         function getSessionData(){
             var Pid = CookieData.PatientID;
             var Eid = CookieData.EventID;
             var Token = CookieData.Token;
             
-            Deferred.addFunc('get',BaseUrl+"patients/"+Pid+"/event/"+Eid+"/"+Token,function( json ) {
+            var Callback = (function (json) {
                     console.log(BaseUrl+"patients/"+Pid+"/event/"+Eid+"/"+Token);
                     SessionData = json.records;
                     console.log(SessionData);
-            });    
+            })();
+            
+            Deferred.addFunc('get',BaseUrl+"patients/"+Pid+"/event/"+Eid+"/"+Token,Callback);    
         }
 
         //Create the save function which builds the json package for the ajax request
@@ -1389,8 +1392,10 @@
 
                 
             aiiApi = new AiiApiHelper('http://aii-hermes.org/aii-api/v1/',CookieData.SessionID,CookieData.PatientID,CookieData.CareTeamID);
-            aiiApi.waitingDialog.show('Loading Page...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {aiiApi.waitingDialog.hide();}, 1000);
+            aiiApi.waitingDialog.show('Getting Data ...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {aiiApi.waitingDialog.hide();}, 1000);
             aiiApi.getSessionData();
+            aiiApi.deferredRun();
+            
             
 
             console.log(aiiApi);
