@@ -395,7 +395,7 @@
                     $scope.addUser = {}; //object to hold form data for adding user
 
                     //Grab the user titles to populate the form with user title options
-                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles').success(function(data) {
+                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles/' + $scope.sessionID).success(function(data) {
                         $scope.userTitles = data.records;
                     });
 
@@ -559,22 +559,17 @@
                     };
 
                     $scope.sendInvite = function() {
-                        $scope.hideSendInvitationButton = true;
-                        //If a patient has been selected...
-                        //if($scope.selectedPatient){				
+                        $scope.hideSendInvitationButton = true;	
                         //Post a Notification inviting the facility to the care team
                         $scope.postNotification = {};
                         $scope.postNotification.PatientID = $scope.selectedPatient.PatientID;
-                        $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
                         $scope.postNotification.ReceiverFacilityID = fac.FacilityID;
 
-                        $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
+                        $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/" + $scope.sessionID;
                         postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
                             $scope.sendButtonText = "Invitation Sent!";
                         });
                         $scope.sendButtonText = "Sending...";
-
-                        //}
                     };
 
                     $scope.ok = function() {
@@ -2650,7 +2645,7 @@
 			}
 			
 			//Save the modified message
-			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
 				$scope.getMessages();
@@ -2680,7 +2675,7 @@
 				$scope.markedMessages[i][deletedName]++;
 				
 				//Save the modified message
-				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'] + '/' + sessionID, $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
 					if(!gettingMessages){
@@ -2706,7 +2701,7 @@
 			//Use lower case message type in the PUT URL
 			var lowerMessageType = $scope.messageType.toLowerCase();
 			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
-			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
 				$scope.getMessages();
@@ -2726,7 +2721,7 @@
 				$scope.markedMessages[i][field] = value;
 				
 				//Save the modified message
-				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'] + '/' + sessionID, $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
 					if(!gettingMessages){
@@ -2970,7 +2965,7 @@
 		$scope.respondToNotification = function(message, response){
 			message['Response'] = response;
 			message['IsArchived'] = 2;
-			putData.put(baseURL + 'notifications/' + message['NotificationID'], message).success(function(data) {
+			putData.put(baseURL + 'notifications/' + message['NotificationID'] + '/' + sessionID, message).success(function(data) {
 				$scope.getMessages();
 			});
 		}
@@ -3017,9 +3012,9 @@
 			//Either POST the message if being sent for the first time or PUT it if 
 			//it is an edited draft being sent.
 			if($scope.composedMessage['isDraft'] === true){
-				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'], $scope.composedMessage);
+				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'] + '/' + sessionID, $scope.composedMessage);
 			} else {
-				postData.post(baseURL + 'messages/', $scope.composedMessage);
+				postData.post(baseURL + 'messages/' + sessionID, $scope.composedMessage);
 			}
 		}
 		
