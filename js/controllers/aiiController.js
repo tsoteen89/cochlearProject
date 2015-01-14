@@ -754,7 +754,61 @@
      */
     controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $cookieStore) {
 
-        //get the SessionID stored
+         var waitingDialog;
+        waitingDialog = waitingDialog || (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-m" style="margin-left:30%">' +
+                '<div class="modal-content" >' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+                    '<div class="modal-body">' +
+                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'm',
+                        progressType: ''
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+                    if (settings.progressType) {
+                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+                    }
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+        
+        waitingDialog.show('Loading Questions...', {dialogSize: 'sm', progressType: 'danger'});
         var cookieSessionID = $cookieStore.get('SessionID');
         
         //currents phase patient is in. used in logic to decide next phase
@@ -981,6 +1035,7 @@
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
+                setTimeout(function () {waitingDialog.hide();}, 600);
             });
         });
 
@@ -1035,7 +1090,7 @@
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
-            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory', $scope.surgery).success(function() {
+            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function() {
                 $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                 $scope.surgery["Other"] = null;
                 $scope.surgery["Type of Surgery?"] = null;
@@ -1191,7 +1246,7 @@
                     "CurrentPhaseID": $scope.nextPhase
                 };
                 // Post the changed currentPhaseID here
-                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID +'/' + cookieSessionID, $scope.newPhase).then(function() {
                     $location.path('patientDirectory')
                 });
 
@@ -1214,7 +1269,7 @@
                 "CurrentPhaseID": 12
             };
             // Post the changed currentPhaseID here
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID + '/'+ cookieSessionID, $scope.newPhase).then(function() {
                 $location.path('patientDirectory')
             });
 
@@ -1682,6 +1737,63 @@
      *
      */
     controllers.apiPatientsController = function($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {
+        
+        var waitingDialog;
+        waitingDialog = waitingDialog || (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-sm" style="margin-left:30%">' +
+                '<div class="modal-content" >' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3> </div>' +
+                    '<div class="modal-body">' +
+                        '<i class="fa fa-spinner fa-spin fa-3x" style="margin-left:45%"></i>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'm',
+                        progressType: ''
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+                    if (settings.progressType) {
+                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+                    }
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+        if ($location.$$path == "/patientDirectory") {
+            waitingDialog.show('Loading Patients...', {dialogSize: 'sm', progressType: 'danger'});
+        }
         //hmm 
         var modalCounter = 1;
         
@@ -1705,7 +1817,7 @@
                     patient.reason = null;
                 }
                 $timeout(function() {
-                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, patient);
+                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, patient);
                 }, 0);
             }, 0);
 
@@ -1716,7 +1828,7 @@
             var updateToActive = {
                 'InactiveStatus': 10
             };
-            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, updateToActive);
             patient.InactiveStatus = 10;
         }
 
@@ -1742,7 +1854,7 @@
         $scope.editDescrip = false; // used to show description as text - changed to true if user needs to edit - in which case, text becomes textbox
 
         $scope.submitDescriptionInfo = function(careTeam) {
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID, careTeam);
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID + '/' + $scope.sessionID, careTeam);
         };
 
         //Get all the possible reasons to become inactive
@@ -1812,6 +1924,7 @@
         $scope.patientURL = "http://aii-hermes.org/aii-api/v1/facilities/patients/" + $scope.sessionID;
         getData.get($scope.patientURL).success(function(data) {
             $scope.patientsData = data;
+            setTimeout(function () {waitingDialog.hide();}, 1);
         })
 
 
@@ -1874,7 +1987,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -1922,7 +2035,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2065,7 +2178,7 @@
                             var updateToActive = {
                                 'InactiveStatus': 10
                             };
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + "/" + cookieSessionID, updateToActive);
                             patient.InactiveStatus = 10;
                         });
 
