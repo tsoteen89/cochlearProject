@@ -880,12 +880,13 @@
 
                 $scope.device = {}; //object to hold device details and phase and event id's
                 $scope.device.Answers = {}; //object to hold device answers specifically
+                $scope.device.Answers[questionID] = provider;
                 $scope.device.PhaseID = $cookieStore.get('PhaseID');
                 $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
-				var sessionID = userInfo.get().SessionID;
 
+                console.log($scope.device.Answers);
                 //url to grab previously entered device details
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID;
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
                 //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
@@ -898,16 +899,19 @@
                         }
                     };
                 });
-
+                
+                var deviceDetails = ""
                 //set the question id's for the device details based on left or right ear data being entered
                 if (questionID == 202) {
                     $scope.implantQuestion = 204;
                     $scope.electrodeQuestion = 205;
                     $scope.processorQuestion = 206;
+                    deviceDetails = "LeftDeviceDetails";
                 } else if (questionID == 212) {
                     $scope.implantQuestion = 214;
                     $scope.electrodeQuestion = 215;
                     $scope.processorQuestion = 216;
+                    deviceDetails = "RightDeviceDetails";
                 }
                 $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
 
@@ -917,34 +921,37 @@
                     $scope.processors = data.records.Processors;
                 });
 
+                //Function to save the applicable implant, electrode, processor types
+                //isValid is the boolean sent from the form in the modal that is true if all required fields were given
                 $scope.saveDevice = function(isValid) {
-                    /*
-                    $scope.deviceDetails = {'DeviceDetails': provider + ', ' + $scope.answer.Answers[$scope.implantQuestion]  + ', ' +
-                                            $scope.answer.Answers[$scope.electrodeQuestion] + ', ' + $scope.answer.Answers[$scope.processorQuestion]}
-                    putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.deviceDetails);
+                    //device details to  save in event record if all necessary aspects of device were answerd
+                    $scope.deviceDetails = {};
+                    $scope.deviceDetails[deviceDetails] = provider;
                 
-                    if(!$scope.answer.Answers[$scope.implantQuestion]){
-                        $scope.answer.Answers[$scope.implantQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.implantQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
+                            $scope.device.Answers[$scope.implantQuestion];
                     }
-                    if(!$scope.answer.Answers[$scope.electrodeQuestion]){
-                        $scope.answer.Answers[$scope.electrodeQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.electrodeQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " +
+                            $scope.device.Answers[$scope.electrodeQuestion];
                     }
-                    if(!$scope.answer.Answers[$scope.processorQuestion]){
-                        $scope.answer.Answers[$scope.processorQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.processorQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
+                            $scope.device.Answers[$scope.processorQuestion];
                     }
-                    */
-                    if (isValid) { //if all aspects of device details was saved- post them to database
-                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device);
+                    if (isValid) { //if all aspects of device details was saved- post them to database, 
+                        //saving each individual answer
+                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device); 
+                        //save string of device details to event
+                        putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $cookieStore.get('CareTeamID') + '/' + cookieSessionID,$scope.deviceDetails);
                         $scope.ok();
-                    } else {
+                    } else { //else alert user they must answer all
                         alert("Please select an option for each category");
                     }
-
-
                 }
                 $scope.ok = function() {
                     $modalInstance.close();
-
                 };
 
             };
@@ -1111,7 +1118,7 @@
             $scope.page = $scope.page + 1;
             //If questions on the previous page lack an answer, save an answer for that question with "Not Answered" as the text
             for (question in this.finalQuestions) {
-                console.log(question);
+                //console.log(question);
                 if (this.answer.Answers[this.finalQuestions[question].QuestionID] == null) {
                     this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
                     $scope.postAnswers(this.finalQuestions[question].QuestionID);
