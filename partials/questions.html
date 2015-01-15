@@ -36,13 +36,13 @@
                                             </div>
                                         </div>
                                         <!--device questions- opens up modal specifc to the selected provider-->
-                                        <div ng-if="question.isDevice" ng-repeat="values in question.Input.Values" >
-                                            <input type={{question.Input.Type}} value={{values}} name={{question.QuestionID}} 
-                                                   ng-model="answer.Answers[question.QuestionID]" ng-blur="postAnswers(question.QuestionID)"  
-                                                   ng-click="showDeviceOptions(values, question.QuestionID)" >
-                                            <label class="choice" >{{values}}</label>
+                                        <div ng-if="question.isDevice" ng-repeat="value in question.Input.Values" >
+                                            <input type={{question.Input.Type}} value={{value}} name={{question.QuestionID}} 
+                                                   ng-model="answer.Answers[question.QuestionID]"  
+                                                   ng-click="showDeviceOptions(value, question.QuestionID)" >
+                                            <label class="choice" >{{value}}</label>
                                         </div>
-                                        <!-- Modal used for writing a message to the Administrator -->
+                                        <!-- Modal used for selecting device details -->
                                         <script type="text/ng-template" id="device.html">
                                             <div class="modal-header">
                                                 <button type="button" class="close" ng-click="ok()"><span ng-click="ok()">&times;</span>
