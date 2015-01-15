@@ -870,7 +870,7 @@
 
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
-            $scope.answer.PhaseID;
+            $scope.answer.PhaseID + "/" + cookieSessionID;
         
         $scope.clickedPhase = null;
 
@@ -882,9 +882,10 @@
                 $scope.device.Answers = {}; //object to hold device answers specifically
                 $scope.device.PhaseID = $cookieStore.get('PhaseID');
                 $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
+				var sessionID = userInfo.get().SessionID;
 
                 //url to grab previously entered device details
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID;
                 //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
@@ -968,7 +969,7 @@
         }
 
         //get audiology results for the phase
-        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $scope.answer.PhaseID).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $scope.answer.PhaseID + "/" + cookieSessionID).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             //console.log("first" + $scope.audioSummaryAnswers);
         });
@@ -1289,8 +1290,10 @@
         $scope.getDataSummary = function() {
 
             var ModalInstanceCtrl = function($scope, $modalInstance) {
-
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+				
+				var sessionID = userInfo.get().SessionID;
+			
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
                 });
                 $scope.ok = function() {
@@ -1428,7 +1431,7 @@
             "BKB-SIN": {}
         };
 
-        $scope.answersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+        $scope.answersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID + "/" + cookieSessionID;
 
         //**********************Copied from questionsControllerr****/
 
@@ -1614,7 +1617,8 @@
          */
         $scope.getDataSummary = function(patientSummaryAnswers) {
             var ModalInstanceCtrl = function($scope, $modalInstance) {
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+				var sessionID = userInfo.get().SessionID;
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID).success(function(data) {
                     $scope.patientSummaryAnswers = data.records.DetailedAnswers;
                 });
                 $scope.ok = function() {
