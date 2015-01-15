@@ -72,15 +72,15 @@
                                         {{phases[careTeam.CurrentPhaseID-1].Name}}</span><br> 
                                     <!-- Device details (left and right ear implant information)-->
                                     <em> Device Details: </em> 
-                                    <span ng-if="careTeam.LeftDeviceDetails != 'N/A'"><u>Left</u>: {{careTeam.LeftDeviceDetails}}</span>
-                                    <span ng-if="careTeam.RightDeviceDetails != 'N/A'"><u>Right</u>: {{careTeam.RightDeviceDetails}}</span>
-                                    <span ng-if="careTeam.RightDeviceDetails == 'N/A' && careTeam.LeftDeviceDetails == 'N/A'"> N/A</span>
+                                    <span ng-if="careTeam.LeftDeviceDetails"><u>Left</u>: {{careTeam.LeftDeviceDetails}}</span>
+                                    <span ng-if="careTeam.RightDeviceDetails"><u>Right</u>: {{careTeam.RightDeviceDetails}}</span>
+                                    <span ng-if="!careTeam.RightDeviceDetails && !careTeam.LeftDeviceDetails"> N/A</span>
                                     <br>
                                 </div>
                                 <!-- Add new event for patient button-->
                                 <div class="col-md-3">
                                     <button style="margin-left:35px" type="button" class="btn btn-info" ng-click="addNewEvent(patient)"
-                                        ng-if="careTeam== patient.CareTeams[0] && userLevelID < 11"> Add new event</button>
+                                        ng-if="userLevel < 11 && careTeam== patient.CareTeams[0]"> Add new event</button>
                                 </div>
                             </div>
                             <div class="row">
