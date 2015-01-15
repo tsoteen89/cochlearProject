@@ -25,7 +25,7 @@ function bubbleSort(points) {
 }
 
 
-var AudioGram = function (stage, audiogram_id, side, element_id) {
+var AudioGram = function (stage, side, element_id) {
     'use strict';
     var Stage = stage;                          //The whole kinetic stage!
     var Layers = {};                            //Object to hold different layers by name
@@ -34,7 +34,6 @@ var AudioGram = function (stage, audiogram_id, side, element_id) {
     var redoStack = [];                         //Stack to hold items removed via "undo"
     var lineArray = [];                         //Array to hold x,y vals to draw line between measures
     var globalClick = {'x' : 0, 'y' : 0};       //Global click to help me with context menu right now.
-    var AudioGramId = audiogram_id;             //Unique identifier for this audiogram
     var Side = side;                            //Left or right ear
     var ElementId = element_id;                 //Element ID of html canvas
     var Colors = {

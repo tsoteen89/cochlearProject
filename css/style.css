@@ -11,7 +11,7 @@ div.scroll{background-color:#EDF2FF;height:100px;overflow:auto}#cp_background-gr
 	
 	box-sizing: border-box;
 	width: 80%;
-	margin: 0 10%;
+	margin: 0 10% 5%;
 }
 #menu-toggle{
     text-decoration:none;

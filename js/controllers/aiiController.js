@@ -68,7 +68,7 @@
     myApp.factory('userInfo', function($cookieStore, $window) {
         //User Info
         var SessionID = $cookieStore.get('SessionID');
-        var UserLevelID = $cookieStore.get('UserLevel');
+        var UserLevelID;
         var UserID;
         var Username;
         var FacilityID;
@@ -80,16 +80,14 @@
                 //Set the persistent user info
                 SessionID = info.SessionID;
                 UserID = info.UserID;
-                $cookieStore.put("UserID", UserID);
+                $cookieStore.put('UserID', UserID);
                 Username = info.Username;
                 FacilityID = info.FacilityID;
                 Name = info.First + " " + info.Last;
                 Title = info.Title;
                 UserLevelID = info.UserLevelID;
-
                 //Set the SessionID and UserLevel to persist in the cookie
                 $cookieStore.put('SessionID', SessionID);
-                $cookieStore.put('UserLevel', UserLevelID);
 
                 return;
             },
@@ -126,7 +124,6 @@
                     if (typeof data === "object") {
                         if (data.records['error'] == "Token Timeout" || data.records['error'] == "Invalid Token") {
                             $cookieStore.remove('SessionID');
-                            $cookieStore.remove('UserLevel');
                            // console.log(data.records['error']);
                             
                             if (data.records['error'] == 'Token Timeout') {
@@ -221,75 +218,19 @@
      *
      * @param: NULL
      * @returns function -
-     *      @function setCareTeamID - set the CareTeam ID passed in.
-     *      @function setPhaseID - set the Phase ID passed in.
-     *      @function setPhaseName - set the Phase Name passed in.
-     *      @function setPatientName - set the Patiet Name passed in.
      *      @function setLoggedIn - set the current Login Status.
-     *      @function setDirAnchor - set the Patient Directory Anchor.
      *      @function setUserLevel - set the current User Level.
-     *      @function getPatientName - return the current Patient Name.
-     *      @function getCareTeamID - return the current CareTeam ID.
-     *      @function getPhaseID - return the current PhaseID.
-     *      @function getPhaseName - return the current Phase Name.
      *      @function getLoggedIn - return the current Login Status.
-     *      @function getDirAnchor - return the current Patient Directory Anchor.
      *      @function getUserLevel - return the current User Level.
      */
     myApp.factory('persistData', function($cookieStore) {
-        //User info
-        var CareTeamID;
-        var PhaseID;
         var loggedIn;
-        var PhaseName;
-        var PatientName;
         var dirAnchor;
         var userLevel;
-        var PatientID;
-
         //Messaging info
         var messageRecipient = -1;
 
         return {
-            //most are being replaced by cookie function - not used
-            setPatientID: function(data) {
-                PatientID = data;
-                $cookieStore.put('PatientID', PatientID);
-            },
-            setCareTeamID: function(data) {
-                CareTeamID = data;
-                $cookieStore.put('CareTeamID', CareTeamID);
-                console.log(data);
-
-            },
-            setPhaseID: function(data) {
-                PhaseID = data;
-                $cookieStore.put('PhaseID', PhaseID);
-
-                console.log(data);
-            },
-            setPhaseName: function(data) {
-                PhaseName = data;
-                $cookieStore.put('PhaseName', PhaseName);
-                console.log(data);
-            },
-            setPatientName: function(data) {
-                PatientName = data;
-                $cookieStore.put('PatientName', PatientName);
-                console.log(data);
-            },
-            getPatientName: function(data) {
-                return PatientName;
-            },
-            getCareTeamID: function() {
-                return CareTeamID;
-            },
-            getPhaseID: function(data) {
-                return PhaseID;
-            },
-            getPhaseName: function() {
-                return PhaseName;
-            },
             setLoggedIn: function(data) {
                 loggedIn = data;
                 console.log(loggedIn);
@@ -297,14 +238,6 @@
             getLoggedIn: function() {
                 console.log(loggedIn);
                 return loggedIn;
-            },
-            setDirAnchor: function(data) {
-                dirAnchor = data;
-                $cookieStore.put('dirAnchor', dirAnchor);
-                console.log(dirAnchor);
-            },
-            getDirAnchor: function(data) {
-                return dirAnchor;
             },
             setUserLevel: function(data) {
                 userLevel = data;
@@ -394,9 +327,15 @@
      */
     controllers.dashboardController = function($scope, persistData, getData, postData, putData, $http, $modal, $window, userInfo, $timeout, $cookieStore) {
 
-        $scope.userLevel = userInfo.get().UserLevelID;
-        $scope.userFacilityID = userInfo.get().FacilityID;
         $scope.sessionID = userInfo.get().SessionID;
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            $scope.userLevel = data.records.UserLevelID;
+        });
+        
+        $scope.userFacilityID = userInfo.get().FacilityID;
 
         //**********API URL's***********************/
         $scope.facilityURL = "http://aii-hermes.org/aii-api/v1/facilities/" + $scope.sessionID; //returns user's facility info
@@ -405,8 +344,6 @@
         //Grab Facility info  using facilityURL
         getData.get($scope.facilityURL).success(function(data) {
             $scope.facData = data;
-            $cookieStore.put('FacilityName', $scope.facData.records.Name); //put facility name and image in cookie so it's grabbable anywhere
-            $cookieStore.put('FacilityImage', $scope.facData.records.FacilityImage);
         });
 
         //Grab All AII Facilities 
@@ -458,7 +395,7 @@
                     $scope.addUser = {}; //object to hold form data for adding user
 
                     //Grab the user titles to populate the form with user title options
-                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles').success(function(data) {
+                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles/' + $scope.sessionID).success(function(data) {
                         $scope.userTitles = data.records;
                     });
 
@@ -622,22 +559,17 @@
                     };
 
                     $scope.sendInvite = function() {
-                        $scope.hideSendInvitationButton = true;
-                        //If a patient has been selected...
-                        //if($scope.selectedPatient){				
+                        $scope.hideSendInvitationButton = true;	
                         //Post a Notification inviting the facility to the care team
                         $scope.postNotification = {};
                         $scope.postNotification.PatientID = $scope.selectedPatient.PatientID;
-                        $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
                         $scope.postNotification.ReceiverFacilityID = fac.FacilityID;
 
-                        $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
+                        $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/" + $scope.sessionID;
                         postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
                             $scope.sendButtonText = "Invitation Sent!";
                         });
                         $scope.sendButtonText = "Sending...";
-
-                        //}
                     };
 
                     $scope.ok = function() {
@@ -822,7 +754,61 @@
      */
     controllers.questionsController = function($scope, persistData, getData, postData, putData, $http, $modal, $location, $cookieStore) {
 
-        //get the SessionID stored
+         var waitingDialog;
+        waitingDialog = waitingDialog || (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-m" style="margin-left:30%">' +
+                '<div class="modal-content" >' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+                    '<div class="modal-body">' +
+                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'm',
+                        progressType: ''
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+                    if (settings.progressType) {
+                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+                    }
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+        
+        waitingDialog.show('Loading Questions...', {dialogSize: 'sm', progressType: 'danger'});
         var cookieSessionID = $cookieStore.get('SessionID');
         
         //currents phase patient is in. used in logic to decide next phase
@@ -884,7 +870,7 @@
 
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
-            $scope.answer.PhaseID;
+            $scope.answer.PhaseID + "/" + cookieSessionID;
         
         $scope.clickedPhase = null;
 
@@ -894,11 +880,13 @@
 
                 $scope.device = {}; //object to hold device details and phase and event id's
                 $scope.device.Answers = {}; //object to hold device answers specifically
+                $scope.device.Answers[questionID] = provider;
                 $scope.device.PhaseID = $cookieStore.get('PhaseID');
                 $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
 
+                console.log($scope.device.Answers);
                 //url to grab previously entered device details
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID');
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + '/' + cookieSessionID;
                 //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
@@ -911,16 +899,19 @@
                         }
                     };
                 });
-
+                
+                var deviceDetails = ""
                 //set the question id's for the device details based on left or right ear data being entered
                 if (questionID == 202) {
                     $scope.implantQuestion = 204;
                     $scope.electrodeQuestion = 205;
                     $scope.processorQuestion = 206;
+                    deviceDetails = "LeftDeviceDetails";
                 } else if (questionID == 212) {
                     $scope.implantQuestion = 214;
                     $scope.electrodeQuestion = 215;
                     $scope.processorQuestion = 216;
+                    deviceDetails = "RightDeviceDetails";
                 }
                 $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
 
@@ -930,34 +921,37 @@
                     $scope.processors = data.records.Processors;
                 });
 
+                //Function to save the applicable implant, electrode, processor types
+                //isValid is the boolean sent from the form in the modal that is true if all required fields were given
                 $scope.saveDevice = function(isValid) {
-                    /*
-                    $scope.deviceDetails = {'DeviceDetails': provider + ', ' + $scope.answer.Answers[$scope.implantQuestion]  + ', ' +
-                                            $scope.answer.Answers[$scope.electrodeQuestion] + ', ' + $scope.answer.Answers[$scope.processorQuestion]}
-                    putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID,$scope.deviceDetails);
+                    //device details to  save in event record if all necessary aspects of device were answerd
+                    $scope.deviceDetails = {};
+                    $scope.deviceDetails[deviceDetails] = provider;
                 
-                    if(!$scope.answer.Answers[$scope.implantQuestion]){
-                        $scope.answer.Answers[$scope.implantQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.implantQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
+                            $scope.device.Answers[$scope.implantQuestion];
                     }
-                    if(!$scope.answer.Answers[$scope.electrodeQuestion]){
-                        $scope.answer.Answers[$scope.electrodeQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.electrodeQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " +
+                            $scope.device.Answers[$scope.electrodeQuestion];
                     }
-                    if(!$scope.answer.Answers[$scope.processorQuestion]){
-                        $scope.answer.Answers[$scope.processorQuestion] = "N/A";
+                    if($scope.device.Answers[$scope.processorQuestion]){
+                        $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
+                            $scope.device.Answers[$scope.processorQuestion];
                     }
-                    */
-                    if (isValid) { //if all aspects of device details was saved- post them to database
-                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device);
+                    if (isValid) { //if all aspects of device details was saved- post them to database, 
+                        //saving each individual answer
+                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device); 
+                        //save string of device details to event
+                        putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $cookieStore.get('CareTeamID') + '/' + cookieSessionID,$scope.deviceDetails);
                         $scope.ok();
-                    } else {
+                    } else { //else alert user they must answer all
                         alert("Please select an option for each category");
                     }
-
-
                 }
                 $scope.ok = function() {
                     $modalInstance.close();
-
                 };
 
             };
@@ -982,7 +976,7 @@
         }
 
         //get audiology results for the phase
-        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $scope.answer.PhaseID).success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $scope.answer.PhaseID + "/" + cookieSessionID).success(function(data) {
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
             //console.log("first" + $scope.audioSummaryAnswers);
         });
@@ -1049,6 +1043,7 @@
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
+                setTimeout(function () {waitingDialog.hide();}, 600);
             });
         });
 
@@ -1103,7 +1098,7 @@
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
-            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory', $scope.surgery).success(function() {
+            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function() {
                 $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                 $scope.surgery["Other"] = null;
                 $scope.surgery["Type of Surgery?"] = null;
@@ -1123,7 +1118,7 @@
             $scope.page = $scope.page + 1;
             //If questions on the previous page lack an answer, save an answer for that question with "Not Answered" as the text
             for (question in this.finalQuestions) {
-                console.log(question);
+                //console.log(question);
                 if (this.answer.Answers[this.finalQuestions[question].QuestionID] == null) {
                     this.answer.Answers[this.finalQuestions[question].QuestionID] = "Not Answered";
                     $scope.postAnswers(this.finalQuestions[question].QuestionID);
@@ -1259,7 +1254,7 @@
                     "CurrentPhaseID": $scope.nextPhase
                 };
                 // Post the changed currentPhaseID here
-                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+                putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID +'/' + cookieSessionID, $scope.newPhase).then(function() {
                     $location.path('patientDirectory')
                 });
 
@@ -1270,50 +1265,23 @@
         //Complete all phases of care and make patient inactive
         $scope.completeCare = function() {
             var patID = $cookieStore.get('PatientID');
+            /*
             var updateToInactive = {
                 'InactiveStatus': 60
             }
             putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID, updateToInactive);
+            */
             //Update Current phase number in database
 
             $scope.newPhase = {
                 "CurrentPhaseID": 12
             };
             // Post the changed currentPhaseID here
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID, $scope.newPhase).then(function() {
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID + '/'+ cookieSessionID, $scope.newPhase).then(function() {
                 $location.path('patientDirectory')
             });
 
         }
-
-        /* not being used anymore - was the patient summary for any phase on the side of questions
-        $scope.patientSummary = function(phaseNumber){
-            this.clickedPhase = phaseNumber;
-            
-            if(phaseNumber == 2 || phaseNumber > 6){
-            
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" +$cookieStore.get('CareTeamID')).success(function(data) {
-                        $scope.patientSummaryAnswers = data.records.DetailedAnswers;
-                        console.log("first" + $scope.audioSummaryAnswers);
-                });
-            }
-            
-            if(phaseNumber == 1 || phaseNumber > 2 && phaseNumber < 7){
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + phaseNumber; 
-
-                getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-                    $scope.patientSummaryAnswers = data.records;          
-                });
-            }
-            
-            if(phaseNumber == 0)
-            {
-                $scope.patientSummaryAnswers = "";
-            }
-            
-        }
-        */
-
 
         //Added by ???
         //***********************Get Data Summary MODAL IN  Questions when you want to complete a phase****************//
@@ -1329,8 +1297,10 @@
         $scope.getDataSummary = function() {
 
             var ModalInstanceCtrl = function($scope, $modalInstance) {
-
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+				
+				var sessionID = userInfo.get().SessionID;
+			
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
                 });
                 $scope.ok = function() {
@@ -1468,7 +1438,7 @@
             "BKB-SIN": {}
         };
 
-        $scope.answersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID;
+        $scope.answersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" + $scope.answer.PhaseID + "/" + cookieSessionID;
 
         //**********************Copied from questionsControllerr****/
 
@@ -1654,7 +1624,8 @@
          */
         $scope.getDataSummary = function(patientSummaryAnswers) {
             var ModalInstanceCtrl = function($scope, $modalInstance) {
-                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID')).success(function(data) {
+				var sessionID = userInfo.get().SessionID;
+                getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID).success(function(data) {
                     $scope.patientSummaryAnswers = data.records.DetailedAnswers;
                 });
                 $scope.ok = function() {
@@ -1777,15 +1748,78 @@
      *
      */
     controllers.apiPatientsController = function($scope, $http, $templateCache, persistData, getData, $location, $anchorScroll, $timeout, $modal, postData, $route, userInfo, putData, $cookieStore) {
+        
+        var waitingDialog;
+        waitingDialog = waitingDialog || (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-sm" style="margin-left:30%">' +
+                '<div class="modal-content" >' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3> </div>' +
+                    '<div class="modal-body">' +
+                        '<i class="fa fa-spinner fa-spin fa-3x" style="margin-left:45%"></i>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'm',
+                        progressType: ''
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+                    if (settings.progressType) {
+                        $dialog.find('.progress-bar').addClass('progress-bar-' + settings.progressType);
+                    }
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+        if ($location.$$path == "/patientDirectory") {
+            waitingDialog.show('Loading Patients...', {dialogSize: 'sm', progressType: 'danger'});
+        }
         //hmm 
         var modalCounter = 1;
         
-        //$scope.patientInactiveStatus = $cookieStore.get('PatientInactiveStatus'); //?? dont know the usage here either
+        var userID = $cookieStore.get('UserID');
+        
         $scope.userFacilityID = userInfo.get().FacilityID;
-        $scope.userLevelID = userInfo.get().UserLevelID;
+    
         $scope.sessionID = userInfo.get().SessionID;
-        //$scope.dirAnchor = $cookieStore.get('dirAnchor');
-
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            $scope.userLevel = data.records.UserLevelID;
+        });
+        
         //Function to change patient to inactive or update patient info - like address
         $scope.submitPatientInfo = function(patient) {
             $timeout(function() {
@@ -1794,7 +1828,7 @@
                     patient.reason = null;
                 }
                 $timeout(function() {
-                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, patient);
+                    putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, patient);
                 }, 0);
             }, 0);
 
@@ -1805,7 +1839,7 @@
             var updateToActive = {
                 'InactiveStatus': 10
             };
-            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + '/' + $scope.sessionID, updateToActive);
             patient.InactiveStatus = 10;
         }
 
@@ -1831,7 +1865,7 @@
         $scope.editDescrip = false; // used to show description as text - changed to true if user needs to edit - in which case, text becomes textbox
 
         $scope.submitDescriptionInfo = function(careTeam) {
-            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID, careTeam);
+            putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID + '/' + $scope.sessionID, careTeam);
         };
 
         //Get all the possible reasons to become inactive
@@ -1901,6 +1935,7 @@
         $scope.patientURL = "http://aii-hermes.org/aii-api/v1/facilities/patients/" + $scope.sessionID;
         getData.get($scope.patientURL).success(function(data) {
             $scope.patientsData = data;
+            setTimeout(function () {waitingDialog.hide();}, 1);
         })
 
 
@@ -1918,10 +1953,8 @@
         $scope.goToQuestions = function(careTeam, phase, patient) {
 
             $cookieStore.put('PatientID', patient.PatientID);
-            $cookieStore.put('PhaseName', phase.PhaseName);
             $cookieStore.put('CareTeamID', careTeam.CareTeamID);
             $cookieStore.put('PhaseID', phase.PhaseID);
-            $cookieStore.put('dirAnchor', patient.Last);
             $cookieStore.put('CurrentPhaseID', careTeam.CurrentPhaseID);
 
         };
@@ -1965,7 +1998,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2013,7 +2046,7 @@
                             modalPatient.reason = null;
                         }
                         $timeout(function() {
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID, modalPatient);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + modalPatient.PatientID + '/' + $scope.sessionID, modalPatient);
                         }, 0).then(function() {
                             $scope.ok();
                         });
@@ -2156,7 +2189,7 @@
                             var updateToActive = {
                                 'InactiveStatus': 10
                             };
-                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID, updateToActive);
+                            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patient.PatientID + "/" + cookieSessionID, updateToActive);
                             patient.InactiveStatus = 10;
                         });
 
@@ -2544,7 +2577,13 @@
 
 		//Controller variables
 		var sessionID = userInfo.get().SessionID;
-		var userLevel = userInfo.get().UserLevelID;
+		var userLevel = 0;
+        //url to get signed in users info
+        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
+        //Grab single User by ID and then bind email and phone details to the editUser scope variable
+        getData.get($scope.userURL).success(function(data) {
+            userLevel= data.records.UserLevelID;
+        });
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var urlSet = {		//(Keys are defined as : messageType + messageProperty)
 			'MessagesReceived' 		: 'users/inbox/',
@@ -2617,7 +2656,7 @@
 			}
 			
 			//Save the modified message
-			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
 				$scope.getMessages();
@@ -2647,7 +2686,7 @@
 				$scope.markedMessages[i][deletedName]++;
 				
 				//Save the modified message
-				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'] + '/' + sessionID, $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
 					if(!gettingMessages){
@@ -2673,7 +2712,7 @@
 			//Use lower case message type in the PUT URL
 			var lowerMessageType = $scope.messageType.toLowerCase();
 			var idType = $scope.messageType.substr(0, $scope.messageType.length - 1);
-			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'], message).success(function(data){
+			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
 				$scope.getMessages();
@@ -2693,7 +2732,7 @@
 				$scope.markedMessages[i][field] = value;
 				
 				//Save the modified message
-				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'], $scope.markedMessages[i]).success(function(data){
+				putData.put(baseURL + lowerMessageType + '/' + $scope.markedMessages[i][idType + 'ID'] + '/' + sessionID, $scope.markedMessages[i]).success(function(data){
 					//Get message counts
 					$scope.getMessageCounts();
 					if(!gettingMessages){
@@ -2937,7 +2976,7 @@
 		$scope.respondToNotification = function(message, response){
 			message['Response'] = response;
 			message['IsArchived'] = 2;
-			putData.put(baseURL + 'notifications/' + message['NotificationID'], message).success(function(data) {
+			putData.put(baseURL + 'notifications/' + message['NotificationID'] + '/' + sessionID, message).success(function(data) {
 				$scope.getMessages();
 			});
 		}
@@ -2984,9 +3023,9 @@
 			//Either POST the message if being sent for the first time or PUT it if 
 			//it is an edited draft being sent.
 			if($scope.composedMessage['isDraft'] === true){
-				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'], $scope.composedMessage);
+				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'] + '/' + sessionID, $scope.composedMessage);
 			} else {
-				postData.post(baseURL + 'messages/', $scope.composedMessage);
+				postData.post(baseURL + 'messages/' + sessionID, $scope.composedMessage);
 			}
 		}
 		
@@ -3157,13 +3196,10 @@
                     info.Last = data.records.last_name;
                     info.Title = data.records.Title;
                     $scope.name = data.records.first_name + " " + data.records.last_name;
-                    $scope.title = $cookieStore.get('Title');
+                    $scope.title = data.records.Title;
                     info.UserLevelID = data.records.UserLevelID;
                     $scope.userLevel = data.records.UserLevelID;
                     userInfo.set(info);
-
-                    //Store the user level in the persistData factory
-                    persistData.setUserLevel(info.UserLevelID);
 
                     //Redirect the user to the dashboard if they were going to the login page
                     if ($window.location.pathname == "#" || $window.location.pathname == "") {
@@ -3175,7 +3211,6 @@
                     console.log("Bad cookie! sending to login page")
                     $scope.loggedIn = false;
                     $cookieStore.remove('SessionID');
-                    $cookieStore.remove('UserLevel');
                     if (data.records['error'] == 'Token Timeout') {
                         $cookieStore.put('BadToken', 'Token Timeout');
                     }
@@ -3220,7 +3255,6 @@
                         userInfo.set(data.data.records);
                         $scope.name = data.data.records.First + " " + data.data.records.Last;
                         $scope.title = data.data.records.Title;
-                        $cookieStore.put('Title', $scope.title);
                         $scope.userLevel = data.data.records.UserLevelID;
                         $scope.loggedIn = true;
                         $window.location.href = "#/dashboard";
@@ -3258,7 +3292,6 @@
 
             //Remove all information from the cookie
             $cookieStore.remove('SessionID');
-            $cookieStore.remove('UserLevel');
             $cookieStore.remove('CareTeamID');
             $cookieStore.remove('PhaseID');
             $cookieStore.remove('PatientID');

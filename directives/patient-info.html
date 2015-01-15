@@ -32,7 +32,7 @@
             </div>
             <div class="modal-body">
                     <div class="container">
-                        <div ng-repeat="reason in inactiveReasons" ng-show="!$first && !$last">
+                        <div ng-repeat="reason in inactiveReasons" ng-show="!$first">
                             <input type=radio ng-value={{reason.ReasonID}} name=inactiveReasons ng-click="setReason(reason.Reason); setReasonID(reason.ReasonID)"
                                    ng-model="patient.reason" > {{reason.Reason}}
                         </div>
