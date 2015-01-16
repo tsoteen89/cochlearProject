@@ -386,7 +386,7 @@
          *      @function ok - closes the modalInstance
          */
         $scope.addUser = function() {
-                var ModalInstanceCtrl = function($scope, $modalInstance, postData) {
+                var ModalInstanceCtrl = function($scope, $modalInstance, postData, userInfo) {
 
                     $scope.sessionID = userInfo.get().SessionID;
                     $scope.addUser = {}; //object to hold form data for adding user
@@ -435,7 +435,7 @@
          *          @param object: a patient object
          */
         $scope.inviteNewFacility = function() {
-                var ModalInstanceCtrl = function($scope, $modalInstance, postData) {
+                var ModalInstanceCtrl = function($scope, $modalInstance, postData, userInfo) {
                     $scope.userFacilityID = userInfo.get().FacilityID;
                     $scope.sessionID = userInfo.get().SessionID;
                     $scope.addFacility = {}; //object to hold form data for adding facility
@@ -497,7 +497,7 @@
          */
         $scope.getFacCard = function(fac) {
 
-                var ModalInstanceCtrl = function($scope, $modalInstance, fac) {
+                var ModalInstanceCtrl = function($scope, $modalInstance, fac, userInfo) {
                     $scope.userFacilityID = userInfo.get().FacilityID;
                     $scope.sessionID = userInfo.get().SessionID;
 
@@ -603,7 +603,7 @@
          */
         $scope.getContactCard = function(contactType) {
 
-            var ModalInstanceCtrl = function($scope, $modalInstance, contactType, postData) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, contactType, postData, userInfo) {
 
                 $scope.sessionID = userInfo.get().SessionID;
 
@@ -995,7 +995,7 @@
         }
 
         //api urls to grab questions for the active phase
-        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID;
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID + cookieSessionID;
         $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
 
         //Get Number of Questions contained in a phase
@@ -1298,7 +1298,7 @@
          */
         $scope.getDataSummary = function() {
 
-            var ModalInstanceCtrl = function($scope, $modalInstance) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, userInfo) {
 				
 				var sessionID = userInfo.get().SessionID;
 			
@@ -1598,7 +1598,7 @@
          *      @function ok - closes the modalInstance
          */
         $scope.getDataSummary = function(patientSummaryAnswers) {
-            var ModalInstanceCtrl = function($scope, $modalInstance) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, userInfo) {
 				var sessionID = userInfo.get().SessionID;
                 getData.get("http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + "/" + sessionID).success(function(data) {
                     $scope.patientSummaryAnswers = data.records.DetailedAnswers;
@@ -2051,9 +2051,9 @@
          */
         $scope.getFacCard = function(fac) {
 
-            var ModalInstanceCtrl = function($scope, $modalInstance, fac) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, fac, userInfo) {
                 $scope.sessionID = userInfo.get().SessionID;
-                //console.log(fac.FacilityID);
+				
                 //Get clicked facilities info
                 getData.get("http://aii-hermes.org/aii-api/v1/facilities/" + fac.FacilityID + "/" + $scope.sessionID).success(function(data) {
                     $scope.facCard = data;
@@ -2204,7 +2204,7 @@
          */
         $scope.inviteToCareTeam = function(patient) {
 
-            var ModalInstanceCtrl = function($modalInstance, $scope) {
+            var ModalInstanceCtrl = function($modalInstance, $scope, userInfo) {
                 $scope.patient = patient;
                 $scope.selectedFac = "(No facility selected)";
 				var sessionID = userInfo.get().SessionID;
