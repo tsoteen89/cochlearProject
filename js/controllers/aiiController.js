@@ -859,12 +859,15 @@
         $scope.answer.Answers = {}; //holds all previous answers and is used as the ng-model on the question forms.. may be able to consolidate with patientSummaryAnswers
         $scope.answer.PhaseID = phaseID;
         $scope.answer.CareTeamID = $cookieStore.get('CareTeamID');
+		
+        //api urls to grab questions for the active phase
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID + "/" + cookieSessionID;
+        $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
         
         //patientSummaryAnswers is the object used for showing completed phases
         $scope.patientSummaryAnswers = {}; //object to hold previously answered questions for the phase if any.
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
             $scope.answer.PhaseID + "/" + cookieSessionID;
-        
          
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
             //Grab all previously answered questions (regular questions)
@@ -880,19 +883,18 @@
     
         //Modal handler for different implant providers (Med El, Cochlear americas, )
         $scope.showDeviceOptions = function(provider, questionID) {
-            var ModalInstanceCtrl = function($scope, $modalInstance) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, userInfo) {
 
                 $scope.device = {}; //object to hold device details and phase and event id's
                 $scope.device.Answers = {}; //object to hold device answers specifically
                 $scope.device.Answers[questionID] = provider;
                 $scope.device.PhaseID = $cookieStore.get('PhaseID');
                 $scope.device.CareTeamID = $cookieStore.get('CareTeamID');
-
-                //console.log($scope.device.Answers);
+				var sessionID = userInfo.get().SessionID;
+				
                 //url to grab previously entered device details
-                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + 
-                    $cookieStore.get('PhaseID') + '/' + cookieSessionID;
-                
+                $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $cookieStore.get('CareTeamID') + "/phaseAnswers/" + $cookieStore.get('PhaseID') + '/' + sessionID;
+
                 //Grab ALL previously answered questions - somewhat wasteful- dont need to grab all - just device questions
                 getData.get($scope.patientSummaryAnswersURL).success(function(data) {
                     $scope.patientSummaryAnswers = data.records;
@@ -921,8 +923,8 @@
                 }
                 $scope.provider = provider; //provider name - displayed in header of modal (Cochlear Americas, Med El, whatever the other one is)
 
-                //get implant, electrode, processor choices based on the company chosen so they can be populated in modal
-                getData.get("http://aii-hermes.org/aii-api/v1/deviceProviders/provider/" + $scope.provider).success(function(data) {
+				//get implant, electrode, processor choices based on the company chosen so they can be populated in modal
+                getData.get("http://aii-hermes.org/aii-api/v1/deviceProviders/provider/" + $scope.provider + "/" + sessionID).success(function(data) {
                     $scope.implants = data.records.Implants;
                     $scope.electrodes = data.records.Electrodes;
                     $scope.processors = data.records.Processors;
@@ -949,9 +951,9 @@
                     }
                     if (isValid) { //if all aspects of device details was saved- post them to database, 
                         //saving each individual answer
-                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + cookieSessionID, $scope.device); 
+                        postData.post('http://aii-hermes.org/aii-api/v1/answers/' + sessionID, $scope.device); 
                         //save string of device details to event
-                        putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $cookieStore.get('CareTeamID') + '/' + cookieSessionID,$scope.deviceDetails);
+                        putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $cookieStore.get('CareTeamID') + '/' + sessionID,$scope.deviceDetails);
                         $scope.ok();
                     } else { //else alert user they must answer all
                         alert("Please select an option for each category");
@@ -1412,7 +1414,7 @@
         });
 
         //Get Audiology Phase fields and tests to populate the form 
-        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions/event/" + $cookieStore.get('CareTeamID');
+        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $cookieStore.get('PhaseID') + "/questions/event/" + $cookieStore.get('CareTeamID') + "/" + cookieSessionID;
         getData.get($scope.questionsURL).success(function(data) {
             $scope.audioQuestions = data.records;
             $scope.audioQs = data.records.Questions;
@@ -1542,7 +1544,7 @@
         //uses $scope.conditions object info (left and right ear conditions) to find ID of the two conditions set for the ears
         $scope.getConditionsID = function() {
             console.log("getConditionsID Called");
-            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/?q=(LeftAidCondition:" + this.conditions.Left + ",RightAidCondition:" + this.conditions.Right + ")").success(function(data) {
+            getData.get("http://aii-hermes.org/aii-api/v1/audioConditions/" + cookieSessionID + "/" + "?q=(LeftAidCondition:" + this.conditions.Left + ",RightAidCondition:" + this.conditions.Right + ")").success(function(data) {
                 $scope.answer.ConditionsID = data.records[0].ConditionsID;
                 //console.log($scope.answer.ConditionsID);
             });
@@ -1795,7 +1797,7 @@
         };
 
         //Get all the possible reasons to become inactive
-        getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons").success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons/" + $scope.sessionID).success(function(data) {
             $scope.inactiveReasons = data.records;
         });
 
@@ -1871,7 +1873,7 @@
         });
         
         //Get all the current phase cases info!! - used to make the dots
-        getData.get("http://aii-hermes.org/aii-api/v1/phases/phaseStatuses").success(function(data) {
+        getData.get("http://aii-hermes.org/aii-api/v1/phases/phaseStatuses/" + $scope.sessionID).success(function(data) {
             $scope.phaseCases = data.records;
         });
 
@@ -1928,11 +1930,12 @@
         
         //toggle switch functionality to make a patient inactive or active
         $scope.activity = function(patient) {
-            var ModalInstanceCtrl = function($scope, $modalInstance) {
+            var ModalInstanceCtrl = function($scope, $modalInstance, userInfo) {
                 modalCounter++;
                 $scope.modalPatient = patient;
-
-                getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons").success(function(data) {
+				var sessionID = userInfo.get().SessionID;
+				
+                getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons/" + sessionID).success(function(data) {
                     $scope.inactiveReasons = data.records;
                 });
 
@@ -2202,11 +2205,11 @@
         $scope.inviteToCareTeam = function(patient) {
 
             var ModalInstanceCtrl = function($modalInstance, $scope) {
-                $scope.userFacilityID = userInfo.get().FacilityID;
                 $scope.patient = patient;
                 $scope.selectedFac = "(No facility selected)";
+				var sessionID = userInfo.get().SessionID;
                 //Grab AII Facilities that are NOT already associated with the patient
-                getData.get("http://aii-hermes.org/aii-api/v1/facilities/new/" + patient.PatientID).success(function(data) {
+                getData.get("http://aii-hermes.org/aii-api/v1/facilities/new/" + patient.PatientID + '/' + sessionID).success(function(data) {
                     $scope.allFacs = data;
                 });
 
@@ -2222,10 +2225,9 @@
                     //Copied james sendInvite function
                     $scope.postNotification = {};
                     $scope.postNotification.PatientID = patient.PatientID;
-                    $scope.postNotification.SenderFacilityID = $scope.userFacilityID;
                     $scope.postNotification.ReceiverFacilityID = $scope.selectedFac.FacilityID;
 
-                    $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/";
+                    $scope.postNotificationURL = "http://aii-hermes.org/aii-api/v1/notifications/" + sessionID;
                     postData.post($scope.postNotificationURL, $scope.postNotification).success(function(data) {
                         if (data.records == "Success")
                             $modalInstance.close();
@@ -2396,7 +2398,6 @@
 
     //*****************************************USER CONTROLLERS**********************************************//
 
-
     //Added by Travis. 
     /**
      * @controller editUserController - 
@@ -2465,8 +2466,6 @@
 				$scope.messageIsError = true;
 			}
         }
-    
-
     }
 
 
@@ -2782,14 +2781,11 @@
 		
 		//Defines SenderName, ReceiverName, ShortSubject, ShortSenderName, and ShortReceiverName 
 		//for all messages
-		$scope.parseMessages = function(){		
-			//console.log("Parsing some messages");
+		$scope.parseMessages = function(){
 			
 			//Loop through each message and parse accordingly
 			for(var key in $scope.messages){
-				//console.log("var key in $scope.messages: " + key);
 				if(key.charAt(0) == 'M'){	//Only parse Messages
-					//console.log("Messages Key: " + key);
 					//Define SenderName and ReceiverName for each message
 					for(var i in $scope.messages[key]){
 						$scope.messages[key][i]['ReceiverName'] = $scope.messages[key][i]['Receiver_First'] + " " + $scope.messages[key][i]['Receiver_Last'];
@@ -2811,7 +2807,6 @@
 		
 		//Define ShortSubject and ShortPatient for all Alerts
 		$scope.parseAlerts = function(){
-			//console.log("Parse these Alerts!");
 			$scope.shortenField('AlertsReceived', 'Subject');
 			$scope.shortenField('AlertsReceived', 'Patient');
 			$scope.shortenField('AlertsDeleted', 'Subject');
@@ -2865,23 +2860,17 @@
 		}
 		
 		//Defines "Short{field}" value for every message in the given key
-		$scope.shortenField = function(key, field){
-			//console.log("This Key is: " + key);
-		
+		$scope.shortenField = function(key, field){		
 			//Length of the shortened fields
 			var shortLength = 24;
 		
 			//Loop through every message in the key and define 'Short{field}'
 			for(var i in $scope.messages[key]){
-				console.log($scope.messages[key][i]);
-				console.log("Field: " + field + " -- Key: " + key);
 		
 				$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field];
 				if($scope.messages[key][i][field].length > shortLength){
 					$scope.messages[key][i]['Short' + field] = $scope.messages[key][i][field].substr(0, shortLength - 3) + "...";
 				}
-				
-				//console.log("Result: " + $scope.messages[key][i]['Short' + field]);
 			}
 			$scope.resetCurrentMessages();
 		}
