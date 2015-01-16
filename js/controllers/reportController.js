@@ -24,7 +24,7 @@
         //units, fields(presentation level, snr, etc)
         
         //arbitrary change in url 
-        $scope.questionsURL = "../aii-api/v1/phases/" + 2 + "/questions/event/1";
+        $scope.questionsURL = "../aii-api/v1/phases/" + 2 + "/questions/event/1/" + cookieSessionID;
         getData.get($scope.questionsURL).success(function(data) {
             $scope.audioQuestions = data.records;
             $scope.fields = []; //array to hold all the fields for all the tests.
