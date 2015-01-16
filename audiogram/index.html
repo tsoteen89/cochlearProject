@@ -70,7 +70,7 @@
             border: 0;
             border-top: 1px solid #e0e0e0;
         }
-        
+                
         .fa-md{
             font-size:1.3em;
             margin-top:3px;
@@ -103,7 +103,7 @@
         /*Aii styles*/
         
         .aii-btn-border{
-            border: 3px solid rgba(0,0,0,.3);
+            border: 3px solid rgba(70,70,70,.7);
             background-color: #EEEEEE;
         }
         
@@ -417,7 +417,7 @@
                                     </div> 
                                     <div>
                                         <span class="button-checkbox">
-                                            <button type="button" class="btn" id="mask-tool"> Masked</button>
+                                            <i class="state-icon ' + settings[$button.data('state')].icon + '"></i><button type="button" class="btn" id="mask-tool"> Masked</button>
                                             <input type="checkbox" class="hidden" />
                                         </span>
                                     </div>
@@ -838,7 +838,9 @@
      * @method loadPatientAudiogramTitles
      * @method loadPhaseName
      ************************************************************************************************/
-    var DomHelper = function(){
+    var DomHelper = function(stage){
+        
+        var Stage = stage;
         
         function loadAudiogram( data ) {
 
@@ -945,11 +947,11 @@
         * @return {void}
         */ 
         function updateMeasureButtons() {
+            console.log('updateMeasureButtons');
             // Settings
             var $widget = $('.button-checkbox'),
                 $button = $widget.find('button'),
                 $checkbox = $widget.find('input:checkbox'),
-                color = $button.data('color'),
                 isChecked = $checkbox.is(':checked'),
                 settings = {
                     on: {
@@ -960,6 +962,8 @@
                     }
                 };
 
+            console.log($button);
+            
             // Set the button's state
             $button.data('state', (isChecked) ? "on" : "off");
 
@@ -972,7 +976,7 @@
             if (isChecked) {
                 $button
                 .removeClass('btn-default')
-                .addClass('btn-' + color + ' active')
+                .addClass('aii-btn-border active')
                 .blur();
                 Stage['right'].setMasked(1);
                 Stage['left'].setMasked(1);
@@ -982,7 +986,7 @@
                 $('#ACR').html('&#x25b3;');
             } else {
                 $button
-                .removeClass('btn-' + color + ' active')
+                .removeClass('aii-btn-border active')
                 .addClass('btn-default')
                 .blur();
                 Stage['right'].setMasked(0);
@@ -1000,6 +1004,7 @@
         */ 
         function initMeasureButtons() {
             //Added for checkbox buttons
+            console.log('initMeasureButtons');
             $('.button-checkbox').each(function(){
 
                 // Settings
@@ -1020,16 +1025,17 @@
                 $button.on('click', function () {
                     $checkbox.prop('checked', !$checkbox.is(':checked'));
                     $checkbox.triggerHandler('change');
-                    updateConditionButtons();
+                    updateMeasureButtons();
                     event.preventDefault();
                 });
 
                 $checkbox.on('change', function () {
-                    updateConditionButtons();
+                    updateMeasureButtons();
                 });
 
             });
         }
+        
         var waitingDialog = (function() {
 
             // Creating modal dialog's DOM
@@ -1114,8 +1120,8 @@
         var aiiApi = null;
         return {
             init: function(stage,aiiapi) {
+                settings.measureButtons = $('.aii-mea-btn');
                 settings.canvasMenu = $('.aii-canvas-menu');
-                settings.chooseMeasure = $('.aii-mea-btn');
                 settings.loadAudiogram = $('#load-audiogram');
                 settings.loadLatestAudiogram = $('#load-latest');
                 settings.printAudiogram = $('#printAudiogram');
@@ -1203,6 +1209,39 @@
                     $('#aii-audiogram-prev option:last-child').attr('selected', 'selected');
                     $('#load-audiogram').trigger( "click" ); 
                 });
+                
+                
+                /**
+                * Controls the choosing of a measurement for an audiogram, and
+                * highlighting the clicked button.
+                * @param {obj} event
+                * @return {void}
+                */ 
+                settings.measureButtons.click(function (event) {
+                    var clicked = $( this )[0].id;
+                    setTimeout( function (){
+                        $( ".aii-mea-btn" ).each(function( index ) {
+                            if($( this )[0].id != 'mask-button'){
+                                if(clicked == $( this )[0].id){
+                                    $( this ).addClass('aii-btn-border');
+                                    $( this ).blur();
+                                }else{
+                                    $( this ).removeClass('aii-btn-border');
+                                }
+                            }
+                        })
+                        setTimeout( function (){
+                            $( ".aii-mea-btn" ).each(function( index ) {
+                                if($( this ).hasClass( "aii-btn-border" )){
+                                    Stage['right'].setMeasureType(clicked);
+                                    Stage['left'].setMeasureType(clicked);
+                                }
+                            });
+                        }, 0 );
+                    }, 0 );
+                    event.preventDefault();
+                }); 
+                
                 /**
                 * Adds a print action to the "print" button in the top menu
                 * @param {obj} event
@@ -1287,36 +1326,8 @@
                     }
                     event.preventDefault();
                 });
-                /**
-                * Controls the choosing of a measurement for an audiogram, and
-                * highlighting the clicked button.
-                * @param {obj} event
-                * @return {void}
-                */ 
-                settings.canvasMenu.click(function (event) {
-                    var clicked = $( this )[0].id;
-                    setTimeout( function (){
-                        $( ".aii-mea-btn" ).each(function( index ) {
-                            if($( this )[0].id != 'mask-button'){
-                                if(clicked == $( this )[0].id){
-                                    $( this ).addClass('aii-btn-border');
-                                    $( this ).blur();
-                                }else{
-                                    $( this ).removeClass('aii-btn-border');
-                                }
-                            }
-                        })
-                        setTimeout( function (){
-                            $( ".aii-mea-btn" ).each(function( index ) {
-                                if($( this ).hasClass( "aii-btn-border" )){
-                                    Stage['right'].setMeasureType(clicked);
-                                    Stage['left'].setMeasureType(clicked);
-                                }
-                            });
-                        }, 0 );
-                    }, 0 );
-                    event.preventDefault();
-                }); 
+                
+
             },
             bindStageReference: function(stage){
                 Stage = stage;
@@ -1347,6 +1358,7 @@
           event.preventDefault();
         });
 
+        //Create 2 canvas's using Kinetic library
         var StageRight = new Kinetic.Stage({
             container: 'audiogram_right',
             width: 450,
@@ -1360,9 +1372,8 @@
         });
 
 
-        //create both canvas' and add 'right-click' event handlers to each canvas
-        //should be handled in audiogram.js
-        //setTimeout(function(){
+        //Pass both kinetic stages to the audiogram lib to add the audiogram
+        //functionality.
         Stage['right'] = new AudioGram(StageRight,'right','audiogram_right');
         Stage['left'] = new AudioGram(StageLeft,'left','audiogram_left');
         
@@ -1385,7 +1396,7 @@
             
             console.log(CookieData);
 
-            domHelper = new DomHelper();
+            domHelper = new DomHelper(Stage);
             aiiApi = new AiiApiHelper('http://aii-hermes.org/aii-api/v1/',CookieData.SessionID,CookieData.PatientID,CookieData.CareTeamID,CookieData.PhaseID,Stage);
             domHelper.waitingDialog.show('Getting Data ...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {domHelper.waitingDialog.hide();}, 30000);
             EventHandler.init(Stage,aiiApi);
@@ -1415,6 +1426,7 @@
                 domHelper.loadEarConditions(AudiogramData.EarConditions);
                 domHelper.loadPatientAudiogramTitles(AudiogramData.PatientsAudiograms);
                 domHelper.loadPhaseName(AudiogramData.PhaseName);
+                domHelper.initMeasureButtons();
                 domHelper.waitingDialog.hide();
             });
             
