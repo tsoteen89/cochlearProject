@@ -8,6 +8,9 @@
         <!-- Table with all results and answers for the audio phase-->
         <div class="col-md-7 col-md-offset-2">
             <div id="divtoprint">
+                <div ng-if="patientSummaryAnswers.Answers"> 
+                    <completed-questions></completed-questions>
+                </div>
                 <div ng-repeat="condition in audioSummaryAnswers">
                     <completed-audiology></completed-audiology>
                 </div>
