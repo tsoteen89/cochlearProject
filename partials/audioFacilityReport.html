@@ -52,21 +52,21 @@
                 </td>
                 <!--AzBio, CNC, BKB-SIN-->
                 <td >
-                    <table style="width:100%;">
-                        <tr style="border:none">
-                            <td style="height:34px;border:none" class="bold"></td>
+                    <table style="width:100%;border-style:none" >
+                        <tr style="border-style:none">
+                            <td style="height:32px;border-style:none" class="bold"></td>
                         </tr>
-                        <tr style="border:none">
-                            <td style="height:33px;border:none" class="bold"></td>
+                        <tr style="border-style:none">
+                            <td style="height:32px;border-style:none" class="bold"></td>
                         </tr>
-                        <tr>
-                            <td>
+                        <tr style="border-style:none">
+                            <td style="border-style:none">
                                 <table ng-repeat="test in audioQuestions.Tests" style=" width:100%;">
-                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21+1.5}}px; background-color:#cae5f0; border-bottom:none">
+                                    <tr ng-attr-style="height:{{test.AudioTestInput.length*21.33-1.5}}px; background-color:#cae5f0; border-bottom:none">
                                         <td style="border-bottom:none"><b> {{test.AudioTestName}}</b></td>
                                     </tr>
-                                    <tr style="border:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first">
-                                        <td style="border:none;background-color:#cae5f0;"></td>
+                                    <tr style="border-style:none" ng-repeat="field in test.AudioTestInput" ng-if="!$first">
+                                        <td style="border-style:none;background-color:#cae5f0;"></td>
                                     </tr>
                                 </table>
                             </td>
@@ -74,13 +74,13 @@
                 </td>
                 <!-- List, SNR, etc; specific to the test-->
                 <td >
-                    <table style="width:100%">
+                    <table style="width:100%;">
                         <!-- empty hidden rows to make excel look better-->
-                        <tr style="border:none">
-                            <td style="height:34px;border:none" class="bold"></td>
+                        <tr style="border-style:none">
+                            <td style="height:33px;border-style:none; border-top:1px solid #164a5e" class="bold"></td>
                         </tr>
-                        <tr style="border:none">
-                            <td style="height:33px;border:none" class="bold"></td>
+                        <tr style="border-style:none">
+                            <td style="height:32px;border-style:none" class="bold"></td>
                         </tr>
                         <tr>
                             <td>
