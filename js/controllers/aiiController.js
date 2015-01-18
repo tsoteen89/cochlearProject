@@ -392,7 +392,7 @@
                     $scope.addUser = {}; //object to hold form data for adding user
 
                     //Grab the user titles to populate the form with user title options
-                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles/' + $scope.sessionID).success(function(data) {
+                    getData.get('http://aii-hermes.org/aii-api/v1/userTitles/').success(function(data) {
                         $scope.userTitles = data.records;
                     });
 
