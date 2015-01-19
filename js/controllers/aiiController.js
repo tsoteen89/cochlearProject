@@ -1042,7 +1042,7 @@
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
-                setTimeout(function () {waitingDialog.hide();}, 10);
+                setTimeout(function () {waitingDialog.hide();}, 600);
             });
         });
 
@@ -1211,13 +1211,16 @@
             "CareTeamID": $cookieStore.get('CareTeamID')
         };
 
+        $scope.savedSurgeries = [];
         //Post a surgery History. 
         $scope.postSurgery = function() {
+            $scope.savedSurgeries.push($scope.surgery);
             $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
             postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function() {
+                
                 $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                 $scope.surgery["Other"] = null;
                 $scope.surgery["Type of Surgery?"] = null;

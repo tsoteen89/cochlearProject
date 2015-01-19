@@ -1,1 +1,11 @@
 {{question.QuestionHelp}}
+
+<div ng-if="question.Input.Type == 'SurgeryHistory'">
+    <!--{{savedSurgeries}}-->
+    <br><br>
+    <p> Previously entered surgery histories</p>
+    <div ng-repeat="surgery in patientSummaryAnswers.Answers.085.Answers">
+        {{$index +1}}. <p ng-repeat="(surgeryInfo, value) in surgery"> <b> {{surgeryInfo}}</b> : {{value}} </p> <br>
+    </div>
+        
+</div>
