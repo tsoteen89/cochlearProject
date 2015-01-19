@@ -11,6 +11,58 @@
 
     controllers.reportCtrl = function($scope, getData, $cookieStore) {
 
+        var waitingDialog;
+        waitingDialog = waitingDialog || (function () {
+
+            // Creating modal dialog's DOM
+            var $dialog = $(
+                '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
+                '<div class="modal-dialog modal-sm" style="margin-left:36%">' +
+                '<div class="modal-content" >' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3> </div>' +
+                    '<div class="modal-body">' +
+                        '<i class="fa fa-spinner fa-spin fa-3x" style="margin-left:45%"></i>' +
+                    '</div>' +
+                '</div></div></div>');
+
+            return {
+                /**
+                 * Opens our dialog
+                 * @param message Custom message
+                 * @param options Custom options:
+                 * 				  options.dialogSize - bootstrap postfix for dialog size, e.g. "sm", "m";
+                 * 				  options.progressType - bootstrap postfix for progress bar type, e.g. "success", "warning".
+                 */
+                show: function (message, options) {
+                    // Assigning defaults
+                    var settings = $.extend({
+                        dialogSize: 'sm'
+                    }, options);
+                    if (typeof message === 'undefined') {
+                        message = 'Loading';
+                    }
+                    if (typeof options === 'undefined') {
+                        options = {};
+                    }
+                    // Configuring dialog
+                    $dialog.find('.modal-dialog').attr('class', 'modal-dialog').addClass('modal-' + settings.dialogSize);
+                    $dialog.find('.progress-bar').attr('class', 'progress-bar');
+
+                    $dialog.find('h3').text(message);
+                    // Opening dialog
+                    $dialog.modal();
+                },
+                /**
+                 * Closes dialog
+                 */
+                hide: function () {
+                    $dialog.modal('hide');
+                }
+            }
+
+        })();
+    
+        
         $scope.careTeams = []; //array to hold all the events at the facility
         
         //get the SessionID stored
@@ -131,6 +183,7 @@
         //create the appropriate table for the facility report
         $scope.generateReport = function() {
 
+            //waitingDialog.show('Please wait for report to load...', {dialogSize: 'sm'});
             $scope.showReport = true;
             $scope.loadMessage = "Please wait for report to load...";
             var fullFacilityURL = 
@@ -180,9 +233,8 @@
         
         //Bad loading message code 
         $scope.clearMessage = function() { //called on last interation of ng-repeat of the answers...
-
             $scope.loadMessage = " ";
-
+            //waitingDialog.hide();
         };
 
     };

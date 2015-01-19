@@ -814,6 +814,7 @@
         getData.get(patientWithFacilityURL).success(function(data) {
             //Patient info display on top of question pages
             $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientLast = data.records.Patient.Last;
             $scope.patientSex = data.records.Patient.Sex;
             $scope.patientDOB = data.records.Patient.DOB;
             $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
@@ -1041,7 +1042,7 @@
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
-                setTimeout(function () {waitingDialog.hide();}, 300);
+                setTimeout(function () {waitingDialog.hide();}, 600);
             });
         });
 
@@ -1210,13 +1211,16 @@
             "CareTeamID": $cookieStore.get('CareTeamID')
         };
 
+        $scope.savedSurgeries = [];
         //Post a surgery History. 
         $scope.postSurgery = function() {
+            $scope.savedSurgeries.push($scope.surgery);
             $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
             postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function() {
+                
                 $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                 $scope.surgery["Other"] = null;
                 $scope.surgery["Type of Surgery?"] = null;
@@ -1339,7 +1343,8 @@
             var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
+            var date = new Date();
+            saveAs(blob, $scope.patientLast +" " + $scope.phaseName + " Report (" + date.toISOString().slice(0, 10) + ").xls");
         };
 
 
@@ -1398,6 +1403,7 @@
         getData.get(patientWithFacilityURL).success(function(data) {
             //Patient info display on top of question pages
             $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientLast = data.records.Patient.Last;
             $scope.patientSex = data.records.Patient.Sex;
             $scope.patientDOB = data.records.Patient.DOB;
             $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
@@ -1642,7 +1648,8 @@
             var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
+            var date = new Date();
+            saveAs(blob, $scope.patientLast +" " + $scope.phaseName + " Report (" + date.toISOString().slice(0, 10) + ").xls");
         };
 
         //initialize these fields
@@ -1824,7 +1831,7 @@
                 $timeout(function() {
                     if (inactiveStatus != 10) { //if patient is inactive- go to inactive tab then scroll to patient
                         $scope.scrollTo(last, true); //NOT working for pages outside of patient directory
-                    } else { //if patient is inactive, stay on active tab and then scroll to patient
+                    } else { //if patient is active, stay on active tab and then scroll to patient
                         $scope.scrollTo(last, false);
                     }
                 }, 0);
@@ -1914,7 +1921,10 @@
         $scope.showInactiveTab = false;
         $scope.showActivePatients = "10";
 
+        $scope.searchPlaceholder ="Active";
         $scope.showInactive = function() {
+            $scope.selectedPatient = null;
+            $scope.searchPlaceholder ="Inactive";
             console.log("inshowInactive()");
             $scope.showActivePatients = "!10";
             $scope.showInactiveTab = true;
@@ -1923,6 +1933,8 @@
             console.log('showActivePatients:', $scope.showActivePatients);
         };
         $scope.showActive = function() {
+            $scope.selectedPatient = null;
+            $scope.searchPlaceholder ="Active";
             $scope.showActivePatients = "10";
             $scope.showInactiveTab = false;
             $scope.showActiveTab = true;
@@ -3354,6 +3366,7 @@
         }
     }
 
+    
     /**
      * @controller ngBindHtmlCtrl -
      *      EXAMPLE FOR BINDING HTML CONTROLLER
@@ -3370,12 +3383,14 @@
      *      @returns - NULL
      *
      */
+    /*
     controllers.ngBindHtmlCtrl = function($scope, $sce) {
         $scope.myHTML =
             'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
         $scope.trustedHtml = $sce.trustAsHtml($scope.myHTML);
         $scope.textBox = $sce.trustAsHtml('<input  type="text" > </input>');
     };
+    */
 
 
     //Added by Sanan

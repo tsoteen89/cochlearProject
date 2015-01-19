@@ -92,7 +92,8 @@
                     <div class="control-group col-md-5 col-md-offset-1" >
                         <div class="controls" >                        
                             <select class="form-control" id="states" name="State" ng-options="states.name as states.name for states in usStates" 
-                                    ng-model="formData.State">                              
+                                    ng-model="formData.State">            
+                                <option value=''> State </option>
                             </select>
                         </div>
                     </div>
