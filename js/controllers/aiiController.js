@@ -814,6 +814,7 @@
         getData.get(patientWithFacilityURL).success(function(data) {
             //Patient info display on top of question pages
             $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientLast = data.records.Patient.Last;
             $scope.patientSex = data.records.Patient.Sex;
             $scope.patientDOB = data.records.Patient.DOB;
             $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
@@ -1041,7 +1042,7 @@
                 getData.get($scope.finalQuestionsURL).success(function(data4) {
                     $scope.finalQuestions = data4.records;
                 });
-                setTimeout(function () {waitingDialog.hide();}, 300);
+                setTimeout(function () {waitingDialog.hide();}, 10);
             });
         });
 
@@ -1339,7 +1340,8 @@
             var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
+            var date = new Date();
+            saveAs(blob, $scope.patientLast +" " + $scope.phaseName + " Report (" + date.toISOString().slice(0, 10) + ").xls");
         };
 
 
@@ -1398,6 +1400,7 @@
         getData.get(patientWithFacilityURL).success(function(data) {
             //Patient info display on top of question pages
             $scope.patientName = data.records.Patient.First + ' ' + data.records.Patient.Last;
+            $scope.patientLast = data.records.Patient.Last;
             $scope.patientSex = data.records.Patient.Sex;
             $scope.patientDOB = data.records.Patient.DOB;
             $scope.patientInactiveStatus = data.records.Patient.InactiveStatus;
@@ -1642,7 +1645,8 @@
             var blob = new Blob([document.getElementById('divtoprint').innerHTML], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
-            saveAs(blob, "Report.xls");
+            var date = new Date();
+            saveAs(blob, $scope.patientLast +" " + $scope.phaseName + " Report (" + date.toISOString().slice(0, 10) + ").xls");
         };
 
         //initialize these fields
