@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Auditory Implant Initiative</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./modern-business/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="./modern-business/css/modern-business.css" rel="stylesheet">
+    <link href="./modern-business/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <?php
+    foreach($Includes as $Include){
+        echo $Include."\n\t";
+    }
+    ?>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="Home">
+                <img src="./images/AIILogoLight2.png" height="100px"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <?php
+                    foreach($Menu['Navigation'] as $Link){
+                        if(!array_key_exists('subMenu',$Link)){
+                            echo'<li><a href="'.$Link['URI'].'">'.$Link['Label'].'</a></li>';
+                        }else{
+                            echo'<li class="dropdown">';
+                                echo'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$Link['Label'].' <b class="caret"></b></a>';
+                                echo'<ul class="dropdown-menu">';
+                                    foreach($Link['subMenu'] as $SubMenu){
+                                        echo'<li><a href="'.$SubMenu['URI'].'">'.$SubMenu['Label'].'</a>';
+                                        echo'</li>';
+                                    }
+                                echo'</ul>';
+                            echo'</li>';
+                        }
+                    }
+                    ?>
+                    <li><a href="Editor"><i class="fa fa-pencil-square-o"></i> Edit</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div id="myCarousel" class="carousel slide">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="fill" style="background-image:url('./images/Hear_spectrum.png');"></div>
+                <div class="carousel-caption" style="padding-bottom:200px">
+                    <h1>Cutting Edge Technology</h1>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('./images/collage_big2.png');"></div>
+                <div class="carousel-caption" style="padding-bottom:200px">
+                    <h1>Give Better Care to Your Patients</h1>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-image:url('./images/research_network.jpg');"></div>
+                <div class="carousel-caption" style="padding-bottom:200px;padding-right:300px">
+                    <h1><a href="#">Register Your Facility Today</a>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </div>
+    <!-- header was above content here  footer was below-->
+        <div class="section">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <h3><i class="fa fa-lock"></i> <a href="http://www.hhs.gov/ocr/privacy/">HIPAA Compliant</a></h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut bibendum arcu tortor, vehicula consectetur est venenatis in. Curabitur venenatis, diam non suscipit consectetur, metus sem fermentum augue, in porttitor diam nisi at sapien. Donec laoreet tincidunt augue eu sodales. Cras eu augue sit amet ligula euismod imperdiet. </p>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h3><i class="fa fa-user-md"></i> <a href="#">Ready to Help Your Practice</a></h3>
+                    <p>In ut felis lobortis diam luctus accumsan. Maecenas mattis quam vel convallis tincidunt. Suspendisse odio urna, interdum eget faucibus ac, mollis at orci. Sed non condimentum nulla. Sed tempus libero dolor, ut imperdiet mauris aliquam pulvinar. Suspendisse lectus odio, ultricies quis placerat eget, eleifend quis tellus.</p>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h3><i class="fa fa-building-o"></i> <a href="#">View our Facilities</a></h3>
+                    <p>Integer mattis malesuada magna in feugiat. Morbi tristique leo in dui porttitor scelerisque at vehicula sem. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.section -->
+
+    <div class="section-colored text-center">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Modern Business: A Clean &amp; Simple Full Website Template by Start Bootstrap</h2>
+                    <p>A complete website design featuring various single page templates from Start Bootstraps library of free HTML starter templates.</p>
+                    <hr>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.section-colored -->
+
+    <div class="section">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Display Some Work on the Home Page Portfolio</h2>
+                    <hr>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html">
+                        <img class="img-responsive img-home-portfolio" src="http://placehold.it/700x450">
+                    </a>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.section -->
+
+    <div class="section-colored">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <h2>Modern Business Features Include:</h2>
+                    <ul>
+                        <li>Bootstrap 3 Framework</li>
+                        <li>Mobile Responsive Design</li>
+                        <li>Predefined File Paths</li>
+                        <li>Working PHP Contact Page</li>
+                        <li>Minimal Custom CSS Styles</li>
+                        <li>Unstyled: Add Your Own Style and Content!</li>
+                        <li>Font-Awesome fonts come pre-installed!</li>
+                        <li>100% <strong>Free</strong> to Use</li>
+                        <li>Open Source: Use for any project, private or commercial!</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <img class="img-responsive" src="http://placehold.it/700x450/ffffff/cccccc">
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.section-colored -->
+
+    <div class="section">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <img class="img-responsive" src="http://placehold.it/700x450">
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <h2>Modern Business Features Include:</h2>
+                    <ul>
+                        <li>Bootstrap 3 Framework</li>
+                        <li>Mobile Responsive Design</li>
+                        <li>Predefined File Paths</li>
+                        <li>Working PHP Contact Page</li>
+                        <li>Minimal Custom CSS Styles</li>
+                        <li>Unstyled: Add Your Own Style and Content!</li>
+                        <li>Font-Awesome fonts come pre-installed!</li>
+                        <li>100% <strong>Free</strong> to Use</li>
+                        <li>Open Source: Use for any project, private or commercial!</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.section -->
+
+    <div class="container">
+
+        <div class="row well">
+            <div class="col-lg-8 col-md-8">
+                <h4>'Modern Business' is a ready-to-use, Bootstrap 3 updated, multi-purpose HTML theme!</h4>
+                <p>For more templates and more page options that you can integrate into this website template, visit Start Bootstrap!</p>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <a class="btn btn-lg btn-primary pull-right" href="http://startbootstrap.com">See More Templates!</a>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <div class="container">
+
+        <hr>
+
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Company 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- JavaScript -->
+    <script src="./modern-business/js/jquery-1.10.2.js"></script>
+    <script src="./modern-business/js/bootstrap.js"></script>
+    <script src="./modern-business/js/modern-business.js"></script>
+    <script type="/text/javascript" src="./retinajs/src/retina.js"></script>
+
+    Include stuff
+
+</body>
+
+</html>
