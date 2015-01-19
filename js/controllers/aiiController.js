@@ -3354,6 +3354,7 @@
         }
     }
 
+    
     /**
      * @controller ngBindHtmlCtrl -
      *      EXAMPLE FOR BINDING HTML CONTROLLER
@@ -3370,12 +3371,14 @@
      *      @returns - NULL
      *
      */
+    /*
     controllers.ngBindHtmlCtrl = function($scope, $sce) {
         $scope.myHTML =
             'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
         $scope.trustedHtml = $sce.trustAsHtml($scope.myHTML);
         $scope.textBox = $sce.trustAsHtml('<input  type="text" > </input>');
     };
+    */
 
 
     //Added by Sanan

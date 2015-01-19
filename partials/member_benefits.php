@@ -4,7 +4,7 @@
     <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Track your patient outcomes</span></li>
     <li class="list-group-item">
       When you join AII, you will have access to the AII web-based Portal. This HIPAA complaint tool will allow you to measure and track outcomes during the preoperative, perioperative and 
-      postoperative phases of implant care.  Our “Virtual Care Teams” will allow you to participate and share data with colleagues who are involved with your patients.
+      postoperative phases of implant care.  Our "Virtual Care Teams" will allow you to participate and share data with colleagues who are involved with your patients.
     </li>
   <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Participate in research without disrupting your practice</span></li>
       
@@ -13,7 +13,7 @@ As providers enter data into the AII Portal, this information is collected in ag
       </li>
     <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Connect with other implant providers</span></li>
     <li class="list-group-item">
-Membership in AII allows providers to join together as “Virtual Care Teams”.  These teams function as an integrated CI team regardless of physical location.  Additionally, the members of AII function as a network of like-minded colleagues who can share ideas, lend support or assist in patient care. 
+Membership in AII allows providers to join together as "Virtual Care Teams".  These teams function as an integrated CI team regardless of physical location.  Additionally, the members of AII function as a network of like-minded colleagues who can share ideas, lend support or assist in patient care. 
     </li>
     <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Access to best practices and solutions to everyday problems</span></li>
     <li class="list-group-item">
@@ -24,7 +24,7 @@ By participating and entering patient data in the AII Portal, you will be guided
     </li>
     <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Receive reminders when  important appointments are past due</span></li>
     <li class="list-group-item">
-The AII Portal will notify all members of the “Virtual Care Team” when scheduled follow up appointments are missed. Let AII become a built in safety net to keep your patients from falling through the cracks. 
+The AII Portal will notify all members of the "Virtual Care Team" when scheduled follow up appointments are missed. Let AII become a built in safety net to keep your patients from falling through the cracks. 
     </li>
     <li class="list-group-item"><span class="pull-left"><i class="fa fa-check-square-o fa-2x"></i></span><span class="title">Compare your outcomes to other providers</span></li>
     <li class="list-group-item">
