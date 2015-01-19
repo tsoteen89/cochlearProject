@@ -1828,7 +1828,7 @@
                 $timeout(function() {
                     if (inactiveStatus != 10) { //if patient is inactive- go to inactive tab then scroll to patient
                         $scope.scrollTo(last, true); //NOT working for pages outside of patient directory
-                    } else { //if patient is inactive, stay on active tab and then scroll to patient
+                    } else { //if patient is active, stay on active tab and then scroll to patient
                         $scope.scrollTo(last, false);
                     }
                 }, 0);
@@ -1918,7 +1918,10 @@
         $scope.showInactiveTab = false;
         $scope.showActivePatients = "10";
 
+        $scope.searchPlaceholder ="Active";
         $scope.showInactive = function() {
+            $scope.selectedPatient = null;
+            $scope.searchPlaceholder ="Inactive";
             console.log("inshowInactive()");
             $scope.showActivePatients = "!10";
             $scope.showInactiveTab = true;
@@ -1927,6 +1930,8 @@
             console.log('showActivePatients:', $scope.showActivePatients);
         };
         $scope.showActive = function() {
+            $scope.selectedPatient = null;
+            $scope.searchPlaceholder ="Active";
             $scope.showActivePatients = "10";
             $scope.showInactiveTab = false;
             $scope.showActiveTab = true;
