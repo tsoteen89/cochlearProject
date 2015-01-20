@@ -136,8 +136,10 @@
                                     If surgery is picked as a service - Please list the level of Cochlear training completed by the surgeons (select all that apply)
                                 </label>
                                 <div ng-repeat="training in facilityCochlearTraining">
-                                    <input type="checkbox" checklist-value="training.name" 
-                                        checklist-model="facilityData.Training"> {{training.name}}<br>
+                                    <div class="row container">
+                                        <input type="checkbox" checklist-value="training.name" 
+                                        checklist-model="facilityData.Training"> {{training.name}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -173,10 +175,12 @@
                 </fieldset>
                 <!----Registration fees /credit card info -->
                 <fieldset>
-                    <h3 class="fs-title">Step 3</h3>
-                    <h3 class="fs-subtitle">Register a credit card for payments</h3>
+                    <h3 class="fs-title">Step 3</h3><br>
                     <div class="row">
-                     Paypal or other credit card service here...
+                        <h3 class="fs-title">1. Registration Fees</h3>
+                        <h3 class="fs-subtitle"><strike> $199.00 </strike></h3> 
+                        <h3 class="fs-title">2. Donate to AII (We are a non-profit 501(c)3 organization)</h3>
+                        <h3 class="fs-subtitle">Your contribution will help us advance cochlear implant care.</h3>
                     </div>
                     <input type="button" name="previous" class="previous action-button" value="Previous" />
                     <input type="button" name="next" class="next action-button" value="Next" />
@@ -185,7 +189,6 @@
                 <fieldset>
                     <h3 class="fs-title">Step 4</h3>
                     <h3 class="fs-subtitle">Accept the terms of the services agreement</h3>
-                    <h3 class="fs-subtitle">You must read the entire agreement to be able to proceed.</h3>
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
                             <div id='baa' class="box" style="text-align:left">
