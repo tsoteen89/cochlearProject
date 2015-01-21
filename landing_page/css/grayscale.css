@@ -9,7 +9,13 @@ body {
     height: 100%;
     font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #fff;
-    background-color: #002;
+background: -moz-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(125,185,232,0) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* IE10+ */
+background: linear-gradient(135deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 html {
@@ -137,7 +143,7 @@ a:focus {
     padding: 100px 0;
     text-align: center;
     color: #fff;
-    background: url(../img/hear_spectrum.png) no-repeat bottom center scroll;
+    background: url(../img/Blue-sea-horizon.jpg) no-repeat bottom center scroll;
     background-color: #000;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -296,7 +302,7 @@ a:focus {
 .btn-default {
     border: 1px solid #000ab3;
     color: #000;
-    background-color: #555555;
+    background-color: #aaafb3;
 }
 
 .btn-default:hover,
