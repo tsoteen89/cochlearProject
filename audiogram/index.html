@@ -641,7 +641,6 @@
             audiogram_id = typeof audiogram_id !== 'undefined' ? audiogram_id : -1;
             //Get one audiogram
             if(audiogram_id > 0){
-                console.log(ApiUrl+"audiograms/"+audiogram_id);
                 return $.ajax({
                           url: ApiUrl+"audiograms/"+audiogram_id,
                           type: "get",
@@ -1151,8 +1150,12 @@
                         console.log("error");
                         return;
                     }else{
-                        var data = aiiApi.getAudiogram(audiogram_id);
-                        domHelper.loadAudiogram(data);
+                        var data = null
+                        
+                        $.when(aiiApi.getAudiogram(audiogram_id)).then(function( data ) {
+                            domHelper.loadAudiogram( data ); 
+                        });
+                        
                     }
                 });
                 /**
