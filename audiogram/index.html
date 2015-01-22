@@ -641,6 +641,7 @@
             audiogram_id = typeof audiogram_id !== 'undefined' ? audiogram_id : -1;
             //Get one audiogram
             if(audiogram_id > 0){
+                console.log(ApiUrl+"audiograms/"+audiogram_id);
                 return $.ajax({
                           url: ApiUrl+"audiograms/"+audiogram_id,
                           type: "get",
@@ -787,8 +788,10 @@
             //Update audiogram title
             $('#aii-audiogram-title').val(data.title);
             $('#aii-audiogram-title').selectpicker('refresh');
+            
+            var AudiogramDate = fromUnixTime(data.date);
 
-            $("#patient-audiogram-date").attr("value", fromUnixTime(data.date));
+            $("#patient-audiogram-date").attr("value", AudiogramDate.year+'-'+AudiogramDate.month+'-'+AudiogramDate.day);
 
             //Update left and right ear conditions
             $('#right-condition-opts').val(data.right_condition);
@@ -821,7 +824,7 @@
         function loadAudiogramTitles( titles ){
             console.log(titles);
 
-            var Html = '<option value="" disabled selected>Choose Title...</option>';
+            var Html = '<option value="0" disabled selected>Choose Title...</option>';
 
             for(var i=0;i<titles.length;i++){
                 Html = Html + '<option value="'+titles[i].Title+'">'+titles[i].Title+'</option>';
@@ -838,7 +841,7 @@
                 conditions.push(data[i].LeftAidCondition);
             }
 
-            var Html = '<option value="" disabled selected>Choose ear condition...</option>';
+            var Html = '<option value="0" disabled selected>Choose ear condition...</option>';
 
             for(var i=0;i<conditions.length;i++){
                 Html = Html + '<option value="'+conditions[i]+'">'+conditions[i]+'</option>';
@@ -850,17 +853,26 @@
         
         function loadPatientAudiogramTitles( data ){
             if(data.length>0){
-                var Html = '<option value="" disabled selected>Find Previous Audiogram <i class="fa fa-search"></i></option>';
+                var Html = '<option value="0" disabled selected>Find Previous Audiogram <i class="fa fa-search"></i></option>';
                 for( i=0; i<data.length; i++) {
                     var audiogram_date = moment.unix(data[i].date).format("MM/DD/YY");
                     Html = Html + '<option value="'+data[i].audiogram_id+'">'+audiogram_date+' - '+data[i].title+'</option>';
                 }
             }else{
-                var Html = '<option value="" disabled selected>NO Previous Audiograms </option>';                    
+                var Html = '<option value="0" disabled selected>NO Previous Audiograms </option>';                    
             }
 
             $('#aii-audiogram-prev').html(Html).selectpicker('refresh');
         }
+        
+        function addPatientAudiogramTitle( data ){
+
+            var Html  = $('#aii-audiogram-prev').html();
+            Html = Html + '<option value="'+data.audiogram_id+'">'+data.audiogram_date+' - '+data.audiogram_title+'</option>';
+
+
+            $('#aii-audiogram-prev').html(Html).selectpicker('refresh');
+        }        
         
         function loadPatientInfo( first,last,dob,facility) {
             $('#patient-name').val(first+' '+last);
@@ -967,6 +979,13 @@
             });
         }
         
+        function resetDropDowns(){
+            $('#aii-audiogram-prev').selectpicker('val','0');
+            $('#right-condition-opts').selectpicker('val','0');
+            $('#left-condition-opts').selectpicker('val','0');
+            $('#aii-audiogram-title').selectpicker('val','0');
+        }
+        
         var waitingDialog = (function() {
 
             // Creating modal dialog's DOM
@@ -1021,6 +1040,7 @@
         })();
         
         return {
+            addPatientAudiogramTitle:addPatientAudiogramTitle,
             initMeasureButtons:initMeasureButtons,
             loadAudiogram:loadAudiogram,
             loadAudiogramTitles:loadAudiogramTitles,
@@ -1028,6 +1048,7 @@
             loadPatientInfo:loadPatientInfo,
             loadPatientAudiogramTitles:loadPatientAudiogramTitles,
             loadPhaseName:loadPhaseName,
+            resetDropDowns:resetDropDowns,
             updateMeasureButtons:updateMeasureButtons,
             waitingDialog:waitingDialog
         };
@@ -1049,8 +1070,9 @@
         var settings = {};
         var Stage = null;
         var aiiApi = null;
+        var domHelper = null;
         return {
-            init: function(stage,aiiapi) {
+            init: function(stage,aiiapi,domhelper) {
                 settings.measureButtons = $('.aii-mea-btn');
                 settings.canvasMenu = $('.aii-canvas-menu');
                 settings.loadAudiogram = $('#load-audiogram');
@@ -1063,6 +1085,7 @@
                 this.bindErrorActions();
                 Stage = stage;
                 aiiApi = aiiapi;
+                domHelper = domhelper;
             },
             bindErrorActions: function(){
                 /**
@@ -1128,7 +1151,8 @@
                         console.log("error");
                         return;
                     }else{
-                        aiiApi.getAudiogram(audiogram_id);
+                        var data = aiiApi.getAudiogram(audiogram_id);
+                        domHelper.loadAudiogram(data);
                     }
                 });
                 /**
@@ -1223,7 +1247,12 @@
                         console.log("error on save");
                         //return;
                     }else{
-                        saveAudiogram(Stage);
+                        saveAudiogram(Stage,domHelper.addPatientAudiogramTitle);
+                        
+                        Stage.left.clear();
+                        Stage.right.clear();
+                        domHelper.resetDropDowns();
+                        
                     }
                 });
                 /**
@@ -1332,7 +1361,7 @@
             domHelper = new DomHelper(Stage);
             aiiApi = new AiiApiHelper(ApiUrl,CookieData,Stage);
             domHelper.waitingDialog.show('Getting Data ...', {dialogSize: 'sm', progressType: 'danger'});setTimeout(function () {domHelper.waitingDialog.hide();}, 30000);
-            EventHandler.init(Stage,aiiApi);
+            EventHandler.init(Stage,aiiApi,domHelper);
             
             //Get all the api data to set up the audiogram page
             $.when(aiiApi.getSessionData(),
@@ -1366,6 +1395,7 @@
                 $('#globalData').data('PhaseID',CookieData.PhaseID);
                 $('#globalData').data('PatientID',CookieData.PatientID);
                 $('#globalData').data('ApiUrl',ApiUrl);
+                
             });
             
             MyDate = new myDateObj();
@@ -1390,17 +1420,21 @@
     * @param {void}
     * @return {void}
     */
-    function saveAudiogram(Stage){
+    function saveAudiogram(Stage,callback){
+
 
         var Max = $('#globalData').data('MaxID') + 1;
 
         console.log(Max);
+        
+        var unix = unixTime();
+        
         var AudiogramData = {
-            "date" : unixTime(),                
+            "date" : unix,                
             "title" : $('#aii-audiogram-title option:selected').val(),
             "audiogram_id": Max,
-            "event_id": $('#globalData').data('EventId'),
-            "phase_id": $('#globalData').data('PhaseId'),
+            "event_id": $('#globalData').data('EventID'),
+            "phase_id": $('#globalData').data('PhaseID'),
             "patient_id": $('#globalData').data('PatientID'),
             "spch_aud_srt_r":$('#spch_aud_srt_r').val(),
             "spch_aud_srt_l":$('#spch_aud_srt_l').val(),
@@ -1429,17 +1463,30 @@
         var data = JSON.stringify(AudiogramData);
         var url = $('#globalData').data('ApiUrl')+'audiograms';
         
-        console.log(url);
 
         $.ajax({
             type: 'POST',
             url: url,
             data: data,
             contentType: "application/json; charset=utf-8",
-            success: function(data){
-                console.log('success');
-                console.log(data);
-            }
+        }).done(function( data ) {
+            console.log('done');
+            console.log(data);
+            $('#globalData').data('MaxID',Max);
+            
+            var d = fromUnixTime(unix);
+            console.log(typeof d.year);
+            d.year = d.year-2000;
+            
+            callback( {
+                'audiogram_title':$('#aii-audiogram-title option:selected').val(),
+                'audiogram_date': d.month+'/'+d.day+'/'+d.year,
+                'audiogram_id':Max
+            });
+        }).fail(function() {
+            console.log( "fail" );
+        }).always(function() {
+            console.log( "always" );
         });
 
     }       
@@ -1521,7 +1568,11 @@
         var day = a.getDate();
         if (day < 10) day = "0" + day;
 
-        return  year + "-" + month + "-" + day;  
+        return {
+            'year':year,
+            'month':month,
+            'day':day
+        };
     }
         
          //Example that closes after 1 second
