@@ -2589,7 +2589,7 @@
 			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
-				$scope.getMessages();
+				$scope.getAllMessages();
 			});
 			
 		}
@@ -2621,7 +2621,7 @@
 					$scope.getMessageCounts();
 					if(!gettingMessages){
 						gettingMessages = true;
-						$scope.getMessages();
+						$scope.getAllMessages();
 					}
 				});
 			}
@@ -2645,7 +2645,7 @@
 			putData.put(baseURL + lowerMessageType + '/' + message[idType + 'ID'] + '/' + sessionID, message).success(function(data){
 				//Get message counts
 				$scope.getMessageCounts();
-				$scope.getMessages();
+				$scope.getAllMessages();
 			});
 		}
 		
@@ -2667,7 +2667,7 @@
 					$scope.getMessageCounts();
 					if(!gettingMessages){
 						gettingMessages = true;
-						$scope.getMessages();
+						$scope.getAllMessages();
 					}
 				});
 			}
@@ -2751,25 +2751,6 @@
 						'Notifications' : $scope.unreadNotificationCount,
 					};
 					$scope.unreadCount = types[$scope.messageType];
-				}
-			});
-		}
-		
-		$scope.getMessages = function(){
-			//Get current messages depending on current message Type and Property
-			var messageURL = baseURL + urlSet[$scope.messageType + $scope.messageProperty] + sessionID;
-			getData.get(messageURL).success(function(data) {
-				//Parse the messages after they are retrieved
-				if(typeof data == "object"){
-					$scope.messages[$scope.messageType + $scope.messageProperty] = data.records;
-					//Parse the retrieved messages
-					if($scope.messageType == "Messages"){
-						$scope.parseMessages();
-					} else if($scope.messageType == "Alerts"){
-						$scope.parseAlerts();
-					} else if($scope.messageType == "Notifications"){
-						$scope.parseNotifications();
-					}
 				}
 			});
 		}
@@ -2897,7 +2878,7 @@
 			message['Response'] = response;
 			message['IsArchived'] = 2;
 			putData.put(baseURL + 'notifications/' + message['NotificationID'] + '/' + sessionID, message).success(function(data) {
-				$scope.getMessages();
+				$scope.getAllMessages();
 			});
 		}
 		
