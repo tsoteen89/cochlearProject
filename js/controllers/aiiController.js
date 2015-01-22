@@ -3437,7 +3437,81 @@
             $scope.icon.count = 0;
         }
     };
-
+	
+	//Added by James
+	/**
+     * @controller dashboardMessagesController -
+     *      Pulls the message data to be displayed on the dashboard
+     *
+     * @variables -
+     *      @*****
+     *
+     * @injections -
+     *      $scope, getData, userInfo
+     *
+     * @functions -
+     *      @function **** -
+     *      @param - NULL
+     *      @returns - NULL
+     *
+     */
+	controllers.dashboardMessagesController = function($scope, getData, userInfo){
+		//Get relevant user info
+		var sessionID = userInfo.get().SessionID;
+		var userLevel = userInfo.get().UserLevelID;
+		
+		//Length of shortened fields
+		var shortLength = 24;
+		
+		//Control display of potential tabs
+		$scope.showAllTabs = false;
+		if(userLevel <= 10){
+			$scope.showAllTabs = true;
+		}
+		
+		//Pull and parse message data
+		var baseURL = "http://aii-hermes.org/aii-api/v1/";
+		var messageURL = 		baseURL + 'users/unreadMessages/' + sessionID;
+		var alertURL = 			baseURL + 'facilities/unreadAlerts/' + sessionID;
+		var notificationURL = 	baseURL + 'facilities/unreadNotifications/' + sessionID;
+		
+		getData.get(messageURL).success(function(data) {
+			$scope.messages = data.records;
+			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
+			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
+		});
+		getData.get(alertURL).success(function(data) {
+			$scope.alerts = data.records;
+			$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
+			$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
+		});
+		getData.get(notificationURL).success(function(data) {
+			$scope.notifications = data.records;
+			//Define Subject of each notification
+			for(var notification in notifications){
+				if(notification['IsRequest'] == '1'){
+					notification['Subject'] = 'Invitation';
+				}else if(notification['Response'] == '1'){
+					notification['Subject'] = 'Accepted';
+				}else{
+					notification['Subject'] = 'Declined';
+				}
+			}
+			$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
+		});
+		
+		//Shortens the field in each message and returns the altered messages
+		$scope.shortenField = function(messages, field){
+			//Loop through every message and shorten the field
+			for(var message in messages){
+				if(message[field].length > shortLength){
+					message[field] = message[field].substr(0, shortLength - 3) + "...";
+				}
+			}
+			return messages;
+		}
+	}
+	 
 
     //App used to hold all controller contained within aiiController
     myApp.controller(controllers);
