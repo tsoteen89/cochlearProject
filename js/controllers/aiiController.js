@@ -3458,7 +3458,7 @@
 	controllers.dashboardMessagesController = function($scope, getData, userInfo){
 		//Get relevant user info
 		var sessionID = userInfo.get().SessionID;
-		var userLevel = userInfo.get().UserLevelID;
+		var userLevel = 10;
 		
 		//Length of shortened fields
 		var shortLength = 24;
@@ -3480,33 +3480,37 @@
 			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
 			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
 		});
-		getData.get(alertURL).success(function(data) {
-			$scope.alerts = data.records;
-			$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
-			$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
-		});
-		getData.get(notificationURL).success(function(data) {
-			$scope.notifications = data.records;
-			//Define Subject of each notification
-			for(var notification in notifications){
-				if(notification['IsRequest'] == '1'){
-					notification['Subject'] = 'Invitation';
-				}else if(notification['Response'] == '1'){
-					notification['Subject'] = 'Accepted';
-				}else{
-					notification['Subject'] = 'Declined';
+		if(userLevel <= 10){
+			getData.get(alertURL).success(function(data) {
+				$scope.alerts = data.records;
+				$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
+				$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
+			});
+			getData.get(notificationURL).success(function(data) {
+				$scope.notifications = data.records;
+				//Define Subject of each notification
+				for(var notification in $scope.notifications){
+					if(notification['IsRequest'] == '1'){
+						notification['Subject'] = 'Invitation';
+					}else if(notification['Response'] == '1'){
+						notification['Subject'] = 'Accepted';
+					}else{
+						notification['Subject'] = 'Declined';
+					}
 				}
-			}
-			$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
-		});
+				$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
+			});
+		}
 		
 		//Shortens the field in each message and returns the altered messages
 		$scope.shortenField = function(messages, field){
 			//Loop through every message and shorten the field
-			for(var message in messages){
-				if(message[field].length > shortLength){
-					message[field] = message[field].substr(0, shortLength - 3) + "...";
-				}
+			if(messages.length > 0){
+				messages.forEach( function (message){
+					if(message[field].length > shortLength){
+						message[field] = message[field].substr(0, shortLength - 3) + "...";
+					}
+				});
 			}
 			return messages;
 		}
