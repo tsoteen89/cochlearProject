@@ -9,13 +9,7 @@ body {
     height: 100%;
     font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #fff;
-background: -moz-linear-gradient(-45deg,  rgba(30,87,153,1) 0%, rgba(125,185,232,0) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(-45deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* IE10+ */
-background: linear-gradient(135deg,  rgba(30,87,153,1) 0%,rgba(125,185,232,0) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background-color: #F50000
 }
 
 html {
@@ -50,7 +44,7 @@ p {
 }
 
 a {
-    color: #219ab3;
+    color: salmon;
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
@@ -59,7 +53,7 @@ a {
 a:hover,
 a:focus {
     text-decoration: none;
-    color: #11505d;
+    color: fuchsia;
 }
 
 .light {
@@ -143,7 +137,7 @@ a:focus {
     padding: 100px 0;
     text-align: center;
     color: #fff;
-    background: url(../img/Blue-sea-horizon.jpg) no-repeat bottom center scroll;
+    background: url(../img/9001-a-blue-sky-with-white-clouds-pv.jpg) no-repeat bottom center scroll;
     background-color: #000;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -300,9 +294,9 @@ a:focus {
 }
 
 .btn-default {
-    border: 1px solid #000ab3;
+    border: 1px solid fuchsia;
     color: #000;
-    background-color: #aaafb3;
+    background-color: salmon;
 }
 
 .btn-default:hover,
@@ -310,7 +304,7 @@ a:focus {
     border: 1px solid #219ab3;
     outline: 0;
     color: #000;
-    background-color: #219aff;
+    background-color: fuchsia;
 }
 
 ul.banner-social-buttons {
