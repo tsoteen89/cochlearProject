@@ -236,7 +236,7 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#"><i class="fa fa-plus-square"></i> New Audiogram</a></li>
+                                    <li><a href="#" class="newAudiogram"><i class="fa fa-plus-square"></i> New Audiogram</a></li>
                                     <li><a href="#"><i class="fa fa-search"></i> Search Audiogram</a></li>
                                     <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i> Save Audiogram</a></li>
                                     <li><a href="#"><i class="fa fa-print"></i> Print Audiogram</a></li>
@@ -246,7 +246,7 @@
                                     <li><a href="#">One more separated link</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#" id="newAudiogram"><i class="fa fa-plus-square-o"></i></a></li>
+                            <li><a href="#" class="newAudiogram"><i class="fa fa-plus-square-o"></i></a></li>
                             <li><a href="#" id="searchAudiogram"><i class="fa fa-search"></i></a></li>
                             <li><a href="#" class="saveAudiogram"><i class="fa fa-save"></i></a></li>
                             <li><a href="#" id="printAudiogram"><i class="fa fa-print"></i></a></li>
@@ -903,8 +903,6 @@
                         icon: 'fa fa-ban'
                     }
                 };
-
-            console.log($button);
             
             // Set the button's state
             $button.data('state', (isChecked) ? "on" : "off");
@@ -1076,6 +1074,7 @@
                 settings.canvasMenu = $('.aii-canvas-menu');
                 settings.loadAudiogram = $('#load-audiogram');
                 settings.loadLatestAudiogram = $('#load-latest');
+                settings.newAudiogram = $('.newAudiogram');
                 settings.printAudiogram = $('#printAudiogram');
                 settings.saveAudiogram = $('.saveAudiogram');
                 settings.showPatientInfo = $('#show-patient-info');
@@ -1158,6 +1157,7 @@
                         
                     }
                 });
+                
                 /**
                 * Gets the 'id' of the last audiogram in the list, then 'clicks' loadAudiogram
                 * @param {obj} event
@@ -1168,6 +1168,16 @@
                     $('#load-audiogram').trigger( "click" ); 
                 });
                 
+                /**
+                * Resets the audiogram page
+                * @param {obj} event
+                * @return {void}
+                */   
+                settings.newAudiogram.click(function (event) {
+                        Stage.left.newAudiogram();
+                        Stage.right.newAudiogram();
+                        domHelper.resetDropDowns();
+                });
                 
                 /**
                 * Controls the choosing of a measurement for an audiogram, and
@@ -1230,6 +1240,7 @@
                     });
                     event.preventDefault();
                 }); 
+                
                 /**
                 * Adds a print action to the "print" button in the top menu
                 * @param {obj} event
