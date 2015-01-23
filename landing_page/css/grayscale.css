@@ -9,7 +9,7 @@ body {
     height: 100%;
     font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #fff;
-    background-color: #F50000
+    background-color: rgb(46, 111, 186);
 }
 
 html {
@@ -175,7 +175,8 @@ a:focus {
 .btn-circle {
     width: 70px;
     height: 70px;
-    margin-top: 15px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     padding: 7px 16px;
     border: 2px solid #fff;
     border-radius: 35px;
@@ -361,4 +362,5 @@ body {
 
 .profile-name{
     color:#002;
+    font-size: 12px;
 }
