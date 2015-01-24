@@ -2832,7 +2832,7 @@
 		
 		//Prefill the composed message's content as either a reply or forward of the given message
 		$scope.prefillComposedMessage = function(message, isReply){
-			$scope.composedMessage = [];
+			$scope.composedMessage = {};
 			
 			//Handle Subject and Content differences in Forwarding or Replying to the message
 			if(isReply){
@@ -2924,9 +2924,13 @@
 			//Either POST the message if being sent for the first time or PUT it if 
 			//it is an edited draft being sent.
 			if($scope.composedMessage['isDraft'] === true){
-				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'] + '/' + sessionID, $scope.composedMessage);
+				putData.put(baseURL + 'messages/' + $scope.composedMessage['MessageID'] + '/' + sessionID, $scope.composedMessage).success(function(data){
+					$scope.getAllMessages();
+				});
 			} else {
-				postData.post(baseURL + 'messages/' + sessionID, $scope.composedMessage);
+				postData.post(baseURL + 'messages/' + sessionID, $scope.composedMessage).success(function(data){
+					$scope.getAllMessages();
+				});
 			}
 		}
 		
