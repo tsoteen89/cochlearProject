@@ -369,6 +369,7 @@ body {
 .well{
     padding:10px;
     cursor:pointer;
+    <!--background-color: gold;-->
 }
 .modal{
     color:black;
