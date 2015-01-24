@@ -162,8 +162,7 @@
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
-                                    <tr ng-repeat="message in currentMessages" style="cursor:pointer" 
-                                        class="bold" >
+                                    <tr ng-repeat="message in messages" style="cursor:pointer" ng-class="bold" >
                                         <td>{{message.Sender}}</td>
                                         <td>{{message.Subject}}</td>
                                     </tr>
