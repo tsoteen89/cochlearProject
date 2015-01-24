@@ -37,7 +37,6 @@ p {
 
 @media(min-width:767px) {
     p {
-        margin: 0 0 35px;
         font-size: 20px;
         line-height: 1.6;
     }
@@ -53,7 +52,7 @@ a {
 a:hover,
 a:focus {
     text-decoration: none;
-    color: fuchsia;
+    color: #FF4B4B;
 }
 
 .light {
@@ -164,7 +163,7 @@ a:focus {
     }
 
     .intro .intro-body .brand-heading {
-        font-size: 80px;
+        font-size: 70px;
     }
 
     .intro .intro-body .intro-text {
@@ -175,10 +174,10 @@ a:focus {
 .btn-circle {
     width: 70px;
     height: 70px;
-    margin-top: 10px;
+    margin-top: -5px;
     margin-bottom: 5px;
     padding: 7px 16px;
-    border: 2px solid #fff;
+    border: 2px solid mediumblue;
     border-radius: 35px;
     font-size: 40px;
     color: #fff;
@@ -300,10 +299,10 @@ a:focus {
 
 .btn-default:hover,
 .btn-default:focus {
-    border: 1px solid #219ab3;
+    border: 1px solid #aF4B4B;
     outline: 0;
     color: #000;
-    background-color: fuchsia;
+    background-color: #FF4B4B;
 }
 
 ul.banner-social-buttons {
@@ -363,4 +362,18 @@ body {
 .profile-name{
     color:#002;
     font-size: 12px;
+}
+.profile-img{
+    height:130px;
+}
+.well{
+    padding:10px;
+    cursor:pointer;
+}
+.modal{
+    color:black;
+}
+
+.modal-body p{
+    font-size: 14px;
 }
