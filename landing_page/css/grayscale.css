@@ -269,7 +269,8 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 250px;
+        padding-top: 175px;
+        padding-bottom: 75px;
     }
 
     .register-section {
