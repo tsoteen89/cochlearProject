@@ -2542,7 +2542,7 @@
 		$scope.unreadCount = 0;
 		
 		//Composed Message Variables
-		$scope.composedMessage = []; 	//object to hold the composed message
+		$scope.composedMessage = {}; 	//object to hold the composed message
 		
 		//Display Variables
 		$scope.reverse = true;				//OrderBy property : true means display contents in reverse order
@@ -2552,7 +2552,7 @@
 		
 		//Clear any content currently in the composed message
 		$scope.clearComposedMessage = function(){
-			$scope.composedMessage = [];
+			$scope.composedMessage = {};
 		}
 		
 		//Clears all selected checkboxes and messages
@@ -3022,7 +3022,6 @@
 		//Define onControllerLoad behavior
 		//====================================================
 		//If user is messaging someone, display the Compose Message screen
-		$scope.composedMessage = [];
 		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			//Fill in the composed message's recipient
