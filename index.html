@@ -29,14 +29,13 @@
         <nav class = "navbar navbar-default navbar-fixed-top" role = "navigation">
             <div class = "container-fluid">
                 <div class = "navbar-header">
-                    <a ng-if="!loggedIn" class="navbar-brand cp_navbar-brand" href="#">Auditory Implant Initiative</a>
+                    <a ng-if="!loggedIn" class="navbar-brand cp_navbar-brand" href="../">Auditory Implant Initiative</a>
                 </div>
                 <div ng-if = "!loggedIn" class = "nav-items collapse navbar-collapse pull-right" id = "nav-responsive-collapse">
-                    <a href = "#/" class="navbar-btn pull-right"><img src="images/hermesCI.png"></a>
                 </div>
 
                 <div ng-if = "loggedIn" class = "collapse navbar-collapse" id = "nav-responsive-collapse-1">    
-                    <a class="navbar-brand cp_navbar-brand" href="#/dashboard"><img src="images/hermesCI.png" style="margin-top:-4%"></a>
+                    <a class="navbar-brand cp_navbar-brand" href="#/dashboard"><img src="images/hermesCI_2.png" style="height:35px; margin-top:-4%  "></a>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="#/dashboard"><i class="fa fa-user"></i> {{title}} {{name}}</a>
