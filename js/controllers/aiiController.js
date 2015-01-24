@@ -2915,11 +2915,11 @@
 			//Content
 			//Sent
 		$scope.sendMessage = function(isSent){
-			//Use lower case message type in the PUT URL
-			var lowerMessageType = $scope.messageType.toLowerCase();
 		
 			//Mark whether or not the message is being sent
 			$scope.composedMessage['Sent'] = isSent;
+			
+			console.log($scope.composedMessage);
 		
 			//Either POST the message if being sent for the first time or PUT it if 
 			//it is an edited draft being sent.
@@ -3022,6 +3022,7 @@
 		//Define onControllerLoad behavior
 		//====================================================
 		//If user is messaging someone, display the Compose Message screen
+		$scope.composedMessage = [];
 		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			//Fill in the composed message's recipient
@@ -3456,6 +3457,7 @@
      *
      */
 	controllers.dashboardMessagesController = function($scope, getData, userInfo){
+		
 		//Get relevant user info
 		var sessionID = userInfo.get().SessionID;
 		var userLevel = 10;
@@ -3476,9 +3478,10 @@
 		var notificationURL = 	baseURL + 'facilities/unreadNotifications/' + sessionID;
 		
 		getData.get(messageURL).success(function(data) {
-			$scope.messages = data.records;
-			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
-			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
+			//$scope.messages = data.records;
+			//$scope.messages = $scope.shortenField($scope.messages, 'Sender');
+			//$scope.messages = $scope.shortenField($scope.messages, 'Subject');
+			console.log($scope.messages);
 		});
 		if(userLevel <= 10){
 			getData.get(alertURL).success(function(data) {
