@@ -27,6 +27,7 @@ h6 {
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
+    color:white;
 }
 
 p {
@@ -163,7 +164,7 @@ a:focus {
     }
 
     .intro .intro-body .brand-heading {
-        font-size: 70px;
+        font-size: 80px;
     }
 
     .intro .intro-body .intro-text {
@@ -247,12 +248,12 @@ a:focus {
 }
 
 .content-section {
-    padding-top: 100px;
+    padding-top: 20%;
 }
 
 .register-section {
     width: 100%;
-    padding: 50px 0;
+    padding: 100px 0;
     color: #fff;
     background: url(../img/collage_big2.png) no-repeat center center scroll;
     -webkit-background-size: cover;
@@ -269,12 +270,11 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 175px;
-        padding-bottom: 75px;
+        padding-top: 18%;
     }
 
     .register-section {
-        padding: 100px 0;
+        padding: 6% 0;
     }
 
     #map {
@@ -372,7 +372,7 @@ body {
     cursor:pointer;
     <!--background-color: gold;-->
 }
-.modal{
+.modal, .modal-title{
     color:black;
 }
 
