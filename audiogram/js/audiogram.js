@@ -63,7 +63,7 @@ var AudioGram = function (stage, side, element_id) {
     var Masked = 'unmasked';                    //Masked = masked Unmasked = unmasked :)
     var measureType = 'AC';                     //AC, BC, MCL, etc.
     var measureID = 0;                          //Unique ID for items added to audio gram
-    var noResponse = 0;                        //true = patient could hear , false = patient couldn't hear
+    var noResponse = 0;                         //true = patient could hear , false = patient couldn't hear
     var redoStack = [];                         //Stack to hold items removed via "undo"
     var row_height = 0;                         //Height in pixels of each row on audiogram
     var Side = side;                            //Left or right ear
@@ -558,7 +558,20 @@ var AudioGram = function (stage, side, element_id) {
         .mousedown(function(){ $(this).focus(); return false; }) 
         .keydown(function(){ console.log("keypress"); return false; });
     }
+    
+    
+    
 
+    /**
+    * Gets an intact stack from other ear to use as a starting point (copy the sucker)
+    * @param {void}
+    * @return {void}
+    */
+    function bulkLoadStack(stack) {
+        currentStack = stack;
+        drawStack();
+    }
+    
     /**
     * Removes all items from the stage, then redraws the clean stage.
     * @param {void}
@@ -856,6 +869,15 @@ var AudioGram = function (stage, side, element_id) {
     }
     
     /**
+    * Returns current stack in order to copy to other ears audiogram
+    * @param {void} 
+    * @return {object} - stack
+    */
+    function getCurrentStack() {
+        return currentStack;
+    }
+    
+    /**
     * Simply makes sure mouse click is on the "audiogram" before adding a measure.
     * @param {int} x  -  Coords of where click happened
     * @param {int} y
@@ -912,8 +934,6 @@ var AudioGram = function (stage, side, element_id) {
     }
     
     function toggleMasked(index) {
-        
-
         
         var MaskedState = Masked;
         var x = currentStack[index].attrs.x;
@@ -1265,7 +1285,9 @@ var AudioGram = function (stage, side, element_id) {
     return {
         bindContextMenu : bindContextMenu,
         bindKeyPress : bindKeyPress,
+        bulkLoadStack : bulkLoadStack,
         clear : clearStage,
+        getCurrentStack: getCurrentStack,
         countMeasures: countMeasures,
         dumpStack: dumpStack,
         getAudiogram : getAudiogram,
@@ -1743,89 +1765,47 @@ var AudioGram = function (stage, side, element_id) {
         */ 
         function updateMeasureButtons() {
             // Settings
-            var $widget = $('.button-checkbox'),
-                $button = $widget.find('button'),
-                $checkbox = $widget.find('input:checkbox'),
-                isChecked = $checkbox.is(':checked'),
-                settings = {
-                    on: {
-                        icon: 'fa fa-check-square-o'
-                    },
-                    off: {
-                        icon: 'fa fa-ban'
-                    }
-                };
-            
-            // Set the button's state
-            $button.data('state', (isChecked) ? "on" : "off");
 
-            // Set the button's icon
-            $button.find('.state-icon')
-            .removeClass()
-            .addClass('state-icon ' + settings[$button.data('state')].icon);
 
-            // Update the button's color
-            if (isChecked) {
-                $button
-                .removeClass('btn-default')
-                .addClass('aii-btn-border active')
-                .blur();
-                Stage['right'].setMasked(1);
-                Stage['left'].setMasked(1);
-                $('#BCL').html('&nbsp;&nbsp;]');
-                $('#BCR').html('[&nbsp;&nbsp;');        
-                $('#ACL').html('<i class="fa fa-square-o"></i>');
-                $('#ACR').html('&#x25b3;');
-            } else {
-                $button
-                .removeClass('aii-btn-border active')
-                .addClass('btn-default')
-                .blur();
-                Stage['right'].setMasked(0);
-                Stage['left'].setMasked(0);  
-                $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
-                $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
-                $('#ACR').html('<i class="fa fa-circle-o"></i>');
-                $('#ACL').html('&#10005;');
-            }
+
         }
         /**
         * initMeasurementButtons - 
         * @param {obj} event
         * @return {void}
         */ 
-        function initMeasureButtons() {
-            //Added for checkbox buttons
-            $('.button-checkbox').each(function(){
-
-                // Settings
-                var $widget = $(this),
-                    $button = $widget.find('button'),
-                    $checkbox = $widget.find('input:checkbox'),
-                    color = $button.data('color'),
-                    settings = {
-                        on: {
-                            icon: 'fa fa-check-square-o'
-                        },
-                        off: {
-                            icon: 'fa fa-ban'
-                        }
-                    };
-
-                // Event Handlers
-                $button.on('click', function () {
-                    $checkbox.prop('checked', !$checkbox.is(':checked'));
-                    $checkbox.triggerHandler('change');
-                    updateMeasureButtons();
-                    event.preventDefault();
-                });
-
-                $checkbox.on('change', function () {
-                    updateMeasureButtons();
-                });
-
-            });
-        }
+//        function initMeasureButtons() {
+//            //Added for checkbox buttons
+//            $('.button-checkbox').each(function(){
+//
+//                // Settings
+//                var $widget = $(this),
+//                    $button = $widget.find('button'),
+//                    $checkbox = $widget.find('input:checkbox'),
+//                    color = $button.data('color'),
+//                    settings = {
+//                        on: {
+//                            icon: 'fa fa-check-square-o'
+//                        },
+//                        off: {
+//                            icon: 'fa fa-ban'
+//                        }
+//                    };
+//
+//                // Event Handlers
+//                $button.on('click', function () {
+//                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+//                    $checkbox.triggerHandler('change');
+//                    updateMeasureButtons();
+//                    event.preventDefault();
+//                });
+//
+//                $checkbox.on('change', function () {
+//                    updateMeasureButtons();
+//                });
+//
+//            });
+//        }
         
         function resetDropDowns(){
             $('#aii-audiogram-prev').selectpicker('val','0');
@@ -1838,7 +1818,6 @@ var AudioGram = function (stage, side, element_id) {
         
         return {
             addPatientAudiogramTitle:addPatientAudiogramTitle,
-            initMeasureButtons:initMeasureButtons,
             loadAudiogram:loadAudiogram,
             loadAudiogramTitles:loadAudiogramTitles,
             loadEarConditions:loadEarConditions,
@@ -1872,6 +1851,7 @@ var AudioGram = function (stage, side, element_id) {
             init: function(stage,aiiapi,domhelper) {
                 settings.measureButtons = $('.aii-mea-btn');
                 settings.canvasMenu = $('.aii-canvas-menu');
+                settings.copyLeft = $('#copy-left');
                 settings.loadAudiogram = $('#load-audiogram');
                 settings.loadLatestAudiogram = $('#load-latest');
                 settings.newAudiogram = $('.newAudiogram');
@@ -1879,6 +1859,7 @@ var AudioGram = function (stage, side, element_id) {
                 settings.saveAudiogram = $('.saveAudiogram');
                 settings.showPatientInfo = $('#show-patient-info');
                 settings.togglePatientInfo = $('#toggle-patient-info');
+                settings.toggleMeasures = $('#masked');
                 this.bindUIActions();
                 this.bindErrorActions();
                 Stage = stage;
@@ -1929,6 +1910,20 @@ var AudioGram = function (stage, side, element_id) {
                             break;
                     }
                     $(event.target).closest('button').blur();
+                    event.preventDefault();
+                });
+
+                
+                /**
+                * Copy left ear to right ear
+                * @param {obj} event
+                * @return {void}
+                */ 
+                settings.copyLeft.click(function (event) {
+                    var button = $( this );
+                    var stack = Stage['right'].getCurrentStack();
+                    Stage['left'].bulkLoadStack(stack);
+                    console.log(stack);
                     event.preventDefault();
                 });
                 
@@ -2089,6 +2084,7 @@ var AudioGram = function (stage, side, element_id) {
                 * @return {void}
                 */ 
                 settings.togglePatientInfo.click(function (event) {
+                                        
                     if($('#patient-info').hasClass('hidden')){
                         $( "#patient-info" ).slideDown( "slow", function() {
                             $('#toggle-patient-info').html('<i class="fa fa-caret-square-o-up"></i> Hide Patient Info');
@@ -2102,7 +2098,80 @@ var AudioGram = function (stage, side, element_id) {
                     }
                     event.preventDefault();
                 });
-                
+                /**
+                * Turns masked on or off for measures, in turn changing symbols for audiogram
+                * @param {obj} event
+                * @return {void}
+                */ 
+                settings.toggleMeasures.click(function (event) {
+                    
+                    var $this = $(this);
+                    var isChecked = false;
+                                        
+                    if($this.data('isChecked') == 'undefined'){
+                        $this.data('isChecked',true);
+                        isChecked = true;
+                    }else if($this.data('isChecked') === true){
+                        $this.data('isChecked',false);
+                        isChecked = false;
+                    }else{
+                        $this.data('isChecked',true);
+                        isChecked = true;  
+                    }
+                    
+                    if (isChecked === true) {
+                        $this
+                        .removeClass('btn-default')
+                        .addClass('aii-btn-border active')
+                        .blur();
+                        Stage['right'].setMasked(1);
+                        Stage['left'].setMasked(1);
+                        $('#BCL').html('&nbsp;&nbsp;]');
+                        $('#BCR').html('[&nbsp;&nbsp;');        
+                        $('#ACL').html('<i class="fa fa-square-o"></i>');
+                        $('#ACR').html('&#x25b3;');
+                        $this.find('.fa')
+                        .removeClass()
+                        .addClass('fa fa-check pull-left aii');
+                    } else {
+                        $this
+                        .removeClass('aii-btn-border active')
+                        .addClass('btn-default')
+                        .blur();
+                        Stage['right'].setMasked(0);
+                        Stage['left'].setMasked(0);  
+                        $('#BCR').html('<i class="fa fa-chevron-left"></i>&nbsp;');
+                        $('#BCL').html('&nbsp;<i class="fa fa-chevron-right"></i>');
+                        $('#ACR').html('<i class="fa fa-circle-o"></i>');
+                        $('#ACL').html('&#10005;');
+                        $this.find('.fa')
+                        .removeClass()
+                        .addClass('fa fa-fw');
+                    }
+//                    var $widget = $('.button-checkbox'),
+//                        $button = $widget.find('button'),
+//                        $checkbox = $widget.find('input:checkbox'),
+//                        isChecked = $checkbox.is(':checked'),
+//                        settings = {
+//                            on: {
+//                                icon: 'fa fa-check-square-o'
+//                            },
+//                            off: {
+//                                icon: 'fa fa-ban'
+//                            }
+//                        };
+//
+//                    // Set the button's state
+//                    $button.data('state', (isChecked) ? "on" : "off");
+//
+//                    // Set the button's icon
+//                    $button.find('.state-icon')
+//                    .removeClass()
+//                    .addClass('state-icon ' + settings[$button.data('state')].icon);
+//                    // Update the button's color
+
+                    event.preventDefault();
+                });               
 
             },
             bindStageReference: function(stage){
@@ -2203,7 +2272,7 @@ var AudioGram = function (stage, side, element_id) {
                 domHelper.loadEarConditions(AudiogramData.EarConditions);
                 domHelper.loadPatientAudiogramTitles(AudiogramData.PatientsAudiograms);
                 domHelper.loadPhaseName(AudiogramData.PhaseName);
-                domHelper.initMeasureButtons();
+                //domHelper.initMeasureButtons();
                 ModelHelper.hide();
                 $('#globalData').data('MaxID',AudiogramData.MaxAudiogramId);
                 $('#globalData').data('EventID',CookieData.CareTeamID);

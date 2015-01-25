@@ -129,7 +129,8 @@
         }
         
         .aii.fa{
-            padding-top:3px;
+            padding-top:2px;
+            font-size: 1.3em;
         }
         
         .aii.input-label{
@@ -377,10 +378,10 @@
                                 <!-- End Right Canvas -->
                                 <!-- Begin Menu Row -->
                                 <div class="row">
-                                    <div class="aii-canvas-menu" data="right">
-                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i>Undo</button>
-                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i>Clear</button>
-                                        <button class="btn btn-default btn-xs" data="Redo" id="redo"><i class="fa fa-repeat pull-left aii"></i>Redo</button>
+                                    <div class="aii-canvas-menu" data="right">                                     
+                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i> Undo</button>&nbsp;&nbsp;
+                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i> Clear</button>&nbsp;&nbsp;
+                                        <button class="btn btn-default btn-xs" data="Redo" id="redo"><i class="fa fa-repeat pull-left aii"></i> Redo</button>
                                     </div>
                                 </div> 
                             </div>
@@ -416,15 +417,11 @@
                                             <span class="aii-mea-btn left">A</span>&nbsp;<span class="aii-mea-btn mid">SF-A</span>&nbsp;<span class="aii-mea-btn right">A</span>
                                         </a>
                                     </div> 
-                                    <div>
-                                        <span class="button-checkbox">
-                                            <i class="state-icon ' + settings[$button.data('state')].icon + '"></i><button type="button" class="btn" id="mask-tool"> Masked</button>
-                                            <input type="checkbox" class="hidden" />
-                                        </span>
-                                    </div>
+                                </div>
+                                <button class="btn btn-default btn-sm" id="masked"><i class="fa fa-fw"></i>Masked</button><br><br>
+                                <button class="btn btn-default btn-sm" id="copy-left"><i class="fa fa-angle-double-right pull-left aii" style="font-size:1.5em"></i><i class="fa fa-angle-double-right pull-right aii" style="font-size:1.5em"></i>Copy</button><br><br>
+                                <button class="btn btn-default btn-sm" id="copy-right"><i class="fa fa-angle-double-left pull-left aii" style="font-size:1.5em"></i><i class="fa fa-angle-double-left pull-right aii" style="font-size:1.5em"></i>Copy</button><br><br>
                               </div>
-                            </div>
-
                         </div>
                     </div>
                     <!-- End Middle Column -->
@@ -455,9 +452,9 @@
                                 <!-- End Right Canvas -->
                                 <!-- Begin Menu Row -->
                                 <div class="row">
-                                    <div class="aii-canvas-menu" data="left">
-                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i>Undo</button>
-                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i>Clear</button>
+                                    <div class="aii-canvas-menu" data="left">  
+                                        <button class="btn btn-default btn-xs" data="Undo" id="undo"><i class="fa fa-undo pull-left aii"></i>Undo</button>&nbsp;&nbsp;
+                                        <button class="btn btn-default btn-xs" data="Refresh" id="refresh"><i class="fa fa-refresh pull-left aii"></i>Clear</button>&nbsp;&nbsp;
                                         <button class="btn btn-default btn-xs" data="Redo" id="redo"><i class="fa fa-repeat pull-left aii"></i>Redo</button>
                                     </div>
                                 </div> 
