@@ -162,7 +162,8 @@
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
-                                    <tr ng-repeat="message in messages" style="cursor:pointer" class="bold" >
+                                    <tr ng-repeat="message in messages" style="cursor:pointer" class="bold" 
+										ng-click="redirectToMessages()">
                                         <td>{{message.Sender}}</td>
                                         <td>{{message.Subject}}</td>
                                     </tr>
