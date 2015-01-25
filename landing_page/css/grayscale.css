@@ -270,12 +270,11 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 250px;
-        padding-bottom: 30px;
+        padding-top: 200px;
     }
 
     .register-section {
-        padding: 150px 0;
+        padding: 150px 0 30px;
     }
 
     #map {
@@ -373,7 +372,7 @@ body {
     cursor:pointer;
     <!--background-color: gold;-->
 }
-.modal{
+.modal, .modal-title{
     color:black;
 }
 
