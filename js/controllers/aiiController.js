@@ -2918,8 +2918,6 @@
 		
 			//Mark whether or not the message is being sent
 			$scope.composedMessage['Sent'] = isSent;
-			
-			console.log($scope.composedMessage);
 		
 			//Either POST the message if being sent for the first time or PUT it if 
 			//it is an edited draft being sent.
@@ -3105,7 +3103,7 @@
                     info.UserLevelID = data.records.UserLevelID;
                     $scope.userLevel = data.records.UserLevelID;
                     userInfo.set(info);
-
+					
                     //Redirect the user to the dashboard if they were going to the login page
                     if ($window.location.pathname == "#" || $window.location.pathname == "") {
                         $window.location.href = "#/dashboard";
@@ -3459,14 +3457,16 @@
      *      @returns - NULL
      *
      */
-	controllers.dashboardMessagesController = function($scope, getData, userInfo){
+	controllers.dashboardMessagesController = function($scope, userInfo, getData, $http){
 		
 		//Get relevant user info
 		var sessionID = userInfo.get().SessionID;
 		var userLevel = 10;
 		
+		//console.log(userInfo.get());
+		
 		//Length of shortened fields
-		var shortLength = 24;
+		var shortLength = 30;
 		
 		//Control display of potential tabs
 		$scope.showAllTabs = false;
@@ -3481,10 +3481,9 @@
 		var notificationURL = 	baseURL + 'facilities/unreadNotifications/' + sessionID;
 		
 		getData.get(messageURL).success(function(data) {
-			//$scope.messages = data.records;
-			//$scope.messages = $scope.shortenField($scope.messages, 'Sender');
-			//$scope.messages = $scope.shortenField($scope.messages, 'Subject');
-			console.log($scope.messages);
+			$scope.messages = data.records;
+			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
+			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
 		});
 		if(userLevel <= 10){
 			getData.get(alertURL).success(function(data) {
@@ -3495,13 +3494,13 @@
 			getData.get(notificationURL).success(function(data) {
 				$scope.notifications = data.records;
 				//Define Subject of each notification
-				for(var notification in $scope.notifications){
-					if(notification['IsRequest'] == '1'){
-						notification['Subject'] = 'Invitation';
-					}else if(notification['Response'] == '1'){
-						notification['Subject'] = 'Accepted';
+				for(i = 0; i < $scope.notifications.length; i++){
+					if($scope.notifications[i]['IsRequest'] == '1'){
+						$scope.notifications[i]['Subject'] = 'Invitation';
+					}else if($scope.notifications[i]['Response'] == '1'){
+						$scope.notifications[i]['Subject'] = 'Accepted';
 					}else{
-						notification['Subject'] = 'Declined';
+						$scope.notifications[i]['Subject'] = 'Declined';
 					}
 				}
 				$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
