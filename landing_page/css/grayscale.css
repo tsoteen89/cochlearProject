@@ -248,7 +248,7 @@ a:focus {
 }
 
 .content-section {
-    padding-top: 150px;
+    padding-top: 20%;
 }
 
 .register-section {
@@ -270,12 +270,11 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 250px;
-        padding-bottom: 20px;
+        padding-top: 18%;
     }
 
     .register-section {
-        padding: 150px 0;
+        padding: 6% 0;
     }
 
     #map {
