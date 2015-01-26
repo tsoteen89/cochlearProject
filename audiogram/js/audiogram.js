@@ -467,17 +467,17 @@ var AudioGram = function (stage, side, element_id) {
         var f = getFrequency(x);
 
         //Arbitrary font size right now.
-        var fontSize = 34;
+        var fontSize = 24;
 
         //Goes and grabs the "shape" to be displayed based on these params
-        var measureData = GetMeasureData(measureType,Masked,Side);
+        //var measureData = GetMeasureData(measureType,Masked,Side);
         
         console.log(measureType);
 
         //Common styles to most measures
         var commonStyle = {
-            x : x,
-            y : y,
+            x : x - (fontSize/2),
+            y : y - (fontSize/2),
             strokeWidth : 5,
             shadowColor : Colors.textShadowColor,
             shadowBlur : 2,
@@ -502,22 +502,56 @@ var AudioGram = function (stage, side, element_id) {
         
         Image = measureType.toLowerCase() + Side.substring(0,1).toLowerCase();
         
-        if(Masked = 'masked')
+        if(Masked == 'masked')
             Image = Image + 'm';
         
+        console.log(Image);
+        
         switch(Image){
-            case 'acl': commonStyle.image = AudiogramImages.acl; break;
-            case 'aclm': commonStyle.image = AudiogramImages.aclm; break;
-            case 'acr': commonStyle.image = AudiogramImages.acr; break;
-            case 'acrm': commonStyle.image = AudiogramImages.acrm; break;
-            case 'bcl': commonStyle.image = AudiogramImages.bcl; break;
-            case 'bclm': commonStyle.image = AudiogramImages.bclm; break;
-            case 'bcr': commonStyle.image = AudiogramImages.bcr; break;
-            case 'bcrm': commonStyle.image = AudiogramImages.bcrm; break;
-            case 'mcl': commonStyle.image = AudiogramImages.mcl; break;
-            case 'sf': commonStyle.image = AudiogramImages.sf; break;
-            case 'sfa': commonStyle.image = AudiogramImages.sfa; break;
-            case 'ucl': commonStyle.image = AudiogramImages.ucl; break;
+            case 'acl': 
+                commonStyle.image = AudiogramImages.acl;
+                commonStyle.audioLine = true;
+                break;
+            case 'aclm': 
+                commonStyle.image = AudiogramImages.aclm;
+                commonStyle.audioLine = true;
+                break;
+            case 'acr': 
+                commonStyle.image = AudiogramImages.acr;
+                commonStyle.audioLine = true;
+                break;
+            case 'acrm': 
+                commonStyle.image = AudiogramImages.acrm; 
+                commonStyle.audioLine = true;
+                break;
+            case 'bcl': 
+                commonStyle.image = AudiogramImages.bcl; break;
+            case 'bclm': 
+                commonStyle.image = AudiogramImages.bclm; break;
+            case 'bcr': 
+                commonStyle.image = AudiogramImages.bcr; break;
+            case 'bcrm': 
+                commonStyle.image = AudiogramImages.bcrm; break;
+            case 'mcll': 
+            case 'mclr':
+            case 'mcllm': 
+            case 'mclrm':
+                commonStyle.image = AudiogramImages.mcl; break;
+            case 'sfl': 
+            case 'sfr':
+            case 'sflm': 
+            case 'sfrm':
+                commonStyle.image = AudiogramImages.sf; break;
+            case 'sfal': 
+            case 'sfar':
+            case 'sfalm': 
+            case 'sfarm':
+                commonStyle.image = AudiogramImages.sfa; break;
+            case 'ucll': 
+            case 'uclr':
+            case 'ucllm': 
+            case 'uclrm':
+                commonStyle.image = AudiogramImages.ucl; break;
         }
                 
         shape = new Kinetic.Image(commonStyle); 
@@ -921,7 +955,7 @@ var AudioGram = function (stage, side, element_id) {
                         "left" :  {"type" : "text", "value" : "S"}
                     }
                 },
-                "SF-A" :  {
+                "SFA" :  {
                     "unmasked" :  {
                         "right" :  {"type" : "text", "value" : "A"},
                         "left" :  {"type" : "text", "value" : "A"}
