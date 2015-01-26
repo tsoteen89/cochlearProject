@@ -3466,6 +3466,10 @@
 		
 		var sessionID = userInfo.get().SessionID;
 		
+		$scope.numMessages = 0;
+		$scope.numAlerts = 0;
+		$scope.numNotifications = 0;
+		
 		//Message data URL's
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var messageURL = 		baseURL + 'users/unreadMessages/' + sessionID;
@@ -3485,11 +3489,19 @@
 				$scope.showAllTabs = true;
 				getData.get(alertURL).success(function(data) {
 					$scope.alerts = data.records;
+					$scope.numAlerts = $scope.alerts.length;
+					if(typeof $scope.numAlerts == 'undefined'){
+						$scope.numAlerts = 0;
+					}
 					$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
 					$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
 				});
 				getData.get(notificationURL).success(function(data) {
 					$scope.notifications = data.records;
+					$scope.numNotifications = $scope.notifications.length;
+					if(typeof $scope.numNotifications == 'undefined'){
+						$scope.numNotifications = 0;
+					}
 					//Define Subject of each notification
 					for(i = 0; i < $scope.notifications.length; i++){
 						if($scope.notifications[i]['IsRequest'] == '1'){
@@ -3507,6 +3519,10 @@
 		
 		getData.get(messageURL).success(function(data) {
 			$scope.messages = data.records;
+			$scope.numMessages = $scope.messages.length;
+			if(typeof $scope.numMessages == 'undefined'){
+				$scope.numMessages = 0;
+			}
 			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
 			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
 		});
