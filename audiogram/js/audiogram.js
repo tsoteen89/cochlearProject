@@ -54,6 +54,10 @@ var AudioGram = function (stage, side, element_id) {
     var isPrevious = 0;                         //Is this a previously saved audiogram
     var Layers = {};                            //Object to hold different layers by name
     var lineArray = [];                         //Array to hold x,y vals to draw line between measures
+    var AudiogramImages = {
+        "bcl": new Image(),
+        "bcr": new Image()
+    };
     var margins = {                             //Margins for all sides of audiogram
         "top" : 65,
         "bottom" : 30,
@@ -85,6 +89,9 @@ var AudioGram = function (stage, side, element_id) {
         var x = 0;
         var y = 0;
         var Label = "";
+        
+        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcr.png";
+        AudiogramImages.bcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcl.png";
         
         //Add the contex menu for audiogram
         addContextMenus();
@@ -433,6 +440,8 @@ var AudioGram = function (stage, side, element_id) {
     function addMeasure(x, y) {
         var index = false;
         var shape = null;
+        var Image = null;
+        var uri = null;
         
         //Get frequency and decibels assigned to the coordinate (x,y)
         var d = getDecibels(y);
@@ -505,12 +514,15 @@ var AudioGram = function (stage, side, element_id) {
             } else if(measureData.value == 'wedge') {
 
                 if(Side == 'right') {
-                    commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10];
+                    commonStyle.image =  AudiogramImages.bcr;
                 }else{
-                    commonStyle.points =  [x - 10, y - 10, x, y, x - 10, y + 10];
+                    commonStyle.image =  AudiogramImages.bcl;
                 }
-
-                shape = new Kinetic.Line(commonStyle);                
+                commonStyle.width = 30;
+                commonStyle.height = 30;
+                
+                shape = new Kinetic.Image(commonStyle);  
+                console.log(shape);
             } else if(measureData.value == 'x') {
                 commonStyle.audioLine = true;
                 commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
@@ -679,7 +691,7 @@ var AudioGram = function (stage, side, element_id) {
 
         for (i = 0; i < currentStack.length; ++i) {
             console.log(typeof currentStack[i].attrs.points == 'object');
-            currentStack[i].move({x:-25,y:-25});
+
             Layers.measures.add(currentStack[i]);
             if (currentStack[i].getAttr('noResponse') === true) {
                 arrow = drawArrow(i);
