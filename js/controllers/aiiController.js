@@ -2506,14 +2506,7 @@
 	controllers.messagingController = function($scope, $http, $templateCache, $filter, persistData, getData, postData, putData, userInfo, messageCount, $cookieStore) {
 
 		//Controller variables
-		var sessionID = userInfo.get().SessionID;
-		var userLevel = 0;
-        //url to get signed in users info
-        $scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
-        //Grab single User by ID and then bind email and phone details to the editUser scope variable
-        getData.get($scope.userURL).success(function(data) {
-            userLevel= data.records.UserLevelID;
-        });
+		var sessionID = userInfo.get().SessionID;		
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var urlSet = {		//(Keys are defined as : messageType + messageProperty)
 			'MessagesReceived' 		: 'users/inbox/',
@@ -3035,12 +3028,24 @@
 			$scope.messageProperty = 'Received';
 		}
 
-		//Get all message data
-		$scope.getAllMessages();
-		
-		//Load display control
-		$scope.updateDisplay();
-		
+		//Get all message data when userlevel is defined
+		var userLevel = userInfo.get().UserLevelID;
+		if(typeof userLevel == 'undefined'){
+			//url to get signed in users info
+			$scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
+			//Grab userLevel
+			getData.get($scope.userURL).success(function(data) {
+				userLevel = data.records.UserLevelID;
+				$scope.getAllMessages();
+				//Load display control
+				$scope.updateDisplay();
+			});
+		}
+		else{
+			$scope.getAllMessages();
+			//Load display control
+			$scope.updateDisplay();
+		}
 		//====================================================
 	}
 	
@@ -3459,53 +3464,68 @@
      */
 	controllers.dashboardMessagesController = function($scope, userInfo, getData, $http){
 		
-		//Get relevant user info
 		var sessionID = userInfo.get().SessionID;
-		var userLevel = 10;
 		
-		//console.log(userInfo.get());
+		$scope.numMessages = 0;
+		$scope.numAlerts = 0;
+		$scope.numNotifications = 0;
 		
-		//Length of shortened fields
-		var shortLength = 30;
-		
-		//Control display of potential tabs
-		$scope.showAllTabs = false;
-		if(userLevel <= 10){
-			$scope.showAllTabs = true;
-		}
-		
-		//Pull and parse message data
+		//Message data URL's
 		var baseURL = "http://aii-hermes.org/aii-api/v1/";
 		var messageURL = 		baseURL + 'users/unreadMessages/' + sessionID;
 		var alertURL = 			baseURL + 'facilities/unreadAlerts/' + sessionID;
 		var notificationURL = 	baseURL + 'facilities/unreadNotifications/' + sessionID;
 		
+		//Length of shortened data fields
+		var shortLength = 30;
+		
+		//Grab userLevel and then possibly grab alerts and notifications depending on userLevel
+		var userLevel = 0;
+		$scope.userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + sessionID;
+		getData.get($scope.userURL).success(function(data) {
+			userLevel = data.records.UserLevelID;
+			$scope.showAllTabs = false;
+			if(userLevel <= 10){
+				$scope.showAllTabs = true;
+				getData.get(alertURL).success(function(data) {
+					$scope.alerts = data.records;
+					$scope.numAlerts = $scope.alerts.length;
+					if(typeof $scope.numAlerts == 'undefined'){
+						$scope.numAlerts = 0;
+					}
+					$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
+					$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
+				});
+				getData.get(notificationURL).success(function(data) {
+					$scope.notifications = data.records;
+					$scope.numNotifications = $scope.notifications.length;
+					if(typeof $scope.numNotifications == 'undefined'){
+						$scope.numNotifications = 0;
+					}
+					//Define Subject of each notification
+					for(i = 0; i < $scope.notifications.length; i++){
+						if($scope.notifications[i]['IsRequest'] == '1'){
+							$scope.notifications[i]['Subject'] = 'Invitation';
+						}else if($scope.notifications[i]['Response'] == '1'){
+							$scope.notifications[i]['Subject'] = 'Accepted';
+						}else{
+							$scope.notifications[i]['Subject'] = 'Declined';
+						}
+					}
+					$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
+				});
+			}
+		});
+		
 		getData.get(messageURL).success(function(data) {
 			$scope.messages = data.records;
+			$scope.numMessages = $scope.messages.length;
+			if(typeof $scope.numMessages == 'undefined'){
+				$scope.numMessages = 0;
+			}
 			$scope.messages = $scope.shortenField($scope.messages, 'Sender');
 			$scope.messages = $scope.shortenField($scope.messages, 'Subject');
 		});
-		if(userLevel <= 10){
-			getData.get(alertURL).success(function(data) {
-				$scope.alerts = data.records;
-				$scope.alerts = $scope.shortenField($scope.alerts, 'Patient');
-				$scope.alerts = $scope.shortenField($scope.alerts, 'Subject');
-			});
-			getData.get(notificationURL).success(function(data) {
-				$scope.notifications = data.records;
-				//Define Subject of each notification
-				for(i = 0; i < $scope.notifications.length; i++){
-					if($scope.notifications[i]['IsRequest'] == '1'){
-						$scope.notifications[i]['Subject'] = 'Invitation';
-					}else if($scope.notifications[i]['Response'] == '1'){
-						$scope.notifications[i]['Subject'] = 'Accepted';
-					}else{
-						$scope.notifications[i]['Subject'] = 'Declined';
-					}
-				}
-				$scope.notifications = $scope.shortenField($scope.notifications, 'SenderFacilityName');
-			});
-		}
 		
 		//Shortens the field in each message and returns the altered messages
 		$scope.shortenField = function(messages, field){

@@ -158,7 +158,7 @@
                         <tabset style="cursor:default">
                             <tab heading="Inbox" style="cursor:pointer">
                                 <table class="table table-hover">
-                                    <tr ng-if="messages.length != 0">
+                                    <tr ng-if="numMessages > 0">
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
@@ -167,7 +167,7 @@
                                         <td>{{message.Sender}}</td>
                                         <td>{{message.Subject}}</td>
                                     </tr>
-                                    <tr ng-if="messages.length == 0">
+                                    <tr ng-if="numMessages == 0">
                                         <br>
                                         <td class="bold">No New Messages</td>
                                     </tr>
@@ -175,7 +175,7 @@
                             </tab>
                             <tab  heading="Alerts" style="cursor:pointer" ng-if="showAllTabs">
                                 <table class="table table-hover">
-                                    <tr ng-if="alerts.length != 0">
+                                    <tr ng-if="numAlerts > 0">
                                         <th>Patient</th>
                                         <th>Subject</th>
                                     </tr>
@@ -184,7 +184,7 @@
                                         <td>{{alert.Patient}}</td>
                                         <td>{{alert.Subject}}</td>
                                     </tr>
-                                    <tr ng-if="alerts.length == 0">
+                                    <tr ng-if="numAlerts == 0">
                                         <br>
                                         <td class="bold">No New Alerts</td>
                                     </tr>
@@ -192,7 +192,7 @@
                             </tab>
                             <tab  heading="Notifications" style="cursor:pointer" ng-if="showAllTabs">
                                 <table class="table table-hover">
-                                    <tr ng-if="notifications.length != 0">
+                                    <tr ng-if="numNotifications > 0">
                                         <th>From</th>
                                         <th>Subject</th>
                                     </tr>
@@ -201,7 +201,7 @@
                                         <td>{{notification.SenderFacilityName}}</td>
                                         <td>{{notification.Subject}}</td>
                                     </tr>
-                                    <tr ng-if="notifications.length == 0">
+                                    <tr ng-if="numNotifications == 0">
                                         <br>
                                         <td class="bold">No New Notifications</td>
                                     </tr>
