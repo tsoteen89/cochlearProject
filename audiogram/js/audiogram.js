@@ -462,6 +462,8 @@ var AudioGram = function (stage, side, element_id) {
             masked : false,
             measureID : nextID()
         };
+        
+        console.log(commonStyle);
 
         //Determine the actual measure type so it can be customized
         if (measureData.type == 'text') {
@@ -502,10 +504,6 @@ var AudioGram = function (stage, side, element_id) {
                 shape = new Kinetic.Rect(commonStyle);
             } else if(measureData.value == 'wedge') {
 
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
-
                 if(Side == 'right') {
                     commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10];
                 }else{
@@ -514,17 +512,11 @@ var AudioGram = function (stage, side, element_id) {
 
                 shape = new Kinetic.Line(commonStyle);                
             } else if(measureData.value == 'x') {
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
                 commonStyle.audioLine = true;
                 commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
 
                 shape = new Kinetic.Line(commonStyle);
             } else if (measureData.value == 'bracket') {
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
                 commonStyle.masked = true;
                 if (Side == 'right') {
                     commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
@@ -534,7 +526,6 @@ var AudioGram = function (stage, side, element_id) {
                 shape = new Kinetic.Line(commonStyle);
             }
         }
-
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
         drawStack();
@@ -568,8 +559,21 @@ var AudioGram = function (stage, side, element_id) {
     * @return {void}
     */
     function bulkLoadStack(stack) {
-        currentStack = stack;
-        drawStack();
+        var i = 0;
+        var x = 0;
+        var y = 0;
+        for(i=0;i<stack.length;++i){
+            Masked = stack[i].attrs.masked ? 'masked' : 'unmasked';
+            measureType = stack[i].attrs.measure;
+            if(stack[i].attrs.x == null){
+                x = stack[i].attrs.center.x;
+                y = stack[i].attrs.center.y;
+            }else{
+                x = stack[i].attrs.x;
+                y = stack[i].attrs.y;
+            }
+            addMeasure(x,y);
+        }
     }
     
     /**
@@ -674,6 +678,8 @@ var AudioGram = function (stage, side, element_id) {
         Layers.measures.removeChildren();
 
         for (i = 0; i < currentStack.length; ++i) {
+            console.log(typeof currentStack[i].attrs.points == 'object');
+            currentStack[i].move({x:-25,y:-25});
             Layers.measures.add(currentStack[i]);
             if (currentStack[i].getAttr('noResponse') === true) {
                 arrow = drawArrow(i);
@@ -746,15 +752,15 @@ var AudioGram = function (stage, side, element_id) {
         var r;
 
         y = y - graph_bounds.min.y;                    //adjust y because of margins
+
         d = Math.floor(y / (row_height / 2));          //How many 1/2 rows divide into y
-
-        r = (y % (row_height / 2)) / row_height;  //Remainder (how close is it to the next value).
-
+        
+        r = (y % (row_height / 2)) / row_height;        //Remainder (how close is it to the next value).
+        
         if (r > 0.5) {
             d = d + 1;
         }
-
-        return y_values[d - 1];
+        return y_values[Math.abs(d - 1)];
     }
 
     /**
@@ -874,6 +880,7 @@ var AudioGram = function (stage, side, element_id) {
     * @return {object} - stack
     */
     function getCurrentStack() {
+        console.log(currentStack);
         return currentStack;
     }
     
@@ -900,22 +907,22 @@ var AudioGram = function (stage, side, element_id) {
     * @return {bool} - True = success or False = broke!.
     */
     function loadAudiogram(data) {
+        console.log("loading");
+        console.log(Side);
+        console.log(data);
         for(var i=0;i<data.length;i++){
             var shape = JSON.parse(data[i]);
-            if(shape.attrs.x)
-                var x = shape.attrs.x;
-            else
+            if(shape.attrs.center.x){
                 var x = shape.attrs.center.x;
-            if(shape.attrs.y)
-                var y = shape.attrs.y;
-            else
                 var y = shape.attrs.center.y;
-            
-            console.log(shape.attrs);
-            
+            }else{
+                var x = shape.attrs.x;
+                var y = shape.attrs.y;
+            }
+
+                        
             setMeasureType(shape.attrs.measure);         
             setMasked(shape.attrs.masked);
-            console.log(shape.attrs.noResponse);
             setNoResponse(shape.attrs.noResponse);
             addMeasure(x,y);
         }
@@ -1043,7 +1050,6 @@ var AudioGram = function (stage, side, element_id) {
     * @return {void}
     */
     function setNoResponse(response) {
-        console.log(response);
         if (response === true) {
             noResponse = true;
         } else {
@@ -1247,8 +1253,11 @@ var AudioGram = function (stage, side, element_id) {
     //Create a click event for the "Stage". Based on "current state", events
     //will be handled
     $(Stage.getContent()).on ('click', function (evt) {
-        var clickInfo = snapClick();
-        
+        //console.log(evt);
+        var offsetX = evt.offsetX || evt.layerX;
+        var offsetY = evt.offsetY || evt.layerY;
+        console.log(offsetX+','+offsetY);
+        var clickInfo = snapClick(offsetX,offsetY);
         if(isPrevious){
             //alert("Previous audiogram, do you want to use this as a template?");
             var confirmModal = modalDialog();
@@ -1280,6 +1289,11 @@ var AudioGram = function (stage, side, element_id) {
             },0);
         }
     });
+    
+    $(Stage.getContent()).on('contextmenu', function (evt) {
+        console.log(evt);
+    });
+    
     
     // Expose public API
     return {
@@ -1621,9 +1635,7 @@ var AudioGram = function (stage, side, element_id) {
             });
         }
         
- 
-        
-        
+
         return {
             getAudiogram:getAudiogram,
             getAudiogramTitles:getAudiogramTitles,
@@ -1654,11 +1666,17 @@ var AudioGram = function (stage, side, element_id) {
             var data = data.records;
 
             var right_json = JSON.parse(data.right_measures);
-            var left_json = JSON.parse(data.right_measures);
+            var left_json = JSON.parse(data.left_measures);
 
             //Load measures on each canvas
-            Stage['right'].loadAudiogram(right_json);
-            Stage['left'].loadAudiogram(left_json);
+
+            if(right_json.length > 0){
+                Stage['right'].loadAudiogram(right_json);
+            }
+            
+            if(left_json.length > 0){
+                Stage['left'].loadAudiogram(left_json);
+            }
 
             //Update audiogram title
             $('#aii-audiogram-title').val(data.title);
@@ -1851,7 +1869,7 @@ var AudioGram = function (stage, side, element_id) {
             init: function(stage,aiiapi,domhelper) {
                 settings.measureButtons = $('.aii-mea-btn');
                 settings.canvasMenu = $('.aii-canvas-menu');
-                settings.copyLeft = $('#copy-left');
+                settings.copy = $('.copy');
                 settings.loadAudiogram = $('#load-audiogram');
                 settings.loadLatestAudiogram = $('#load-latest');
                 settings.newAudiogram = $('.newAudiogram');
@@ -1912,18 +1930,23 @@ var AudioGram = function (stage, side, element_id) {
                     $(event.target).closest('button').blur();
                     event.preventDefault();
                 });
-
                 
                 /**
-                * Copy left ear to right ear
+                * Copy left ear to right ear and vice versa 
                 * @param {obj} event
                 * @return {void}
                 */ 
-                settings.copyLeft.click(function (event) {
+                settings.copy.click(function (event) {
                     var button = $( this );
-                    var stack = Stage['right'].getCurrentStack();
-                    Stage['left'].bulkLoadStack(stack);
-                    console.log(stack);
+                    var side = button.data('side');
+
+                    if(side == 'left'){
+                        var stack = Stage['left'].getCurrentStack();
+                        Stage['right'].bulkLoadStack(stack);
+                    }else{
+                        var stack = Stage['right'].getCurrentStack();
+                        Stage['left'].bulkLoadStack(stack);
+                    }
                     event.preventDefault();
                 });
                 
@@ -1952,7 +1975,6 @@ var AudioGram = function (stage, side, element_id) {
                             domHelper.loadAudiogram( data ); 
                             ModelHelper.hide();
                         });
-                        
                     }
                 });
                 
@@ -2345,7 +2367,6 @@ var AudioGram = function (stage, side, element_id) {
 
         var data = JSON.stringify(AudiogramData);
         
-        console.log(data);
         var url = $('#globalData').data('ApiUrl')+'audiograms';
         
 
