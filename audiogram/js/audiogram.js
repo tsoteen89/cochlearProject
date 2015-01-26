@@ -100,18 +100,18 @@ var AudioGram = function (stage, side, element_id) {
         var y = 0;
         var Label = "";
         
-        AudiogramImages.acl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acl.png";
-        AudiogramImages.aclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/aclm.png";
-        AudiogramImages.acr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acr.png";
-        AudiogramImages.acrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acrm.png";
-        AudiogramImages.bcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcl.png";
-        AudiogramImages.bclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bclm.png";
-        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcr.png";
-        AudiogramImages.bcrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcrm.png";
-        AudiogramImages.mcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/mcl.png";
-        AudiogramImages.sf.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/sf.png";,
-        AudiogramImages.sfa.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/sfa.png";
-        AudiogramImages.ucl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/ucl.png";
+        AudiogramImages.acl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acl.png";
+        AudiogramImages.aclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/aclm.png";
+        AudiogramImages.acr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acr.png";
+        AudiogramImages.acrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acrm.png";
+        AudiogramImages.bcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcl.png";
+        AudiogramImages.bclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bclm.png";
+        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcr.png";
+        AudiogramImages.bcrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcrm.png";
+        AudiogramImages.mcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/mcl.png";
+        AudiogramImages.sf.src = "http://aii-hermes.org/cochlearProject/audiogram/images/sf.png";
+        AudiogramImages.sfa.src = "http://aii-hermes.org/cochlearProject/audiogram/images/sfa.png";
+        AudiogramImages.ucl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/ucl.png";
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -471,6 +471,8 @@ var AudioGram = function (stage, side, element_id) {
 
         //Goes and grabs the "shape" to be displayed based on these params
         var measureData = GetMeasureData(measureType,Masked,Side);
+        
+        console.log(measureType);
 
         //Common styles to most measures
         var commonStyle = {
@@ -488,76 +490,103 @@ var AudioGram = function (stage, side, element_id) {
             audioLine : false,
             noResponse : noResponse,
             masked : false,
-            measureID : nextID()
+            measureID : nextID(),
+            width : 25,
+            height : 25,
+            stroke : 0
         };
         
         console.log(commonStyle);
+        
+
+        
+        Image = measureType.toLowerCase() + Side.substring(0,1).toLowerCase();
+        
+        if(Masked = 'masked')
+            Image = Image + 'm';
+        
+        switch(Image){
+            case 'acl': commonStyle.image = AudiogramImages.acl; break;
+            case 'aclm': commonStyle.image = AudiogramImages.aclm; break;
+            case 'acr': commonStyle.image = AudiogramImages.acr; break;
+            case 'acrm': commonStyle.image = AudiogramImages.acrm; break;
+            case 'bcl': commonStyle.image = AudiogramImages.bcl; break;
+            case 'bclm': commonStyle.image = AudiogramImages.bclm; break;
+            case 'bcr': commonStyle.image = AudiogramImages.bcr; break;
+            case 'bcrm': commonStyle.image = AudiogramImages.bcrm; break;
+            case 'mcl': commonStyle.image = AudiogramImages.mcl; break;
+            case 'sf': commonStyle.image = AudiogramImages.sf; break;
+            case 'sfa': commonStyle.image = AudiogramImages.sfa; break;
+            case 'ucl': commonStyle.image = AudiogramImages.ucl; break;
+        }
+                
+        shape = new Kinetic.Image(commonStyle); 
 
         //Determine the actual measure type so it can be customized
-        if (measureData.type == 'text') {
-            commonStyle.text = measureData.value;
-            commonStyle.fontSize = fontSize;
-            commonStyle.fontFamily = 'Courier';
-            commonStyle.fill = Colors.textColor;
-            commonStyle.shadowColor = Colors.textShadowColor;
-            commonStyle.shadowBlur = 2;
-            commonStyle.shadowOffset = {'x' : 4, 'y' : 4};
-            commonStyle.shadowOpacity = 0.4;
-            //Adjust text to go up and left
-            commonStyle.x = x - (fontSize / 4);
-            commonStyle.y = y - (fontSize / 2);
-            shape = new Kinetic.Text(commonStyle);
-        } else {
-            commonStyle.stroke = Colors.strokeColor;
-            if (measureData.value == 'circle') {
-                commonStyle.radius = 10;
-                commonStyle.audioLine = true;
-                shape = new Kinetic.Circle(commonStyle);
-            } else if(measureData.value == 'triangle') {
-                commonStyle.sides = 3;
-                commonStyle.radius = 12;
-                commonStyle.audioLine = true;
-                commonStyle.masked = true;
-                shape = new Kinetic.RegularPolygon (commonStyle);
-            } else if(measureData.value == 'square') {
-                commonStyle.width = 17;
-                commonStyle.height = 17;
-                commonStyle.center.x = x;
-                commonStyle.center.y = y;
-                commonStyle.audioLine = true;
-                commonStyle.masked = true;
-                //Adjust x,y so rectangle is centered on coords
-                commonStyle.x -= commonStyle.width/2;
-                commonStyle.y -= commonStyle.height/2;
-                shape = new Kinetic.Rect(commonStyle);
-            } else if(measureData.value == 'wedge') {
-
-                if(Side == 'right') {
-                    commonStyle.image =  AudiogramImages.bcr;
-                }else{
-                    commonStyle.image =  AudiogramImages.bcl;
-                }
-                commonStyle.width = 50;
-                commonStyle.height = 50;
-                commonStyle.stroke = 0;
-                
-                shape = new Kinetic.Image(commonStyle);  
-                console.log(shape);
-            } else if(measureData.value == 'x') {
-                commonStyle.audioLine = true;
-                commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
-
-                shape = new Kinetic.Line(commonStyle);
-            } else if (measureData.value == 'bracket') {
-                commonStyle.masked = true;
-                if (Side == 'right') {
-                    commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
-                } else {
-                    commonStyle.points =  [x - 6, y - 10, x, y - 10, x, y + 10, x - 6, y + 10];
-                }
-                shape = new Kinetic.Line(commonStyle);
-            }
-        }
+//        if (measureData.type == 'text') {
+//            commonStyle.text = measureData.value;
+//            commonStyle.fontSize = fontSize;
+//            commonStyle.fontFamily = 'Courier';
+//            commonStyle.fill = Colors.textColor;
+//            commonStyle.shadowColor = Colors.textShadowColor;
+//            commonStyle.shadowBlur = 2;
+//            commonStyle.shadowOffset = {'x' : 4, 'y' : 4};
+//            commonStyle.shadowOpacity = 0.4;
+//            //Adjust text to go up and left
+//            commonStyle.x = x - (fontSize / 4);
+//            commonStyle.y = y - (fontSize / 2);
+//            shape = new Kinetic.Text(commonStyle);
+//        } else {
+//            commonStyle.stroke = Colors.strokeColor;
+//            if (measureData.value == 'circle') {
+//                commonStyle.radius = 10;
+//                commonStyle.audioLine = true;
+//                shape = new Kinetic.Circle(commonStyle);
+//            } else if(measureData.value == 'triangle') {
+//                commonStyle.sides = 3;
+//                commonStyle.radius = 12;
+//                commonStyle.audioLine = true;
+//                commonStyle.masked = true;
+//                shape = new Kinetic.RegularPolygon (commonStyle);
+//            } else if(measureData.value == 'square') {
+//                if(Side == 'right') {
+//                    commonStyle.image =  AudiogramImages.acrm;
+//                }else{
+//                    commonStyle.image =  AudiogramImages.aclm;
+//                }
+//                commonStyle.width = 25;
+//                commonStyle.height = 25;
+//                commonStyle.stroke = 0;
+//                
+//                shape = new Kinetic.Image(commonStyle); 
+//            } else if(measureData.value == 'wedge') {
+//
+//                if(Side == 'right') {
+//                    commonStyle.image =  AudiogramImages.bcr;
+//                }else{
+//                    commonStyle.image =  AudiogramImages.bcl;
+//                }
+//                commonStyle.width = 25;
+//                commonStyle.height = 25;
+//                commonStyle.stroke = 0;
+//                
+//                shape = new Kinetic.Image(commonStyle);  
+//                console.log(shape);
+//            } else if(measureData.value == 'x') {
+//                commonStyle.audioLine = true;
+//                commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
+//
+//                shape = new Kinetic.Line(commonStyle);
+//            } else if (measureData.value == 'bracket') {
+//                commonStyle.masked = true;
+//                if (Side == 'right') {
+//                    commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
+//                } else {
+//                    commonStyle.points =  [x - 6, y - 10, x, y - 10, x, y + 10, x - 6, y + 10];
+//                }
+//                shape = new Kinetic.Line(commonStyle);
+//            }
+//        }
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
         drawStack();
