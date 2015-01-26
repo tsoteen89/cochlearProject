@@ -55,8 +55,18 @@ var AudioGram = function (stage, side, element_id) {
     var Layers = {};                            //Object to hold different layers by name
     var lineArray = [];                         //Array to hold x,y vals to draw line between measures
     var AudiogramImages = {
+        "acl": new Image(),
+        "aclm": new Image(),
+        "acr": new Image(),
+        "acrm": new Image(),
         "bcl": new Image(),
-        "bcr": new Image()
+        "bclm": new Image(),
+        "bcr": new Image(),
+        "bcrm": new Image(),
+        "mcl": new Image(),
+        "sf": new Image(),
+        "sfa": new Image(),
+        "ucl": new Image()
     };
     var margins = {                             //Margins for all sides of audiogram
         "top" : 65,
@@ -90,9 +100,18 @@ var AudioGram = function (stage, side, element_id) {
         var y = 0;
         var Label = "";
         
-        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcr.png";
+        AudiogramImages.acl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acl.png";
+        AudiogramImages.aclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/aclm.png";
+        AudiogramImages.acr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acr.png";
+        AudiogramImages.acrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/acrm.png";
         AudiogramImages.bcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcl.png";
-        
+        AudiogramImages.bclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bclm.png";
+        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcr.png";
+        AudiogramImages.bcrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/bcrm.png";
+        AudiogramImages.mcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/mcl.png";
+        AudiogramImages.sf.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/sf.png";,
+        AudiogramImages.sfa.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/sfa.png";
+        AudiogramImages.ucl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/crazy_fonts/ucl.png";
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -518,8 +537,9 @@ var AudioGram = function (stage, side, element_id) {
                 }else{
                     commonStyle.image =  AudiogramImages.bcl;
                 }
-                commonStyle.width = 30;
-                commonStyle.height = 30;
+                commonStyle.width = 50;
+                commonStyle.height = 50;
+                commonStyle.stroke = 0;
                 
                 shape = new Kinetic.Image(commonStyle);  
                 console.log(shape);
