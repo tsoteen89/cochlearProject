@@ -54,6 +54,20 @@ var AudioGram = function (stage, side, element_id) {
     var isPrevious = 0;                         //Is this a previously saved audiogram
     var Layers = {};                            //Object to hold different layers by name
     var lineArray = [];                         //Array to hold x,y vals to draw line between measures
+    var AudiogramImages = {
+        "acl": new Image(),
+        "aclm": new Image(),
+        "acr": new Image(),
+        "acrm": new Image(),
+        "bcl": new Image(),
+        "bclm": new Image(),
+        "bcr": new Image(),
+        "bcrm": new Image(),
+        "mcl": new Image(),
+        "sf": new Image(),
+        "sfa": new Image(),
+        "ucl": new Image()
+    };
     var margins = {                             //Margins for all sides of audiogram
         "top" : 65,
         "bottom" : 30,
@@ -86,6 +100,18 @@ var AudioGram = function (stage, side, element_id) {
         var y = 0;
         var Label = "";
         
+        AudiogramImages.acl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acl.png";
+        AudiogramImages.aclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/aclm.png";
+        AudiogramImages.acr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acr.png";
+        AudiogramImages.acrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/acrm.png";
+        AudiogramImages.bcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcl.png";
+        AudiogramImages.bclm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bclm.png";
+        AudiogramImages.bcr.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcr.png";
+        AudiogramImages.bcrm.src = "http://aii-hermes.org/cochlearProject/audiogram/images/bcrm.png";
+        AudiogramImages.mcl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/mcl.png";
+        AudiogramImages.sf.src = "http://aii-hermes.org/cochlearProject/audiogram/images/sf.png";
+        AudiogramImages.sfa.src = "http://aii-hermes.org/cochlearProject/audiogram/images/sfa.png";
+        AudiogramImages.ucl.src = "http://aii-hermes.org/cochlearProject/audiogram/images/ucl.png";
         //Add the contex menu for audiogram
         addContextMenus();
 
@@ -433,21 +459,25 @@ var AudioGram = function (stage, side, element_id) {
     function addMeasure(x, y) {
         var index = false;
         var shape = null;
+        var Image = null;
+        var uri = null;
         
         //Get frequency and decibels assigned to the coordinate (x,y)
         var d = getDecibels(y);
         var f = getFrequency(x);
 
         //Arbitrary font size right now.
-        var fontSize = 34;
+        var fontSize = 24;
 
         //Goes and grabs the "shape" to be displayed based on these params
-        var measureData = GetMeasureData(measureType,Masked,Side);
+        //var measureData = GetMeasureData(measureType,Masked,Side);
+        
+        console.log(measureType);
 
         //Common styles to most measures
         var commonStyle = {
-            x : x,
-            y : y,
+            x : x - (fontSize/2),
+            y : y - (fontSize/2),
             strokeWidth : 5,
             shadowColor : Colors.textShadowColor,
             shadowBlur : 2,
@@ -460,81 +490,137 @@ var AudioGram = function (stage, side, element_id) {
             audioLine : false,
             noResponse : noResponse,
             masked : false,
-            measureID : nextID()
+            measureID : nextID(),
+            width : 25,
+            height : 25,
+            stroke : 0
         };
+        
+        console.log(commonStyle);
+        
+
+        
+        Image = measureType.toLowerCase() + Side.substring(0,1).toLowerCase();
+        
+        if(Masked == 'masked')
+            Image = Image + 'm';
+        
+        console.log(Image);
+        
+        switch(Image){
+            case 'acl': 
+                commonStyle.image = AudiogramImages.acl;
+                commonStyle.audioLine = true;
+                break;
+            case 'aclm': 
+                commonStyle.image = AudiogramImages.aclm;
+                commonStyle.audioLine = true;
+                break;
+            case 'acr': 
+                commonStyle.image = AudiogramImages.acr;
+                commonStyle.audioLine = true;
+                break;
+            case 'acrm': 
+                commonStyle.image = AudiogramImages.acrm; 
+                commonStyle.audioLine = true;
+                break;
+            case 'bcl': 
+                commonStyle.image = AudiogramImages.bcl; break;
+            case 'bclm': 
+                commonStyle.image = AudiogramImages.bclm; break;
+            case 'bcr': 
+                commonStyle.image = AudiogramImages.bcr; break;
+            case 'bcrm': 
+                commonStyle.image = AudiogramImages.bcrm; break;
+            case 'mcll': 
+            case 'mclr':
+            case 'mcllm': 
+            case 'mclrm':
+                commonStyle.image = AudiogramImages.mcl; break;
+            case 'sfl': 
+            case 'sfr':
+            case 'sflm': 
+            case 'sfrm':
+                commonStyle.image = AudiogramImages.sf; break;
+            case 'sfal': 
+            case 'sfar':
+            case 'sfalm': 
+            case 'sfarm':
+                commonStyle.image = AudiogramImages.sfa; break;
+            case 'ucll': 
+            case 'uclr':
+            case 'ucllm': 
+            case 'uclrm':
+                commonStyle.image = AudiogramImages.ucl; break;
+        }
+                
+        shape = new Kinetic.Image(commonStyle); 
 
         //Determine the actual measure type so it can be customized
-        if (measureData.type == 'text') {
-            commonStyle.text = measureData.value;
-            commonStyle.fontSize = fontSize;
-            commonStyle.fontFamily = 'Courier';
-            commonStyle.fill = Colors.textColor;
-            commonStyle.shadowColor = Colors.textShadowColor;
-            commonStyle.shadowBlur = 2;
-            commonStyle.shadowOffset = {'x' : 4, 'y' : 4};
-            commonStyle.shadowOpacity = 0.4;
-            //Adjust text to go up and left
-            commonStyle.x = x - (fontSize / 4);
-            commonStyle.y = y - (fontSize / 2);
-            shape = new Kinetic.Text(commonStyle);
-        } else {
-            commonStyle.stroke = Colors.strokeColor;
-            if (measureData.value == 'circle') {
-                commonStyle.radius = 10;
-                commonStyle.audioLine = true;
-                shape = new Kinetic.Circle(commonStyle);
-            } else if(measureData.value == 'triangle') {
-                commonStyle.sides = 3;
-                commonStyle.radius = 12;
-                commonStyle.audioLine = true;
-                commonStyle.masked = true;
-                shape = new Kinetic.RegularPolygon (commonStyle);
-            } else if(measureData.value == 'square') {
-                commonStyle.width = 17;
-                commonStyle.height = 17;
-                commonStyle.center.x = x;
-                commonStyle.center.y = y;
-                commonStyle.audioLine = true;
-                commonStyle.masked = true;
-                //Adjust x,y so rectangle is centered on coords
-                commonStyle.x -= commonStyle.width/2;
-                commonStyle.y -= commonStyle.height/2;
-                shape = new Kinetic.Rect(commonStyle);
-            } else if(measureData.value == 'wedge') {
-
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
-
-                if(Side == 'right') {
-                    commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10];
-                }else{
-                    commonStyle.points =  [x - 10, y - 10, x, y, x - 10, y + 10];
-                }
-
-                shape = new Kinetic.Line(commonStyle);                
-            } else if(measureData.value == 'x') {
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
-                commonStyle.audioLine = true;
-                commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
-
-                shape = new Kinetic.Line(commonStyle);
-            } else if (measureData.value == 'bracket') {
-                //remove base x,y because it throws line way off
-                commonStyle.x = null;
-                commonStyle.y = null;
-                commonStyle.masked = true;
-                if (Side == 'right') {
-                    commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
-                } else {
-                    commonStyle.points =  [x - 6, y - 10, x, y - 10, x, y + 10, x - 6, y + 10];
-                }
-                shape = new Kinetic.Line(commonStyle);
-            }
-        }
-
+//        if (measureData.type == 'text') {
+//            commonStyle.text = measureData.value;
+//            commonStyle.fontSize = fontSize;
+//            commonStyle.fontFamily = 'Courier';
+//            commonStyle.fill = Colors.textColor;
+//            commonStyle.shadowColor = Colors.textShadowColor;
+//            commonStyle.shadowBlur = 2;
+//            commonStyle.shadowOffset = {'x' : 4, 'y' : 4};
+//            commonStyle.shadowOpacity = 0.4;
+//            //Adjust text to go up and left
+//            commonStyle.x = x - (fontSize / 4);
+//            commonStyle.y = y - (fontSize / 2);
+//            shape = new Kinetic.Text(commonStyle);
+//        } else {
+//            commonStyle.stroke = Colors.strokeColor;
+//            if (measureData.value == 'circle') {
+//                commonStyle.radius = 10;
+//                commonStyle.audioLine = true;
+//                shape = new Kinetic.Circle(commonStyle);
+//            } else if(measureData.value == 'triangle') {
+//                commonStyle.sides = 3;
+//                commonStyle.radius = 12;
+//                commonStyle.audioLine = true;
+//                commonStyle.masked = true;
+//                shape = new Kinetic.RegularPolygon (commonStyle);
+//            } else if(measureData.value == 'square') {
+//                if(Side == 'right') {
+//                    commonStyle.image =  AudiogramImages.acrm;
+//                }else{
+//                    commonStyle.image =  AudiogramImages.aclm;
+//                }
+//                commonStyle.width = 25;
+//                commonStyle.height = 25;
+//                commonStyle.stroke = 0;
+//                
+//                shape = new Kinetic.Image(commonStyle); 
+//            } else if(measureData.value == 'wedge') {
+//
+//                if(Side == 'right') {
+//                    commonStyle.image =  AudiogramImages.bcr;
+//                }else{
+//                    commonStyle.image =  AudiogramImages.bcl;
+//                }
+//                commonStyle.width = 25;
+//                commonStyle.height = 25;
+//                commonStyle.stroke = 0;
+//                
+//                shape = new Kinetic.Image(commonStyle);  
+//                console.log(shape);
+//            } else if(measureData.value == 'x') {
+//                commonStyle.audioLine = true;
+//                commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
+//
+//                shape = new Kinetic.Line(commonStyle);
+//            } else if (measureData.value == 'bracket') {
+//                commonStyle.masked = true;
+//                if (Side == 'right') {
+//                    commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
+//                } else {
+//                    commonStyle.points =  [x - 6, y - 10, x, y - 10, x, y + 10, x - 6, y + 10];
+//                }
+//                shape = new Kinetic.Line(commonStyle);
+//            }
+//        }
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
         drawStack();
@@ -568,8 +654,21 @@ var AudioGram = function (stage, side, element_id) {
     * @return {void}
     */
     function bulkLoadStack(stack) {
-        currentStack = stack;
-        drawStack();
+        var i = 0;
+        var x = 0;
+        var y = 0;
+        for(i=0;i<stack.length;++i){
+            Masked = stack[i].attrs.masked ? 'masked' : 'unmasked';
+            measureType = stack[i].attrs.measure;
+            if(stack[i].attrs.x == null){
+                x = stack[i].attrs.center.x;
+                y = stack[i].attrs.center.y;
+            }else{
+                x = stack[i].attrs.x;
+                y = stack[i].attrs.y;
+            }
+            addMeasure(x,y);
+        }
     }
     
     /**
@@ -674,6 +773,8 @@ var AudioGram = function (stage, side, element_id) {
         Layers.measures.removeChildren();
 
         for (i = 0; i < currentStack.length; ++i) {
+            console.log(typeof currentStack[i].attrs.points == 'object');
+
             Layers.measures.add(currentStack[i]);
             if (currentStack[i].getAttr('noResponse') === true) {
                 arrow = drawArrow(i);
@@ -746,15 +847,15 @@ var AudioGram = function (stage, side, element_id) {
         var r;
 
         y = y - graph_bounds.min.y;                    //adjust y because of margins
+
         d = Math.floor(y / (row_height / 2));          //How many 1/2 rows divide into y
-
-        r = (y % (row_height / 2)) / row_height;  //Remainder (how close is it to the next value).
-
+        
+        r = (y % (row_height / 2)) / row_height;        //Remainder (how close is it to the next value).
+        
         if (r > 0.5) {
             d = d + 1;
         }
-
-        return y_values[d - 1];
+        return y_values[Math.abs(d - 1)];
     }
 
     /**
@@ -854,7 +955,7 @@ var AudioGram = function (stage, side, element_id) {
                         "left" :  {"type" : "text", "value" : "S"}
                     }
                 },
-                "SF-A" :  {
+                "SFA" :  {
                     "unmasked" :  {
                         "right" :  {"type" : "text", "value" : "A"},
                         "left" :  {"type" : "text", "value" : "A"}
@@ -874,6 +975,7 @@ var AudioGram = function (stage, side, element_id) {
     * @return {object} - stack
     */
     function getCurrentStack() {
+        console.log(currentStack);
         return currentStack;
     }
     
@@ -900,22 +1002,22 @@ var AudioGram = function (stage, side, element_id) {
     * @return {bool} - True = success or False = broke!.
     */
     function loadAudiogram(data) {
+        console.log("loading");
+        console.log(Side);
+        console.log(data);
         for(var i=0;i<data.length;i++){
             var shape = JSON.parse(data[i]);
-            if(shape.attrs.x)
-                var x = shape.attrs.x;
-            else
+            if(shape.attrs.center.x){
                 var x = shape.attrs.center.x;
-            if(shape.attrs.y)
-                var y = shape.attrs.y;
-            else
                 var y = shape.attrs.center.y;
-            
-            console.log(shape.attrs);
-            
+            }else{
+                var x = shape.attrs.x;
+                var y = shape.attrs.y;
+            }
+
+                        
             setMeasureType(shape.attrs.measure);         
             setMasked(shape.attrs.masked);
-            console.log(shape.attrs.noResponse);
             setNoResponse(shape.attrs.noResponse);
             addMeasure(x,y);
         }
@@ -1043,7 +1145,6 @@ var AudioGram = function (stage, side, element_id) {
     * @return {void}
     */
     function setNoResponse(response) {
-        console.log(response);
         if (response === true) {
             noResponse = true;
         } else {
@@ -1247,8 +1348,11 @@ var AudioGram = function (stage, side, element_id) {
     //Create a click event for the "Stage". Based on "current state", events
     //will be handled
     $(Stage.getContent()).on ('click', function (evt) {
-        var clickInfo = snapClick();
-        
+        //console.log(evt);
+        var offsetX = evt.offsetX || evt.layerX;
+        var offsetY = evt.offsetY || evt.layerY;
+        console.log(offsetX+','+offsetY);
+        var clickInfo = snapClick(offsetX,offsetY);
         if(isPrevious){
             //alert("Previous audiogram, do you want to use this as a template?");
             var confirmModal = modalDialog();
@@ -1280,6 +1384,11 @@ var AudioGram = function (stage, side, element_id) {
             },0);
         }
     });
+    
+    $(Stage.getContent()).on('contextmenu', function (evt) {
+        console.log(evt);
+    });
+    
     
     // Expose public API
     return {
@@ -1621,9 +1730,7 @@ var AudioGram = function (stage, side, element_id) {
             });
         }
         
- 
-        
-        
+
         return {
             getAudiogram:getAudiogram,
             getAudiogramTitles:getAudiogramTitles,
@@ -1654,11 +1761,17 @@ var AudioGram = function (stage, side, element_id) {
             var data = data.records;
 
             var right_json = JSON.parse(data.right_measures);
-            var left_json = JSON.parse(data.right_measures);
+            var left_json = JSON.parse(data.left_measures);
 
             //Load measures on each canvas
-            Stage['right'].loadAudiogram(right_json);
-            Stage['left'].loadAudiogram(left_json);
+
+            if(right_json.length > 0){
+                Stage['right'].loadAudiogram(right_json);
+            }
+            
+            if(left_json.length > 0){
+                Stage['left'].loadAudiogram(left_json);
+            }
 
             //Update audiogram title
             $('#aii-audiogram-title').val(data.title);
@@ -1851,7 +1964,7 @@ var AudioGram = function (stage, side, element_id) {
             init: function(stage,aiiapi,domhelper) {
                 settings.measureButtons = $('.aii-mea-btn');
                 settings.canvasMenu = $('.aii-canvas-menu');
-                settings.copyLeft = $('#copy-left');
+                settings.copy = $('.copy');
                 settings.loadAudiogram = $('#load-audiogram');
                 settings.loadLatestAudiogram = $('#load-latest');
                 settings.newAudiogram = $('.newAudiogram');
@@ -1912,18 +2025,23 @@ var AudioGram = function (stage, side, element_id) {
                     $(event.target).closest('button').blur();
                     event.preventDefault();
                 });
-
                 
                 /**
-                * Copy left ear to right ear
+                * Copy left ear to right ear and vice versa 
                 * @param {obj} event
                 * @return {void}
                 */ 
-                settings.copyLeft.click(function (event) {
+                settings.copy.click(function (event) {
                     var button = $( this );
-                    var stack = Stage['right'].getCurrentStack();
-                    Stage['left'].bulkLoadStack(stack);
-                    console.log(stack);
+                    var side = button.data('side');
+
+                    if(side == 'left'){
+                        var stack = Stage['left'].getCurrentStack();
+                        Stage['right'].bulkLoadStack(stack);
+                    }else{
+                        var stack = Stage['right'].getCurrentStack();
+                        Stage['left'].bulkLoadStack(stack);
+                    }
                     event.preventDefault();
                 });
                 
@@ -1952,7 +2070,6 @@ var AudioGram = function (stage, side, element_id) {
                             domHelper.loadAudiogram( data ); 
                             ModelHelper.hide();
                         });
-                        
                     }
                 });
                 
@@ -2345,7 +2462,6 @@ var AudioGram = function (stage, side, element_id) {
 
         var data = JSON.stringify(AudiogramData);
         
-        console.log(data);
         var url = $('#globalData').data('ApiUrl')+'audiograms';
         
 
