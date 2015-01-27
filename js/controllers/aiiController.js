@@ -3016,16 +3016,17 @@
 		
 		//Define onControllerLoad behavior
 		//====================================================
+		$scope.messageType = 'Messages';		
+		$scope.messageProperty = 'Received';
+		
 		//If user is messaging someone, display the Compose Message screen
 		var recipient = persistData.getMessageRecipient();
 		if(recipient != -1){
 			//Fill in the composed message's recipient
 			$scope.composedMessage['ReceiverUsername'] =
 				recipient['username'] + " <" + recipient['full_name'] + ">";
-			
-		} else { 		//Otherwise, display the Message Inbox
-			$scope.messageType = 'Messages';		
-			$scope.messageProperty = 'Received';
+			$('#composeMessageModal').modal('show');
+			persistData.setMessageRecipient(-1);
 		}
 
 		//Get all message data when userlevel is defined

@@ -137,16 +137,14 @@
 			</tabset>
 			<div class="tab-pane fade in active" id="home">
 				<div class="list-group">
-					<span class="list-group-item"
-					   ng-repeat="message in currentMessages | filter:search | orderBy:orderFilter:reverse"
-					   ng-click="selectMessage(message)" style="cursor:pointer" 
-					   ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
+					<span class="list-group-item" ng-repeat="message in currentMessages | filter:search | orderBy:orderFilter:reverse"
+					    style="cursor:pointer" ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
 						<div class="checkbox">
 							<label>
 								<input type="checkbox" name="messageCheckbox" checklist-value="message" checklist-model="markedMessages"> 
 							</label>
 						</div>
-						<span data-toggle="modal" data-target="#displayMessageModal">
+						<span data-toggle="modal" data-target="#displayMessageModal" ng-click="selectMessage(message)">
 							<!--Sender/receiver name -->
 							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}{{message.ShortPatient}}{{message.ShortSenderFacilityName}}</span>
 							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
@@ -155,7 +153,7 @@
 							<!--little message preview -->
 							<span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
 							<!--time badge-->
-							<span class="badge">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
+							<span class="badge pull-right">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
 						</span>
 					</span>
 				</div>
