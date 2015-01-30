@@ -472,7 +472,7 @@ var AudioGram = function (stage, side, element_id) {
         //Goes and grabs the "shape" to be displayed based on these params
         //var measureData = GetMeasureData(measureType,Masked,Side);
         
-        console.log(measureType);
+        //console.log(measureType);
 
         //Common styles to most measures
         var commonStyle = {
@@ -496,7 +496,7 @@ var AudioGram = function (stage, side, element_id) {
             stroke : 0
         };
         
-        console.log(commonStyle);
+        //console.log(commonStyle);
         
 
         
@@ -505,7 +505,7 @@ var AudioGram = function (stage, side, element_id) {
         if(Masked == 'masked')
             Image = Image + 'm';
         
-        console.log(Image);
+        //console.log(Image);
         
         switch(Image){
             case 'acl': 
@@ -773,7 +773,7 @@ var AudioGram = function (stage, side, element_id) {
         Layers.measures.removeChildren();
 
         for (i = 0; i < currentStack.length; ++i) {
-            console.log(typeof currentStack[i].attrs.points == 'object');
+            //console.log(typeof currentStack[i].attrs.points == 'object');
 
             Layers.measures.add(currentStack[i]);
             if (currentStack[i].getAttr('noResponse') === true) {
@@ -975,7 +975,7 @@ var AudioGram = function (stage, side, element_id) {
     * @return {object} - stack
     */
     function getCurrentStack() {
-        console.log(currentStack);
+        //console.log(currentStack);
         return currentStack;
     }
     
@@ -1002,9 +1002,9 @@ var AudioGram = function (stage, side, element_id) {
     * @return {bool} - True = success or False = broke!.
     */
     function loadAudiogram(data) {
-        console.log("loading");
-        console.log(Side);
-        console.log(data);
+        //console.log("loading");
+        //console.log(Side);
+        //console.log(data);
         for(var i=0;i<data.length;i++){
             var shape = JSON.parse(data[i]);
             if(shape.attrs.center.x){
@@ -1351,7 +1351,7 @@ var AudioGram = function (stage, side, element_id) {
         //console.log(evt);
         var offsetX = evt.offsetX || evt.layerX;
         var offsetY = evt.offsetY || evt.layerY;
-        console.log(offsetX+','+offsetY);
+
         var clickInfo = snapClick(offsetX,offsetY);
         if(isPrevious){
             //alert("Previous audiogram, do you want to use this as a template?");
@@ -1623,6 +1623,8 @@ var AudioGram = function (stage, side, element_id) {
         * @return {void}
         */ 
         function getAudiogram(audiogram_id){
+            console.log("getAudiogram:");
+            console.log(audiogram_id);
             var dynamicData = {};
             audiogram_id = typeof audiogram_id !== 'undefined' ? audiogram_id : -1;
             //Get one audiogram
@@ -1761,7 +1763,7 @@ var AudioGram = function (stage, side, element_id) {
         function loadAudiogram( data ) {
 
             var data = data.records;
-
+            
             var right_json = JSON.parse(data.right_measures);
             var left_json = JSON.parse(data.left_measures);
 
@@ -1780,8 +1782,6 @@ var AudioGram = function (stage, side, element_id) {
             $('#aii-audiogram-title').selectpicker('refresh');
             
             var AudiogramDate = fromUnixTime(data.date);
-            
-            console.log(AudiogramDate)
 
             $("#patient-audiogram-date").attr("value", AudiogramDate.year+'-'+AudiogramDate.month+'-'+AudiogramDate.day);
 
@@ -1857,7 +1857,6 @@ var AudioGram = function (stage, side, element_id) {
         }
         
         function addPatientAudiogramTitle( data ){
-
             var Html  = $('#aii-audiogram-prev').html();
             Html = Html + '<option value="'+data.audiogram_id+'">'+data.audiogram_date+' - '+data.audiogram_title+'</option>';
 
@@ -1867,6 +1866,11 @@ var AudioGram = function (stage, side, element_id) {
         
         function loadPatientInfo( first,last,dob,facility) {
             $('#patient-name').val(first+' '+last);
+            
+            //Shouldn't have to do this here
+            var dob = dob.split("-");
+            dob = dob[1]+'/'+dob[2]+'/'+dob[0];
+            
             $('#patient-dob').val(dob);
             $('#facility-name').html(facility);
         }
@@ -2068,7 +2072,8 @@ var AudioGram = function (stage, side, element_id) {
                         
                         ModelHelper.modalType('loading');
                         ModelHelper.show('Fetching audiogram ...');
-                        
+                        console.log("loadAudiogram.click");
+                        console.log(audiogram_id)
 
                         $.when(aiiApi.getAudiogram(audiogram_id)).then(function( data ) {
                             domHelper.loadAudiogram( data ); 
@@ -2150,7 +2155,7 @@ var AudioGram = function (stage, side, element_id) {
                         }
                     }
 
-                    console.log(ImgData);
+                    //console.log(ImgData);
 
                     //DO I NEED THIS ????????
                     $.post( "class.audiogram.php", ImgData)
@@ -2180,11 +2185,24 @@ var AudioGram = function (stage, side, element_id) {
                         console.log("error on save");
                         //return;
                     }else{
-                        saveAudiogram(Stage,domHelper.addPatientAudiogramTitle);
-                        
-                        Stage.left.clear();
-                        Stage.right.clear();
-                        domHelper.resetDropDowns();
+                        var Max = $('#globalData').data('MaxID',Max);            
+                        var d = fromUnixTime(unixTime());
+                        d.year = d.year-2000;
+                        d = d.month+'/'+d.day+'/'+d.year
+                        var title = $('#aii-audiogram-title option:selected').val();
+                        $.when(
+                            saveAudiogram(Stage),
+                            domHelper.addPatientAudiogramTitle({                             
+                                'audiogram_title': title,
+                                'audiogram_date': d,
+                                'audiogram_id': Max         
+                            })
+                        )
+                        .then(function(){
+                            Stage.left.clear();
+                            Stage.right.clear();
+                            domHelper.resetDropDowns();
+                        });
                         
                     }
                 });
@@ -2425,7 +2443,7 @@ var AudioGram = function (stage, side, element_id) {
     * @param {void}
     * @return {void}
     */
-    function saveAudiogram(Stage,callback){
+    function saveAudiogram(Stage){
 
 
         var Max = $('#globalData').data('MaxID') + 1;
@@ -2476,20 +2494,11 @@ var AudioGram = function (stage, side, element_id) {
             contentType: "application/json; charset=utf-8",
         }).done(function( data ) {
             $('#globalData').data('MaxID',Max);            
-            var d = fromUnixTime(unix);
-            d.year = d.year-2000;
-            
-            callback( {
-                'audiogram_title':$('#aii-audiogram-title option:selected').val(),
-                'audiogram_date': d.month+'/'+d.day+'/'+d.year,
-                'audiogram_id':Max
-            });
         }).fail(function() {
             console.log( "fail" );
         }).always(function() {
-            console.log( "always" );
+            //console.log( "always" );
         });
-
     }       
     /**
     * Re-sets the page back to its original "state" of cleanliness.
