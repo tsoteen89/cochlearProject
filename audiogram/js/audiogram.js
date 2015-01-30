@@ -660,12 +660,12 @@ var AudioGram = function (stage, side, element_id) {
         for(i=0;i<stack.length;++i){
             Masked = stack[i].attrs.masked ? 'masked' : 'unmasked';
             measureType = stack[i].attrs.measure;
-            if(stack[i].attrs.x == null){
-                x = stack[i].attrs.center.x;
-                y = stack[i].attrs.center.y;
-            }else{
+            if(stack[i].attrs.center.x == null){
                 x = stack[i].attrs.x;
                 y = stack[i].attrs.y;
+            }else{
+                x = stack[i].attrs.center.x;
+                y = stack[i].attrs.center.y;
             }
             addMeasure(x,y);
         }
@@ -1604,6 +1604,7 @@ var AudioGram = function (stage, side, element_id) {
      * @method audiograms/{audiogram_id:[0-9]+}/patient/{patient_id:[0-9]+}
      * @method audiograms/patient/{patient_id:[0-9]+}
      * @method audiograms/getLatestAudiogramID
+     * @method phases/{id:[0-9]+}/{token:[a-zA-Z0-9_-]+}
      ************************************************************************************************/  
 
     var AiiApiHelper = function(apiurl,cookie_data,stage){
@@ -1752,9 +1753,10 @@ var AudioGram = function (stage, side, element_id) {
      * @method loadPatientAudiogramTitles
      * @method loadPhaseName
      ************************************************************************************************/
-    var DomHelper = function(stage){
+    var DomHelper = function(stage,aii_helper){
         
         var Stage = stage;
+        var AiiHelper = aii_helper;
         
         function loadAudiogram( data ) {
 
@@ -1778,6 +1780,8 @@ var AudioGram = function (stage, side, element_id) {
             $('#aii-audiogram-title').selectpicker('refresh');
             
             var AudiogramDate = fromUnixTime(data.date);
+            
+            console.log(AudiogramDate)
 
             $("#patient-audiogram-date").attr("value", AudiogramDate.year+'-'+AudiogramDate.month+'-'+AudiogramDate.day);
 
