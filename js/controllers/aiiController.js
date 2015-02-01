@@ -3119,9 +3119,8 @@
                     info.UserLevelID = data.records.UserLevelID;
                     $scope.userLevel = data.records.UserLevelID;
                     userInfo.set(info);
-					
                     //Redirect the user to the dashboard if they were going to the login page
-                    if ($window.location.pathname == "#" || $window.location.pathname == "") {
+                    if ($location.$$path == "/") {
                         $window.location.href = "#/dashboard";
                     }
                 }

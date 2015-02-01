@@ -84,16 +84,8 @@
             <div class="pull-right">
                 <!-- message counts-->
                 <span class="text-muted">
-                    <b>1</b>–<b>{{currentMessages.length}}</b> of <b>{{currentMessages.length}}</b></span>
-                <!--left and right buttons to navigate messages perhaps, not implemented yet -->
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </button>
-                    <button type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </button>
-                </div>
+                    <b>1</b>–<b>{{currentMessages.length}}</b>
+                </span>
             </div>
         </div>
     </div>
@@ -139,12 +131,12 @@
 				<div class="list-group">
 					<span class="list-group-item" ng-repeat="message in currentMessages | filter:search | orderBy:orderFilter:reverse"
 					    style="cursor:pointer" ng-class="{'read bold':(message.IsRead == '0') && isCurrentProperty('Received')}">
-						<div class="checkbox">
+						<div class="checkbox" style="float:left">
 							<label>
 								<input type="checkbox" name="messageCheckbox" checklist-value="message" checklist-model="markedMessages"> 
 							</label>
 						</div>
-						<span data-toggle="modal" data-target="#displayMessageModal" ng-click="selectMessage(message)">
+						<div class="col-md-12" style="margin-left:25px;padding-left:0px" data-toggle="modal" data-target="#displayMessageModal" ng-click="selectMessage(message)">
 							<!--Sender/receiver name -->
 							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showFrom">{{message.ShortSenderName}}{{message.ShortPatient}}{{message.ShortSenderFacilityName}}</span>
 							<span class="name" style="min-width: 120px;display: inline-block;" ng-if="showTo">{{message.ShortReceiverName}}</span>
@@ -154,7 +146,7 @@
 							<span class="text-muted" style="font-size: 11px;">{{message.ShortContent}}</span>
 							<!--time badge-->
 							<span class="badge pull-right">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
-						</span>
+						</div>
 					</span>
 				</div>
 			</div>
