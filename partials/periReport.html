@@ -55,7 +55,9 @@
                     <span ng-if="isObject(careTeams[$parent.$index].Data[key][questionNumb]) && questionNumb == 085"
                         ng-repeat="surgery in careTeams[$parent.$index].Data[key][questionNumb] track by $index">
                         <span >{{$index +1}}. </span> 
-                        <span ng-repeat="(surgeryInfo, value) in surgery track by $index"> <b> {{surgeryInfo}}</b>: <br>  {{value}} <br> </span> 
+                        <span> <b> Date:</b> <br>  {{surgery.Date}} <br> </span>
+                        <span> <b> Side:</b> <br>  {{surgery.Side}} <br> </span>
+                        <span> <b> Type:</b> <br>  {{surgery.Type}} <br> </span>
                         <hr>
                     </span>
                 </td>
