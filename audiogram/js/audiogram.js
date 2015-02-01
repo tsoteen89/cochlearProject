@@ -496,9 +496,6 @@ var AudioGram = function (stage, side, element_id) {
             stroke : 0
         };
         
-        //console.log(commonStyle);
-        
-
         
         Image = measureType.toLowerCase() + Side.substring(0,1).toLowerCase();
         
@@ -555,72 +552,6 @@ var AudioGram = function (stage, side, element_id) {
         }
                 
         shape = new Kinetic.Image(commonStyle); 
-
-        //Determine the actual measure type so it can be customized
-//        if (measureData.type == 'text') {
-//            commonStyle.text = measureData.value;
-//            commonStyle.fontSize = fontSize;
-//            commonStyle.fontFamily = 'Courier';
-//            commonStyle.fill = Colors.textColor;
-//            commonStyle.shadowColor = Colors.textShadowColor;
-//            commonStyle.shadowBlur = 2;
-//            commonStyle.shadowOffset = {'x' : 4, 'y' : 4};
-//            commonStyle.shadowOpacity = 0.4;
-//            //Adjust text to go up and left
-//            commonStyle.x = x - (fontSize / 4);
-//            commonStyle.y = y - (fontSize / 2);
-//            shape = new Kinetic.Text(commonStyle);
-//        } else {
-//            commonStyle.stroke = Colors.strokeColor;
-//            if (measureData.value == 'circle') {
-//                commonStyle.radius = 10;
-//                commonStyle.audioLine = true;
-//                shape = new Kinetic.Circle(commonStyle);
-//            } else if(measureData.value == 'triangle') {
-//                commonStyle.sides = 3;
-//                commonStyle.radius = 12;
-//                commonStyle.audioLine = true;
-//                commonStyle.masked = true;
-//                shape = new Kinetic.RegularPolygon (commonStyle);
-//            } else if(measureData.value == 'square') {
-//                if(Side == 'right') {
-//                    commonStyle.image =  AudiogramImages.acrm;
-//                }else{
-//                    commonStyle.image =  AudiogramImages.aclm;
-//                }
-//                commonStyle.width = 25;
-//                commonStyle.height = 25;
-//                commonStyle.stroke = 0;
-//                
-//                shape = new Kinetic.Image(commonStyle); 
-//            } else if(measureData.value == 'wedge') {
-//
-//                if(Side == 'right') {
-//                    commonStyle.image =  AudiogramImages.bcr;
-//                }else{
-//                    commonStyle.image =  AudiogramImages.bcl;
-//                }
-//                commonStyle.width = 25;
-//                commonStyle.height = 25;
-//                commonStyle.stroke = 0;
-//                
-//                shape = new Kinetic.Image(commonStyle);  
-//                console.log(shape);
-//            } else if(measureData.value == 'x') {
-//                commonStyle.audioLine = true;
-//                commonStyle.points =  [x + 10, y - 10, x, y, x + 10, y + 10, x - 10, y - 10, x, y, x - 10, y + 10];
-//
-//                shape = new Kinetic.Line(commonStyle);
-//            } else if (measureData.value == 'bracket') {
-//                commonStyle.masked = true;
-//                if (Side == 'right') {
-//                    commonStyle.points =  [x + 6, y - 10, x, y - 10, x, y + 10, x + 6, y + 10];
-//                } else {
-//                    commonStyle.points =  [x - 6, y - 10, x, y - 10, x, y + 10, x - 6, y + 10];
-//                }
-//                shape = new Kinetic.Line(commonStyle);
-//            }
-//        }
         currentStack.push(shape);
         actionStack.push({"action" : "add", "measureID" : shape.get});
         drawStack();
@@ -669,6 +600,7 @@ var AudioGram = function (stage, side, element_id) {
             }
             addMeasure(x,y);
         }
+        isPrevious = 1;
     }
     
     /**
@@ -1508,7 +1440,7 @@ var AudioGram = function (stage, side, element_id) {
     var modalDialog = function() {
 
         var $modal = null;
-        
+        var $handler = null;
         
         // Creating modal dialog's DOM
         var $loadingDialog = $(
@@ -1530,10 +1462,11 @@ var AudioGram = function (stage, side, element_id) {
                     '<div>This is a previously saved audiogram.<br>Would you like to use this as template for your new audiogram?</div>' +
                 '</div>' +
                 '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>' +
+                    '<button type="button" class="btn btn-default" data-dismiss="modal" id="confirm-edit" onclick="confirmEdit(Stage)">Confirm</button>' +
                     '<a href="#" class="btn btn-danger danger">Cancel</a>' +
                 '</div>' +
-            '</div></div></div>');
+            '</div></div></div>' 
+            );
 
         function setModalType(type){
             switch(type){
@@ -1547,6 +1480,7 @@ var AudioGram = function (stage, side, element_id) {
                     alert("Error: No modaltype chosen");
             }
         }
+        
         /**
          * Opens our dialog
          * @param message Custom message
@@ -1890,43 +1824,6 @@ var AudioGram = function (stage, side, element_id) {
 
 
         }
-        /**
-        * initMeasurementButtons - 
-        * @param {obj} event
-        * @return {void}
-        */ 
-//        function initMeasureButtons() {
-//            //Added for checkbox buttons
-//            $('.button-checkbox').each(function(){
-//
-//                // Settings
-//                var $widget = $(this),
-//                    $button = $widget.find('button'),
-//                    $checkbox = $widget.find('input:checkbox'),
-//                    color = $button.data('color'),
-//                    settings = {
-//                        on: {
-//                            icon: 'fa fa-check-square-o'
-//                        },
-//                        off: {
-//                            icon: 'fa fa-ban'
-//                        }
-//                    };
-//
-//                // Event Handlers
-//                $button.on('click', function () {
-//                    $checkbox.prop('checked', !$checkbox.is(':checked'));
-//                    $checkbox.triggerHandler('change');
-//                    updateMeasureButtons();
-//                    event.preventDefault();
-//                });
-//
-//                $checkbox.on('change', function () {
-//                    updateMeasureButtons();
-//                });
-//
-//            });
-//        }
         
         function resetDropDowns(){
             $('#aii-audiogram-prev').selectpicker('val','0');
@@ -1936,7 +1833,6 @@ var AudioGram = function (stage, side, element_id) {
         }
         
 
-        
         return {
             addPatientAudiogramTitle:addPatientAudiogramTitle,
             loadAudiogram:loadAudiogram,
@@ -2034,6 +1930,7 @@ var AudioGram = function (stage, side, element_id) {
                     event.preventDefault();
                 });
                 
+                
                 /**
                 * Copy left ear to right ear and vice versa 
                 * @param {obj} event
@@ -2072,8 +1969,6 @@ var AudioGram = function (stage, side, element_id) {
                         
                         ModelHelper.modalType('loading');
                         ModelHelper.show('Fetching audiogram ...');
-                        console.log("loadAudiogram.click");
-                        console.log(audiogram_id)
 
                         $.when(aiiApi.getAudiogram(audiogram_id)).then(function( data ) {
                             domHelper.loadAudiogram( data ); 
@@ -2206,6 +2101,7 @@ var AudioGram = function (stage, side, element_id) {
                         
                     }
                 });
+                
                 /**
                 * Shows the patient info "block" that could be hidden to save screen space
                 * @param {obj} event
@@ -2217,6 +2113,7 @@ var AudioGram = function (stage, side, element_id) {
                     $('#show-patient-info').css('display','none');
                     event.preventDefault();
                 });
+                
                 /**
                 * Shows or hides the patient information "block" (or div)
                 * @param {obj} event
@@ -2287,28 +2184,6 @@ var AudioGram = function (stage, side, element_id) {
                         .removeClass()
                         .addClass('fa fa-fw');
                     }
-//                    var $widget = $('.button-checkbox'),
-//                        $button = $widget.find('button'),
-//                        $checkbox = $widget.find('input:checkbox'),
-//                        isChecked = $checkbox.is(':checked'),
-//                        settings = {
-//                            on: {
-//                                icon: 'fa fa-check-square-o'
-//                            },
-//                            off: {
-//                                icon: 'fa fa-ban'
-//                            }
-//                        };
-//
-//                    // Set the button's state
-//                    $button.data('state', (isChecked) ? "on" : "off");
-//
-//                    // Set the button's icon
-//                    $button.find('.state-icon')
-//                    .removeClass()
-//                    .addClass('state-icon ' + settings[$button.data('state')].icon);
-//                    // Update the button's color
-
                     event.preventDefault();
                 });               
 
@@ -2426,7 +2301,9 @@ var AudioGram = function (stage, side, element_id) {
             setTodaysDate();
 
             //testing only
-            loadSpeechWordData();
+            $('#load-speech-data').click(function(){
+                loadSpeechWordData();
+            });
 
             //Library for bootstrap dropdowns.
             $('.selectpicker').selectpicker();
@@ -2437,6 +2314,18 @@ var AudioGram = function (stage, side, element_id) {
         
     });
     //End Main Function //////////////////////////////////////////////////////////////////////////////////////////////  
+
+   /**
+    * Handles event when user wants to use previous audiogram as template for new audiogram. 
+    * @param {void}
+    * @return {void}
+    */
+    function confirmEdit(stage){
+        setTodaysDate();
+        $('#aii-audiogram-prev option:first-child').attr('selected', 'selected');
+        stage['left'].newAudiogram();
+        stage['left'].newAudiogram();
+    }
 
    /**
     * Create the save function which builds the json package for the ajax request 
