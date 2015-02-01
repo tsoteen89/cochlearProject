@@ -674,7 +674,7 @@
 
     //Added by Travis. 
     /**
-     * @controller dashboardController -
+     * @controller questionsController -
      *      Controller used to handle display of Questions for a Patient's CareTeam
      *
      * @variables -
@@ -873,12 +873,14 @@
         getData.get($scope.patientSummaryAnswersURL).success(function(data) {
             //Grab all previously answered questions (regular questions)
             $scope.patientSummaryAnswers = data.records;
+            
             //get audiology results for the phase
             $scope.audioSummaryAnswers = data.records.DetailedAnswers;
         }).then(function() {
             for (var answerID in $scope.patientSummaryAnswers.Answers) {
                 $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
             };
+            
         });
         
     
@@ -1188,6 +1190,10 @@
 
         };
 
+        $scope.getDate= function(unixTimestamp){
+            var date = new Date(unixTimestamp*1000).toISOString().slice(0, 10);
+            return date;
+        }
         //post date type answers - cuts off time zones
         $scope.postDateAnswers = function(questionID) {
 
@@ -1211,20 +1217,24 @@
             "CareTeamID": $cookieStore.get('CareTeamID')
         };
 
-        $scope.savedSurgeries = [];
         //Post a surgery History. 
         $scope.postSurgery = function() {
-            $scope.savedSurgeries.push($scope.surgery);
+            
             $scope.answer.Answers[85] = " "; // need to initialize this answer in answers object,
             //so upon "Next page", "Not answered" isn't saved and break the api
 
             //post the surgery and then clear the question fields so user may add another
-            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function() {
+            postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function(data) {
                 
-                $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
-                $scope.surgery["Other"] = null;
-                $scope.surgery["Type of Surgery?"] = null;
-                $scope.surgery["Side?"] = null;
+                if(data.records.message == 'Success'){
+                    var tempSurgery = {'Date':$scope.surgery.Date.toISOString().slice(0, 10), 'Side':data.records.surgery.Side, 'Type':data.records.surgery.Type, 'Timestamp':data.records.surgery.Timestamp}
+                    $scope.patientSummaryAnswers.Answers['085'].Answers.push(tempSurgery);
+                    $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
+                    $scope.surgery["Other"] = null;
+                    $scope.surgery["Type of Surgery?"] = null;
+                    $scope.surgery["Side?"] = null;
+                } 
+                
             });
         };
 
