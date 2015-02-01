@@ -2754,6 +2754,9 @@
 						'Notifications' : $scope.unreadNotificationCount,
 					};
 					$scope.unreadCount = types[$scope.messageType];
+					
+					//Update header message count
+					messageCount.prepForBroadcast(data['records']['totalUnreadCount']);
 				}
 			});
 		}
