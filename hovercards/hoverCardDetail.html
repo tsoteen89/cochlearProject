@@ -105,8 +105,8 @@ table tr:hover td {
     <caption> Previously Entered Surgery Histories </caption>
 	<thead>
 		<tr>
+            <th>Side</th>
 			<th>Date of Surgery</th>
-			<th>Side</th>
 			<th>Type of Surgery</th>
 			<th>Date of Entry</th>
 		</tr>
@@ -116,9 +116,9 @@ table tr:hover td {
 	<!-- Table Body -->
 	<tbody>
 
-		<tr ng-repeat="surgery in patientSummaryAnswers.Answers.085.Answers | orderBy:'Timestamp'" ng-class-odd="''" ng-class-even="'even'">
+		<tr ng-repeat="surgery in patientSummaryAnswers.Answers.085.Answers | orderBy:'Timestamp'">
+            <td>{{surgery.Side}}</td>
 			<td>{{surgery.Date}}</td>
-			<td>{{surgery.Side}}</td>
 			<td>{{surgery.Type}}</td>
 			<td>{{getDate(surgery.Timestamp)}}</td>
 		</tr><!-- Table Row -->
