@@ -2877,6 +2877,12 @@
 		//Reset the messages being displayed to the correct messages
 		$scope.resetCurrentMessages = function(){
 			$scope.currentMessages = $scope.messages[$scope.messageType + $scope.messageProperty];
+			
+			//Determine the number of current messages
+			$scope.numCurrentMessages = $scope.currentMessages.length;
+			if(typeof $scope.currentMessages[0] === 'undefined'){
+				$scope.numCurrentMessages = 0;
+			}
 		}
 		
 		//Respond to request Notifications
