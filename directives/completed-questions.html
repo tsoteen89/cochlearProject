@@ -26,11 +26,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="answer in patientSummaryAnswers.Answers">
-          <td width="60%"><b>{{answer.Question}}</b></td>
-          <td width="40%"ng-if="!isArray(answer.Answers) && !isObject(answer.Answers)" >{{answer.Answers}}</td>
-            <td width="40%"ng-if="isArray(answer.Answers)"><span ng-repeat="answer in answer.Answers"> {{answer}},</span></td>
-            <td width="40%"ng-if="isObject(answer.Answers) && !isArray(answer.Answers)"><span ng-repeat="surgery in answer.Answers">{{$index +1}}.  <span ng-repeat="(surgeryInfo, value) in surgery"> <b> {{surgeryInfo}}</b> : {{value}} <br></span> <hr> </span></td>
+        <tr ng-repeat="(questionNum,info) in patientSummaryAnswers.Answers">
+          <td width="60%"><b>{{info.Question}}</b></td>
+          <td width="40%"ng-if="!isArray(info.Answers) && !isObject(info.Answers)" >{{info.Answers}}</td>
+            <td width="40%"ng-if="isArray(info.Answers) && questionNum!=085"><span ng-repeat="answer in info.Answers"> {{answer}},</span></td>
+            <td width="40%"ng-if="questionNum==085 && info.Answers != 'Not Answered'"><span ng-repeat="surgery in info.Answers">
+                <span >{{$index +1}}. </span> 
+                <span> <b> Date:</b> <br>  {{surgery.Date}} <br> </span>
+                <span> <b> Side:</b> <br>  {{surgery.Side}} <br> </span>
+                <span> <b> Type:</b> <br>  {{surgery.Type}} <br> </span>
+                <hr> </span></td>
         </tr>
         </tbody>
     </table>

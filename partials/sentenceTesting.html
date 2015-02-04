@@ -10,7 +10,7 @@
     </div>
     <hr>
     <!-- Sentence testing container -->
-    <div class="container-fluid col-md-8 col-md-offset-2 col-xs-6">
+    <div class="container-fluid col-md-10 col-md-offset-1 col-xs-6">
         <!-- Step 1- select conditions -->
         <div class="select-audio-tests" style="margin-bottom:5px">
             <label >
@@ -67,14 +67,14 @@
                                     <thead>
                                         <tr>
                                             <th ng-repeat="type in test.AudioTestInput" 
-                                                style="border: 1px solid black; padding-left:15px; padding-right:15px;">{{type.Name}}</th>
+                                                style="border: 1px solid black;">{{type.Name}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr ng-class-even="'alt'" 
                                             ng-repeat="result in summaryAnswers.DetailedAnswers[answer.ConditionsID]['Results'][test.AudioTestName]">
                                             <td ng-repeat="type in test.AudioTestInput" 
-                                                style="border: 1px solid black; padding-left:15px; padding-right:15px;"> {{result[type.Name]}}</td>
+                                                style="border: 1px solid black;"> {{result[type.Name]}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
