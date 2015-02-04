@@ -151,16 +151,18 @@
                     <h3 class="fs-subtitle">Register your facility administrator</h3>
                     <h3 class="fs-subtitle">This is the user who will oversee all administrative duties </h3>
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <input type="text" class="box" name="first" placeholder="First Name" ng-model="administratorData.first_name"/> 
                         </div>
                         <div class="col-md-5" >
                             <input type="text" class="box" name="last" placeholder="Last Name" ng-model="administratorData.last_name"/> </div>
-                        <div class="col-md-2" >
-                            <select id="titles" name="title" ng-options="title.TitleID as title.Abbreviation for title in userTitles"
-                                    ng-model="administratorData.TitleID"> 
+                        <div class="col-md-3" >
+                            <select ng-hide="administratorData.TitleID == 99" id="titles" name="title" 
+                                    ng-options="title.TitleID as title.Abbreviation for title in userTitles" ng-model="administratorData.TitleID"> 
                                 <option value=''>  Title </option>
                             </select>
+                            <input ng-show="administratorData.TitleID == 99" type="text" class="box" name="otherTitle"
+                                   placeholder="Enter Title Name" ng-model="administratorData.NovelTitle">
                         </div>
                     </div>
                     <input type="text" class="box" name="username" placeholder="Username" ng-model="administratorData.username"/>
@@ -360,7 +362,7 @@
             $scope.registration = {"FacilityForm" : this.facilityData, "AdminForm": this.administratorData};
 
                 $scope.button = "Processing...";
-                $scope.disableRegister = true;
+                //$scope.disableRegister = true;
                 $http({
                 method  : 'POST',
                 url     : '../aii-api/v1/facilities',
@@ -369,6 +371,7 @@
                 })
                 .success(function(data) {
                 console.log(data.records);
+                    
                 //if both are registered, let em know and redirect to sign in 
                 if(data.records["Facility Admin Registration Response"] == "Success" && data.records["Facility Registration Response"] == "Success"){
 
