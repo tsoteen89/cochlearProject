@@ -148,6 +148,9 @@
 							<span class="badge pull-right">{{message.Timestamp * 1000 | date:'h:mm a'}} {{message.Timestamp * 1000 | date:'M/d/yy'}}</span>
 						</div>
 					</span>
+					<span class="col-md-4 offset-1" ng-if="numCurrentMessages == 0">
+						No {{messageType}}.
+					</span>
 				</div>
 			</div>
 			<!-- COMPOSE MESSAGE MODAL -->
