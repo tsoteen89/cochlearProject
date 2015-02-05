@@ -2952,7 +2952,7 @@
 		//Respond to request Notifications
 		$scope.respondToNotification = function(message, response){
 			message['Response'] = response;
-			message['IsArchived'] = 2;
+			message['IsArchived'] = '2';
 			putData.put(baseURL + 'notifications/' + message['NotificationID'] + '/' + sessionID, message).success(function(data) {
 				$scope.getAllMessages();
 			});

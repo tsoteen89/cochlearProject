@@ -242,10 +242,10 @@
 									<a class="btn btn-primary" ng-if="showReply" ng-click="prefillComposedMessage(selectedMessage, true)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Reply</a>
 									<a class="btn btn-primary" ng-if="showForward" ng-click="prefillComposedMessage(selectedMessage, false)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Forward</a>
 									<a class="btn btn-primary" ng-if="showEdit" ng-click="editDraft(selectedMessage)" data-toggle="modal" data-target="#composeMessageModal" data-dismiss="modal">Edit</a>
-									<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)">Restore</a>
-									<a class="btn btn-success" ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, 1)">Accept</a>
-									<a class="btn btn-danger"  ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, 2)">Reject</a>
-									<a class="btn btn-primary" ng-click="deleteMessage(selectedMessage, true)">Delete</a>
+									<a class="btn btn-primary" ng-if="showRestore" ng-click="deleteMessage(selectedMessage, false)" data-dismiss="modal">Restore</a>
+									<a class="btn btn-success" ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, '1')" data-dismiss="modal">Accept</a>
+									<a class="btn btn-danger"  ng-if="showResponses" ng-show="selectedMessage.IsRequest" ng-click="respondToNotification(selectedMessage, '2')" data-dismiss="modal">Reject</a>
+									<a class="btn btn-primary" ng-click="deleteMessage(selectedMessage, true)" data-dismiss="modal">Delete</a>
 									<a class="btn btn-primary" data-dismiss="modal">Close</a>
 								</div>								
 							</div>
