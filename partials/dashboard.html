@@ -99,9 +99,9 @@
                         </div>
                         <div class="modal-body">
                             <!-- Invite user form -->
-                            <form name="addUserForm" ng-submit="processForm()" class="form form-vertical" novalidate>
+                            <form name="addUserForm" class="form form-vertical" novalidate>
                                 <div class="row">
-                                    <div class="control-group col-md-4 col-md-offset-1" >
+                                    <div class="control-group col-md-4 col-md-offset" >
                                         <label>First Name</label>
                                         <div class="controls" >
                                             <input type="text" class="form-control" name="firstName" ng-model="addUser.First" ng-required="true" 
@@ -115,16 +115,20 @@
                                                 placeholder="Enter Last Name" alphabet required>
                                         </div>
                                     </div>
-                                    <div class="control-group col-md-2" >
+                                    <div class="control-group col-md-4" >
                                         <label>Title</label>
-                                        <select id="titles" class="form-control" name="title"
+                                        <select ng-hide="addUser.TitleID == 99" class="form-control" name="title" 
                                             ng-options="title.TitleID as title.Abbreviation for title in userTitles" 
-                                            ng-model="addUser.TitleID" required>  </select>
+                                            ng-model="addUser.TitleID"> 
+                                            <option value=''>  Title </option>
+                                        </select>
+                                        <input ng-show="addUser.TitleID == 99" type="text"  class="form-control" name="otherTitle"
+                                               placeholder="Enter Title Name" ng-model="addUser.NovelTitle">
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
-                                    <div class="control-group col-md-10 col-md-offset-1" >
+                                    <div class="control-group col-md-10 col-md-offset" >
                                         <label>Email</label>
                                         <div class="controls" >
                                             <input type="text" class="form-control" name="email" ng-model="addUser.Email" ng-required="true" 
@@ -133,7 +137,7 @@
                                     </div>
                                 </div>
                                 <br>
-                                <button class="btn btn-primary col-md-3 col-md-offset-1" type="submit" value="submit" 
+                                <button class="btn btn-primary col-md-3" type="submit" value="submit" 
                                     ng-click="sendInvitation()" ng-disabled="addUserForm.$invalid">Submit</button>
                                     <span style="color:red; margin-left:10px" ng-if="addUserForm.$invalid"> All fields are required. </span>
                                 <br>
