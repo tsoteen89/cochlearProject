@@ -17,7 +17,7 @@
 |**Default Gateway**	|: |69.28.76.129|
 |**Server Username**	|: |root|
 |**Server Password**|	: |CW!~qGM&h[5N|
-|**Atlantic.Net DNS**	|: |209.208.25.18  209.208.127.65|
+|**Atlantic.Net DNS**	|: |209.208.25.18 and 209.208.127.65|
 |                           |   |                                         | 
 | **SSH after VPN connected** | : |  172.16.30.3 |
 
