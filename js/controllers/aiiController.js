@@ -870,18 +870,20 @@
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
             $scope.answer.PhaseID + "/" + cookieSessionID;
          
-        getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-            //Grab all previously answered questions (regular questions)
-            $scope.patientSummaryAnswers = data.records;
-            
-            //get audiology results for the phase
-            $scope.audioSummaryAnswers = data.records.DetailedAnswers;
-        }).then(function() {
-            for (var answerID in $scope.patientSummaryAnswers.Answers) {
-                $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
-            };
-            
-        });
+        if ($location.$$path != "/questions") {
+            getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+                //Grab all previously answered questions (regular questions)
+                $scope.patientSummaryAnswers = data.records;
+
+                //get audiology results for the phase
+                $scope.audioSummaryAnswers = data.records.DetailedAnswers;
+            }).then(function() {
+                for (var answerID in $scope.patientSummaryAnswers.Answers) {
+                    $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
+                };
+                waitingDialog.hide()
+            });
+        }
         
     
         //Modal handler for different implant providers (Med El, Cochlear americas, )
@@ -997,39 +999,24 @@
             }
         }
 
-        //api urls to grab questions for the active phase
-        $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID + "/" + cookieSessionID;
-        $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+        if ($location.$$path == "/questions" || $location.$$path == "/audioQuestions") {        
 
-        //Get Number of Questions contained in a phase
-        getData.get($scope.questionsURL).success(function(data) {
-            $scope.numberOfQuestions = data.records.length;
-        });
+            //api urls to grab questions for the active phase
+            $scope.questionsURL = "http://aii-hermes.org/aii-api/v1/phases/" + $scope.answer.PhaseID + "/questions/event/" + $scope.answer.CareTeamID + "/" + cookieSessionID;
+            $scope.initialQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+
+            //Get Number of Questions contained in a phase
+            getData.get($scope.questionsURL).success(function(data) {
+                $scope.numberOfQuestions = data.records.length;
+            });
 
 
-        //Get all questions for a particular Phase
-        getData.get($scope.initialQuestionsURL).success(function(data) {
-            $scope.childNumber = 0;
-            $scope.parentNumber = 0;
-
-            //Go through initial batch of Questions to find Children of Parents
-            for ($scope.n = 0; $scope.n < data.records.length; $scope.n++) {
-                $scope.childNumber += data.records[$scope.n].Children.length;
-                if (data.records[$scope.n].IsChild == 0) {
-                    $scope.parentNumber += 1;
-                }
-            }
-
-            //Set the sorted data equal to a new HTTP request
-        }).then(function() {
-            $scope.limit = $scope.childNumber + $scope.parentNumber;
-            $scope.displayedQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
-            getData.get($scope.displayedQuestionsURL).success(function(data) {
-                $scope.displayedQuestions = data.records;
+            //Get all questions for a particular Phase
+            getData.get($scope.initialQuestionsURL).success(function(data) {
                 $scope.childNumber = 0;
                 $scope.parentNumber = 0;
 
-                //Go through Second batch of Questions to find Children of Children
+                //Go through initial batch of Questions to find Children of Parents
                 for ($scope.n = 0; $scope.n < data.records.length; $scope.n++) {
                     $scope.childNumber += data.records[$scope.n].Children.length;
                     if (data.records[$scope.n].IsChild == 0) {
@@ -1037,18 +1024,35 @@
                     }
                 }
 
-                //Set the final sorted data equal to a final HTTP request
             }).then(function() {
                 $scope.limit = $scope.childNumber + $scope.parentNumber;
-                $scope.finalQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
-                getData.get($scope.finalQuestionsURL).success(function(data4) {
-                    $scope.finalQuestions = data4.records;
+                $scope.displayedQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+                getData.get($scope.displayedQuestionsURL).success(function(data) {
+                    $scope.displayedQuestions = data.records;
+                    $scope.childNumber = 0;
+                    $scope.parentNumber = 0;
+
+                    //Go through Second batch of Questions to find Children of Children
+                    for ($scope.n = 0; $scope.n < data.records.length; $scope.n++) {
+                        $scope.childNumber += data.records[$scope.n].Children.length;
+                        if (data.records[$scope.n].IsChild == 0) {
+                            $scope.parentNumber += 1;
+                        }
+                    }
+
+                    //Set the final sorted data equal to a final HTTP request
+                }).then(function() {
+                    $scope.limit = $scope.childNumber + $scope.parentNumber;
+                    $scope.finalQuestionsURL = $scope.questionsURL + "&offset=" + $scope.offSet + "&limit=" + $scope.limit;
+                    getData.get($scope.finalQuestionsURL).success(function(data4) {
+                        $scope.finalQuestions = data4.records;
+                    });
+                    setTimeout(function () {waitingDialog.hide();}, 600);
                 });
-                setTimeout(function () {waitingDialog.hide();}, 600);
             });
-        });
 
-
+        }
+        
         //Display the next set of questions for a phase
         $scope.nextPage = function() {
             $scope.page = $scope.page + 1;
@@ -1126,7 +1130,7 @@
                 $scope.finalQuestions = data4.records;
             });
         }
-
+    
 
         $scope.checkboxTrigger = function(data) {
             var other = false;
@@ -1794,13 +1798,32 @@
             }
 
         })();
-        if ($location.$$path == "/patientDirectory") {
-            waitingDialog.show('Loading Patients...', {dialogSize: 'sm', progressType: 'danger'});
-        }
+       
         //hmm 
         var modalCounter = 1;
     
-        $scope.sessionID = userInfo.get().SessionID;
+        $scope.sessionID = $cookieStore.get('SessionID');
+        
+        
+         if ($location.$$path == "/patientDirectory") {
+            waitingDialog.show('Loading Patients...', {dialogSize: 'sm', progressType: 'danger'});
+            //Get all the possible reasons to become inactive
+            getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons/" + $scope.sessionID).success(function(data) {
+                $scope.inactiveReasons = data.records;
+            });
+            
+            
+            //Get all the phases info!!
+            getData.get("http://aii-hermes.org/aii-api/v1/phases/" + $scope.sessionID).success(function(data) {
+                $scope.phases = data.records;
+            });
+
+            //Get all the current phase cases info!! - used to make the dots
+            getData.get("http://aii-hermes.org/aii-api/v1/phases/phaseStatuses/" + $scope.sessionID).success(function(data) {
+                $scope.phaseCases = data.records;
+            });
+
+        }
         //url to get signed in users info
         var userURL = "http://aii-hermes.org/aii-api/v1/users/one/" + $scope.sessionID;
         //Grab single User by ID and then bind email and phone details to the editUser scope variable
@@ -1813,11 +1836,7 @@
             putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + careTeam.CareTeamID + '/' + $scope.sessionID, careTeam);
         };
 
-        //Get all the possible reasons to become inactive
-        getData.get("http://aii-hermes.org/aii-api/v1/inactiveReasons/" + $scope.sessionID).success(function(data) {
-            $scope.inactiveReasons = data.records;
-        });
-
+        
         //Calulate patients age based on a birthdate
         $scope.calcAge = function(dateString) {
             var year = Number(dateString.substr(0, 4));
@@ -1882,17 +1901,6 @@
             $scope.patientsData = data;
             setTimeout(function () {waitingDialog.hide();}, 1);
         })
-
-
-        //Get all the phases info!!
-        getData.get("http://aii-hermes.org/aii-api/v1/phases/" + $scope.sessionID).success(function(data) {
-            $scope.phases = data.records;
-        });
-        
-        //Get all the current phase cases info!! - used to make the dots
-        getData.get("http://aii-hermes.org/aii-api/v1/phases/phaseStatuses/" + $scope.sessionID).success(function(data) {
-            $scope.phaseCases = data.records;
-        });
 
         //Set persistData so CareTeamID, PhaseID, phasename, patient name and anchor location in patient Directory are known in different partials.
         $scope.goToQuestions = function(careTeam, phase, patient) {
