@@ -51,7 +51,6 @@
                         </div>
                     </div>
                 </div>
-                <br>
                 <!-- Sex, Phone # FIELDs --> 
                 <div class="row">
                     <!-- Sex FIELD --> 
@@ -69,11 +68,18 @@
                             <p style="color:#325bbd; font-size: 1vw" class="fa fa-question-circle">
                             </p>
                         </hovercard>
-                        <input class="form-control" type="tel" pattern='\d{3}[\-]\d{4}[\-]\d{4}' 
-                               ng-model="formData.Phone" placeholder="Phone: ###-###-####">
+                        <input class="form-control" type="tel" 
+                               ng-model="formData.Phone" placeholder="Phone: 1231231234">
                     </div>
                 </div>
-                <br>        
+                <br>  
+                <!-- Address FIELD --> 
+                <div class="row">
+                    <div class="control-group col-md-9 col-md-offset-1">
+                        <label>Email Address</label>
+                        <input type="text" class="form-control" ng-model="formData.Email" placeholder="Email Address">
+                    </div>
+                </div>
                 <!-- Address FIELD --> 
                 <div class="row">
                     <div class="control-group col-md-9 col-md-offset-1">
