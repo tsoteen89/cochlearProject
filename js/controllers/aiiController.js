@@ -870,20 +870,19 @@
         $scope.patientSummaryAnswersURL = "http://aii-hermes.org/aii-api/v1/careTeams/" + $scope.answer.CareTeamID + "/phaseAnswers/" +
             $scope.answer.PhaseID + "/" + cookieSessionID;
          
-        if ($location.$$path != "/questions") {
-            getData.get($scope.patientSummaryAnswersURL).success(function(data) {
-                //Grab all previously answered questions (regular questions)
-                $scope.patientSummaryAnswers = data.records;
+        getData.get($scope.patientSummaryAnswersURL).success(function(data) {
+            //Grab all previously answered questions (regular questions)
+            $scope.patientSummaryAnswers = data.records;
 
-                //get audiology results for the phase
-                $scope.audioSummaryAnswers = data.records.DetailedAnswers;
-            }).then(function() {
-                for (var answerID in $scope.patientSummaryAnswers.Answers) {
-                    $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
-                };
-                waitingDialog.hide()
-            });
-        }
+            //get audiology results for the phase
+            $scope.audioSummaryAnswers = data.records.DetailedAnswers;
+        }).then(function() {
+            for (var answerID in $scope.patientSummaryAnswers.Answers) {
+                $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
+            };
+            waitingDialog.hide()
+        });
+        
         
     
         //Modal handler for different implant providers (Med El, Cochlear americas, )
@@ -942,15 +941,15 @@
                     $scope.deviceDetails = {};
                     $scope.deviceDetails[deviceDetails] = provider;
                 
-                    if($scope.device.Answers[$scope.implantQuestion]){
+                    if($scope.device.Answers[$scope.implantQuestion] && $scope.device.Answers[$scope.implantQuestion] != "Not Answered"){
                         $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
                             $scope.device.Answers[$scope.implantQuestion];
                     }
-                    if($scope.device.Answers[$scope.electrodeQuestion]){
+                    if($scope.device.Answers[$scope.electrodeQuestion] && $scope.device.Answers[$scope.implantQuestion] != "Not Answered"){
                         $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " +
                             $scope.device.Answers[$scope.electrodeQuestion];
                     }
-                    if($scope.device.Answers[$scope.processorQuestion]){
+                    if($scope.device.Answers[$scope.processorQuestion] && $scope.device.Answers[$scope.processorQuestion] != "Not Answered"){
                         $scope.deviceDetails[deviceDetails] = $scope.deviceDetails[deviceDetails] + ", " + 
                             $scope.device.Answers[$scope.processorQuestion];
                     }
@@ -1231,7 +1230,7 @@
             postData.post('http://aii-hermes.org/aii-api/v1/surgeryHistory/' + cookieSessionID, $scope.surgery).success(function(data) {
                 
                 if(data.records.message == 'Success'){
-                    var tempSurgery = {'Date':$scope.surgery.Date.toISOString().slice(0, 10), 'Side':data.records.surgery.Side, 'Type':data.records.surgery.Type, 'Timestamp':data.records.surgery.Timestamp}
+                    var tempSurgery = {'Date':$scope.surgery.Date.toISOString().slice(0, 10), 'Side':data.records.surgery.Side, 'Type':data.records.surgery.Type, 'Timestamp':data.records.surgery.Timestamp};
                     $scope.patientSummaryAnswers.Answers['085'].Answers.push(tempSurgery);
                     $scope.surgery["Date"] = null; //Clear surgeryHistory object so user can add another history
                     $scope.surgery["Other"] = null;
@@ -2021,6 +2020,7 @@
                 modalCounter++;
                 $scope.modalPatient = patient;
 
+                $scope.sessionID = $cookieStore.get('SessionID');
                 $scope.ok = function() {
                     $modalInstance.close();
                     $scope.undoSwitch();
