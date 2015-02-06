@@ -1286,12 +1286,12 @@
         //Complete all phases of care and make patient inactive
         $scope.completeCare = function() {
             var patID = $cookieStore.get('PatientID');
-            /*
+            
             var updateToInactive = {
                 'InactiveStatus': 60
             }
-            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID, updateToInactive);
-            */
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID + '/'+ cookieSessionID, updateToInactive);
+            
             //Update Current phase number in database
 
             $scope.newPhase = {
@@ -1299,6 +1299,7 @@
             };
             // Post the changed currentPhaseID here
             putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID + '/'+ cookieSessionID, $scope.newPhase).then(function() {
+                alert($scope.patientName + " has completed all phases of care and will hereafter be considered inactive. \nShould the patient return, a new event can be made, at which point the patient will be re-activated.");
                 $location.path('patientDirectory')
             });
 
