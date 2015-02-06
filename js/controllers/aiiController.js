@@ -754,13 +754,13 @@
         waitingDialog = waitingDialog || (function () {
 
             // Creating modal dialog's DOM
-            var $dialog = $(
+             var $dialog = $(
                 '<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">' +
-                '<div class="modal-dialog modal-m" style="margin-left:30%">' +
+                '<div class="modal-dialog modal-sm" style="margin-left:30%">' +
                 '<div class="modal-content" >' +
-                    '<div class="modal-header"><h3 style="margin:0;"></h3></div>' +
+                    '<div class="modal-header"><h3 style="margin:0;"></h3> </div>' +
                     '<div class="modal-body">' +
-                        '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>' +
+                        '<i class="fa fa-spinner fa-spin fa-3x" style="margin-left:45%"></i>' +
                     '</div>' +
                 '</div></div></div>');
 
@@ -880,7 +880,9 @@
             for (var answerID in $scope.patientSummaryAnswers.Answers) {
                 $scope.answer.Answers[answerID] = $scope.patientSummaryAnswers.Answers[answerID].Answers; 
             };
-            waitingDialog.hide()
+            if ($location.$$path != "/questions") {
+                waitingDialog.hide()
+            }
         });
         
         
@@ -1284,12 +1286,12 @@
         //Complete all phases of care and make patient inactive
         $scope.completeCare = function() {
             var patID = $cookieStore.get('PatientID');
-            /*
+            
             var updateToInactive = {
                 'InactiveStatus': 60
             }
-            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID, updateToInactive);
-            */
+            putData.put('http://aii-hermes.org/aii-api/v1/patients/' + patID + '/'+ cookieSessionID, updateToInactive);
+            
             //Update Current phase number in database
 
             $scope.newPhase = {
@@ -1297,6 +1299,7 @@
             };
             // Post the changed currentPhaseID here
             putData.put('http://aii-hermes.org/aii-api/v1/careTeams/' + $scope.answer.CareTeamID + '/'+ cookieSessionID, $scope.newPhase).then(function() {
+                alert($scope.patientName + " has completed all phases of care and will hereafter be considered inactive. \nShould the patient return, a new event can be made, at which point the patient will be re-activated.");
                 $location.path('patientDirectory')
             });
 
